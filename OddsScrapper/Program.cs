@@ -1,15 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OddsScrapper
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public const string BaseWebsite = "http://www.oddsportal.com";
+        private const string Football = "soccer";
+
+        [STAThread]
+        public static void Main(string[] args)
         {
+            var scrapper = new CommingMatchesScrapper(); // ArchiveOddsScrapper();
+            scrapper.Scrape(BaseWebsite, Football);
         }
     }
 }
