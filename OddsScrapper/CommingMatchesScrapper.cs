@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OddsScrapper
 {
@@ -9,18 +10,23 @@ namespace OddsScrapper
     {
         private HtmlReader WebReader { get; } = new HtmlReader();
 
-        public void Scrape(string baseWebsite, string sport)
+        public void Scrape(string baseWebsite, string[] sports)
         {
-            var tommorowsGames = GetTommorowGames($"{baseWebsite}/matches/{sport}/");
-            if (tommorowsGames == null)
-                return;
+            //Parallel.ForEach(sports, (sport) =>
+            foreach(var sport in sports)
+            {
+                var tommorowsGames = GetTommorowGames($"{baseWebsite}/matches/{sport}/");
+                if (tommorowsGames == null)
+                    return;
 
-            WriteResultsToFile(tommorowsGames);
+                WriteResultsToFile(tommorowsGames, sport);
+            }
+            //);            
         }
 
-        private void WriteResultsToFile(HtmlDocument tommorowsGames)
+        private void WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
         {
-            var fileName = $"tommorows_games.csv";
+            var fileName = $"tommorows_games_{sport}.csv";
             using (var fileStream = File.AppendText(fileName))
             {
                 var div = tommorowsGames.GetElementbyId("table-matches");
@@ -42,11 +48,17 @@ namespace OddsScrapper
                         continue;
 
                     var nameTd = tds.First(s => s.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("table-participant"));
-                    var name = nameTd.Elements(HtmlTagNames.A)
-                        .First(s => !string.IsNullOrEmpty(s.GetAttributeValue(HtmlAttributes.Href, null)) && 
-                                    !s.Attributes[HtmlAttributes.Href].Value.Contains("javascript")).InnerText;
+                    var nameElement = nameTd.Elements(HtmlTagNames.A).First(s => !string.IsNullOrEmpty(s.GetAttributeValue(HtmlAttributes.Href, null)) &&
+                                                                                !s.Attributes[HtmlAttributes.Href].Value.Contains("javascript"));
 
-                    fileStream.WriteLine($"{name},{String.Join(",", odds.Select(s => s.InnerText).ToArray())}");
+                    var name = nameElement.InnerText;
+                    var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
+                    var gameLinkParts = gameLink.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                    //var sport = gameLinkParts[0];
+                    var country = gameLinkParts[1];
+                    var league = gameLinkParts[2];
+
+                    fileStream.WriteLine($"{sport},{country},{league},{name},{String.Join(",", odds.Select(s => s.InnerText).ToArray())}");
                 }
             }
         }
@@ -68,10 +80,8 @@ namespace OddsScrapper
             return WebReader.GetHtmlFromWebpage(a.Attributes[HtmlAttributes.Href].Value, GamesTableLoaded);
         }
 
-        private static bool FirstPageLoaded(object o)
+        private static bool FirstPageLoaded(System.Windows.Forms.WebBrowser webBrowser)
         {
-            var webBrowser = (System.Windows.Forms.WebBrowser)o;
-
             // WAIT until the dynamic text is set
             foreach(System.Windows.Forms.HtmlElement span in webBrowser.Document.GetElementsByTagName(HtmlTagNames.Span))
             {
@@ -85,10 +95,8 @@ namespace OddsScrapper
             return false;
         }
 
-        private static bool GamesTableLoaded(object o)
+        private static bool GamesTableLoaded(System.Windows.Forms.WebBrowser webBrowser)
         {
-            var webBrowser = (System.Windows.Forms.WebBrowser)o;
-
             // WAIT until the dynamic text is set
             return !string.IsNullOrEmpty(webBrowser.Document.GetElementById("table-matches").InnerText);
         }

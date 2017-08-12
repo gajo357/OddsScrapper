@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace OddsScrapper
 {
@@ -10,31 +11,56 @@ namespace OddsScrapper
     {
         private HtmlReader WebReader { get; } = new HtmlReader();
 
-        public void Scrape(string baseWebsite, string sport)
+        public void ScrapeLeagueInfo(string baseWebsite, string sport)
         {
-            foreach (var league in ReadLeagues($"{baseWebsite}/{sport}/results/", sport))
+            // page with results of all sports
+            var leaguesPage = ReadLeaguesPage(baseWebsite, sport);
+            if (leaguesPage == null)
+                return;
+
+            foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
             {
-                var fileName = $"results_{sport}_{league.Country}_{(league.IsFirst ? "first" : "others")}.csv";
+                File.AppendAllLines($"leagues_{sport}.txt", new[] { league.ToString() });
+            }
+        }
 
-                Console.WriteLine(fileName);
-                using (var fileStream = File.AppendText(fileName))
+        public void Scrape(string baseWebsite, string[] sports)
+        {
+            // page with results of all sports
+            var leaguesPage = ReadLeaguesPage(baseWebsite, sports[0]);
+            if (leaguesPage == null)
+                return;
+
+            Parallel.ForEach(sports, (sport) =>
+            {
+                foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
                 {
-                    foreach(var seasonLink in ReadSeasons($"{baseWebsite}{league.Link}"))
-                    {
-                        Console.WriteLine(seasonLink);
-                        foreach (var resultsPage in ReadSeasonPages($"{baseWebsite}{seasonLink}"))
-                        {
-                            foreach (var resultLine in ReadResultsFromPage(resultsPage))
-                            {
-                                if (string.IsNullOrEmpty(resultLine))
-                                    continue;
+                    var fileName = MakeValidFileName($"{league.Sport}_{league.Country}_{league.Name}.csv");
 
-                                fileStream.WriteLine(resultLine);
+                    Console.WriteLine(fileName);
+                    File.AppendAllLines($"leagues_{sport}.txt", new[] { league.ToString() });
+                    using (var fileStream = File.AppendText(fileName))
+                    {
+                        var seasons = ReadSeasons($"{baseWebsite}{league.Link}");
+                        if (seasons == null)
+                            continue;
+                        foreach (var seasonLink in seasons)
+                        {
+                            Console.WriteLine(seasonLink);
+                            foreach (var resultsPage in ReadSeasonPages($"{baseWebsite}{seasonLink}"))
+                            {
+                                foreach (var resultLine in ReadResultsFromPage(resultsPage))
+                                {
+                                    if (string.IsNullOrEmpty(resultLine))
+                                        continue;
+
+                                    fileStream.WriteLine(resultLine);
+                                }
                             }
                         }
                     }
                 }
-            }
+            });            
         }
 
         private IEnumerable<string> ReadResultsFromPage(HtmlDocument resultsPage)
@@ -52,8 +78,10 @@ namespace OddsScrapper
 
             // first page of the season
             var divTable = FindResultsDiv(seasonHtml);
-            if (divTable != null)
-                yield return seasonHtml;
+            if (divTable == null)
+                yield break;
+
+            yield return seasonHtml;
 
             var pagination = divTable.Element(HtmlTagNames.Div);
             if (pagination == null)
@@ -74,8 +102,11 @@ namespace OddsScrapper
         private IEnumerable<string> ReadSeasons(string link)
         {
             var nextYear = "2018";
+            var lastYear = new[] { "2009", "2008", "2007", "2006" };
 
             var html = WebReader.GetHtmlFromWebpage(link);
+            if (html == null)
+                yield break;
 
             var mainDiv = html.DocumentNode.Descendants(HtmlTagNames.Div).First(s => s.GetAttributeValue(HtmlAttributes.Class, null) == "main-menu2 main-menu-gray");
             var ul = mainDiv.Element(HtmlTagNames.Ul);
@@ -83,6 +114,9 @@ namespace OddsScrapper
             {
                 var seasonResultsLink = a.Attributes[HtmlAttributes.Href].Value;
                 var season = a.InnerText;
+                if (lastYear.Any(seasonResultsLink.Contains) ||
+                    lastYear.Any(season.Contains))
+                    break;
                 if (seasonResultsLink.Contains(nextYear) ||
                     season.Contains(nextYear))
                     continue;
@@ -92,13 +126,18 @@ namespace OddsScrapper
         }
 
         private const string LeaguesTableClassAttribute = "table-main sport";
-        private IEnumerable<League> ReadLeagues(string link, string sport)
+        private HtmlDocument ReadLeaguesPage(string baseWebsite, string sport)
+        {
+            // page with results of all sports
+            var leaguesPage = WebReader.GetHtmlFromWebpage($"{baseWebsite}/results/#{sport}", LeaguesTableLoaded);
+            return leaguesPage;
+        }
+
+        private string[] CupNames = new[] { "cup", "copa", "cupen" };
+        private string Women = "women";
+        private IEnumerable<League> ReadLeaguesForSport(HtmlDocument page, string sport)
         {
             var results = new List<League>();
-
-            var page = WebReader.GetHtmlFromWebpage(link);
-            if (page == null)
-                return results;
 
             var table = page.DocumentNode.Descendants(HtmlTagNames.Table).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Class, null) == LeaguesTableClassAttribute);
 
@@ -106,20 +145,37 @@ namespace OddsScrapper
             foreach (var tr in table.Element(HtmlTagNames.Tbody).ChildNodes)
             {
                 // exactly 2 tds in a row
-                if (tr.ChildNodes.Where(s => s.Name == HtmlTagNames.Td).Count() != 2)
+                var tds = tr.ChildNodes.Where(s => s.Name == HtmlTagNames.Td).ToArray();
+                if (tds.Length != 2)
                     continue;
 
-                foreach(var td in tr.ChildNodes)
+                foreach (var td in tds)
                 {
                     if (string.IsNullOrEmpty(td.InnerText))
                         continue;
 
                     var league = new League();
                     league.Link = td.Element(HtmlTagNames.A).Attributes[HtmlAttributes.Href].Value;
-                    var noSportLink = league.Link.Replace($"/{sport}/", string.Empty);
-                    var country = noSportLink.Remove(noSportLink.IndexOf("/"));
+                    if (string.IsNullOrEmpty(league.Link))
+                        continue;
+
+                    if (!league.Link.Contains($"/{sport}/"))
+                        continue;
+
+                    var linkParts = league.Link.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (linkParts.Length < 4)
+                        continue;
+
+                    var country = linkParts[1];
+                    var leagueName = linkParts[2];
+
+                    if (string.IsNullOrEmpty(leagueName) ||
+                        string.IsNullOrEmpty(country))
+                        continue;
+
                     league.Country = country;
-                    if(leagueCountryCount.ContainsKey(country))
+                    league.Name = leagueName;
+                    if (leagueCountryCount.ContainsKey(country))
                     {
                         league.IsFirst = false;
                         leagueCountryCount[country]++;
@@ -130,16 +186,29 @@ namespace OddsScrapper
                         leagueCountryCount.Add(country, 1);
                     }
 
+                    var leagueNameParts = leagueName.Split('-');
+                    league.IsCup = CupNames.Any(s => leagueNameParts.Any(x => x.Contains(s)));
+                    league.IsWomen = leagueName.Contains(Women);
+                    league.Sport = sport;
+
                     results.Add(league);
                 }
             }
-
+            
             return results;
         }
 
         private HtmlNode FindResultsDiv(HtmlDocument document)
         {
-            return document.DocumentNode.Descendants(HtmlTagNames.Div).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Id, null) == "tournamentTable");
+            if (document == null ||
+                document.DocumentNode == null)
+                return null;
+
+            var divs = document.DocumentNode.Descendants(HtmlTagNames.Div);
+            if (divs == null)
+                return null;
+
+            return divs.FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Id, null) == "tournamentTable");
         }
 
         private IEnumerable<string> FindAndReadResultsTable(HtmlNode divNode)
@@ -155,6 +224,11 @@ namespace OddsScrapper
                     !attribute.Contains("deactivate"))
                     continue;
 
+                var participants = string.Empty;
+                var participantElement = tr.Elements(HtmlTagNames.Td).FirstOrDefault(s => s.Attributes[HtmlAttributes.Class].Value.Contains("name table-participant"));
+                if (participantElement != null)
+                    participants = participantElement.InnerText;
+
                 var odds = tr.Elements(HtmlTagNames.Td).Where(s => s.Attributes[HtmlAttributes.Class].Value.Contains("odds-nowrp")).ToArray();
                 // has a winner?
                 if (!odds.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok")))
@@ -167,7 +241,7 @@ namespace OddsScrapper
                 var odd = GetOddFromTdNode(goodOdd);
                 var isWinning = goodOdd.Attributes[HtmlAttributes.Class].Value.Contains("result-ok") ? 1 : 0;
 
-                yield return $"{odd},{isWinning}";
+                yield return $"{participants},{odd},{isWinning}";
             }
         }
 
@@ -180,10 +254,16 @@ namespace OddsScrapper
             return double.NaN;
         }
 
-        private static bool LeaguesTableLoaded(object o)
+        public static string MakeValidFileName(string name)
         {
-            var webBrowser = (System.Windows.Forms.WebBrowser)o;
+            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
+            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
+        }
+
+        private static bool LeaguesTableLoaded(System.Windows.Forms.WebBrowser webBrowser)
+        {
             // WAIT until the dynamic text is set
             foreach (System.Windows.Forms.HtmlElement table in webBrowser.Document.GetElementsByTagName(HtmlTagNames.Table))
             {
@@ -196,20 +276,31 @@ namespace OddsScrapper
             return false;
         }
 
-        private static bool TournamentTableDivLoaded(object o)
+        private static bool TournamentTableDivLoaded(System.Windows.Forms.WebBrowser webBrowser)
         {
-            var webBrowser = (System.Windows.Forms.WebBrowser)o;
+            var table = webBrowser.Document.GetElementById("tournamentTable");
+            if (table == null)
+                return false;
 
             // WAIT until the dynamic text is set
-            return !string.IsNullOrEmpty(webBrowser.Document.GetElementById("tournamentTable").InnerText);
+            return !string.IsNullOrEmpty(table.InnerText);
         }
 
         private class League
         {
             public bool IsFirst;
             public string Country;
+            public string Name;
 
             public string Link;
+            internal bool IsCup;
+            internal bool IsWomen;
+            internal string Sport;
+
+            public override string ToString()
+            {
+                return $"{Sport},{Country},{MakeValidFileName(Name)},{(IsFirst ? 1 : 0)},{(IsCup ? 1 : 0)},{(IsWomen ? 1 : 0)}";
+            }            
         }
     }
 }

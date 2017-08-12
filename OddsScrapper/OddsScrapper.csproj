@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchiveDataAnalysis.cs" />
     <Compile Include="ArchiveOddsScrapper.cs" />
     <Compile Include="CommingMatchesScrapper.cs" />
     <Compile Include="HtmlReader.cs" />
