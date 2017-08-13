@@ -18,8 +18,8 @@ namespace OddsScrapper
             //var scrapper = new ArchiveOddsScrapper();
             //scrapper.Scrape(BaseWebsite, new[] { Basketball, Handball, Hockey });
 
-            var scrapper = new CommingMatchesScrapper();
-            scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey });
+            //var scrapper = new CommingMatchesScrapper();
+            //scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey });
 
             //var analyser = new ArchiveDataAnalysis();
             //analyser.Analyse();

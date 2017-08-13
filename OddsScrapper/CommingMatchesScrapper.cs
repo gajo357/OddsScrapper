@@ -23,7 +23,7 @@ namespace OddsScrapper
 
         private void WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
         {
-            var date = DateTime.Now.Date.ToShortDateString().Replace("/", string.Empty);
+            var date = GetDate(tommorowsGames);
 
             var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"{sport}_{date}.csv");
             using (var fileStream = File.AppendText(fileName))
@@ -64,6 +64,17 @@ namespace OddsScrapper
                     fileStream.WriteLine($"{sport},{country},{league},{name},{String.Join(",", odds.Select(s => s.InnerText).ToArray())}");
                 }
             }
+        }
+
+        private object GetDate(HtmlDocument tommorowsGames)
+        {
+            var div = tommorowsGames.GetElementbyId("col-content");
+            if (div == null)
+                return null;
+
+            var header = div.Element(HtmlTagNames.H1);
+            var date = header.InnerText.Split(new[] { ':', ',' }, StringSplitOptions.RemoveEmptyEntries).Last();
+            return date.Replace(" ", string.Empty);
         }
 
         private HtmlDocument GetTommorowGames(string link)

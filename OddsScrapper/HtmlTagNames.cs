@@ -12,6 +12,7 @@
         public const string Td = "td";
         public const string Tr = "tr";
 
+        public const string H1 = "h1";
     }
 
     public static class HtmlAttributes

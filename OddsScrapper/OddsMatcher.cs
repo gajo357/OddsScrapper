@@ -9,46 +9,21 @@ namespace OddsScrapper
     {
         public void MatchGamesWithArchivedData()
         {
+            var date = "14Aug2017";
             var archivedData = GetArchivedData();
 
-            var games = GetAllTommorowsGames();
+            var games = GetAllTommorowsGames(date);
 
-            MatchGames(archivedData, games);
+            MatchGames(archivedData, games, date);
         }
 
-        private void MatchGames(LeagueTypeData[] archivedData, IList<GameInfo> games)
+        private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date)
         {
-            using (var fileStream = File.AppendText("GamesToBet.csv"))
+            var filteredGames = GetFilteredGames(archivedData, games);
+
+            using (var fileStream = File.AppendText($"GamesToBet_{date}.csv"))
             {
-                var filteredGames = new List<GameInfo>();
-                foreach (var game in games)
-                {
-                    var bestOdd = game.Odds.Min();
-                    LeagueTypeData league = null;
-
-                    foreach(var l in archivedData.Where(s => s.Info.Sport == game.Sport && 
-                                                                s.Info.Country == game.Country && 
-                                                                s.Info.Name == game.League &&
-                                                                s.Margin > bestOdd))
-                    {
-                        // find margin closest to the actual odd
-                        // meaning minimal margin
-                        if (league == null ||
-                            league.Margin > l.Margin)
-                            league = l;
-                    }
-
-                    if (league == null)
-                        continue;
-
-                    game.MoneyPerGame = league.MoneyPerGame;
-                    game.TotalRecords = league.TotalRecords;
-                    game.SuccessRate = league.SuccessRate;
-
-                    filteredGames.Add(game);
-                }
-
-                foreach(var game in filteredGames.OrderByDescending(s => s.MoneyPerGame))
+                foreach (var game in filteredGames.OrderByDescending(s => s.MoneyPerGame))
                 {
                     var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
                     fileStream.WriteLine(line);
@@ -56,14 +31,46 @@ namespace OddsScrapper
             }
         }
 
-        private IList<GameInfo> GetAllTommorowsGames()
+        private IEnumerable<GameInfo> GetFilteredGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games)
         {
-            var results = new List<GameInfo>();
+            foreach (var game in games)
+            {
+                var bestOdd = game.Odds.Min();
+                LeagueTypeData league = null;
 
+                foreach (var l in archivedData.Where(s => s.Info.Sport == game.Sport &&
+                                                             s.Info.Country == game.Country &&
+                                                             s.Info.Name == game.League &&
+                                                             s.Margin > bestOdd))
+                {
+                    // find margin closest to the actual odd
+                    // meaning minimal margin
+                    if (league == null ||
+                        league.Margin > l.Margin)
+                        league = l;
+                }
+
+                if (league == null)
+                    continue;
+
+                game.MoneyPerGame = league.MoneyPerGame;
+                game.TotalRecords = league.TotalRecords;
+                game.SuccessRate = league.SuccessRate;
+
+                yield return game;
+            }
+        }
+
+        private IEnumerable<GameInfo> GetAllTommorowsGames(string gameDate)
+        {
             var dataDirectory = HelperMethods.GetTommorowsGamesFolderPath();
             var files = Directory.GetFiles(dataDirectory, "*.csv");
             foreach(var file in files)
             {
+                var date = Path.GetFileNameWithoutExtension(file).Split('_').Last();
+                if (date != gameDate)
+                    continue;
+
                 foreach(var line in File.ReadLines(file))
                 {
                     var data = line.Split(',');
@@ -84,11 +91,9 @@ namespace OddsScrapper
                         Odds = odds.ToArray()
                     };
 
-                    results.Add(game);
+                    yield return game;
                 }
             }
-
-            return results;
         }
 
         private LeagueTypeData[] GetArchivedData()
