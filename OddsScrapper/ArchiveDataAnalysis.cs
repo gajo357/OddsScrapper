@@ -26,7 +26,7 @@ namespace OddsScrapper
 
                 var info = leaguesInfo[sport][country][leagueName];
 
-                var leagueData = new LeagueOddsData() { Info = info };
+                var leagueData = new LeagueOddsData(info);
 
                 foreach(var line in File.ReadLines(file))
                 {

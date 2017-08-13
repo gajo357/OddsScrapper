@@ -23,13 +23,23 @@ namespace OddsScrapper
 
     public class LeagueOddsData
     {
-        public LeagueInfo Info;
+        public LeagueOddsData(LeagueInfo info)
+        {
+            Info = info;
+            Le11 = new LeagueTypeData(1.1, info);
+            Le12 = new LeagueTypeData(1.2, info);
+            Le13 = new LeagueTypeData(1.3, info);
+            Le14 = new LeagueTypeData(1.4, info);
+            Le15 = new LeagueTypeData(1.5, info);
+        }
 
-        public LeagueTypeData Le11 { get; } = new LeagueTypeData(1.1);
-        public LeagueTypeData Le12 { get; } = new LeagueTypeData(1.2);
-        public LeagueTypeData Le13 { get; } = new LeagueTypeData(1.3);
-        public LeagueTypeData Le14 { get; } = new LeagueTypeData(1.4);
-        public LeagueTypeData Le15 { get; } = new LeagueTypeData(1.5);
+        public LeagueInfo Info { get; }
+
+        public LeagueTypeData Le11 { get; }
+        public LeagueTypeData Le12 { get; }
+        public LeagueTypeData Le13 { get; }
+        public LeagueTypeData Le14 { get; }
+        public LeagueTypeData Le15 { get; }
 
         private IEnumerable<LeagueTypeData> Data => new[] { Le11, Le12, Le13, Le14, Le15 };
 
@@ -45,18 +55,21 @@ namespace OddsScrapper
         {
             foreach (var ltd in Data)
             {
-                ltd.WriteLeagueData(stream, Info);
+                ltd.WriteLeagueData(stream);
             }
         }
     }
 
     public class LeagueTypeData
     {
-        public LeagueTypeData(double margin)
+        public LeagueTypeData(double margin, LeagueInfo info)
         {
             Margin = margin;
+            Info = info;
         }
 
+        public LeagueInfo Info { get; }
+        
         public double Margin { get; }
         public double OddsSum = 0;
 
@@ -65,18 +78,16 @@ namespace OddsScrapper
 
         public double MoneyMade = 0;
 
-        private double _moneyPerGame = 0;
-        public double MoneyPerGame => _moneyPerGame;
+        public double MoneyPerGame = 0;
 
-        private double _successRate = 0;
-        public double SuccessRate => _successRate;
+        public double SuccessRate = 0;
 
-        public void WriteLeagueData(StreamWriter stream, LeagueInfo info)
+        public void WriteLeagueData(StreamWriter stream)
         {
             if (TotalRecords == 0)
                 return;
 
-            var line = $"{info.Sport},{info.Country},{HelperMethods.MakeValidFileName(info.Name)},{Margin:F2},{TotalRecords},{SuccessRecords},{OddsSum / TotalRecords:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4}";
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{Margin:F2},{TotalRecords},{SuccessRecords},{OddsSum / TotalRecords:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4}";
             stream.WriteLine(line);
         }
 
@@ -97,8 +108,23 @@ namespace OddsScrapper
             }
             OddsSum += odd;
 
-            _moneyPerGame = MoneyMade / TotalRecords;
-            _successRate = (double)SuccessRecords / TotalRecords;
+            MoneyPerGame = MoneyMade / TotalRecords;
+            SuccessRate = (double)SuccessRecords / TotalRecords;
         }
+    }
+
+    public class GameInfo
+    {
+        public string Country;
+        public string League;
+        public string Sport;
+
+        public int TotalRecords = 0;
+        public double MoneyPerGame = 0;
+        public double SuccessRate = 0;
+
+        public string Participants;
+
+        public double[] Odds;
     }
 }

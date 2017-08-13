@@ -21,8 +21,11 @@ namespace OddsScrapper
             //var scrapper = new CommingMatchesScrapper();
             //scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey });
 
-            var analyser = new ArchiveDataAnalysis();
-            analyser.Analyse();
+            //var analyser = new ArchiveDataAnalysis();
+            //analyser.Analyse();
+
+            var matcher = new OddsMatcher();
+            matcher.MatchGamesWithArchivedData();
         }
     }
 }

@@ -54,6 +54,7 @@
     <Compile Include="HtmlReader.cs" />
     <Compile Include="HtmlTagNames.cs" />
     <Compile Include="League.cs" />
+    <Compile Include="OddsMatcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestScrapper.cs" />
