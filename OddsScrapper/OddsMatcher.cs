@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OddsScrapper
 {
@@ -25,9 +23,21 @@ namespace OddsScrapper
                 var filteredGames = new List<GameInfo>();
                 foreach (var game in games)
                 {
-                    var league = archivedData.FirstOrDefault(s => s.Info.Sport == game.Sport && 
+                    var bestOdd = game.Odds.Min();
+                    LeagueTypeData league = null;
+
+                    foreach(var l in archivedData.Where(s => s.Info.Sport == game.Sport && 
                                                                 s.Info.Country == game.Country && 
-                                                                s.Info.Name == game.League);
+                                                                s.Info.Name == game.League &&
+                                                                s.Margin > bestOdd))
+                    {
+                        // find margin closest to the actual odd
+                        // meaning minimal margin
+                        if (league == null ||
+                            league.Margin > l.Margin)
+                            league = l;
+                    }
+
                     if (league == null)
                         continue;
 

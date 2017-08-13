@@ -23,7 +23,9 @@ namespace OddsScrapper
 
         private void WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
         {
-            var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"tommorows_games_{sport}.csv");
+            var date = DateTime.Now.Date.ToShortDateString().Replace("/", string.Empty);
+
+            var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"{sport}_{date}.csv");
             using (var fileStream = File.AppendText(fileName))
             {
                 var div = tommorowsGames.GetElementbyId("table-matches");
