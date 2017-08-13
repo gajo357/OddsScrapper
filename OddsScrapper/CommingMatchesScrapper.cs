@@ -2,7 +2,6 @@
 using System;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OddsScrapper
 {
@@ -12,7 +11,6 @@ namespace OddsScrapper
 
         public void Scrape(string baseWebsite, string[] sports)
         {
-            //Parallel.ForEach(sports, (sport) =>
             foreach(var sport in sports)
             {
                 var tommorowsGames = GetTommorowGames($"{baseWebsite}/matches/{sport}/");
@@ -21,12 +19,11 @@ namespace OddsScrapper
 
                 WriteResultsToFile(tommorowsGames, sport);
             }
-            //);            
         }
 
         private void WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
         {
-            var fileName = $"tommorows_games_{sport}.csv";
+            var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"tommorows_games_{sport}.csv");
             using (var fileStream = File.AppendText(fileName))
             {
                 var div = tommorowsGames.GetElementbyId("table-matches");
@@ -53,8 +50,12 @@ namespace OddsScrapper
 
                     var name = nameElement.InnerText;
                     var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
+                    if (!gameLink.Contains(sport))
+                        continue;
+
+                    gameLink = gameLink.Substring(gameLink.IndexOf($"/{sport}/"));
                     var gameLinkParts = gameLink.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                    //var sport = gameLinkParts[0];
+                    //var gameSport = gameLinkParts[0];
                     var country = gameLinkParts[1];
                     var league = gameLinkParts[2];
 
@@ -65,6 +66,8 @@ namespace OddsScrapper
 
         private HtmlDocument GetTommorowGames(string link)
         {
+            //return WebReader.GetHtmlFromWebpage(link, GamesTableLoaded);
+
             var page = WebReader.GetHtmlFromWebpage(link, FirstPageLoaded);
             if (page == null)
                 return null;

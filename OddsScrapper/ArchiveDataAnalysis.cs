@@ -8,22 +8,26 @@ namespace OddsScrapper
     {
         public void Analyse()
         {
-            var dataDirectory = @"C:\Users\Gajo\Documents\Visual Studio 2017\Projects\OddsScrapper\OddsScrapper\bin\Debug";
+            var dataDirectory = HelperMethods.GetArchiveFolderPath();
             var files = Directory.GetFiles(dataDirectory, "*.csv");
-            var leaguesInfoFiles = Directory.GetFiles(dataDirectory, "*.txt").Where(s => s.StartsWith("leagues_"));
+            var leaguesInfoFiles = Directory.GetFiles(dataDirectory, "*.txt");
+            var leaguesInfo = ReadLeaguesInfos(leaguesInfoFiles);
 
-
-            var leaguesDict = new Dictionary<string, LeagueData>();
-            var total = new LeagueData() { Type = "ZZZ", Sport= "ZZZ", Country = "ZZZ" };
+            var leaguesDict = new Dictionary<string, List<LeagueOddsData>>();
+            var allLeagues = new List<LeagueOddsData>();
             foreach(var file in files)
             {
                 var fileName = Path.GetFileNameWithoutExtension(file).Split('_');
                 var sport = fileName[0];
                 var country = fileName[1];
                 var leagueName = fileName[2];
-                
-                var leagueData = new LeagueData() { Type = leagueName, Sport = sport, Country = country};
-                leaguesDict.Add(file, leagueData);
+                if (!leaguesInfo.ContainsKey(sport))
+                    continue;
+
+                var info = leaguesInfo[sport][country][leagueName];
+
+                var leagueData = new LeagueOddsData() { Info = info };
+
                 foreach(var line in File.ReadLines(file))
                 {
                     var data = line.Split(',');
@@ -35,117 +39,83 @@ namespace OddsScrapper
                     var success = int.Parse(data[2]) == 1;
 
                     leagueData.AddData(odd, success);
-                    total.AddData(odd, success);
+                }
+
+                if (leagueData.Le15.TotalRecords == 0)
+                    continue;
+
+                if (!leaguesDict.ContainsKey(sport))
+                    leaguesDict.Add(sport, new List<LeagueOddsData>());
+
+                leaguesDict[sport].Add(leagueData);
+                allLeagues.Add(leagueData);
+            }
+
+            using (var stream = File.AppendText(HelperMethods.GetAllAnalysedResultsFile()))
+            {
+                foreach (var pair in allLeagues)
+                {
+                    pair.WriteLeagueData(stream);
                 }
             }
 
-            using (var stream = File.AppendText("results.csv"))
+            foreach(var spair in leaguesDict)
             {
-                foreach (var pair in leaguesDict)
+                var sport = spair.Key;
+                using (var stream = File.AppendText(Path.Combine(HelperMethods.GetAnalysedArchivedDataFolderPath(), $"results_{sport}.csv")))
                 {
-                    pair.Value.WriteLeagueData(stream);
-                }
-
-                total.WriteLeagueData(stream);
-            }
-        }
-
-        private class LeagueData
-        {
-            public string Sport;
-            public string Country;
-            public string Type;
-
-            public LeagueTypeData Le11 { get; } = new LeagueTypeData("LE 11");
-            public LeagueTypeData Le12 { get; } = new LeagueTypeData("LE 12");
-            public LeagueTypeData Le13 { get; } = new LeagueTypeData("LE 13");
-            public LeagueTypeData Le14 { get; } = new LeagueTypeData("LE 14");
-            public LeagueTypeData Le15 { get; } = new LeagueTypeData("LE 15");
-
-            private IEnumerable<LeagueTypeData> data => new []{ Le11, Le12, Le13, Le14, Le15 };
-
-            public void AddData(double odd, bool success)
-            {
-                var data = new List<LeagueTypeData>();
-                if (odd <= 1.1)
-                {
-                    data.Add(Le11);
-                    data.Add(Le12);
-                    data.Add(Le13);
-                    data.Add(Le14);
-                    data.Add(Le15);
-                }
-                else if (odd <= 1.2)
-                {
-                    data.Add(Le12);
-                    data.Add(Le13);
-                    data.Add(Le14);
-                    data.Add(Le15);
-                }
-                else if (odd <= 1.3)
-                {
-                    data.Add(Le13);
-                    data.Add(Le14);
-                    data.Add(Le15);
-                }
-                else if (odd <= 1.4)
-                {
-                    data.Add(Le14);
-                    data.Add(Le15);
-                }
-                else
-                {
-                    data.Add(Le15);
-                }
-
-                foreach(var ltd in data)
-                {
-                    ltd.TotalRecords++;
-                    if (success)
+                    foreach (var league in spair.Value)
                     {
-                        ltd.SuccessRecords++;
-                        ltd.MoneyMade += odd - 1;
+                        league.WriteLeagueData(stream);
                     }
-                    else
-                    {
-                        ltd.MoneyMade -= 1;
-                    }
-                    ltd.OddsSum += odd;
                 }
-            }
 
-            public void WriteLeagueData(StreamWriter stream)
-            {
-                foreach(var ltd in data)
+                using (var stream = File.AppendText(Path.Combine(HelperMethods.GetAnalysedArchivedDataFolderPath(), $"results_{sport}_first_man_league.csv")))
                 {
-                    ltd.WriteLeagueData(stream, Type, Sport, Country);
+                    foreach (var league in spair.Value.Where(s => s.Info.IsFirst && !s.Info.IsWomen && !s.Info.IsCup))
+                    {
+                        league.WriteLeagueData(stream);
+                    }
                 }
             }
         }
 
-        private class LeagueTypeData
+        private string[] CupNames = new[] { "cup", "copa", "cupen" };
+        private string Women = "women";
+        private IDictionary<string, IDictionary<string, IDictionary<string, LeagueInfo>>> ReadLeaguesInfos(IEnumerable<string> leaguesInfoFiles)
         {
-            public LeagueTypeData(string name)
+            var result = new Dictionary<string, IDictionary<string, IDictionary<string, LeagueInfo>>>();
+            foreach(var fileName in leaguesInfoFiles)
             {
-                Name = name;
+                foreach (var line in File.ReadLines(fileName))
+                {
+                    var data = line.Split(',');
+                    var sport = data[0];
+                    var country = data[1];
+                    var name = data[2];
+                    var isFirst = int.Parse(data[3]) == 1 ? true : false;
+                    var isCup = int.Parse(data[4]) == 1 || CupNames.Any(name.Contains) ? true : false;
+                    var isWomen = int.Parse(data[5]) == 1 || name.Contains(Women) ? true : false;
+
+                    var league = new LeagueInfo();
+                    league.Sport = sport;
+                    league.Country = country;
+                    league.Name = name;
+                    league.IsFirst = isFirst;
+                    league.IsCup = isCup;
+                    league.IsWomen = isWomen;
+
+                    if (!result.ContainsKey(sport))
+                        result.Add(sport, new Dictionary<string, IDictionary<string, LeagueInfo>>());
+                    
+                    if (!result[sport].ContainsKey(country))
+                        result[sport].Add(country, new Dictionary<string, LeagueInfo>());
+
+                    result[sport][country].Add(name, league);
+                }
             }
 
-            public string Name { get; }
-            public double OddsSum = 0;
-
-            public int TotalRecords = 0;
-            public int SuccessRecords = 0;
-
-            public double MoneyMade = 0;
-
-            public void WriteLeagueData(StreamWriter stream, string leagueName, string sport, string country)
-            {
-                if (TotalRecords == 0)
-                    return;
-
-                var line = $"{sport},{country},{leagueName},{Name},{TotalRecords},{SuccessRecords},{OddsSum / TotalRecords:F4},{(double)SuccessRecords / (double)TotalRecords:F4},{MoneyMade},{MoneyMade/TotalRecords:F4}";
-                stream.WriteLine(line);                
-            }
+            return result;
         }
     }
 }

@@ -50,8 +50,10 @@
     <Compile Include="ArchiveDataAnalysis.cs" />
     <Compile Include="ArchiveOddsScrapper.cs" />
     <Compile Include="CommingMatchesScrapper.cs" />
+    <Compile Include="HelperMethods.cs" />
     <Compile Include="HtmlReader.cs" />
     <Compile Include="HtmlTagNames.cs" />
+    <Compile Include="League.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestScrapper.cs" />

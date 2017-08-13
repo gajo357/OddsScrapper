@@ -1,0 +1,900 @@
+Chambery Savoie - Saran,1.47,0
+Creteil - Cesson Rennes-Metropole,1.26,1
+Dunkerque - Aix,1.25,1
+Montpellier - Selestat,1.04,1
+Paris SG - Nantes,1.45,0
+St. Raphael - Ivry,1.23,1
+Toulouse - Nimes,1.46,1
+Nantes - St. Raphael,1.36,1
+Cesson Rennes-Metropole - Montpellier,1.27,1
+Selestat - Creteil,1.18,1
+Aix - Paris SG,1.38,1
+St. Raphael - Cesson Rennes-Metropole,1.24,0
+Paris SG - Saran,1.01,1
+Dunkerque - Ivry,1.37,1
+Selestat - Chambery Savoie,1.14,1
+St. Raphael - Paris SG,1.29,1
+Cesson Rennes-Metropole - Selestat,1.09,0
+Montpellier - Aix,1.08,1
+Toulouse - Dunkerque,1.43,0
+Chambery Savoie - Nantes,1.5,1
+Aix - Ivry,1.48,0
+Nimes - Montpellier,1.49,1
+Paris SG - Cesson Rennes-Metropole,1.03,1
+Creteil - St. Raphael,1.44,1
+Nantes - Saran,1.02,1
+Selestat - Toulouse,1.31,1
+Chambery Savoie - Creteil,1.12,0
+Ivry - Nantes,1.24,1
+Nimes - Selestat,1.15,1
+Saran - St. Raphael,1.18,1
+Paris SG - Toulouse,1.04,1
+Nantes - Nimes,1.07,0
+Montpellier - Ivry,1.08,1
+Aix - Cesson Rennes-Metropole,1.44,1
+Chambery Savoie - Aix,1.36,1
+Chambery Savoie - Saran,1.47,0
+Creteil - Cesson Rennes-Metropole,1.26,1
+Dunkerque - Aix,1.25,1
+Montpellier - Selestat,1.04,1
+Paris SG - Nantes,1.45,0
+St. Raphael - Ivry,1.23,1
+Toulouse - Nimes,1.46,1
+Nantes - St. Raphael,1.36,1
+Cesson Rennes-Metropole - Montpellier,1.27,1
+Selestat - Creteil,1.18,1
+Aix - Paris SG,1.38,1
+St. Raphael - Cesson Rennes-Metropole,1.24,0
+Paris SG - Saran,1.01,1
+Dunkerque - Ivry,1.37,1
+Selestat - Chambery Savoie,1.14,1
+St. Raphael - Paris SG,1.29,1
+Cesson Rennes-Metropole - Selestat,1.09,0
+Montpellier - Aix,1.08,1
+Toulouse - Dunkerque,1.43,0
+Chambery Savoie - Nantes,1.5,1
+Aix - Ivry,1.48,0
+Nimes - Montpellier,1.49,1
+Paris SG - Cesson Rennes-Metropole,1.03,1
+Creteil - St. Raphael,1.44,1
+Nantes - Saran,1.02,1
+Selestat - Toulouse,1.31,1
+Chambery Savoie - Creteil,1.12,0
+Ivry - Nantes,1.24,1
+Nimes - Selestat,1.15,1
+Saran - St. Raphael,1.18,1
+Paris SG - Toulouse,1.04,1
+Nantes - Nimes,1.07,0
+Montpellier - Ivry,1.08,1
+Aix - Cesson Rennes-Metropole,1.44,1
+Chambery Savoie - Aix,1.36,1
+Chambery Savoie - Saran,1.47,0
+Creteil - Cesson Rennes-Metropole,1.26,1
+Dunkerque - Aix,1.25,1
+Montpellier - Selestat,1.04,1
+Paris SG - Nantes,1.45,0
+St. Raphael - Ivry,1.23,1
+Toulouse - Nimes,1.46,1
+Nantes - St. Raphael,1.36,1
+Cesson Rennes-Metropole - Montpellier,1.27,1
+Selestat - Creteil,1.18,1
+Aix - Paris SG,1.38,1
+St. Raphael - Cesson Rennes-Metropole,1.24,0
+Paris SG - Saran,1.01,1
+Dunkerque - Ivry,1.37,1
+Selestat - Chambery Savoie,1.14,1
+St. Raphael - Paris SG,1.29,1
+Cesson Rennes-Metropole - Selestat,1.09,0
+Montpellier - Aix,1.08,1
+Toulouse - Dunkerque,1.43,0
+Chambery Savoie - Nantes,1.5,1
+Aix - Ivry,1.48,0
+Nimes - Montpellier,1.49,1
+Paris SG - Cesson Rennes-Metropole,1.03,1
+Creteil - St. Raphael,1.44,1
+Nantes - Saran,1.02,1
+Selestat - Toulouse,1.31,1
+Chambery Savoie - Creteil,1.12,0
+Ivry - Nantes,1.24,1
+Nimes - Selestat,1.15,1
+Saran - St. Raphael,1.18,1
+Paris SG - Toulouse,1.04,1
+Nantes - Nimes,1.07,0
+Montpellier - Ivry,1.08,1
+Aix - Cesson Rennes-Metropole,1.44,1
+Chambery Savoie - Aix,1.36,1
+Chambery Savoie - Saran,1.47,0
+Creteil - Cesson Rennes-Metropole,1.26,1
+Dunkerque - Aix,1.25,1
+Montpellier - Selestat,1.04,1
+Paris SG - Nantes,1.45,0
+St. Raphael - Ivry,1.23,1
+Toulouse - Nimes,1.46,1
+Nantes - St. Raphael,1.36,1
+Cesson Rennes-Metropole - Montpellier,1.27,1
+Selestat - Creteil,1.18,1
+Aix - Paris SG,1.38,1
+St. Raphael - Cesson Rennes-Metropole,1.24,0
+Paris SG - Saran,1.01,1
+Dunkerque - Ivry,1.37,1
+Selestat - Chambery Savoie,1.14,1
+St. Raphael - Paris SG,1.29,1
+Cesson Rennes-Metropole - Selestat,1.09,0
+Montpellier - Aix,1.08,1
+Toulouse - Dunkerque,1.43,0
+Chambery Savoie - Nantes,1.5,1
+Aix - Ivry,1.48,0
+Nimes - Montpellier,1.49,1
+Paris SG - Cesson Rennes-Metropole,1.03,1
+Creteil - St. Raphael,1.44,1
+Nantes - Saran,1.02,1
+Selestat - Toulouse,1.31,1
+Chambery Savoie - Creteil,1.12,0
+Ivry - Nantes,1.24,1
+Nimes - Selestat,1.15,1
+Saran - St. Raphael,1.18,1
+Paris SG - Toulouse,1.04,1
+Nantes - Nimes,1.07,0
+Montpellier - Ivry,1.08,1
+Aix - Cesson Rennes-Metropole,1.44,1
+Chambery Savoie - Aix,1.36,1
+Chartres - Chambery Savoie,1.2,1
+Montpellier - Dunkerque,1.22,0
+Nantes - Nimes,1.17,1
+Paris SG - Aix,1.01,0
+St. Raphael - Cesson Rennes-Metropole,1.28,0
+Aix - Montpellier,1.12,1
+Toulouse - Nantes,1.41,0
+Chambery Savoie - Tremblay,1.09,0
+Cesson Rennes-Metropole - Chartres,1.23,0
+Dunkerque - Ivry,1.16,0
+Nimes - St. Raphael,1.43,1
+Creteil - Paris SG,1.14,0
+Paris SG - Montpellier,1.33,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Creteil,1.48,0
+Ivry - Chambery Savoie,1.41,1
+Tremblay - Paris SG,1.08,1
+Montpellier - Tremblay,1.06,1
+Cesson Rennes-Metropole - Paris SG,1.21,1
+Creteil - Chartres,1.17,1
+Aix - Ivry,1.34,0
+Toulouse - Nimes,1.42,1
+Nantes - Cesson Rennes-Metropole,1.29,1
+Montpellier - Chambery Savoie,1.17,0
+Nantes - Aix,1.08,1
+St. Raphael - Creteil,1.37,1
+Chartres - Montpellier,1.11,1
+Paris SG - Toulouse,1.04,1
+Tremblay - Nantes,1.31,1
+Creteil - Nimes,1.36,0
+Aix - St. Raphael,1.43,1
+St. Raphael - Paris SG,1.32,1
+Nantes - Chartres,1.08,1
+Montpellier - Creteil,1.31,1
+Dunkerque - Tremblay,1.14,1
+Nimes - Ivry,1.33,0
+Toulouse - Aix,1.4,1
+Paris SG - Nantes,1.1,1
+Chartres - Chambery Savoie,1.2,1
+Montpellier - Dunkerque,1.22,0
+Nantes - Nimes,1.17,1
+Paris SG - Aix,1.01,0
+St. Raphael - Cesson Rennes-Metropole,1.28,0
+Aix - Montpellier,1.12,1
+Toulouse - Nantes,1.41,0
+Chambery Savoie - Tremblay,1.09,0
+Cesson Rennes-Metropole - Chartres,1.23,0
+Dunkerque - Ivry,1.16,0
+Nimes - St. Raphael,1.43,1
+Creteil - Paris SG,1.14,0
+Paris SG - Montpellier,1.33,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Creteil,1.48,0
+Ivry - Chambery Savoie,1.41,1
+Tremblay - Paris SG,1.08,1
+Montpellier - Tremblay,1.06,1
+Cesson Rennes-Metropole - Paris SG,1.21,1
+Creteil - Chartres,1.17,1
+Aix - Ivry,1.34,0
+Toulouse - Nimes,1.42,1
+Nantes - Cesson Rennes-Metropole,1.29,1
+Montpellier - Chambery Savoie,1.17,0
+Nantes - Aix,1.08,1
+St. Raphael - Creteil,1.37,1
+Chartres - Montpellier,1.11,1
+Paris SG - Toulouse,1.04,1
+Tremblay - Nantes,1.31,1
+Creteil - Nimes,1.36,0
+Aix - St. Raphael,1.43,1
+St. Raphael - Paris SG,1.32,1
+Nantes - Chartres,1.08,1
+Montpellier - Creteil,1.31,1
+Dunkerque - Tremblay,1.14,1
+Nimes - Ivry,1.33,0
+Toulouse - Aix,1.4,1
+Paris SG - Nantes,1.1,1
+Chartres - Chambery Savoie,1.2,1
+Montpellier - Dunkerque,1.22,0
+Nantes - Nimes,1.17,1
+Paris SG - Aix,1.01,0
+St. Raphael - Cesson Rennes-Metropole,1.28,0
+Aix - Montpellier,1.12,1
+Toulouse - Nantes,1.41,0
+Chambery Savoie - Tremblay,1.09,0
+Cesson Rennes-Metropole - Chartres,1.23,0
+Dunkerque - Ivry,1.16,0
+Nimes - St. Raphael,1.43,1
+Creteil - Paris SG,1.14,0
+Paris SG - Montpellier,1.33,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Creteil,1.48,0
+Ivry - Chambery Savoie,1.41,1
+Tremblay - Paris SG,1.08,1
+Montpellier - Tremblay,1.06,1
+Cesson Rennes-Metropole - Paris SG,1.21,1
+Creteil - Chartres,1.17,1
+Aix - Ivry,1.34,0
+Toulouse - Nimes,1.42,1
+Nantes - Cesson Rennes-Metropole,1.29,1
+Montpellier - Chambery Savoie,1.17,0
+Nantes - Aix,1.08,1
+St. Raphael - Creteil,1.37,1
+Chartres - Montpellier,1.11,1
+Paris SG - Toulouse,1.04,1
+Tremblay - Nantes,1.31,1
+Creteil - Nimes,1.36,0
+Aix - St. Raphael,1.43,1
+St. Raphael - Paris SG,1.32,1
+Nantes - Chartres,1.08,1
+Montpellier - Creteil,1.31,1
+Dunkerque - Tremblay,1.14,1
+Nimes - Ivry,1.33,0
+Toulouse - Aix,1.4,1
+Paris SG - Nantes,1.1,1
+Chartres - Chambery Savoie,1.2,1
+Montpellier - Dunkerque,1.22,0
+Nantes - Nimes,1.17,1
+Paris SG - Aix,1.01,0
+St. Raphael - Cesson Rennes-Metropole,1.28,0
+Aix - Montpellier,1.12,1
+Toulouse - Nantes,1.41,0
+Chambery Savoie - Tremblay,1.09,0
+Cesson Rennes-Metropole - Chartres,1.23,0
+Dunkerque - Ivry,1.16,0
+Nimes - St. Raphael,1.43,1
+Creteil - Paris SG,1.14,0
+Paris SG - Montpellier,1.33,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Creteil,1.48,0
+Ivry - Chambery Savoie,1.41,1
+Tremblay - Paris SG,1.08,1
+Montpellier - Tremblay,1.06,1
+Cesson Rennes-Metropole - Paris SG,1.21,1
+Creteil - Chartres,1.17,1
+Aix - Ivry,1.34,0
+Toulouse - Nimes,1.42,1
+Nantes - Cesson Rennes-Metropole,1.29,1
+Montpellier - Chambery Savoie,1.17,0
+Nantes - Aix,1.08,1
+St. Raphael - Creteil,1.37,1
+Chartres - Montpellier,1.11,1
+Paris SG - Toulouse,1.04,1
+Tremblay - Nantes,1.31,1
+Creteil - Nimes,1.36,0
+Aix - St. Raphael,1.43,1
+St. Raphael - Paris SG,1.32,1
+Nantes - Chartres,1.08,1
+Montpellier - Creteil,1.31,1
+Dunkerque - Tremblay,1.14,1
+Nimes - Ivry,1.33,0
+Toulouse - Aix,1.4,1
+Paris SG - Nantes,1.1,1
+Cesson Rennes-Metropole - Nimes,1.42,1
+Chambery Savoie - Toulouse,1.24,1
+Montpellier - Istres,1.01,1
+Tremblay - Paris SG,1.07,1
+Paris SG - St. Raphael,1.1,1
+Nantes - Cesson Rennes-Metropole,1.26,1
+Nimes - Chambery Savoie,1.33,0
+Toulouse - Aix,1.25,0
+Chambery Savoie - Montpellier,1.43,0
+Cesson Rennes-Metropole - Paris SG,1.12,1
+Creteil - Dunkerque,1.39,1
+Selestat - Nantes,1.22,1
+St. Raphael - Istres,1.06,1
+Paris SG - Dunkerque,1.18,1
+Montpellier - Aix,1.04,1
+Nantes - Creteil,1.26,1
+Nimes - Istres,1.19,1
+Toulouse - Selestat,1.17,1
+Chambery Savoie - Aix,1.2,1
+Dunkerque - Tremblay,1.31,1
+Istres - Toulouse,1.45,1
+Paris SG - Creteil,1.08,1
+Nimes - Montpellier,1.26,1
+Nantes - Tremblay,1.31,0
+Istres - Chambery Savoie,1.24,1
+Dunkerque - Toulouse,1.29,1
+Chambery Savoie - Cesson Rennes-Metropole,1.31,0
+Nantes - Nimes,1.25,1
+Paris SG - Selestat,1.02,1
+Tremblay - Istres,1.34,1
+Creteil - Montpellier,1.42,1
+St. Raphael - Aix,1.31,1
+Montpellier - Nantes,1.33,1
+Cesson Rennes-Metropole - Nimes,1.42,1
+Chambery Savoie - Toulouse,1.24,1
+Montpellier - Istres,1.01,1
+Tremblay - Paris SG,1.07,1
+Paris SG - St. Raphael,1.1,1
+Nantes - Cesson Rennes-Metropole,1.26,1
+Nimes - Chambery Savoie,1.33,0
+Toulouse - Aix,1.25,0
+Chambery Savoie - Montpellier,1.43,0
+Cesson Rennes-Metropole - Paris SG,1.12,1
+Creteil - Dunkerque,1.39,1
+Selestat - Nantes,1.22,1
+St. Raphael - Istres,1.06,1
+Paris SG - Dunkerque,1.18,1
+Montpellier - Aix,1.04,1
+Nantes - Creteil,1.26,1
+Nimes - Istres,1.19,1
+Toulouse - Selestat,1.17,1
+Chambery Savoie - Aix,1.2,1
+Dunkerque - Tremblay,1.31,1
+Istres - Toulouse,1.45,1
+Paris SG - Creteil,1.08,1
+Nimes - Montpellier,1.26,1
+Nantes - Tremblay,1.31,0
+Istres - Chambery Savoie,1.24,1
+Dunkerque - Toulouse,1.29,1
+Chambery Savoie - Cesson Rennes-Metropole,1.31,0
+Nantes - Nimes,1.25,1
+Paris SG - Selestat,1.02,1
+Tremblay - Istres,1.34,1
+Creteil - Montpellier,1.42,1
+St. Raphael - Aix,1.31,1
+Montpellier - Nantes,1.33,1
+Cesson Rennes-Metropole - Nimes,1.42,1
+Chambery Savoie - Toulouse,1.24,1
+Montpellier - Istres,1.01,1
+Tremblay - Paris SG,1.07,1
+Paris SG - St. Raphael,1.1,1
+Nantes - Cesson Rennes-Metropole,1.26,1
+Nimes - Chambery Savoie,1.33,0
+Toulouse - Aix,1.25,0
+Chambery Savoie - Montpellier,1.43,0
+Cesson Rennes-Metropole - Paris SG,1.12,1
+Creteil - Dunkerque,1.39,1
+Selestat - Nantes,1.22,1
+St. Raphael - Istres,1.06,1
+Paris SG - Dunkerque,1.18,1
+Montpellier - Aix,1.04,1
+Nantes - Creteil,1.26,1
+Nimes - Istres,1.19,1
+Toulouse - Selestat,1.17,1
+Chambery Savoie - Aix,1.2,1
+Dunkerque - Tremblay,1.31,1
+Istres - Toulouse,1.45,1
+Paris SG - Creteil,1.08,1
+Nimes - Montpellier,1.26,1
+Nantes - Tremblay,1.31,0
+Istres - Chambery Savoie,1.24,1
+Dunkerque - Toulouse,1.29,1
+Chambery Savoie - Cesson Rennes-Metropole,1.31,0
+Nantes - Nimes,1.25,1
+Paris SG - Selestat,1.02,1
+Tremblay - Istres,1.34,1
+Creteil - Montpellier,1.42,1
+St. Raphael - Aix,1.31,1
+Montpellier - Nantes,1.33,1
+Cesson Rennes-Metropole - Nimes,1.42,1
+Chambery Savoie - Toulouse,1.24,1
+Montpellier - Istres,1.01,1
+Tremblay - Paris SG,1.07,1
+Paris SG - St. Raphael,1.1,1
+Nantes - Cesson Rennes-Metropole,1.26,1
+Nimes - Chambery Savoie,1.33,0
+Toulouse - Aix,1.25,0
+Chambery Savoie - Montpellier,1.43,0
+Cesson Rennes-Metropole - Paris SG,1.12,1
+Creteil - Dunkerque,1.39,1
+Selestat - Nantes,1.22,1
+St. Raphael - Istres,1.06,1
+Paris SG - Dunkerque,1.18,1
+Montpellier - Aix,1.04,1
+Nantes - Creteil,1.26,1
+Nimes - Istres,1.19,1
+Toulouse - Selestat,1.17,1
+Chambery Savoie - Aix,1.2,1
+Dunkerque - Tremblay,1.31,1
+Istres - Toulouse,1.45,1
+Paris SG - Creteil,1.08,1
+Nimes - Montpellier,1.26,1
+Nantes - Tremblay,1.31,0
+Istres - Chambery Savoie,1.24,1
+Dunkerque - Toulouse,1.29,1
+Chambery Savoie - Cesson Rennes-Metropole,1.31,0
+Nantes - Nimes,1.25,1
+Paris SG - Selestat,1.02,1
+Tremblay - Istres,1.34,1
+Creteil - Montpellier,1.42,1
+St. Raphael - Aix,1.31,1
+Montpellier - Nantes,1.33,1
+Chambery Savoie - Montpellier,1.33,0
+Dunkerque - Tremblay,1.14,1
+Nantes - Toulouse,1.44,0
+Paris SG - Cesson Rennes-Metropole,1.04,1
+Aix - Ivry,1.44,1
+Cesson Rennes-Metropole - Dijon,1.17,1
+Dunkerque - Chambery Savoie,1.33,0
+Tremblay - Paris SG,1.16,1
+Toulouse - Nimes,1.25,1
+Ivry - Montpellier,1.15,1
+Selestat - Nantes,1.39,1
+St. Raphael - Aix,1.39,1
+Dijon - St. Raphael,1.34,0
+Nantes - Cesson Rennes-Metropole,1.13,1
+Chambery Savoie - Selestat,1.27,1
+Aix - Paris SG,1.09,1
+Dunkerque - Aix,1.14,1
+Nimes - Montpellier,1.22,1
+Tremblay - Nantes,1.43,1
+Paris SG - Dijon,1.04,1
+Chambery Savoie - Nimes,1.2,1
+Montpellier - Dunkerque,1.41,0
+Nantes - Ivry,1.18,1
+Paris SG - Nantes,1.31,1
+Dunkerque - Cesson Rennes-Metropole,1.22,1
+Aix - Dijon,1.29,0
+Selestat - Toulouse,1.45,1
+Cesson Rennes-Metropole - Nimes,1.35,1
+Paris SG - Dunkerque,1.34,0
+Tremblay - Chambery Savoie,1.43,0
+Montpellier - St. Raphael,1.16,1
+Nantes - Aix,1.16,1
+Chambery Savoie - Montpellier,1.33,0
+Dunkerque - Tremblay,1.14,1
+Nantes - Toulouse,1.44,0
+Paris SG - Cesson Rennes-Metropole,1.04,1
+Aix - Ivry,1.44,1
+Cesson Rennes-Metropole - Dijon,1.17,1
+Dunkerque - Chambery Savoie,1.33,0
+Tremblay - Paris SG,1.16,1
+Toulouse - Nimes,1.25,1
+Ivry - Montpellier,1.15,1
+Selestat - Nantes,1.39,1
+St. Raphael - Aix,1.39,1
+Dijon - St. Raphael,1.34,0
+Nantes - Cesson Rennes-Metropole,1.13,1
+Chambery Savoie - Selestat,1.27,1
+Aix - Paris SG,1.09,1
+Dunkerque - Aix,1.14,1
+Nimes - Montpellier,1.22,1
+Tremblay - Nantes,1.43,1
+Paris SG - Dijon,1.04,1
+Chambery Savoie - Nimes,1.2,1
+Montpellier - Dunkerque,1.41,0
+Nantes - Ivry,1.18,1
+Paris SG - Nantes,1.31,1
+Dunkerque - Cesson Rennes-Metropole,1.22,1
+Aix - Dijon,1.29,0
+Selestat - Toulouse,1.45,1
+Cesson Rennes-Metropole - Nimes,1.35,1
+Paris SG - Dunkerque,1.34,0
+Tremblay - Chambery Savoie,1.43,0
+Montpellier - St. Raphael,1.16,1
+Nantes - Aix,1.16,1
+Chambery Savoie - Montpellier,1.33,0
+Dunkerque - Tremblay,1.14,1
+Nantes - Toulouse,1.44,0
+Paris SG - Cesson Rennes-Metropole,1.04,1
+Aix - Ivry,1.44,1
+Cesson Rennes-Metropole - Dijon,1.17,1
+Dunkerque - Chambery Savoie,1.33,0
+Tremblay - Paris SG,1.16,1
+Toulouse - Nimes,1.25,1
+Ivry - Montpellier,1.15,1
+Selestat - Nantes,1.39,1
+St. Raphael - Aix,1.39,1
+Dijon - St. Raphael,1.34,0
+Nantes - Cesson Rennes-Metropole,1.13,1
+Chambery Savoie - Selestat,1.27,1
+Aix - Paris SG,1.09,1
+Dunkerque - Aix,1.14,1
+Nimes - Montpellier,1.22,1
+Tremblay - Nantes,1.43,1
+Paris SG - Dijon,1.04,1
+Chambery Savoie - Nimes,1.2,1
+Montpellier - Dunkerque,1.41,0
+Nantes - Ivry,1.18,1
+Paris SG - Nantes,1.31,1
+Dunkerque - Cesson Rennes-Metropole,1.22,1
+Aix - Dijon,1.29,0
+Selestat - Toulouse,1.45,1
+Cesson Rennes-Metropole - Nimes,1.35,1
+Paris SG - Dunkerque,1.34,0
+Tremblay - Chambery Savoie,1.43,0
+Montpellier - St. Raphael,1.16,1
+Nantes - Aix,1.16,1
+Chambery Savoie - Montpellier,1.33,0
+Dunkerque - Tremblay,1.14,1
+Nantes - Toulouse,1.44,0
+Paris SG - Cesson Rennes-Metropole,1.04,1
+Aix - Ivry,1.44,1
+Cesson Rennes-Metropole - Dijon,1.17,1
+Dunkerque - Chambery Savoie,1.33,0
+Tremblay - Paris SG,1.16,1
+Toulouse - Nimes,1.25,1
+Ivry - Montpellier,1.15,1
+Selestat - Nantes,1.39,1
+St. Raphael - Aix,1.39,1
+Dijon - St. Raphael,1.34,0
+Nantes - Cesson Rennes-Metropole,1.13,1
+Chambery Savoie - Selestat,1.27,1
+Aix - Paris SG,1.09,1
+Dunkerque - Aix,1.14,1
+Nimes - Montpellier,1.22,1
+Tremblay - Nantes,1.43,1
+Paris SG - Dijon,1.04,1
+Chambery Savoie - Nimes,1.2,1
+Montpellier - Dunkerque,1.41,0
+Nantes - Ivry,1.18,1
+Paris SG - Nantes,1.31,1
+Dunkerque - Cesson Rennes-Metropole,1.22,1
+Aix - Dijon,1.29,0
+Selestat - Toulouse,1.45,1
+Cesson Rennes-Metropole - Nimes,1.35,1
+Paris SG - Dunkerque,1.34,0
+Tremblay - Chambery Savoie,1.43,0
+Montpellier - St. Raphael,1.16,1
+Nantes - Aix,1.16,1
+Cesson Rennes-Metropole - Toulouse,1.44,1
+Chambery Savoie - Creteil,1.11,1
+Ivry - Billere,1.05,1
+Montpellier - Nantes,1.32,1
+Paris SG - Tremblay,1.19,1
+Aix - Selestat,1.3,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Montpellier,1.11,1
+Billere - St. Raphael,1.12,1
+Nantes - Cesson Rennes-Metropole,1.21,0
+Toulouse - Paris SG,1.24,1
+Aix - Toulouse,1.17,0
+Dunkerque - Tremblay,1.18,1
+Creteil - Cesson Rennes-Metropole,1.48,0
+Billere - Chambery Savoie,1.03,1
+Nantes - Selestat,1.14,1
+Billere - Toulouse,1.1,1
+Cesson Rennes-Metropole - Paris SG,1.17,1
+Chambery Savoie - Tremblay,1.12,0
+Creteil - Dunkerque,1.48,1
+Paris SG - Aix,1.07,1
+Montpellier - Selestat,1.1,1
+St. Raphael - Tremblay,1.32,1
+Chambery Savoie - St. Raphael,1.33,1
+Billere - Dunkerque,1.02,1
+Aix - Cesson Rennes-Metropole,1.3,1
+Montpellier - Creteil,1.06,0
+Ivry - Paris SG,1.11,1
+St. Raphael - Montpellier,1.26,0
+Cesson Rennes-Metropole - Toulouse,1.44,1
+Chambery Savoie - Creteil,1.11,1
+Ivry - Billere,1.05,1
+Montpellier - Nantes,1.32,1
+Paris SG - Tremblay,1.19,1
+Aix - Selestat,1.3,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Montpellier,1.11,1
+Billere - St. Raphael,1.12,1
+Nantes - Cesson Rennes-Metropole,1.21,0
+Toulouse - Paris SG,1.24,1
+Aix - Toulouse,1.17,0
+Dunkerque - Tremblay,1.18,1
+Creteil - Cesson Rennes-Metropole,1.48,0
+Billere - Chambery Savoie,1.03,1
+Nantes - Selestat,1.14,1
+Billere - Toulouse,1.1,1
+Cesson Rennes-Metropole - Paris SG,1.17,1
+Chambery Savoie - Tremblay,1.12,0
+Creteil - Dunkerque,1.48,1
+Paris SG - Aix,1.07,1
+Montpellier - Selestat,1.1,1
+St. Raphael - Tremblay,1.32,1
+Chambery Savoie - St. Raphael,1.33,1
+Billere - Dunkerque,1.02,1
+Aix - Cesson Rennes-Metropole,1.3,1
+Montpellier - Creteil,1.06,0
+Ivry - Paris SG,1.11,1
+St. Raphael - Montpellier,1.26,0
+Cesson Rennes-Metropole - Toulouse,1.44,1
+Chambery Savoie - Creteil,1.11,1
+Ivry - Billere,1.05,1
+Montpellier - Nantes,1.32,1
+Paris SG - Tremblay,1.19,1
+Aix - Selestat,1.3,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Montpellier,1.11,1
+Billere - St. Raphael,1.12,1
+Nantes - Cesson Rennes-Metropole,1.21,0
+Toulouse - Paris SG,1.24,1
+Aix - Toulouse,1.17,0
+Dunkerque - Tremblay,1.18,1
+Creteil - Cesson Rennes-Metropole,1.48,0
+Billere - Chambery Savoie,1.03,1
+Nantes - Selestat,1.14,1
+Billere - Toulouse,1.1,1
+Cesson Rennes-Metropole - Paris SG,1.17,1
+Chambery Savoie - Tremblay,1.12,0
+Creteil - Dunkerque,1.48,1
+Paris SG - Aix,1.07,1
+Montpellier - Selestat,1.1,1
+St. Raphael - Tremblay,1.32,1
+Chambery Savoie - St. Raphael,1.33,1
+Billere - Dunkerque,1.02,1
+Aix - Cesson Rennes-Metropole,1.3,1
+Montpellier - Creteil,1.06,0
+Ivry - Paris SG,1.11,1
+St. Raphael - Montpellier,1.26,0
+Cesson Rennes-Metropole - Toulouse,1.44,1
+Chambery Savoie - Creteil,1.11,1
+Ivry - Billere,1.05,1
+Montpellier - Nantes,1.32,1
+Paris SG - Tremblay,1.19,1
+Aix - Selestat,1.3,1
+St. Raphael - Dunkerque,1.41,1
+Tremblay - Montpellier,1.11,1
+Billere - St. Raphael,1.12,1
+Nantes - Cesson Rennes-Metropole,1.21,0
+Toulouse - Paris SG,1.24,1
+Aix - Toulouse,1.17,0
+Dunkerque - Tremblay,1.18,1
+Creteil - Cesson Rennes-Metropole,1.48,0
+Billere - Chambery Savoie,1.03,1
+Nantes - Selestat,1.14,1
+Billere - Toulouse,1.1,1
+Cesson Rennes-Metropole - Paris SG,1.17,1
+Chambery Savoie - Tremblay,1.12,0
+Creteil - Dunkerque,1.48,1
+Paris SG - Aix,1.07,1
+Montpellier - Selestat,1.1,1
+St. Raphael - Tremblay,1.32,1
+Chambery Savoie - St. Raphael,1.33,1
+Billere - Dunkerque,1.02,1
+Aix - Cesson Rennes-Metropole,1.3,1
+Montpellier - Creteil,1.06,0
+Ivry - Paris SG,1.11,1
+St. Raphael - Montpellier,1.26,0
+Montpellier - Creteil,1.05,1
+Creteil - Chambery Savoie,1.45,0
+Istres - Cesson Rennes-Metropole,1.47,1
+Nantes - Nimes,1.43,1
+Paris SG - Dunkerque,1.29,1
+Ivry - Selestat,1.44,0
+Cesson Rennes-Metropole - Montpellier,1.43,0
+Nimes - Paris SG,1.46,0
+Dunkerque - Toulouse,1.45,0
+Chambery Savoie - St. Raphael,1.28,1
+Montpellier - Dunkerque,1.35,1
+St. Raphael - Ivry,1.42,1
+Chambery Savoie - Tremblay,1.11,1
+Nimes - Montpellier,1.2,0
+Nantes - Istres,1.32,1
+Montpellier - Selestat,1.01,1
+St. Raphael - Creteil,1.25,1
+Toulouse - Chambery Savoie,1.37,0
+Dunkerque - Nimes,1.17,1
+Tremblay - Ivry,1.36,0
+Creteil - Dunkerque,1.42,0
+Chambery Savoie - Cesson Rennes-Metropole,1.05,1
+Nimes - St. Raphael,1.39,1
+Nantes - Montpellier,1.11,0
+Ivry - Chambery Savoie,1.35,1
+Montpellier - Creteil,1.05,1
+Creteil - Chambery Savoie,1.45,0
+Istres - Cesson Rennes-Metropole,1.47,1
+Nantes - Nimes,1.43,1
+Paris SG - Dunkerque,1.29,1
+Ivry - Selestat,1.44,0
+Cesson Rennes-Metropole - Montpellier,1.43,0
+Nimes - Paris SG,1.46,0
+Dunkerque - Toulouse,1.45,0
+Chambery Savoie - St. Raphael,1.28,1
+Montpellier - Dunkerque,1.35,1
+St. Raphael - Ivry,1.42,1
+Chambery Savoie - Tremblay,1.11,1
+Nimes - Montpellier,1.2,0
+Nantes - Istres,1.32,1
+Montpellier - Selestat,1.01,1
+St. Raphael - Creteil,1.25,1
+Toulouse - Chambery Savoie,1.37,0
+Dunkerque - Nimes,1.17,1
+Tremblay - Ivry,1.36,0
+Creteil - Dunkerque,1.42,0
+Chambery Savoie - Cesson Rennes-Metropole,1.05,1
+Nimes - St. Raphael,1.39,1
+Nantes - Montpellier,1.11,0
+Ivry - Chambery Savoie,1.35,1
+Montpellier - Creteil,1.05,1
+Creteil - Chambery Savoie,1.45,0
+Istres - Cesson Rennes-Metropole,1.47,1
+Nantes - Nimes,1.43,1
+Paris SG - Dunkerque,1.29,1
+Ivry - Selestat,1.44,0
+Cesson Rennes-Metropole - Montpellier,1.43,0
+Nimes - Paris SG,1.46,0
+Dunkerque - Toulouse,1.45,0
+Chambery Savoie - St. Raphael,1.28,1
+Montpellier - Dunkerque,1.35,1
+St. Raphael - Ivry,1.42,1
+Chambery Savoie - Tremblay,1.11,1
+Nimes - Montpellier,1.2,0
+Nantes - Istres,1.32,1
+Montpellier - Selestat,1.01,1
+St. Raphael - Creteil,1.25,1
+Toulouse - Chambery Savoie,1.37,0
+Dunkerque - Nimes,1.17,1
+Tremblay - Ivry,1.36,0
+Creteil - Dunkerque,1.42,0
+Chambery Savoie - Cesson Rennes-Metropole,1.05,1
+Nimes - St. Raphael,1.39,1
+Nantes - Montpellier,1.11,0
+Ivry - Chambery Savoie,1.35,1
+Montpellier - Creteil,1.05,1
+Creteil - Chambery Savoie,1.45,0
+Istres - Cesson Rennes-Metropole,1.47,1
+Nantes - Nimes,1.43,1
+Paris SG - Dunkerque,1.29,1
+Ivry - Selestat,1.44,0
+Cesson Rennes-Metropole - Montpellier,1.43,0
+Nimes - Paris SG,1.46,0
+Dunkerque - Toulouse,1.45,0
+Chambery Savoie - St. Raphael,1.28,1
+Montpellier - Dunkerque,1.35,1
+St. Raphael - Ivry,1.42,1
+Chambery Savoie - Tremblay,1.11,1
+Nimes - Montpellier,1.2,0
+Nantes - Istres,1.32,1
+Montpellier - Selestat,1.01,1
+St. Raphael - Creteil,1.25,1
+Toulouse - Chambery Savoie,1.37,0
+Dunkerque - Nimes,1.17,1
+Tremblay - Ivry,1.36,0
+Creteil - Dunkerque,1.42,0
+Chambery Savoie - Cesson Rennes-Metropole,1.05,1
+Nimes - St. Raphael,1.39,1
+Nantes - Montpellier,1.11,0
+Ivry - Chambery Savoie,1.35,1
+Dijon - Nantes,1.39,0
+Istres - Toulouse,1.36,1
+Montpellier - St. Raphael,1.07,1
+Nimes - Ivry,1.48,1
+Paris SG - Tremblay,1.33,1
+Cesson Rennes-Metropole - Montpellier,1.06,1
+Ivry - Saint-Cyr,1.44,0
+St. Raphael - Paris SG,1.16,0
+Tremblay - Istres,1.44,1
+Nantes - Nimes,1.18,1
+Chambery Savoie - Dijon,1.05,1
+Nimes - Saint-Cyr,1.31,1
+Dunkerque - Dijon,1.2,1
+Istres - Ivry,1.45,1
+St. Raphael - Cesson Rennes-Metropole,1.21,0
+Montpellier - Chambery Savoie,1.16,1
+Paris SG - Nantes,1.42,0
+Toulouse - Tremblay,1.36,1
+Ivry - Montpellier,1.01,1
+Chambery Savoie - Paris SG,1.02,1
+Montpellier - Saint-Cyr,1.01,1
+Tremblay - Ivry,1.4,1
+Dunkerque - Nimes,1.16,1
+Toulouse - Cesson Rennes-Metropole,1.44,0
+Paris SG - Dijon,1.35,0
+St. Raphael - Chambery Savoie,1.29,0
+Chambery Savoie - Istres,1.01,1
+Nimes - Montpellier,1.01,1
+Chambery Savoie - Cesson Rennes-Metropole,1.01,1
+Dunkerque - Saint-Cyr,1.08,1
+Tremblay - Dijon,1.18,1
+Istres - Montpellier,1.06,1
+St. Raphael - Ivry,1.25,1
+Dijon - Nantes,1.39,0
+Istres - Toulouse,1.36,1
+Montpellier - St. Raphael,1.07,1
+Nimes - Ivry,1.48,1
+Paris SG - Tremblay,1.33,1
+Cesson Rennes-Metropole - Montpellier,1.06,1
+Ivry - Saint-Cyr,1.44,0
+St. Raphael - Paris SG,1.16,0
+Tremblay - Istres,1.44,1
+Nantes - Nimes,1.18,1
+Chambery Savoie - Dijon,1.05,1
+Nimes - Saint-Cyr,1.31,1
+Dunkerque - Dijon,1.2,1
+Istres - Ivry,1.45,1
+St. Raphael - Cesson Rennes-Metropole,1.21,0
+Montpellier - Chambery Savoie,1.16,1
+Paris SG - Nantes,1.42,0
+Toulouse - Tremblay,1.36,1
+Ivry - Montpellier,1.01,1
+Chambery Savoie - Paris SG,1.02,1
+Montpellier - Saint-Cyr,1.01,1
+Tremblay - Ivry,1.4,1
+Dunkerque - Nimes,1.16,1
+Toulouse - Cesson Rennes-Metropole,1.44,0
+Paris SG - Dijon,1.35,0
+St. Raphael - Chambery Savoie,1.29,0
+Chambery Savoie - Istres,1.01,1
+Nimes - Montpellier,1.01,1
+Chambery Savoie - Cesson Rennes-Metropole,1.01,1
+Dunkerque - Saint-Cyr,1.08,1
+Tremblay - Dijon,1.18,1
+Istres - Montpellier,1.06,1
+St. Raphael - Ivry,1.25,1
+Dijon - Nantes,1.39,0
+Istres - Toulouse,1.36,1
+Montpellier - St. Raphael,1.07,1
+Nimes - Ivry,1.48,1
+Paris SG - Tremblay,1.33,1
+Cesson Rennes-Metropole - Montpellier,1.06,1
+Ivry - Saint-Cyr,1.44,0
+St. Raphael - Paris SG,1.16,0
+Tremblay - Istres,1.44,1
+Nantes - Nimes,1.18,1
+Chambery Savoie - Dijon,1.05,1
+Nimes - Saint-Cyr,1.31,1
+Dunkerque - Dijon,1.2,1
+Istres - Ivry,1.45,1
+St. Raphael - Cesson Rennes-Metropole,1.21,0
+Montpellier - Chambery Savoie,1.16,1
+Paris SG - Nantes,1.42,0
+Toulouse - Tremblay,1.36,1
+Ivry - Montpellier,1.01,1
+Chambery Savoie - Paris SG,1.02,1
+Montpellier - Saint-Cyr,1.01,1
+Tremblay - Ivry,1.4,1
+Dunkerque - Nimes,1.16,1
+Toulouse - Cesson Rennes-Metropole,1.44,0
+Paris SG - Dijon,1.35,0
+St. Raphael - Chambery Savoie,1.29,0
+Chambery Savoie - Istres,1.01,1
+Nimes - Montpellier,1.01,1
+Chambery Savoie - Cesson Rennes-Metropole,1.01,1
+Dunkerque - Saint-Cyr,1.08,1
+Tremblay - Dijon,1.18,1
+Istres - Montpellier,1.06,1
+St. Raphael - Ivry,1.25,1
+Dijon - Nantes,1.39,0
+Istres - Toulouse,1.36,1
+Montpellier - St. Raphael,1.07,1
+Nimes - Ivry,1.48,1
+Paris SG - Tremblay,1.33,1
+Cesson Rennes-Metropole - Montpellier,1.06,1
+Ivry - Saint-Cyr,1.44,0
+St. Raphael - Paris SG,1.16,0
+Tremblay - Istres,1.44,1
+Nantes - Nimes,1.18,1
+Chambery Savoie - Dijon,1.05,1
+Nimes - Saint-Cyr,1.31,1
+Dunkerque - Dijon,1.2,1
+Istres - Ivry,1.45,1
+St. Raphael - Cesson Rennes-Metropole,1.21,0
+Montpellier - Chambery Savoie,1.16,1
+Paris SG - Nantes,1.42,0
+Toulouse - Tremblay,1.36,1
+Ivry - Montpellier,1.01,1
+Chambery Savoie - Paris SG,1.02,1
+Montpellier - Saint-Cyr,1.01,1
+Tremblay - Ivry,1.4,1
+Dunkerque - Nimes,1.16,1
+Toulouse - Cesson Rennes-Metropole,1.44,0
+Paris SG - Dijon,1.35,0
+St. Raphael - Chambery Savoie,1.29,0
+Chambery Savoie - Istres,1.01,1
+Nimes - Montpellier,1.01,1
+Chambery Savoie - Cesson Rennes-Metropole,1.01,1
+Dunkerque - Saint-Cyr,1.08,1
+Tremblay - Dijon,1.18,1
+Istres - Montpellier,1.06,1
+St. Raphael - Ivry,1.25,1

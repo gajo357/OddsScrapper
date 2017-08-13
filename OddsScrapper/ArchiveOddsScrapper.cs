@@ -11,19 +11,6 @@ namespace OddsScrapper
     {
         private HtmlReader WebReader { get; } = new HtmlReader();
 
-        public void ScrapeLeagueInfo(string baseWebsite, string sport)
-        {
-            // page with results of all sports
-            var leaguesPage = ReadLeaguesPage(baseWebsite, sport);
-            if (leaguesPage == null)
-                return;
-
-            foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
-            {
-                File.AppendAllLines($"leagues_{sport}.txt", new[] { league.ToString() });
-            }
-        }
-
         public void Scrape(string baseWebsite, string[] sports)
         {
             // page with results of all sports
@@ -31,15 +18,16 @@ namespace OddsScrapper
             if (leaguesPage == null)
                 return;
 
-            Parallel.ForEach(sports, (sport) =>
+            //Parallel.ForEach(sports, (sport) =>
+            foreach(var sport in sports)
             {
                 foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
                 {
-                    var fileName = MakeValidFileName($"{league.Sport}_{league.Country}_{league.Name}.csv");
+                    var fileName = HelperMethods.MakeValidFileName($"{league.Sport}_{league.Country}_{league.Name}.csv");
 
                     Console.WriteLine(fileName);
-                    File.AppendAllLines($"leagues_{sport}.txt", new[] { league.ToString() });
-                    using (var fileStream = File.AppendText(fileName))
+                    File.AppendAllLines(Path.Combine(HelperMethods.GetArchiveFolderPath(), $"leagues_{sport}.txt"), new[] { league.ToString() });
+                    using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetArchiveFolderPath(), fileName)))
                     {
                         var seasons = ReadSeasons($"{baseWebsite}{league.Link}");
                         if (seasons == null)
@@ -60,7 +48,8 @@ namespace OddsScrapper
                         }
                     }
                 }
-            });            
+            }
+            //);            
         }
 
         private IEnumerable<string> ReadResultsFromPage(HtmlDocument resultsPage)
@@ -135,9 +124,9 @@ namespace OddsScrapper
 
         private string[] CupNames = new[] { "cup", "copa", "cupen" };
         private string Women = "women";
-        private IEnumerable<League> ReadLeaguesForSport(HtmlDocument page, string sport)
+        private IEnumerable<LeagueInfo> ReadLeaguesForSport(HtmlDocument page, string sport)
         {
-            var results = new List<League>();
+            var results = new List<LeagueInfo>();
 
             var table = page.DocumentNode.Descendants(HtmlTagNames.Table).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Class, null) == LeaguesTableClassAttribute);
 
@@ -154,7 +143,7 @@ namespace OddsScrapper
                     if (string.IsNullOrEmpty(td.InnerText))
                         continue;
 
-                    var league = new League();
+                    var league = new LeagueInfo();
                     league.Link = td.Element(HtmlTagNames.A).Attributes[HtmlAttributes.Href].Value;
                     if (string.IsNullOrEmpty(league.Link))
                         continue;
@@ -254,14 +243,6 @@ namespace OddsScrapper
             return double.NaN;
         }
 
-        public static string MakeValidFileName(string name)
-        {
-            string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(Path.GetInvalidFileNameChars()));
-            string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-
-            return System.Text.RegularExpressions.Regex.Replace(name, invalidRegStr, "_");
-        }
-
         private static bool LeaguesTableLoaded(System.Windows.Forms.WebBrowser webBrowser)
         {
             // WAIT until the dynamic text is set
@@ -286,21 +267,6 @@ namespace OddsScrapper
             return !string.IsNullOrEmpty(table.InnerText);
         }
 
-        private class League
-        {
-            public bool IsFirst;
-            public string Country;
-            public string Name;
-
-            public string Link;
-            internal bool IsCup;
-            internal bool IsWomen;
-            internal string Sport;
-
-            public override string ToString()
-            {
-                return $"{Sport},{Country},{MakeValidFileName(Name)},{(IsFirst ? 1 : 0)},{(IsCup ? 1 : 0)},{(IsWomen ? 1 : 0)}";
-            }            
-        }
+        
     }
 }
