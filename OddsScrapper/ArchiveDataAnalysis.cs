@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -13,7 +14,7 @@ namespace OddsScrapper
             var leaguesInfoFiles = Directory.GetFiles(dataDirectory, "*.txt");
             var leaguesInfo = ReadLeaguesInfos(leaguesInfoFiles);
 
-            var leaguesDict = new Dictionary<string, List<LeagueOddsData>>();
+            var leaguesDict = new Dictionary<Tuple<string, string, string>, IDictionary<string, LeagueOddsData>>();
             var allLeagues = new List<LeagueOddsData>();
             foreach(var file in files)
             {
@@ -21,33 +22,42 @@ namespace OddsScrapper
                 var sport = fileName[0];
                 var country = fileName[1];
                 var leagueName = fileName[2];
-                if (!leaguesInfo.ContainsKey(sport))
+
+                var key = new Tuple<string, string, string>(sport, country, leagueName);
+                if (!leaguesInfo.ContainsKey(key))
                     continue;
 
-                var info = leaguesInfo[sport][country][leagueName];
+                var info = leaguesInfo[key];
 
                 var leagueData = new LeagueOddsData(info);
 
-                foreach(var line in File.ReadLines(file))
+                if (!leaguesDict.ContainsKey(key))
+                    leaguesDict.Add(key, new Dictionary<string, LeagueOddsData>());
+
+                foreach (var line in File.ReadLines(file))
                 {
                     var data = line.Split(',');
-                    if (data.Length != 3)
+                    if (data.Length != 4)
                         continue;
 
-                    var participants = data[0];
-                    var odd = double.Parse(data[1]);
-                    var success = int.Parse(data[2]) == 1;
+                    var season = data[0];
+                    var participants = data[1];
+                    var odd = double.Parse(data[2]);
+                    var success = int.Parse(data[3]) == 1;
+                                                            
+                    if (!leaguesDict[key].ContainsKey(season))
+                    {
+                        leaguesDict[key].Add(season, new LeagueOddsData(info));
+                    }
+                    LeagueOddsData leagueDictData = leaguesDict[key][season];
 
+                    leagueDictData.AddData(odd, success);
                     leagueData.AddData(odd, success);
                 }
 
                 if (leagueData.Le15.TotalRecords == 0)
                     continue;
 
-                if (!leaguesDict.ContainsKey(sport))
-                    leaguesDict.Add(sport, new List<LeagueOddsData>());
-
-                leaguesDict[sport].Add(leagueData);
                 allLeagues.Add(leagueData);
             }
 
@@ -61,20 +71,14 @@ namespace OddsScrapper
 
             foreach(var spair in leaguesDict)
             {
-                var sport = spair.Key;
+                var sport = spair.Key.Item1;
+                var country = spair.Key.Item2;
+                var name = spair.Key.Item3;
                 using (var stream = File.AppendText(Path.Combine(HelperMethods.GetAnalysedArchivedDataFolderPath(), $"results_{sport}.csv")))
                 {
                     foreach (var league in spair.Value)
                     {
-                        league.WriteLeagueData(stream);
-                    }
-                }
-
-                using (var stream = File.AppendText(Path.Combine(HelperMethods.GetAnalysedArchivedDataFolderPath(), $"results_{sport}_first_man_league.csv")))
-                {
-                    foreach (var league in spair.Value.Where(s => s.Info.IsFirst && !s.Info.IsWomen && !s.Info.IsCup))
-                    {
-                        league.WriteLeagueData(stream);
+                        league.Value.WriteLeagueData(stream, league.Key);
                     }
                 }
             }
@@ -82,9 +86,9 @@ namespace OddsScrapper
 
         private string[] CupNames = new[] { "cup", "copa", "cupen" };
         private string Women = "women";
-        private IDictionary<string, IDictionary<string, IDictionary<string, LeagueInfo>>> ReadLeaguesInfos(IEnumerable<string> leaguesInfoFiles)
+        private IDictionary<Tuple<string, string, string>, LeagueInfo> ReadLeaguesInfos(IEnumerable<string> leaguesInfoFiles)
         {
-            var result = new Dictionary<string, IDictionary<string, IDictionary<string, LeagueInfo>>>();
+            var result = new Dictionary<Tuple<string, string, string>, LeagueInfo>();
             foreach(var fileName in leaguesInfoFiles)
             {
                 foreach (var line in File.ReadLines(fileName))
@@ -94,8 +98,8 @@ namespace OddsScrapper
                     var country = data[1];
                     var name = data[2];
                     var isFirst = int.Parse(data[3]) == 1 ? true : false;
-                    var isCup = int.Parse(data[4]) == 1 || CupNames.Any(name.Contains) ? true : false;
-                    var isWomen = int.Parse(data[5]) == 1 || name.Contains(Women) ? true : false;
+                    var isCup = CupNames.Any(name.Contains) ? true : false;
+                    var isWomen = name.Contains(Women) ? true : false;
 
                     var league = new LeagueInfo();
                     league.Sport = sport;
@@ -105,13 +109,9 @@ namespace OddsScrapper
                     league.IsCup = isCup;
                     league.IsWomen = isWomen;
 
-                    if (!result.ContainsKey(sport))
-                        result.Add(sport, new Dictionary<string, IDictionary<string, LeagueInfo>>());
-                    
-                    if (!result[sport].ContainsKey(country))
-                        result[sport].Add(country, new Dictionary<string, LeagueInfo>());
-
-                    result[sport][country].Add(name, league);
+                    var key = new Tuple<string, string, string>(sport, country, name);
+                    if (!result.ContainsKey(key))
+                        result.Add(key, league);
                 }
             }
 

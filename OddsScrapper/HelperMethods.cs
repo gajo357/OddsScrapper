@@ -5,7 +5,7 @@ namespace OddsScrapper
 {
     public static class HelperMethods
     {
-        public const string ArchiveFolder = "FullArchive";
+        public const string ArchiveFolder = "Archive";
         public const string TommorowsGamesFolder = "TommorowsGames";
         public const string AnalysedArchivedDataFolder = "AnalysedArchivedData";
         

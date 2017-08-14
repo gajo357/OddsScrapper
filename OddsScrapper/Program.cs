@@ -10,16 +10,18 @@ namespace OddsScrapper
         private const string Tennis = "tennis";
         private const string Handball = "handball";
         private const string Hockey = "hockey";
+        private const string Baseball = "baseball";
+        private const string AmericanFootball = "american-football";
         
 
          [STAThread]
         public static void Main(string[] args)
         {
             //var scrapper = new ArchiveOddsScrapper();
-            //scrapper.Scrape(BaseWebsite, new[] { Basketball, Handball, Hockey });
+            //scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey, Baseball, AmericanFootball });
 
             //var scrapper = new CommingMatchesScrapper();
-            //scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey });
+            //scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey, Baseball, AmericanFootball });
 
             //var analyser = new ArchiveDataAnalysis();
             //analyser.Analyse();

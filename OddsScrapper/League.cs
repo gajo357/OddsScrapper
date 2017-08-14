@@ -17,7 +17,7 @@ namespace OddsScrapper
 
         public override string ToString()
         {
-            return $"{Sport},{Country},{HelperMethods.MakeValidFileName(Name)},{(IsFirst ? 1 : 0)},{(IsCup ? 1 : 0)},{(IsWomen ? 1 : 0)}";
+            return $"{Sport},{Country},{HelperMethods.MakeValidFileName(Name)},{(IsFirst ? 1 : 0)}";
         }
     }
 
@@ -51,11 +51,11 @@ namespace OddsScrapper
             }
         }
 
-        public void WriteLeagueData(StreamWriter stream)
+        public void WriteLeagueData(StreamWriter stream, string season = null)
         {
             foreach (var ltd in Data)
             {
-                ltd.WriteLeagueData(stream);
+                ltd.WriteLeagueData(stream, season);
             }
         }
     }
@@ -82,12 +82,12 @@ namespace OddsScrapper
 
         public double SuccessRate = 0;
 
-        public void WriteLeagueData(StreamWriter stream)
+        public void WriteLeagueData(StreamWriter stream, string season)
         {
             if (TotalRecords == 0)
                 return;
 
-            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{Margin:F2},{TotalRecords},{SuccessRecords},{OddsSum / TotalRecords:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4}";
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{Margin:F2},{TotalRecords},{SuccessRecords},{OddsSum / TotalRecords:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4},{season}";
             stream.WriteLine(line);
         }
 

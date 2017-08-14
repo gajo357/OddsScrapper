@@ -9,7 +9,7 @@ namespace OddsScrapper
     {
         public void MatchGamesWithArchivedData()
         {
-            var date = "14Aug2017";
+            var date = "15Aug2017";
             var archivedData = GetArchivedData();
 
             var games = GetAllTommorowsGames(date);
@@ -112,9 +112,10 @@ namespace OddsScrapper
                 var successRate = double.Parse(data[7]);
                 var moneyMade = double.Parse(data[8]);
                 var moneyPerGame = double.Parse(data[9]);
+                var season = data.Length < 11 ? string.Empty : data[10];
 
                 if (success < 50 ||
-                    successRate < 0.90 ||
+                    //successRate < 0.9 ||
                     moneyPerGame <= 0.0)
                     continue;
 

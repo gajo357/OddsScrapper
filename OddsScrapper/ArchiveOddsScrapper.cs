@@ -32,8 +32,11 @@ namespace OddsScrapper
                         var seasons = ReadSeasons($"{baseWebsite}{league.Link}");
                         if (seasons == null)
                             continue;
-                        foreach (var seasonLink in seasons)
+                        foreach (var seasonInfo in seasons)
                         {
+                            var seasonLink = seasonInfo.Item2;
+                            var season = seasonInfo.Item1;
+
                             Console.WriteLine(seasonLink);
                             foreach (var resultsPage in ReadSeasonPages($"{baseWebsite}{seasonLink}"))
                             {
@@ -42,7 +45,7 @@ namespace OddsScrapper
                                     if (string.IsNullOrEmpty(resultLine))
                                         continue;
 
-                                    fileStream.WriteLine(resultLine);
+                                    fileStream.WriteLine($"{season},{resultLine}");
                                 }
                             }
                         }
@@ -88,10 +91,10 @@ namespace OddsScrapper
             }
         }
 
-        private IEnumerable<string> ReadSeasons(string link)
+        private IEnumerable<Tuple<string, string>> ReadSeasons(string link)
         {
             var nextYear = "2018";
-            var lastYear = new[] { "2009", "2008", "2007", "2006" };
+            var lastYear = new[] { "1999", "1998", "1997", "1996" };
 
             var html = WebReader.GetHtmlFromWebpage(link);
             if (html == null)
@@ -103,14 +106,20 @@ namespace OddsScrapper
             {
                 var seasonResultsLink = a.Attributes[HtmlAttributes.Href].Value;
                 var season = a.InnerText;
+
+                // reached the last year
                 if (lastYear.Any(seasonResultsLink.Contains) ||
                     lastYear.Any(season.Contains))
                     break;
+                // skip the current year
                 if (seasonResultsLink.Contains(nextYear) ||
                     season.Contains(nextYear))
                     continue;
 
-                yield return seasonResultsLink;
+                if (season.Contains("/"))
+                    season = season.Remove(season.IndexOf("/"));
+
+                yield return new Tuple<string, string>(season, seasonResultsLink);
             }
         }
 
@@ -122,8 +131,6 @@ namespace OddsScrapper
             return leaguesPage;
         }
 
-        private string[] CupNames = new[] { "cup", "copa", "cupen" };
-        private string Women = "women";
         private IEnumerable<LeagueInfo> ReadLeaguesForSport(HtmlDocument page, string sport)
         {
             var results = new List<LeagueInfo>();
@@ -176,8 +183,6 @@ namespace OddsScrapper
                     }
 
                     var leagueNameParts = leagueName.Split('-');
-                    league.IsCup = CupNames.Any(s => leagueNameParts.Any(x => x.Contains(s)));
-                    league.IsWomen = leagueName.Contains(Women);
                     league.Sport = sport;
 
                     results.Add(league);
