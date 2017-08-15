@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace OddsScrapper
 {
@@ -38,19 +39,28 @@ namespace OddsScrapper
 
         private LeagueTypeData[] Data { get; }
 
-        public void AddData(double odd, bool success)
+
+        public void AddData(double odd, bool success, string season)
         {
             foreach (var ltd in Data)
             {
-                ltd.AddRecord(odd, success);
+                ltd.AddRecord(odd, success, season);
             }
         }
 
-        public void WriteLeagueData(StreamWriter stream, string season = null)
+        public void WriteLeagueData(StreamWriter stream)
         {
             foreach (var ltd in Data)
             {
-                ltd.WriteLeagueData(stream, season);
+                ltd.WriteLeagueData(stream);
+            }
+        }
+
+        public void WriteLeagueDataBySeasons(StreamWriter stream)
+        {
+            foreach (var ltd in Data)
+            {
+                ltd.WriteLeagueDataBySeasons(stream);
             }
         }
     }
@@ -62,10 +72,14 @@ namespace OddsScrapper
             DownMargin = downMargin;
             UpMargin = upMargin;
             Info = info;
+
+            DataBySeasons = new Dictionary<string, LeagueTypeData>();
         }
 
         public LeagueInfo Info { get; }
-        
+
+        private IDictionary<string, LeagueTypeData> DataBySeasons { get; }
+
         public double DownMargin { get; }
         public double UpMargin { get; }
         public double OddsSum = 0;
@@ -83,21 +97,76 @@ namespace OddsScrapper
 
         public double AvgOdd = 0;
 
-        public void WriteLeagueData(StreamWriter stream, string season)
+        public void WriteLeagueData(StreamWriter stream)
         {
             if (TotalRecords == 0)
                 return;
 
-            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{SuccessRecords},{AvgOdd:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4},{RateOfAvailableMoney:F4},{season}";
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{SuccessRecords},{AvgOdd:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4},{RateOfAvailableMoney:F4}";
             stream.WriteLine(line);
         }
 
+        public void WriteLeagueDataBySeasons(StreamWriter stream)
+        {
+            if (TotalRecords == 0)
+                return;
+
+            var numberOfSeasons = DataBySeasons.Count;
+            var totalRecords = 0.0;
+            var successRecords = 0.0;
+            var avgOdd = 0.0;
+            var money = 0.0;
+            var moneyPerGame = 0.0;
+            var successRate = 0.0;
+            var rateOfAvailableMoney = 0.0;
+
+            var numOfPositiveSeasons = 0;
+            var moneyHigh = double.MinValue;
+            var moneyLow = double.MaxValue;
+            var rateHigh = double.MinValue;
+            var rateLow = double.MaxValue;
+            foreach (var data in DataBySeasons)
+            {
+                totalRecords += data.Value.TotalRecords;
+                successRecords += data.Value.SuccessRecords;
+                avgOdd += data.Value.AvgOdd;
+                money += data.Value.MoneyMade;
+                moneyPerGame += data.Value.MoneyPerGame;
+                successRate += data.Value.SuccessRate;
+                rateOfAvailableMoney += data.Value.RateOfAvailableMoney;
+
+                if (data.Value.MoneyPerGame > moneyHigh)
+                    moneyHigh = data.Value.MoneyPerGame;
+                if (data.Value.MoneyPerGame < moneyLow)
+                    moneyLow = data.Value.MoneyPerGame;
+
+                if (data.Value.RateOfAvailableMoney > rateHigh)
+                    rateHigh = data.Value.RateOfAvailableMoney;
+                if (data.Value.RateOfAvailableMoney < rateLow)
+                    rateLow = data.Value.RateOfAvailableMoney;
+
+                if (data.Value.MoneyPerGame > 0)
+                    numOfPositiveSeasons++;
+            }
+
+            totalRecords /= numberOfSeasons;
+            successRecords /= numberOfSeasons;
+            avgOdd /= numberOfSeasons;
+            money /= numberOfSeasons;
+            moneyPerGame /= numberOfSeasons;
+            successRate /= numberOfSeasons;
+            rateOfAvailableMoney /= numberOfSeasons;
+
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{totalRecords},{successRecords},{avgOdd:F4},{successRate:F4},{money},{moneyPerGame:F4},{rateOfAvailableMoney:F4},{numberOfSeasons},{numOfPositiveSeasons},{moneyLow},{moneyHigh},{rateLow},{rateHigh}";
+            stream.WriteLine(line);
+        }
+        
         public bool DoesOddBelong(double odd)
         {
             return odd <= UpMargin && odd > DownMargin;
         }
 
-        public void AddRecord(double odd, bool success)
+        public void AddRecord(double odd, bool success, string season = null)
         {
             if (!DoesOddBelong(odd))
                 return;
@@ -118,6 +187,15 @@ namespace OddsScrapper
             RateOfAvailableMoney = MoneyMade / (OddsSum - TotalRecords);
             MoneyPerGame = MoneyMade / TotalRecords;
             SuccessRate = (double)SuccessRecords / TotalRecords;
+            
+
+            if (string.IsNullOrEmpty(season))
+                return;
+
+            if (!DataBySeasons.ContainsKey(season))
+                DataBySeasons.Add(season, new LeagueTypeData(DownMargin, UpMargin, Info));
+
+            DataBySeasons[season].AddRecord(odd, success);
         }
     }
 

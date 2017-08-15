@@ -29,6 +29,23 @@ namespace OddsScrapper
             return Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_all.csv");
         }
 
+        public static string[] GetAnalysedResultsFiles()
+        {
+            return new[]
+            {
+                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_all_10percent.csv"),
+                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons_10percent.csv"),
+                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_all_negative.csv"),
+                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons_allnegative.csv"),
+                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons_allpositive.csv")
+            };
+        }
+
+        public static string GetBySeasonsAnalysedResultsFile()
+        {
+            return Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons.csv");
+        }
+
         public static string GetSolutionDirectory()
         {
             return Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;

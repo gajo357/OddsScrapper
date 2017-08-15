@@ -14,7 +14,6 @@ namespace OddsScrapper
             var leaguesInfoFiles = Directory.GetFiles(dataDirectory, "*.txt");
             var leaguesInfo = ReadLeaguesInfos(leaguesInfoFiles);
 
-            var leaguesDict = new Dictionary<Tuple<string, string, string>, IDictionary<string, LeagueOddsData>>();
             var allLeagues = new List<LeagueOddsData>();
             foreach(var file in files)
             {
@@ -31,9 +30,6 @@ namespace OddsScrapper
 
                 var leagueData = new LeagueOddsData(info);
 
-                if (!leaguesDict.ContainsKey(key))
-                    leaguesDict.Add(key, new Dictionary<string, LeagueOddsData>());
-
                 foreach (var line in File.ReadLines(file))
                 {
                     var data = line.Split(',');
@@ -45,14 +41,7 @@ namespace OddsScrapper
                     var odd = double.Parse(data[2]);
                     var success = int.Parse(data[3]) == 1;
                                                             
-                    if (!leaguesDict[key].ContainsKey(season))
-                    {
-                        leaguesDict[key].Add(season, new LeagueOddsData(info));
-                    }
-                    var leagueDictData = leaguesDict[key][season];
-
-                    leagueDictData.AddData(odd, success);
-                    leagueData.AddData(odd, success);
+                    leagueData.AddData(odd, success, season);
                 }
 
                 allLeagues.Add(leagueData);
@@ -60,29 +49,16 @@ namespace OddsScrapper
 
             using (var stream = File.AppendText(HelperMethods.GetAllAnalysedResultsFile()))
             {
-                foreach (var pair in allLeagues)
+                var line = $"Sport,Country,League Name,Margin,Total Records,Success Records,Avg. Odd,Success Rate,Money Made,Money Per Game,Rate Of Available Money";
+                stream.WriteLine(line);
+                using (var streamBySeasons = File.AppendText(HelperMethods.GetBySeasonsAnalysedResultsFile()))
                 {
-                    pair.WriteLeagueData(stream);
-                }
-            }
-
-            foreach(var spair in leaguesDict)
-            {
-                var sport = spair.Key.Item1;
-                var country = spair.Key.Item2;
-                var name = spair.Key.Item3;
-                using (var stream = File.AppendText(Path.Combine(HelperMethods.GetAnalysedArchivedDataFolderPath(), $"results_{sport}.csv")))
-                {
-                    // record leagues that have positive in all seasons (in a single category) 
-                    // or at least last 5 seasons
-                    // or smth
-
-                    foreach (var leaguePair in spair.Value)
+                    line = $"Sport,Country,League Name,Margin,Total Records,Records Per Season,Success Records,Avg. Odd,Success Rate,Money Made,Money Per Game,Rate Of Available Money,Number Of Seasons,No Of Positive Seasons,Money Low,Money High,Rate Low,Rate High";
+                    streamBySeasons.WriteLine(line);
+                    foreach (var league in allLeagues)
                     {
-                        var league = leaguePair.Value;
-                        var season = leaguePair.Key;
-
-                        league.WriteLeagueData(stream, season);
+                        league.WriteLeagueData(stream);
+                        league.WriteLeagueDataBySeasons(streamBySeasons);
                     }
                 }
             }

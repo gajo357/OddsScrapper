@@ -9,19 +9,23 @@ namespace OddsScrapper
     {
         public void MatchGamesWithArchivedData()
         {
-            var date = "15Aug2017";
-            var archivedData = GetArchivedData();
-
+            var date = "16Aug2017";
             var games = GetAllTommorowsGames(date);
 
-            MatchGames(archivedData, games, date);
+            var results_files = HelperMethods.GetAnalysedResultsFiles();
+            foreach(var file in results_files)
+            {
+                var archivedData = GetArchivedData(file);
+                var fileName = Path.GetFileNameWithoutExtension(file).Replace("results_", string.Empty);
+                MatchGames(archivedData, games, date, fileName);
+            }
         }
 
-        private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date)
+        private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date, string fileName)
         {
             var filteredGames = GetFilteredGames(archivedData, games);
 
-            using (var fileStream = File.AppendText($"GamesToBet_{date}.csv"))
+            using (var fileStream = File.AppendText($"GamesToBet_{date}_{fileName}.csv"))
             {
                 foreach (var game in filteredGames.OrderByDescending(s => s.MoneyPerGame))
                 {
@@ -87,29 +91,33 @@ namespace OddsScrapper
             }
         }
 
-        private LeagueTypeData[] GetArchivedData()
+        private LeagueTypeData[] GetArchivedData(string file)
         {
             var results = new List<LeagueTypeData>();
-            foreach(var line in File.ReadLines(HelperMethods.GetAllAnalysedResultsFile()))
+            foreach(var line in File.ReadLines(file))
             {
                 var data = line.Split(',');
-                var sport = data[0];
-                var country = data[1];
-                var name = data[2];
-                var margin = double.Parse(data[3]);
-                var total = int.Parse(data[4]);
-                var success = int.Parse(data[5]);
-                var avgOdd = double.Parse(data[6]);
-                var successRate = double.Parse(data[7]);
-                var moneyMade = double.Parse(data[8]);
-                var moneyPerGame = double.Parse(data[9]);
-                var rateOFAvailableMoney = double.Parse(data[10]);
-                var season = data.Length < 12 ? string.Empty : data[11];
-
-                if (success < 50 ||
-                    //successRate < 0.9 ||
-                    moneyPerGame <= 0.0)
+                var i = 0;
+                var sport = data[i++];
+                var country = data[i++];
+                var name = data[i++];
+                double margin;
+                if (!double.TryParse(data[i++], out margin))
                     continue;
+                var total = double.Parse(data[i++]);
+                if(file.Contains("_byseasons_"))
+                    i++;
+                var success = double.Parse(data[i++]);
+                var avgOdd = double.Parse(data[i++]);
+                var successRate = double.Parse(data[i++]);
+                var moneyMade = double.Parse(data[i++]);
+                var moneyPerGame = double.Parse(data[i++]);
+                var rateOFAvailableMoney = double.Parse(data[i++]);
+
+                //if (success < 50 ||
+                //    //successRate < 0.9 ||
+                //    moneyPerGame <= 0.0)
+                //    continue;
 
                 var info = new LeagueInfo()
                 {
@@ -120,8 +128,8 @@ namespace OddsScrapper
 
                 var league = new LeagueTypeData(margin - 0.1, margin, info)
                 {
-                    TotalRecords = total,
-                    SuccessRecords = success,
+                    TotalRecords = (int)total,
+                    SuccessRecords = (int)success,
                     SuccessRate = successRate,
                     MoneyMade = moneyMade,
                     RateOfAvailableMoney = rateOFAvailableMoney,
