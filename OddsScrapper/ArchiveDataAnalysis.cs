@@ -49,14 +49,11 @@ namespace OddsScrapper
                     {
                         leaguesDict[key].Add(season, new LeagueOddsData(info));
                     }
-                    LeagueOddsData leagueDictData = leaguesDict[key][season];
+                    var leagueDictData = leaguesDict[key][season];
 
                     leagueDictData.AddData(odd, success);
                     leagueData.AddData(odd, success);
                 }
-
-                if (leagueData.Le15.TotalRecords == 0)
-                    continue;
 
                 allLeagues.Add(leagueData);
             }
@@ -76,9 +73,16 @@ namespace OddsScrapper
                 var name = spair.Key.Item3;
                 using (var stream = File.AppendText(Path.Combine(HelperMethods.GetAnalysedArchivedDataFolderPath(), $"results_{sport}.csv")))
                 {
-                    foreach (var league in spair.Value)
+                    // record leagues that have positive in all seasons (in a single category) 
+                    // or at least last 5 seasons
+                    // or smth
+
+                    foreach (var leaguePair in spair.Value)
                     {
-                        league.Value.WriteLeagueData(stream, league.Key);
+                        var league = leaguePair.Value;
+                        var season = leaguePair.Key;
+
+                        league.WriteLeagueData(stream, season);
                     }
                 }
             }
@@ -97,9 +101,9 @@ namespace OddsScrapper
                     var sport = data[0];
                     var country = data[1];
                     var name = data[2];
-                    var isFirst = int.Parse(data[3]) == 1 ? true : false;
-                    var isCup = CupNames.Any(name.Contains) ? true : false;
-                    var isWomen = name.Contains(Women) ? true : false;
+                    var isFirst = int.Parse(data[3]) == 1;
+                    var isCup = CupNames.Any(name.Contains);
+                    var isWomen = name.Contains(Women);
 
                     var league = new LeagueInfo();
                     league.Sport = sport;

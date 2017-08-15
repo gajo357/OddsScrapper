@@ -36,19 +36,10 @@ namespace OddsScrapper
             foreach (var game in games)
             {
                 var bestOdd = game.Odds.Min();
-                LeagueTypeData league = null;
-
-                foreach (var l in archivedData.Where(s => s.Info.Sport == game.Sport &&
-                                                             s.Info.Country == game.Country &&
-                                                             s.Info.Name == game.League &&
-                                                             s.Margin > bestOdd))
-                {
-                    // find margin closest to the actual odd
-                    // meaning minimal margin
-                    if (league == null ||
-                        league.Margin > l.Margin)
-                        league = l;
-                }
+                LeagueTypeData league = archivedData.FirstOrDefault(s => s.Info.Sport == game.Sport &&
+                                                                         s.Info.Country == game.Country &&
+                                                                         s.Info.Name == game.League &&
+                                                                         s.DoesOddBelong(bestOdd));
 
                 if (league == null)
                     continue;
@@ -112,7 +103,8 @@ namespace OddsScrapper
                 var successRate = double.Parse(data[7]);
                 var moneyMade = double.Parse(data[8]);
                 var moneyPerGame = double.Parse(data[9]);
-                var season = data.Length < 11 ? string.Empty : data[10];
+                var rateOFAvailableMoney = double.Parse(data[10]);
+                var season = data.Length < 12 ? string.Empty : data[11];
 
                 if (success < 50 ||
                     //successRate < 0.9 ||
@@ -126,12 +118,13 @@ namespace OddsScrapper
                     Name = name
                 };
 
-                var league = new LeagueTypeData(margin, info)
+                var league = new LeagueTypeData(margin - 0.1, margin, info)
                 {
                     TotalRecords = total,
                     SuccessRecords = success,
                     SuccessRate = successRate,
                     MoneyMade = moneyMade,
+                    RateOfAvailableMoney = rateOFAvailableMoney,
                     MoneyPerGame = moneyPerGame
                 };
 

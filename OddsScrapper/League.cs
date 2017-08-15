@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace OddsScrapper
 {
@@ -26,22 +24,19 @@ namespace OddsScrapper
         public LeagueOddsData(LeagueInfo info)
         {
             Info = info;
-            Le11 = new LeagueTypeData(1.1, info);
-            Le12 = new LeagueTypeData(1.2, info);
-            Le13 = new LeagueTypeData(1.3, info);
-            Le14 = new LeagueTypeData(1.4, info);
-            Le15 = new LeagueTypeData(1.5, info);
+            Data = new[]
+            {
+                new LeagueTypeData(1.0, 1.1, info),
+                new LeagueTypeData(1.1, 1.2, info),
+                new LeagueTypeData(1.2, 1.3, info),
+                new LeagueTypeData(1.3, 1.4, info),
+                new LeagueTypeData(1.4, 1.5, info)
+            };
         }
 
         public LeagueInfo Info { get; }
 
-        public LeagueTypeData Le11 { get; }
-        public LeagueTypeData Le12 { get; }
-        public LeagueTypeData Le13 { get; }
-        public LeagueTypeData Le14 { get; }
-        public LeagueTypeData Le15 { get; }
-
-        private IEnumerable<LeagueTypeData> Data => new[] { Le11, Le12, Le13, Le14, Le15 };
+        private LeagueTypeData[] Data { get; }
 
         public void AddData(double odd, bool success)
         {
@@ -62,15 +57,17 @@ namespace OddsScrapper
 
     public class LeagueTypeData
     {
-        public LeagueTypeData(double margin, LeagueInfo info)
+        public LeagueTypeData(double downMargin, double upMargin, LeagueInfo info)
         {
-            Margin = margin;
+            DownMargin = downMargin;
+            UpMargin = upMargin;
             Info = info;
         }
 
         public LeagueInfo Info { get; }
         
-        public double Margin { get; }
+        public double DownMargin { get; }
+        public double UpMargin { get; }
         public double OddsSum = 0;
 
         public int TotalRecords = 0;
@@ -82,18 +79,27 @@ namespace OddsScrapper
 
         public double SuccessRate = 0;
 
+        public double RateOfAvailableMoney = 0;
+
+        public double AvgOdd = 0;
+
         public void WriteLeagueData(StreamWriter stream, string season)
         {
             if (TotalRecords == 0)
                 return;
 
-            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{Margin:F2},{TotalRecords},{SuccessRecords},{OddsSum / TotalRecords:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4},{season}";
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{SuccessRecords},{AvgOdd:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4},{RateOfAvailableMoney:F4},{season}";
             stream.WriteLine(line);
+        }
+
+        public bool DoesOddBelong(double odd)
+        {
+            return odd <= UpMargin && odd > DownMargin;
         }
 
         public void AddRecord(double odd, bool success)
         {
-            if (odd > Margin)
+            if (!DoesOddBelong(odd))
                 return;
 
             TotalRecords++;
@@ -108,6 +114,8 @@ namespace OddsScrapper
             }
             OddsSum += odd;
 
+            AvgOdd = OddsSum / TotalRecords;
+            RateOfAvailableMoney = MoneyMade / (OddsSum - TotalRecords);
             MoneyPerGame = MoneyMade / TotalRecords;
             SuccessRate = (double)SuccessRecords / TotalRecords;
         }
