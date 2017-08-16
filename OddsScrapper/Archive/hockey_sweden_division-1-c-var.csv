@@ -1,47 +1,48 @@
-2013,Pitea - Kristianstads&nbsp;,1.27,1
-2013,HC Vita Hasten - Visby/Roma&nbsp;,1.37,1
-2013,Kallinge/Ronneby - Ostersund&nbsp;,1.15,1
-2013,Huddinge - Arlanda&nbsp;,1.35,1
-2013,Tingsryds - Vasterviks IK&nbsp;,1.38,1
-2013,Hudiksvalls - Tierps&nbsp;,1.27,1
-2013,Ostersund - Tegs&nbsp;,1.46,1
-2013,Hudiksvalls - Tierps&nbsp;,1.41,1
-2013,Kiruna - Kalix Ungdoms&nbsp;,1.21,1
-2013,Tingsryds - Vasterviks IK&nbsp;,1.17,0
-2013,Huddinge - Arlanda&nbsp;,1.37,1
-2013,Falu - Skedvi/Saters,1.06,1
-2013,Lindlovens - Hedemora,1.17,1
-2013,Surahammars - Skedvi/Saters,1.08,1
-2013,Tierps - Falu,1.41,0
-2013,Pitea - Kristianstads&nbsp;,1.27,1
-2013,HC Vita Hasten - Visby/Roma&nbsp;,1.37,1
-2013,Kallinge/Ronneby - Ostersund&nbsp;,1.15,1
-2013,Huddinge - Arlanda&nbsp;,1.35,1
-2013,Tingsryds - Vasterviks IK&nbsp;,1.38,1
-2013,Hudiksvalls - Tierps&nbsp;,1.27,1
-2013,Ostersund - Tegs&nbsp;,1.46,1
-2013,Hudiksvalls - Tierps&nbsp;,1.41,1
-2013,Kiruna - Kalix Ungdoms&nbsp;,1.21,1
-2013,Tingsryds - Vasterviks IK&nbsp;,1.17,0
-2013,Huddinge - Arlanda&nbsp;,1.37,1
-2013,Falu - Skedvi/Saters,1.06,1
-2013,Lindlovens - Hedemora,1.17,1
-2013,Surahammars - Skedvi/Saters,1.08,1
-2013,Tierps - Falu,1.41,0
-2012,Surahammars - Hedemora,1.47,1
-2012,Tierps - Valbo,1.5,1
-2012,Borlange - Tierps,1.45,1
-2012,Surahammars - Valbo,1.36,1
-2012,Borlange - Hedemora,1.25,0
-2012,Borlange - Valbo,1.35,1
-2012,Tierps - Valbo,1.3,0
-2012,Surahammars - Valbo,1.35,1
-2011,Soderhamn/Ljusne - Enkopings,1.05,1
-2011,Enkopings - Ore,1.14,0
-2011,Soderhamn/Ljusne - Lindlovens,1.14,0
-2011,Enkopings - Soderhamn/Ljusne,1.03,1
-2011,Lindlovens - Soderhamn/Ljusne,1.35,1
-2011,Ore - Enkopings,1.42,0
-2011,Lindlovens - Surahammars,1.4,1
-2011,Soderhamn/Ljusne - Enkopings,1.14,1
-2011,Tierps - Ore,1.32,0
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2013,Pitea - Kristianstads&nbsp;,1.27,1,1
+2013,HC Vita Hasten - Visby/Roma&nbsp;,1.37,1,1
+2013,Kallinge/Ronneby - Ostersund&nbsp;,1.16,1,1
+2013,Huddinge - Arlanda&nbsp;,1.35,1,1
+2013,Tingsryds - Vasterviks IK&nbsp;,1.38,1,1
+2013,Hudiksvalls - Tierps&nbsp;,1.27,1,1
+2013,Ostersund - Tegs&nbsp;,1.46,1,1
+2013,Hudiksvalls - Tierps&nbsp;,1.41,1,1
+2013,Kiruna - Kalix Ungdoms&nbsp;,1.21,1,1
+2013,Tingsryds - Vasterviks IK&nbsp;,1.17,1,0
+2013,Huddinge - Arlanda&nbsp;,1.37,1,1
+2013,Falu - Skedvi/Saters,1.06,1,1
+2013,Lindlovens - Hedemora,1.17,1,1
+2013,Surahammars - Skedvi/Saters,1.09,1,1
+2013,Tierps - Falu,1.41,1,2
+2013,Pitea - Kristianstads&nbsp;,1.27,1,1
+2013,HC Vita Hasten - Visby/Roma&nbsp;,1.37,1,1
+2013,Kallinge/Ronneby - Ostersund&nbsp;,1.16,1,1
+2013,Huddinge - Arlanda&nbsp;,1.35,1,1
+2013,Tingsryds - Vasterviks IK&nbsp;,1.38,1,1
+2013,Hudiksvalls - Tierps&nbsp;,1.27,1,1
+2013,Ostersund - Tegs&nbsp;,1.46,1,1
+2013,Hudiksvalls - Tierps&nbsp;,1.41,1,1
+2013,Kiruna - Kalix Ungdoms&nbsp;,1.21,1,1
+2013,Tingsryds - Vasterviks IK&nbsp;,1.17,1,0
+2013,Huddinge - Arlanda&nbsp;,1.37,1,1
+2013,Falu - Skedvi/Saters,1.06,1,1
+2013,Lindlovens - Hedemora,1.17,1,1
+2013,Surahammars - Skedvi/Saters,1.09,1,1
+2013,Tierps - Falu,1.41,1,2
+2012,Surahammars - Hedemora,1.47,1,1
+2012,Tierps - Valbo,1.5,1,1
+2012,Borlange - Tierps,1.45,1,1
+2012,Surahammars - Valbo,1.36,1,1
+2012,Borlange - Hedemora,1.25,1,2
+2012,Borlange - Valbo,1.35,1,1
+2012,Tierps - Valbo,1.3,1,0
+2012,Surahammars - Valbo,1.35,1,1
+2011,Soderhamn/Ljusne - Enkopings,1.05,2,2
+2011,Enkopings - Ore,1.14,1,2
+2011,Soderhamn/Ljusne - Lindlovens,1.14,2,1
+2011,Enkopings - Soderhamn/Ljusne,1.03,1,1
+2011,Lindlovens - Soderhamn/Ljusne,1.35,1,1
+2011,Ore - Enkopings,1.42,2,0
+2011,Lindlovens - Surahammars,1.4,1,1
+2011,Soderhamn/Ljusne - Enkopings,1.14,2,2
+2011,Tierps - Ore,1.32,1,2

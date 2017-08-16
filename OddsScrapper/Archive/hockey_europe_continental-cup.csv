@@ -1,47 +1,48 @@
-2016,Tychy - Beibarys Atyrau,1.47,1
-2016,Zeytinburnu Istanbul - Jaca,1.37,0
-2016,Nottingham - Liepaja,1.4,1
-2016,Tychy - Jesenice,1.09,0
-2016,Jaca - Nottingham,1.04,1
-2015,Rouen - Tychy,1.28,1
-2015,Asiago - Rouen,1.37,1
-2015,Mogo - Asiago,1.08,1
-2015,Tychy - Kremenchuk,1.03,1
-2015,Rouen - Kremenchuk,1.02,1
-2015,Herning Blue Fox - Mogo,1.07,1
-2015,Soligorsk - Tychy,1.36,0
-2015,Rouen - Tychy,1.27,1
-2015,Pavlodar - Mogo,1.18,1
-2015,Kremenchuk - Soligorsk,1.03,1
-2015,Partizan - Dunarea Galati,1.04,1
-2015,Tychy - Dunarea Galati,1.07,1
-2015,Jesenice - DVTK,1.4,1
-2015,Mogo - Jaca,1.15,1
-2015,DVTK - Mogo,1.35,0
-2015,Dunarea Galati - Coventry,1.1,1
-2015,Jesenice - Jaca,1.18,1
-2013,Rouen - Donbass,1.07,0
-2013,Asiago - Donbass,1.23,1
-2013,Rouen - Asiago,1.37,0
-2013,Donbass - Stavanger,1.1,0
-2013,Asiago - Nottingham,1.3,1
-2013,DAB - Neman Grodno,1.3,1
-2012,Donbass - Rouen,1.17,1
-2012,Zhlobin - Bolzano,1.26,0
-2012,Bolzano - Donbass,1.12,1
-2012,Donbass - Zhlobin,1.19,1
-2011,Rouen - Donbass,1.36,0
-2011,Asiago - Yunost Minsk,1.23,1
-2011,Asiago - Donbass,1.15,1
-2011,Donbass - Yunost Minsk,1.38,1
-2011,Donbass - Krakow,1.1,1
-2011,Tyumen - Liepajas Metalurgs,1.1,1
-2011,DAB - Herning Blue Fox,1.2,0
-2011,Liepajas Metalurgs - Donbass,1.23,1
-2011,Krakow - Tyumen,1.12,1
-2010,Salzburg - Sonderjyske Ishockey,1.38,1
-2010,Rouen - Yunost Minsk,1.27,1
-2010,Yunost Minsk - Sonderjyske Ishockey,1.46,1
-2010,Salzburg - Rouen,1.39,1
-2009,Yunost Minsk - Grenoble,1.5,0
-2009,Sheffield - Salzburg,1.5,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2016,Tychy - Beibarys Atyrau,1.47,2,2
+2016,Zeytinburnu Istanbul - Jaca,1.37,2,1
+2016,Nottingham - Liepaja,1.4,1,1
+2016,Tychy - Jesenice,1.09,1,0
+2016,Jaca - Nottingham,1.04,2,2
+2015,Rouen - Tychy,1.28,1,1
+2015,Asiago - Rouen,1.36,2,2
+2015,Mogo - Asiago,1.08,2,2
+2015,Tychy - Kremenchuk,1.03,1,1
+2015,Rouen - Kremenchuk,1.02,1,1
+2015,Herning Blue Fox - Mogo,1.07,1,1
+2015,Soligorsk - Tychy,1.36,1,2
+2015,Rouen - Tychy,1.27,1,1
+2015,Pavlodar - Mogo,1.18,1,1
+2015,Kremenchuk - Soligorsk,1.03,2,2
+2015,Partizan - Dunarea Galati,1.04,2,2
+2015,Tychy - Dunarea Galati,1.07,1,1
+2015,Jesenice - DVTK,1.4,2,2
+2015,Mogo - Jaca,1.15,1,1
+2015,DVTK - Mogo,1.35,1,2
+2015,Dunarea Galati - Coventry,1.1,2,2
+2015,Jesenice - Jaca,1.18,1,1
+2013,Rouen - Donbass,1.07,2,0
+2013,Asiago - Donbass,1.23,2,2
+2013,Rouen - Asiago,1.37,1,2
+2013,Donbass - Stavanger,1.1,1,0
+2013,Asiago - Nottingham,1.3,1,1
+2013,DAB - Neman Grodno,1.3,2,2
+2012,Donbass - Rouen,1.17,1,1
+2012,Zhlobin - Bolzano,1.26,1,0
+2012,Bolzano - Donbass,1.12,2,2
+2012,Donbass - Zhlobin,1.19,1,1
+2011,Rouen - Donbass,1.36,2,1
+2011,Asiago - Yunost Minsk,1.23,2,2
+2011,Asiago - Donbass,1.15,2,2
+2011,Donbass - Yunost Minsk,1.38,1,1
+2011,Donbass - Krakow,1.1,1,1
+2011,Tyumen - Liepajas Metalurgs,1.1,1,1
+2011,DAB - Herning Blue Fox,1.2,2,1
+2011,Liepajas Metalurgs - Donbass,1.23,2,2
+2011,Krakow - Tyumen,1.12,2,2
+2010,Salzburg - Sonderjyske Ishockey,1.38,1,1
+2010,Rouen - Yunost Minsk,1.27,2,2
+2010,Yunost Minsk - Sonderjyske Ishockey,1.46,1,1
+2010,Salzburg - Rouen,1.39,1,1
+2009,Yunost Minsk - Grenoble,1.5,1,0
+2009,Sheffield - Salzburg,1.5,2,2

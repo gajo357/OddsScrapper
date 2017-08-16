@@ -1,62 +1,63 @@
-2014,Japan - Kazakhstan,1.5,1
-2014,Iran - Kazakhstan,1.01,1
-2014,South Korea - Japan,1.13,1
-2014,China - Qatar,1.23,1
-2014,Philippines - Mongolia,1.04,1
-2014,Qatar - Mongolia,1.02,1
-2014,Mongolia - Japan,1.01,1
-2014,South Korea - Qatar,1.11,1
-2014,Iran - China,1.23,1
-2014,Philippines - Kazakhstan,1.21,1
-2014,Japan - China,1.07,0
-2014,Qatar - Kazakhstan,1.22,0
-2014,South Korea - Philippines,1.29,1
-2014,Iran - Japan,1.11,1
-2014,Philippines - Qatar,1.27,0
-2014,China - Mongolia,1.02,1
-2014,Kazakhstan - South Korea,1.02,1
-2014,South Korea - Jordan,1.06,1
-2014,China - Chinese Taipei,1.12,1
-2014,Iran - Philippines,1.18,1
-2014,Kuwait - Japan,1.08,1
-2014,Mongolia - South Korea,1.01,1
-2014,India - Iran,1.02,1
-2014,Kazakhstan - China,1.06,1
-2014,Jordan - Mongolia,1.04,0
-2014,Qatar - Kuwait,1.07,1
-2014,Chinese Taipei - Kazakhstan,1.07,0
-2014,Philippines - India,1.05,1
-2014,Kazakhstan - India,1.24,0
-2014,Kuwait - Mongolia,1.24,1
-2014,Palestine - Saudi Arabia,1.03,1
-2014,Hong Kong - Kuwait,1.11,1
-2014,Palestine - India,1.05,1
-2014,Mongolia - Hong Kong,1.4,0
-2014,Saudi Arabia - Kazakhstan,1.31,1
-2010,China - South Korea,1.29,1
-2010,Jordan - Qatar,1.05,1
-2010,Japan - North Korea,1.09,1
-2010,South Korea - Philippines,1.15,1
-2010,North Korea - Uzbekistan,1.07,1
-2010,Qatar - Iran,1.45,1
-2010,Chinese Taipei - Iran,1.19,1
-2010,Uzbekistan - Jordan,1.01,1
-2010,Japan - Qatar,1.4,0
-2010,Mongolia - North Korea,1.12,1
-2010,South Korea - China,1.12,1
-2010,Philippines - Japan,1.3,1
-2010,Jordan - Mongolia,1.03,1
-2010,Qatar - Chinese Taipei,1.5,0
-2010,Japan - Iran,1.16,0
-2010,South Korea - Jordan,1.11,1
-2010,Philippines - Qatar,1.19,0
-2010,Uzbekistan - Mongolia,1.05,0
-2010,Iran - Philippines,1.11,1
-2010,Japan - Chinese Taipei,1.35,1
-2010,Jordan - North Korea,1.01,1
-2010,Qatar - India,1.01,1
-2010,South Korea - Uzbekistan,1.01,1
-2010,Afghanistan - India,1.44,1
-2010,Turkmenistan - Mongolia,1.07,0
-2010,Hong Kong - North Korea,1.12,1
-2010,Philippines - Kuwait,1.01,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2014,Japan - Kazakhstan,1.5,1,1
+2014,Iran - Kazakhstan,1.01,1,1
+2014,South Korea - Japan,1.13,1,1
+2014,China - Qatar,1.23,1,1
+2014,Philippines - Mongolia,1.04,1,1
+2014,Qatar - Mongolia,1.02,1,1
+2014,Mongolia - Japan,1.01,2,2
+2014,South Korea - Qatar,1.11,1,1
+2014,Iran - China,1.23,1,1
+2014,Philippines - Kazakhstan,1.21,1,1
+2014,Japan - China,1.07,2,1
+2014,Qatar - Kazakhstan,1.22,1,2
+2014,South Korea - Philippines,1.29,1,1
+2014,Iran - Japan,1.11,1,1
+2014,Philippines - Qatar,1.27,1,2
+2014,China - Mongolia,1.02,1,1
+2014,Kazakhstan - South Korea,1.02,2,2
+2014,South Korea - Jordan,1.06,1,1
+2014,China - Chinese Taipei,1.12,1,1
+2014,Iran - Philippines,1.18,1,1
+2014,Kuwait - Japan,1.08,2,2
+2014,Mongolia - South Korea,1.01,2,2
+2014,India - Iran,1.02,2,2
+2014,Kazakhstan - China,1.06,2,2
+2014,Jordan - Mongolia,1.04,1,2
+2014,Qatar - Kuwait,1.07,1,1
+2014,Chinese Taipei - Kazakhstan,1.07,1,2
+2014,Philippines - India,1.05,1,1
+2014,Kazakhstan - India,1.24,1,2
+2014,Kuwait - Mongolia,1.24,1,1
+2014,Palestine - Saudi Arabia,1.03,2,2
+2014,Hong Kong - Kuwait,1.11,2,2
+2014,Palestine - India,1.05,2,2
+2014,Mongolia - Hong Kong,1.4,2,1
+2014,Saudi Arabia - Kazakhstan,1.31,2,2
+2010,China - South Korea,1.29,1,1
+2010,Jordan - Qatar,1.05,2,2
+2010,Japan - North Korea,1.09,1,1
+2010,South Korea - Philippines,1.15,1,1
+2010,North Korea - Uzbekistan,1.07,1,1
+2010,Qatar - Iran,1.45,2,2
+2010,Chinese Taipei - Iran,1.19,2,2
+2010,Uzbekistan - Jordan,1.01,2,2
+2010,Japan - Qatar,1.4,1,2
+2010,Mongolia - North Korea,1.12,2,2
+2010,South Korea - China,1.12,2,2
+2010,Philippines - Japan,1.3,2,2
+2010,Jordan - Mongolia,1.03,1,1
+2010,Qatar - Chinese Taipei,1.5,2,1
+2010,Japan - Iran,1.16,2,1
+2010,South Korea - Jordan,1.11,1,1
+2010,Philippines - Qatar,1.19,2,1
+2010,Uzbekistan - Mongolia,1.05,1,2
+2010,Iran - Philippines,1.11,1,1
+2010,Japan - Chinese Taipei,1.35,1,1
+2010,Jordan - North Korea,1.01,1,1
+2010,Qatar - India,1.01,1,1
+2010,South Korea - Uzbekistan,1.01,1,1
+2010,Afghanistan - India,1.44,2,2
+2010,Turkmenistan - Mongolia,1.07,1,2
+2010,Hong Kong - North Korea,1.12,2,2
+2010,Philippines - Kuwait,1.01,1,1

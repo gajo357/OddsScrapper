@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace OddsScrapper
 {
@@ -29,6 +28,8 @@ namespace OddsScrapper
                     File.AppendAllLines(Path.Combine(HelperMethods.GetArchiveFolderPath(), $"leagues_{sport}.txt"), new[] { league.ToString() });
                     using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetArchiveFolderPath(), fileName)))
                     {
+                        fileStream.WriteLine("Season,Participants,Best Odd,Your Bet,Winning Bet");
+
                         var seasons = ReadSeasons($"{baseWebsite}{league.Link}");
                         if (seasons == null)
                             continue;
@@ -117,7 +118,7 @@ namespace OddsScrapper
                     continue;
 
                 if (season.Contains("/"))
-                    season = season.Remove(season.IndexOf("/"));
+                    season = season.Remove(season.IndexOf("/", StringComparison.Ordinal));
 
                 yield return new Tuple<string, string>(season, seasonResultsLink);
             }
@@ -194,15 +195,9 @@ namespace OddsScrapper
 
         private HtmlNode FindResultsDiv(HtmlDocument document)
         {
-            if (document == null ||
-                document.DocumentNode == null)
-                return null;
+            var divs = document?.DocumentNode?.Descendants(HtmlTagNames.Div);
 
-            var divs = document.DocumentNode.Descendants(HtmlTagNames.Div);
-            if (divs == null)
-                return null;
-
-            return divs.FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Id, null) == "tournamentTable");
+            return divs?.FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Id, null) == "tournamentTable");
         }
 
         private IEnumerable<string> FindAndReadResultsTable(HtmlNode divNode)
@@ -228,15 +223,55 @@ namespace OddsScrapper
                 if (!odds.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok")))
                     continue;
 
-                var goodOdd = odds.FirstOrDefault(s => GetOddFromTdNode(s) <= 1.5);
-                if (goodOdd == null)
+                int winIndex = -1;
+                int oddIndex = -1;
+                double odd = 0;
+                for (var i = 0; i < odds.Length; i++)
+                {
+                    var nodeOdd = GetOddFromTdNode(odds[i]);
+                    if (nodeOdd <= 1.5)
+                    {
+                        odd = nodeOdd;
+                        oddIndex = i;
+                    }
+
+                    if (odds[i].Attributes[HtmlAttributes.Class].Value.Contains("result-ok"))
+                        winIndex = i;
+                }
+
+                if (winIndex < 0 ||
+                    oddIndex < 0)
                     continue;
+                
+                // 1 is home win, 2 is away win, 0 is draw
+                int winCombo = GetBetComboFromIndex(odds.Length, winIndex);
+                int betCombo = GetBetComboFromIndex(odds.Length, oddIndex);
 
-                var odd = GetOddFromTdNode(goodOdd);
-                var isWinning = goodOdd.Attributes[HtmlAttributes.Class].Value.Contains("result-ok") ? 1 : 0;
-
-                yield return $"{participants},{odd},{isWinning}";
+                yield return $"{participants},{odd},{betCombo},{winCombo}";
             }
+        }
+
+        /// <summary>
+        /// Returns 1 for home bet, 0 for draw and 2 for away
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private int GetBetComboFromIndex(int length, int index)
+        {
+            if (index == 0)
+            {
+                // first index is always a home win
+                return 1;
+            }
+            if (index == length - 1)
+            {
+                // last index is always a visitor win
+                return 2;
+            }
+            
+            // else it's a draw
+            return 0;
         }
 
         public static double GetOddFromTdNode(HtmlNode tdNode)

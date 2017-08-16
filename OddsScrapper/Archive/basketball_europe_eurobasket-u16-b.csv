@@ -1,104 +1,151 @@
-2017,Belarus U16 - Iceland U16,1.09,0
-2017,Hungary U16 - Czech Republic U16,1.28,1
-2017,Poland U16 - Ukraine U16,1.13,1
-2017,Bulgaria U16 - Netherlands U16,1.27,1
-2017,Denmark U16 - Cyprus U16,1.17,1
-2017,Bosnia &amp; Herzegovina U16 - Slovakia U16,1.07,1
-2017,Great Britain U16 - FYR Macedonia U16,1.01,1
-2017,Luxembourg U16 - Kosovo U16,1.04,1
-2017,Norway U16 - Ireland U16,1.16,1
-2017,Cyprus U16 - Ukraine U16,1.03,1
-2017,Czech Republic U16 - Bosnia &amp; Herzegovina U16,1.13,0
-2017,Georgia U16 - Great Britain U16,1.28,1
-2017,Belgium U16 - Greece U16,1.15,1
-2017,Denmark U16 - Bulgaria U16,1.02,1
-2017,Norway U16 - Hungary U16,1.03,1
-2017,Belarus U16 - Switzerland U16,1.23,1
-2017,Luxembourg U16 - Portugal U16,1.01,1
-2017,Iceland U16 - Romania U16,1.07,1
-2017,Netherlands U16 - Poland U16,1.2,0
-2017,Greece U16 - Belarus U16,1.05,1
-2017,Slovakia U16 - Czech Republic U16,1.15,1
-2017,Bulgaria U16 - Cyprus U16,1.03,1
-2017,FYR Macedonia U16 - Georgia U16,1.28,1
-2017,Portugal U16 - Kosovo U16,1.01,1
-2017,Romania U16 - Belgium U16,1.02,1
-2017,Ukraine U16 - Netherlands U16,1.34,1
-2017,Poland U16 - Denmark U16,1.01,1
-2017,Switzerland U16 - Iceland U16,1.13,1
-2016,Ukraine U16 - Slovenia U16,1.44,1
-2016,Bulgaria U16 - Norway U16,1.15,1
-2016,England U16 - Belarus U16,1.5,1
-2016,Scotland U16 - Luxembourg U16,1.14,1
-2016,Kosovo U16 - Hungary U16,1.14,1
-2016,FYR Macedonia U16 - Romania U16,1.49,1
-2016,Austria U16 - Iceland U16,1.27,1
-2016,Ireland U16 - Norway U16,1.16,0
-2016,Netherlands U16 - Slovakia U16,1.35,0
-2016,Denmark U16 - Bulgaria U16,1.21,1
-2016,Belarus U16 - Belgium U16,1.38,0
-2016,Hungary U16 - Romania U16,1.29,1
-2016,Luxembourg U16 - Iceland U16,1.33,1
-2016,England U16 - Czech Republic U16,1.36,1
-2016,FYR Macedonia U16 - Kosovo U16,1.2,0
-2016,Scotland U16 - Austria U16,1.33,1
-2016,Slovenia U16 - Belgium U16,1.42,1
-2016,Norway U16 - Iceland U16,1.17,0
-2016,Israel U16 - Belarus U16,1.27,1
-2016,Hungary U16 - Portugal U16,1.31,0
-2016,Ireland U16 - Luxembourg U16,1.16,1
-2016,Slovakia U16 - Kosovo U16,1.11,1
-2016,Bulgaria U16 - Austria U16,1.01,1
-2016,Netherlands U16 - FYR Macedonia U16,1.21,1
-2016,Denmark U16 - Scotland U16,1.07,1
-2016,Austria U16 - Kosovo U16,1.31,1
-2016,Israel U16 - Ireland U16,1.02,1
-2016,Ukraine U16 - Romania U16,1.5,1
-2016,Netherlands U16 - Belarus U16,1.45,0
-2016,Slovenia U16 - Norway U16,1.01,1
-2016,England U16 - FYR Macedonia U16,1.18,1
-2016,Hungary U16 - Scotland U16,1.01,1
-2016,Russia U16 - Portugal U16,1.08,0
-2016,Czech Republic U16 - Iceland U16,1.18,1
-2016,Denmark U16 - Luxembourg U16,1.41,1
-2016,Georgia U16 - Slovakia U16,1.49,0
-2016,Belarus U16 - Russia U16,1.36,1
-2016,Norway U16 - Romania U16,1.02,1
-2016,Ukraine U16 - Slovenia U16,1.44,1
-2016,Bulgaria U16 - Norway U16,1.15,1
-2016,England U16 - Belarus U16,1.5,1
-2016,Scotland U16 - Luxembourg U16,1.14,1
-2016,Kosovo U16 - Hungary U16,1.14,1
-2016,FYR Macedonia U16 - Romania U16,1.49,1
-2016,Austria U16 - Iceland U16,1.27,1
-2016,Ireland U16 - Norway U16,1.16,0
-2016,Netherlands U16 - Slovakia U16,1.35,0
-2016,Denmark U16 - Bulgaria U16,1.21,1
-2016,Belarus U16 - Belgium U16,1.38,0
-2016,Hungary U16 - Romania U16,1.29,1
-2016,Luxembourg U16 - Iceland U16,1.33,1
-2016,England U16 - Czech Republic U16,1.36,1
-2016,FYR Macedonia U16 - Kosovo U16,1.2,0
-2016,Scotland U16 - Austria U16,1.33,1
-2016,Slovenia U16 - Belgium U16,1.42,1
-2016,Norway U16 - Iceland U16,1.17,0
-2016,Israel U16 - Belarus U16,1.27,1
-2016,Hungary U16 - Portugal U16,1.31,0
-2016,Ireland U16 - Luxembourg U16,1.16,1
-2016,Slovakia U16 - Kosovo U16,1.11,1
-2016,Bulgaria U16 - Austria U16,1.01,1
-2016,Netherlands U16 - FYR Macedonia U16,1.21,1
-2016,Denmark U16 - Scotland U16,1.07,1
-2016,Austria U16 - Kosovo U16,1.31,1
-2016,Israel U16 - Ireland U16,1.02,1
-2016,Ukraine U16 - Romania U16,1.5,1
-2016,Netherlands U16 - Belarus U16,1.45,0
-2016,Slovenia U16 - Norway U16,1.01,1
-2016,England U16 - FYR Macedonia U16,1.18,1
-2016,Hungary U16 - Scotland U16,1.01,1
-2016,Russia U16 - Portugal U16,1.08,0
-2016,Czech Republic U16 - Iceland U16,1.18,1
-2016,Denmark U16 - Luxembourg U16,1.41,1
-2016,Georgia U16 - Slovakia U16,1.49,0
-2016,Belarus U16 - Russia U16,1.36,1
-2016,Norway U16 - Romania U16,1.02,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2017,Belarus U16 - Romania U16,1.1,1,1
+2017,Hungary U16 - Bosnia &amp; Herzegovina U16,1.17,2,1
+2017,Luxembourg U16 - FYR Macedonia U16,1.04,2,2
+2017,Bulgaria U16 - Poland U16,1.08,2,1
+2017,Czech Republic U16 - Ireland U16,1.02,1,1
+2017,Portugal U16 - Great Britain U16,1.04,2,2
+2017,Denmark U16 - Ukraine U16,1.03,2,2
+2017,Georgia U16 - Kosovo U16,1.02,1,1
+2017,Belgium U16 - Iceland U16,1.1,1,1
+2017,Norway U16 - Slovakia U16,1.05,2,2
+2017,Ireland U16 - Bosnia &amp; Herzegovina U16,1.23,2,2
+2017,Belgium U16 - Belarus U16,1.09,1,1
+2017,Slovakia U16 - Hungary U16,1.46,2,2
+2017,Iceland U16 - Greece U16,1.03,2,2
+2017,FYR Macedonia U16 - Portugal U16,1.39,2,2
+2017,Netherlands U16 - Denmark U16,1.05,1,1
+2017,Belarus U16 - Iceland U16,1.09,2,1
+2017,Hungary U16 - Czech Republic U16,1.28,2,2
+2017,Poland U16 - Ukraine U16,1.13,1,1
+2017,Bulgaria U16 - Netherlands U16,1.27,2,2
+2017,Denmark U16 - Cyprus U16,1.17,1,1
+2017,Bosnia &amp; Herzegovina U16 - Slovakia U16,1.07,1,1
+2017,Great Britain U16 - FYR Macedonia U16,1.01,1,1
+2017,Luxembourg U16 - Kosovo U16,1.04,2,2
+2017,Norway U16 - Ireland U16,1.16,2,2
+2017,Cyprus U16 - Ukraine U16,1.03,2,2
+2017,Czech Republic U16 - Bosnia &amp; Herzegovina U16,1.13,2,1
+2017,Georgia U16 - Great Britain U16,1.28,2,2
+2017,Belgium U16 - Greece U16,1.15,2,2
+2017,Denmark U16 - Bulgaria U16,1.02,2,2
+2017,Norway U16 - Hungary U16,1.03,2,2
+2017,Belarus U16 - Switzerland U16,1.23,1,1
+2017,Luxembourg U16 - Portugal U16,1.01,2,2
+2017,Iceland U16 - Romania U16,1.07,1,1
+2017,Netherlands U16 - Poland U16,1.2,2,1
+2017,Greece U16 - Belarus U16,1.05,1,1
+2017,Slovakia U16 - Czech Republic U16,1.15,2,2
+2017,Belarus U16 - Romania U16,1.1,1,1
+2017,Hungary U16 - Bosnia &amp; Herzegovina U16,1.17,2,1
+2017,Luxembourg U16 - FYR Macedonia U16,1.04,2,2
+2017,Bulgaria U16 - Poland U16,1.08,2,1
+2017,Czech Republic U16 - Ireland U16,1.02,1,1
+2017,Portugal U16 - Great Britain U16,1.04,2,2
+2017,Denmark U16 - Ukraine U16,1.03,2,2
+2017,Georgia U16 - Kosovo U16,1.02,1,1
+2017,Belgium U16 - Iceland U16,1.1,1,1
+2017,Norway U16 - Slovakia U16,1.05,2,2
+2017,Ireland U16 - Bosnia &amp; Herzegovina U16,1.23,2,2
+2017,Belgium U16 - Belarus U16,1.09,1,1
+2017,Slovakia U16 - Hungary U16,1.46,2,2
+2017,Iceland U16 - Greece U16,1.03,2,2
+2017,FYR Macedonia U16 - Portugal U16,1.39,2,2
+2017,Netherlands U16 - Denmark U16,1.05,1,1
+2017,Belarus U16 - Iceland U16,1.09,2,1
+2017,Hungary U16 - Czech Republic U16,1.28,2,2
+2017,Poland U16 - Ukraine U16,1.13,1,1
+2017,Bulgaria U16 - Netherlands U16,1.27,2,2
+2017,Denmark U16 - Cyprus U16,1.17,1,1
+2017,Bosnia &amp; Herzegovina U16 - Slovakia U16,1.07,1,1
+2017,Great Britain U16 - FYR Macedonia U16,1.01,1,1
+2017,Luxembourg U16 - Kosovo U16,1.04,2,2
+2017,Norway U16 - Ireland U16,1.16,2,2
+2017,Cyprus U16 - Ukraine U16,1.03,2,2
+2017,Czech Republic U16 - Bosnia &amp; Herzegovina U16,1.13,2,1
+2017,Georgia U16 - Great Britain U16,1.28,2,2
+2017,Belgium U16 - Greece U16,1.15,2,2
+2017,Denmark U16 - Bulgaria U16,1.02,2,2
+2017,Norway U16 - Hungary U16,1.03,2,2
+2017,Belarus U16 - Switzerland U16,1.23,1,1
+2017,Luxembourg U16 - Portugal U16,1.01,2,2
+2017,Iceland U16 - Romania U16,1.07,1,1
+2017,Netherlands U16 - Poland U16,1.2,2,1
+2017,Greece U16 - Belarus U16,1.05,1,1
+2017,Slovakia U16 - Czech Republic U16,1.15,2,2
+2016,Ukraine U16 - Slovenia U16,1.44,2,2
+2016,Bulgaria U16 - Norway U16,1.15,1,1
+2016,England U16 - Belarus U16,1.5,1,1
+2016,Scotland U16 - Luxembourg U16,1.14,2,2
+2016,Kosovo U16 - Hungary U16,1.14,2,2
+2016,FYR Macedonia U16 - Romania U16,1.49,2,2
+2016,Austria U16 - Iceland U16,1.27,2,2
+2016,Ireland U16 - Norway U16,1.16,1,2
+2016,Netherlands U16 - Slovakia U16,1.35,1,2
+2016,Denmark U16 - Bulgaria U16,1.21,2,2
+2016,Belarus U16 - Belgium U16,1.38,2,1
+2016,Hungary U16 - Romania U16,1.29,1,1
+2016,Luxembourg U16 - Iceland U16,1.33,2,2
+2016,England U16 - Czech Republic U16,1.36,1,1
+2016,FYR Macedonia U16 - Kosovo U16,1.2,1,2
+2016,Scotland U16 - Austria U16,1.33,2,2
+2016,Slovenia U16 - Belgium U16,1.42,1,1
+2016,Norway U16 - Iceland U16,1.17,2,1
+2016,Israel U16 - Belarus U16,1.27,1,1
+2016,Hungary U16 - Portugal U16,1.31,1,2
+2016,Ireland U16 - Luxembourg U16,1.16,1,1
+2016,Slovakia U16 - Kosovo U16,1.11,1,1
+2016,Bulgaria U16 - Austria U16,1.01,1,1
+2016,Netherlands U16 - FYR Macedonia U16,1.21,1,1
+2016,Denmark U16 - Scotland U16,1.07,1,1
+2016,Austria U16 - Kosovo U16,1.31,2,2
+2016,Israel U16 - Ireland U16,1.02,1,1
+2016,Ukraine U16 - Romania U16,1.5,1,1
+2016,Netherlands U16 - Belarus U16,1.45,1,2
+2016,Slovenia U16 - Norway U16,1.01,1,1
+2016,England U16 - FYR Macedonia U16,1.18,1,1
+2016,Hungary U16 - Scotland U16,1.01,1,1
+2016,Russia U16 - Portugal U16,1.08,1,2
+2016,Czech Republic U16 - Iceland U16,1.18,1,1
+2016,Denmark U16 - Luxembourg U16,1.41,1,1
+2016,Georgia U16 - Slovakia U16,1.49,2,1
+2016,Belarus U16 - Russia U16,1.36,2,2
+2016,Norway U16 - Romania U16,1.02,2,2
+2016,Ukraine U16 - Slovenia U16,1.44,2,2
+2016,Bulgaria U16 - Norway U16,1.15,1,1
+2016,England U16 - Belarus U16,1.5,1,1
+2016,Scotland U16 - Luxembourg U16,1.14,2,2
+2016,Kosovo U16 - Hungary U16,1.14,2,2
+2016,FYR Macedonia U16 - Romania U16,1.49,2,2
+2016,Austria U16 - Iceland U16,1.27,2,2
+2016,Ireland U16 - Norway U16,1.16,1,2
+2016,Netherlands U16 - Slovakia U16,1.35,1,2
+2016,Denmark U16 - Bulgaria U16,1.21,2,2
+2016,Belarus U16 - Belgium U16,1.38,2,1
+2016,Hungary U16 - Romania U16,1.29,1,1
+2016,Luxembourg U16 - Iceland U16,1.33,2,2
+2016,England U16 - Czech Republic U16,1.36,1,1
+2016,FYR Macedonia U16 - Kosovo U16,1.2,1,2
+2016,Scotland U16 - Austria U16,1.33,2,2
+2016,Slovenia U16 - Belgium U16,1.42,1,1
+2016,Norway U16 - Iceland U16,1.17,2,1
+2016,Israel U16 - Belarus U16,1.27,1,1
+2016,Hungary U16 - Portugal U16,1.31,1,2
+2016,Ireland U16 - Luxembourg U16,1.16,1,1
+2016,Slovakia U16 - Kosovo U16,1.11,1,1
+2016,Bulgaria U16 - Austria U16,1.01,1,1
+2016,Netherlands U16 - FYR Macedonia U16,1.21,1,1
+2016,Denmark U16 - Scotland U16,1.07,1,1
+2016,Austria U16 - Kosovo U16,1.31,2,2
+2016,Israel U16 - Ireland U16,1.02,1,1
+2016,Ukraine U16 - Romania U16,1.5,1,1
+2016,Netherlands U16 - Belarus U16,1.45,1,2
+2016,Slovenia U16 - Norway U16,1.01,1,1
+2016,England U16 - FYR Macedonia U16,1.18,1,1
+2016,Hungary U16 - Scotland U16,1.01,1,1
+2016,Russia U16 - Portugal U16,1.08,1,2
+2016,Czech Republic U16 - Iceland U16,1.18,1,1
+2016,Denmark U16 - Luxembourg U16,1.41,1,1
+2016,Georgia U16 - Slovakia U16,1.49,2,1
+2016,Belarus U16 - Russia U16,1.36,2,2
+2016,Norway U16 - Romania U16,1.02,2,2

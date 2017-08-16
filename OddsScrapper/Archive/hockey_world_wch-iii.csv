@@ -1,37 +1,38 @@
-2017,Luxembourg - Bulgaria,1.3,0
-2017,Hong Kong - Georgia,1.05,1
-2017,South Africa - Chinese Taipei,1.05,1
-2017,Luxembourg - Hong Kong,1.04,1
-2017,Chinese Taipei - United Arab Emirates,1.11,1
-2017,Hong Kong - Bulgaria,1.02,1
-2017,United Arab Emirates - South Africa,1.01,1
-2017,Bulgaria - Chinese Taipei,1.02,1
-2017,South Africa - Georgia,1.44,0
-2017,Luxembourg - United Arab Emirates,1.03,1
-2016,Hong Kong - Georgia,1.01,0
-2016,Georgia - Luxembourg,1.47,1
-2016,Hong Kong - Turkey,1.01,1
-2016,Turkey - Luxembourg,1.47,1
-2016,Georgia - Bosnia &amp; Herzegovina,1.1,1
-2015,Luxembourg - Hong Kong,1.06,1
-2015,United Arab Emirates - Georgia,1.45,0
-2015,Hong Kong - North Korea,1.04,1
-2015,Luxembourg - Turkey,1.02,1
-2015,Bosnia &amp; Herzegovina - United Arab Emirates,1.22,1
-2015,North Korea - Luxembourg,1.2,1
-2015,Turkey - Hong Kong,1.01,1
-2015,Georgia - Bosnia &amp; Herzegovina,1.43,1
-2015,Georgia - Hong Kong,1.03,1
-2015,United Arab Emirates - Luxembourg,1.02,1
-2013,South Africa - North Korea,1.4,1
-2013,Ireland - United Arab Emirates,1.05,1
-2013,Luxembourg - Greece,1.05,1
-2013,Greece - South Africa,1.01,1
-2013,United Arab Emirates - Luxembourg,1.03,1
-2013,Ireland - North Korea,1.07,1
-2013,South Africa - United Arab Emirates,1.03,1
-2013,North Korea - Greece,1.1,1
-2013,South Africa - Ireland,1.14,1
-2013,North Korea - Luxembourg,1.35,1
-2013,Luxembourg - South Africa,1.3,1
-2013,North Korea - United Arab Emirates,1.03,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2017,Luxembourg - Bulgaria,1.3,2,1
+2017,Hong Kong - Georgia,1.05,2,2
+2017,South Africa - Chinese Taipei,1.05,1,1
+2017,Luxembourg - Hong Kong,1.04,1,1
+2017,Chinese Taipei - United Arab Emirates,1.11,1,1
+2017,Hong Kong - Bulgaria,1.02,2,2
+2017,United Arab Emirates - South Africa,1.01,2,2
+2017,Bulgaria - Chinese Taipei,1.02,1,1
+2017,South Africa - Georgia,1.44,1,2
+2017,Luxembourg - United Arab Emirates,1.03,1,1
+2016,Hong Kong - Georgia,1.01,1,2
+2016,Georgia - Luxembourg,1.47,1,1
+2016,Hong Kong - Turkey,1.01,2,2
+2016,Turkey - Luxembourg,1.47,1,1
+2016,Georgia - Bosnia &amp; Herzegovina,1.1,1,1
+2015,Luxembourg - Hong Kong,1.06,1,1
+2015,United Arab Emirates - Georgia,1.45,1,0
+2015,Hong Kong - North Korea,1.04,2,2
+2015,Luxembourg - Turkey,1.02,2,2
+2015,Bosnia &amp; Herzegovina - United Arab Emirates,1.22,2,2
+2015,North Korea - Luxembourg,1.2,1,1
+2015,Turkey - Hong Kong,1.01,1,1
+2015,Georgia - Bosnia &amp; Herzegovina,1.43,1,1
+2015,Georgia - Hong Kong,1.03,2,2
+2015,United Arab Emirates - Luxembourg,1.02,2,2
+2013,South Africa - North Korea,1.4,1,1
+2013,Ireland - United Arab Emirates,1.05,1,1
+2013,Luxembourg - Greece,1.05,1,1
+2013,Greece - South Africa,1.01,2,2
+2013,United Arab Emirates - Luxembourg,1.03,2,2
+2013,Ireland - North Korea,1.07,2,2
+2013,South Africa - United Arab Emirates,1.03,1,1
+2013,North Korea - Greece,1.1,1,1
+2013,South Africa - Ireland,1.14,1,1
+2013,North Korea - Luxembourg,1.35,1,1
+2013,Luxembourg - South Africa,1.3,2,2
+2013,North Korea - United Arab Emirates,1.03,1,1

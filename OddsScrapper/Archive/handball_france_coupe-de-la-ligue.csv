@@ -1,52 +1,53 @@
-2016,Paris SG - Nantes,1.24,1
-2016,Dunkerque - Nantes,1.23,1
-2016,St. Raphael - Paris SG,1.17,1
-2016,Nantes - Billere,1.01,1
-2016,Billere - Chambery Savoie,1.27,0
-2016,Istres - St. Raphael,1.38,1
-2016,Limoges - Creteil,1.36,1
-2016,Tremblay - Nantes,1.37,1
-2016,Ivry - Dunkerque,1.5,0
-2016,Montpellier - Chartres,1.06,1
-2016,Dijon - Chambery Savoie,1.15,1
-2016,Limoges - Aix,1.41,1
-2016,Massy Essonne - Toulouse,1.25,1
-2016,Pontault - Cesson Rennes-Metropole,1.07,0
-2016,Nancy - Creteil,1.19,1
-2015,Paris SG - Montpellier,1.23,0
-2015,Nantes - Montpellier,1.36,1
-2015,Toulouse - Paris SG,1.06,1
-2015,Montpellier - Dunkerque,1.22,1
-2015,Creteil - Paris SG,1.08,1
-2015,Chambery Savoie - Tremblay,1.39,1
-2015,Cesson Rennes-Metropole - Creteil,1.48,0
-2015,Dunkerque - Aix,1.3,1
-2015,Aix - Ivry,1.2,1
-2015,Tremblay - Chartres,1.16,1
-2014,Cesson Rennes-Metropole - Nantes,1.44,1
-2014,Montpellier - Dunkerque,1.48,0
-2014,Paris SG - Nantes,1.38,0
-2014,Chambery Savoie - Creteil,1.27,0
-2014,St. Raphael - Tremblay,1.23,0
-2014,Toulouse - Aix,1.26,1
-2014,Nantes - Selestat,1.13,1
-2013,Paris SG - St. Raphael,1.14,0
-2013,Selestat - Paris SG,1.07,1
-2013,Cesson Rennes-Metropole - Montpellier,1.3,1
-2013,Nantes - Toulouse,1.36,0
-2013,Cesson Rennes-Metropole - Ivry,1.45,1
-2013,Montpellier - Dijon,1.02,1
-2013,Chambery Savoie - Aix,1.21,1
-2013,St. Raphael - Nimes,1.17,1
-2012,Nantes - Selestat,1.23,1
-2012,Dunkerque - Montpellier,1.5,1
-2012,Paris SG - Nantes,1.01,0
-2012,Chambery Savoie - Toulouse,1.16,1
-2012,St. Raphael - Paris SG,1.2,1
-2012,Nantes - Billere,1.05,1
-2012,Dunkerque - Aix,1.12,1
-2011,Montpellier - Chambery Savoie,1.13,1
-2011,Chambery Savoie - Creteil,1.04,1
-2011,Montpellier - Tremblay,1.01,1
-2011,Dunkerque - Creteil,1.05,0
-2011,Nantes - Paris SG,1.25,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2016,Paris SG - Nantes,1.23,1,1
+2016,Dunkerque - Nantes,1.23,2,2
+2016,St. Raphael - Paris SG,1.17,2,2
+2016,Nantes - Billere,1.01,1,1
+2016,Billere - Chambery Savoie,1.27,2,1
+2016,Istres - St. Raphael,1.38,2,2
+2016,Limoges - Creteil,1.36,2,2
+2016,Tremblay - Nantes,1.37,2,2
+2016,Ivry - Dunkerque,1.5,1,2
+2016,Montpellier - Chartres,1.06,1,1
+2016,Dijon - Chambery Savoie,1.15,2,2
+2016,Limoges - Aix,1.41,2,2
+2016,Massy Essonne - Toulouse,1.25,2,2
+2016,Pontault - Cesson Rennes-Metropole,1.07,2,1
+2016,Nancy - Creteil,1.19,2,2
+2015,Paris SG - Montpellier,1.23,1,2
+2015,Nantes - Montpellier,1.37,2,2
+2015,Toulouse - Paris SG,1.06,2,2
+2015,Montpellier - Dunkerque,1.22,1,1
+2015,Creteil - Paris SG,1.08,2,2
+2015,Chambery Savoie - Tremblay,1.38,1,1
+2015,Cesson Rennes-Metropole - Creteil,1.47,1,2
+2015,Dunkerque - Aix,1.29,1,1
+2015,Aix - Ivry,1.2,1,1
+2015,Tremblay - Chartres,1.16,1,1
+2014,Cesson Rennes-Metropole - Nantes,1.44,2,2
+2014,Montpellier - Dunkerque,1.48,1,0
+2014,Paris SG - Nantes,1.38,1,2
+2014,Chambery Savoie - Creteil,1.27,1,2
+2014,St. Raphael - Tremblay,1.23,1,0
+2014,Toulouse - Aix,1.26,1,1
+2014,Nantes - Selestat,1.13,1,1
+2013,Paris SG - St. Raphael,1.14,1,0
+2013,Selestat - Paris SG,1.07,2,2
+2013,Cesson Rennes-Metropole - Montpellier,1.3,2,2
+2013,Nantes - Toulouse,1.36,1,0
+2013,Cesson Rennes-Metropole - Ivry,1.45,1,1
+2013,Montpellier - Dijon,1.02,1,1
+2013,Chambery Savoie - Aix,1.21,1,1
+2013,St. Raphael - Nimes,1.17,1,1
+2012,Nantes - Selestat,1.23,1,1
+2012,Dunkerque - Montpellier,1.5,1,1
+2012,Paris SG - Nantes,1.01,1,2
+2012,Chambery Savoie - Toulouse,1.16,1,1
+2012,St. Raphael - Paris SG,1.2,2,2
+2012,Nantes - Billere,1.05,1,1
+2012,Dunkerque - Aix,1.12,1,1
+2011,Montpellier - Chambery Savoie,1.13,1,1
+2011,Chambery Savoie - Creteil,1.04,1,1
+2011,Montpellier - Tremblay,1.01,1,1
+2011,Dunkerque - Creteil,1.05,1,2
+2011,Nantes - Paris SG,1.25,1,1

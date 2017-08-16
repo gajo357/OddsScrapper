@@ -1,55 +1,56 @@
-2016,Nymburk - Opava,1.02,1
-2016,Pardubice - Prostejov,1.18,1
-2016,Prostejov - Opava,1.33,1
-2016,Pardubice - Nymburk,1.16,1
-2016,USK Prague - Nymburk,1.01,1
-2016,NH Ostrava - Opava,1.46,1
-2016,Brno - NH Ostrava,1.42,0
-2016,Opava - Svitavy,1.11,1
-2016,Hradec Kralove - USK Prague,1.05,1
-2016,Kolin - Pardubice,1.45,1
-2016,Snakes Ostrava - Hradec Kralove,1.02,1
-2016,Zlin - Opava,1.01,1
-2016,Basketbal Olomouc - Jindrichuv Hradec,1.02,1
-2015,Pardubice - Kolin,1.19,1
-2015,Jindrichuv Hradec - Opava,1.45,1
-2015,Kolin - Prostejov,1.47,0
-2015,Litomerice - Nymburk 2,1.38,1
-2015,Jindrichuv Hradec - NH Ostrava,1.12,1
-2015,Nymburk 2 - Usti n. Labem,1.09,0
-2015,Plzen - USK Prague,1.18,1
-2014,Pardubice - Brno,1.27,0
-2014,Brno - Prostejov,1.12,1
-2014,Prostejov - Opava,1.18,1
-2014,Decin - Kolin,1.07,1
-2014,Jindrichuv Hradec - Pardubice,1.43,1
-2014,Decin - Usti n. Labem,1.07,1
-2014,Opava - NH Ostrava,1.08,1
-2014,USK Prague - Kolin,1.5,0
-2014,Jindrichuv Hradec - Svitavy,1.08,1
-2013,Prostejov - Nymburk,1.01,1
-2013,Opava - Nymburk,1.01,1
-2013,Prostejov - Pardubice,1.43,1
-2013,Usti n. Labem - Opava,1.36,1
-2012,Nymburk - Pardubice,1.03,1
-2012,NH Ostrava - Prostejov,1.16,1
-2012,NH Ostrava - Nymburk,1.02,1
-2012,Pardubice - Prostejov,1.14,1
-2012,Nymburk - Kolin,1.01,1
-2012,Prostejov - Sparta Prague,1.03,1
-2012,Liberec - Pardubice,1.01,1
-2012,NH Ostrava - Decin,1.39,1
-2011,Nymburk - Decin,1.09,1
-2011,USK Prague - Prostejov,1.22,0
-2011,USK Prague - Nymburk,1.01,1
-2011,Usti n. Labem - Nymburk,1.01,1
-2011,Decin - Jindrichuv Hradec,1.01,1
-2011,Prostejov - Kolin,1.39,1
-2011,Pardubice - USK Prague,1.18,0
-2010,Nymburk - Novy Jicin,1.06,1
-2010,Prostejov - Decin,1.43,0
-2010,Nymburk - Decin,1.06,1
-2010,Novy Jicin - Usti n. Labem,1.01,1
-2010,Opava - Nymburk,1.01,1
-2010,Prostejov - Pardubice,1.37,1
-2010,Decin - NH Ostrava,1.31,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2016,Nymburk - Opava,1.02,1,1
+2016,Pardubice - Prostejov,1.18,1,1
+2016,Prostejov - Opava,1.33,2,2
+2016,Pardubice - Nymburk,1.16,2,2
+2016,USK Prague - Nymburk,1.01,2,2
+2016,NH Ostrava - Opava,1.46,2,2
+2016,Brno - NH Ostrava,1.42,1,2
+2016,Opava - Svitavy,1.11,1,1
+2016,Hradec Kralove - USK Prague,1.05,2,2
+2016,Kolin - Pardubice,1.45,2,2
+2016,Snakes Ostrava - Hradec Kralove,1.02,2,2
+2016,Zlin - Opava,1.01,2,2
+2016,Basketbal Olomouc - Jindrichuv Hradec,1.02,2,2
+2015,Pardubice - Kolin,1.19,1,1
+2015,Jindrichuv Hradec - Opava,1.45,2,2
+2015,Kolin - Prostejov,1.47,2,1
+2015,Litomerice - Nymburk 2,1.38,2,2
+2015,Jindrichuv Hradec - NH Ostrava,1.12,1,1
+2015,Nymburk 2 - Usti n. Labem,1.09,2,1
+2015,Plzen - USK Prague,1.18,2,2
+2014,Pardubice - Brno,1.27,1,2
+2014,Brno - Prostejov,1.12,2,2
+2014,Prostejov - Opava,1.18,1,1
+2014,Decin - Kolin,1.07,1,1
+2014,Jindrichuv Hradec - Pardubice,1.43,2,2
+2014,Decin - Usti n. Labem,1.07,1,1
+2014,Opava - NH Ostrava,1.08,1,1
+2014,USK Prague - Kolin,1.5,1,2
+2014,Jindrichuv Hradec - Svitavy,1.08,1,1
+2013,Prostejov - Nymburk,1.01,2,2
+2013,Opava - Nymburk,1.01,2,2
+2013,Prostejov - Pardubice,1.43,1,1
+2013,Usti n. Labem - Opava,1.36,2,2
+2012,Nymburk - Pardubice,1.03,1,1
+2012,NH Ostrava - Prostejov,1.16,1,1
+2012,NH Ostrava - Nymburk,1.02,2,2
+2012,Pardubice - Prostejov,1.14,1,1
+2012,Nymburk - Kolin,1.01,1,1
+2012,Prostejov - Sparta Prague,1.03,1,1
+2012,Liberec - Pardubice,1.01,2,2
+2012,NH Ostrava - Decin,1.39,1,1
+2011,Nymburk - Decin,1.09,1,1
+2011,USK Prague - Prostejov,1.22,2,1
+2011,USK Prague - Nymburk,1.01,2,2
+2011,Usti n. Labem - Nymburk,1.01,2,2
+2011,Decin - Jindrichuv Hradec,1.01,1,1
+2011,Prostejov - Kolin,1.39,1,1
+2011,Pardubice - USK Prague,1.18,1,2
+2010,Nymburk - Novy Jicin,1.06,1,1
+2010,Prostejov - Decin,1.43,1,2
+2010,Nymburk - Decin,1.06,1,1
+2010,Novy Jicin - Usti n. Labem,1.01,1,1
+2010,Opava - Nymburk,1.01,2,2
+2010,Prostejov - Pardubice,1.37,1,1
+2010,Decin - NH Ostrava,1.31,1,1

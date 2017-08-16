@@ -1,44 +1,45 @@
-2017,Olimpia Milano - Sassari,1.39,1
-2017,Sassari - Brescia,1.48,1
-2017,Olimpia Milano - Reggiana,1.31,1
-2017,Venezia - Brescia,1.43,0
-2017,Olimpia Milano - Brindisi,1.15,1
-2017,Reggiana - Capo d'Orlando,1.29,1
-2016,Avellino - Olimpia Milano,1.12,1
-2016,Cremona - Olimpia Milano,1.08,1
-2016,Olimpia Milano - Venezia,1.14,1
-2015,Olimpia Milano - Sassari,1.44,0
-2015,Olimpia Milano - Brindisi&nbsp;,1.32,1
-2015,Olimpia Milano - Avellino,1.09,1
-2015,Reggiana - Trento,1.42,1
-2015,Sassari - Cremona,1.31,1
-2013,Sassari - Reggiana,1.41,1
-2013,Olimpia Milano - Sassari,1.21,0
-2013,Cantu - Reggiana,1.37,0
-2013,Brindisi - Venezia,1.41,1
-2012,Sassari - Siena,1.49,1
-2012,Virtus Roma - Varese,1.47,1
-2012,Siena - Reggiana,1.14,1
-2012,Sassari - Brindisi,1.31,1
-2012,Varese - Olimpia Milano,1.41,0
-2011,Siena - Cantu,1.35,1
-2011,Pesaro - Cantu,1.42,1
-2011,Siena - Olimpia Milano,1.22,1
-2011,Cantu - Avellino,1.33,1
-2011,Siena - Sassari,1.15,1
-2010,Siena - Cantu,1.29,1
-2010,Cantu - Avellino,1.41,1
-2010,Siena - Montegranaro,1.16,1
-2010,Cantu - Biella,1.38,1
-2010,Olimpia Milano - Avellino,1.37,0
-2010,Siena - Pesaro,1.04,1
-2009,Virtus Segafredo Bologna - Siena,1.07,1
-2009,Siena - Biella,1.03,1
-2009,Siena - Montegranaro,1.03,1
-2008,Siena - Virtus Segafredo Bologna,1.26,1
-2008,Treviso - Siena,1.1,1
-2008,Teramo - Virtus Segafredo Bologna,1.41,1
-2008,Siena - Cantu,1.05,1
-2008,Treviso - Montegranaro,1.42,1
-2008,Cantu - Udine,1.26,1
-2008,Ferrara - Siena,1.05,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2017,Olimpia Milano - Sassari,1.39,1,1
+2017,Sassari - Brescia,1.48,1,1
+2017,Olimpia Milano - Reggiana,1.31,1,1
+2017,Venezia - Brescia,1.43,1,2
+2017,Olimpia Milano - Brindisi,1.15,1,1
+2017,Reggiana - Capo d'Orlando,1.29,1,1
+2016,Avellino - Olimpia Milano,1.12,2,2
+2016,Cremona - Olimpia Milano,1.08,2,2
+2016,Olimpia Milano - Venezia,1.14,1,1
+2015,Olimpia Milano - Sassari,1.44,1,2
+2015,Olimpia Milano - Brindisi&nbsp;,1.32,1,1
+2015,Olimpia Milano - Avellino,1.09,1,1
+2015,Reggiana - Trento,1.42,1,1
+2015,Sassari - Cremona,1.31,1,1
+2013,Sassari - Reggiana,1.41,1,1
+2013,Olimpia Milano - Sassari,1.21,1,2
+2013,Cantu - Reggiana,1.37,1,2
+2013,Brindisi - Venezia,1.41,1,1
+2012,Sassari - Siena,1.49,2,2
+2012,Virtus Roma - Varese,1.47,2,2
+2012,Siena - Reggiana,1.14,1,1
+2012,Sassari - Brindisi,1.31,1,1
+2012,Varese - Olimpia Milano,1.41,2,1
+2011,Siena - Cantu,1.35,1,1
+2011,Pesaro - Cantu,1.42,2,2
+2011,Siena - Olimpia Milano,1.22,1,1
+2011,Cantu - Avellino,1.33,1,1
+2011,Siena - Sassari,1.15,1,1
+2010,Siena - Cantu,1.29,1,1
+2010,Cantu - Avellino,1.41,1,1
+2010,Siena - Montegranaro,1.16,1,1
+2010,Cantu - Biella,1.38,1,1
+2010,Olimpia Milano - Avellino,1.37,1,2
+2010,Siena - Pesaro,1.04,1,1
+2009,Virtus Segafredo Bologna - Siena,1.07,2,2
+2009,Siena - Biella,1.03,1,1
+2009,Siena - Montegranaro,1.03,1,1
+2008,Siena - Virtus Segafredo Bologna,1.26,1,1
+2008,Treviso - Siena,1.1,2,2
+2008,Teramo - Virtus Segafredo Bologna,1.41,2,2
+2008,Siena - Cantu,1.05,1,1
+2008,Treviso - Montegranaro,1.42,1,1
+2008,Cantu - Udine,1.26,1,1
+2008,Ferrara - Siena,1.05,2,2

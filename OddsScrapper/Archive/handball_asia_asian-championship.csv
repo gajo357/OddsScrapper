@@ -1,52 +1,53 @@
-2016,Qatar - Bahrain,1.2,1
-2016,Saudi Arabia - Japan,1.42,1
-2016,South Korea - Iran,1.48,0
-2016,United Arab Emirates - Oman,1.47,0
-2016,Bahrain - Japan,1.29,1
-2016,Iran - Oman,1.16,1
-2016,South Korea - United Arab Emirates,1.28,1
-2016,Japan - Syria,1.01,1
-2016,Qatar - South Korea,1.08,1
-2016,Bahrain - Saudi Arabia,1.21,1
-2016,Iran - United Arab Emirates,1.37,1
-2016,Oman - Japan,1.09,1
-2016,Iran - Bahrain,1.35,1
-2016,Oman - Syria,1.07,1
-2016,Qatar - Japan,1.01,1
-2016,Bahrain - United Arab Emirates,1.02,1
-2016,Saudi Arabia - Lebanon,1.03,1
-2016,Iran - China,1.05,1
-2016,Syria - Qatar,1.01,1
-2016,South Korea - Oman,1.07,1
-2016,China - Bahrain,1.01,1
-2016,Lebanon - Iran,1.01,1
-2016,United Arab Emirates - Saudi Arabia,1.15,0
-2016,Japan - South Korea,1.15,0
-2016,Lebanon - Bahrain,1.01,1
-2016,Saudi Arabia - Iran,1.19,0
-2016,China - United Arab Emirates,1.05,1
-2014,United Arab Emirates - Iran,1.05,1
-2014,South Korea - Saudi Arabia,1.25,1
-2014,Oman - Kuwait,1.19,1
-2014,Iraq - Japan,1.01,1
-2014,Bahrain - United Arab Emirates,1.04,1
-2014,Kuwait - Saudi Arabia,1.4,1
-2014,South Korea - Oman,1.09,1
-2014,Qatar - Iran,1.04,1
-2014,China - Iraq,1.28,0
-2014,Qatar - Japan,1.32,1
-2014,Kuwait - Iraq,1.01,1
-2014,Bahrain - Iran,1.39,0
-2014,South Korea - Saudi Arabia,1.3,1
-2014,United Arab Emirates - Kuwait,1.03,0
-2014,Saudi Arabia - China,1.04,1
-2014,Qatar - Kuwait,1.04,1
-2014,Oman - Japan,1.04,0
-2014,United Arab Emirates - Iraq,1.02,1
-2014,Bahrain - Saudi Arabia,1.4,1
-2014,Iran - China,1.02,1
-2014,Kuwait - Oman,1.08,1
-2014,Iraq - Qatar,1.01,1
-2014,Japan - United Arab Emirates,1.03,1
-2014,China - South Korea,1.05,1
-2014,Saudi Arabia - Iran,1.48,0
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2016,Qatar - Bahrain,1.2,1,1
+2016,Saudi Arabia - Japan,1.42,2,2
+2016,South Korea - Iran,1.48,1,2
+2016,United Arab Emirates - Oman,1.46,1,0
+2016,Bahrain - Japan,1.29,1,1
+2016,Iran - Oman,1.16,1,1
+2016,South Korea - United Arab Emirates,1.29,1,1
+2016,Japan - Syria,1.01,1,1
+2016,Qatar - South Korea,1.08,1,1
+2016,Bahrain - Saudi Arabia,1.21,1,1
+2016,Iran - United Arab Emirates,1.37,1,1
+2016,Oman - Japan,1.08,2,2
+2016,Iran - Bahrain,1.34,2,2
+2016,Oman - Syria,1.07,1,1
+2016,Qatar - Japan,1.01,1,1
+2016,Bahrain - United Arab Emirates,1.02,1,1
+2016,Saudi Arabia - Lebanon,1.03,1,1
+2016,Iran - China,1.05,1,1
+2016,Syria - Qatar,1.01,2,2
+2016,South Korea - Oman,1.06,1,1
+2016,China - Bahrain,1.01,2,2
+2016,Lebanon - Iran,1.01,2,2
+2016,United Arab Emirates - Saudi Arabia,1.15,2,0
+2016,Japan - South Korea,1.15,2,1
+2016,Lebanon - Bahrain,1.01,2,2
+2016,Saudi Arabia - Iran,1.19,2,1
+2016,China - United Arab Emirates,1.05,2,2
+2014,United Arab Emirates - Iran,1.05,2,2
+2014,South Korea - Saudi Arabia,1.25,1,1
+2014,Oman - Kuwait,1.19,2,2
+2014,Iraq - Japan,1.01,2,2
+2014,Bahrain - United Arab Emirates,1.04,1,1
+2014,Kuwait - Saudi Arabia,1.4,2,2
+2014,South Korea - Oman,1.09,1,1
+2014,Qatar - Iran,1.04,1,1
+2014,China - Iraq,1.28,1,2
+2014,Qatar - Japan,1.32,1,1
+2014,Kuwait - Iraq,1.01,1,1
+2014,Bahrain - Iran,1.39,1,0
+2014,South Korea - Saudi Arabia,1.3,1,1
+2014,United Arab Emirates - Kuwait,1.03,2,1
+2014,Saudi Arabia - China,1.04,1,1
+2014,Qatar - Kuwait,1.04,1,1
+2014,Oman - Japan,1.04,2,1
+2014,United Arab Emirates - Iraq,1.02,1,1
+2014,Bahrain - Saudi Arabia,1.4,1,1
+2014,Iran - China,1.02,1,1
+2014,Kuwait - Oman,1.08,1,1
+2014,Iraq - Qatar,1.01,2,2
+2014,Japan - United Arab Emirates,1.03,1,1
+2014,China - South Korea,1.05,2,2
+2014,Saudi Arabia - Iran,1.48,1,0

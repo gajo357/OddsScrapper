@@ -1,63 +1,64 @@
-2016,Borac - RK Konjuh,1.16,1
-2016,Izvidac - Vogosca,1.3,1
-2016,Vogosca - RK Konjuh,1.29,1
-2016,Sarajevo - Celik Zenica,1.04,1
-2016,RK Konjuh - Krajina,1.08,1
-2016,Krivaja - Celik Zenica,1.18,1
-2016,Sarajevo - Maglaj,1.3,1
-2016,Borac - Sarajevo,1.18,1
-2016,Krivaja - Maglaj,1.46,1
-2016,Sarajevo - Vogosca,1.48,1
-2016,Zrinjski Mostar - Derventa,1.5,1
-2016,Celik Zenica - Borac,1.15,1
-2016,Vogosca - Celik Zenica,1.01,1
-2016,Celik Zenica - Krajina,1.26,1
-2016,Celik Zenica - Hercegovina,1.17,1
-2016,Sarajevo - Doboj,1.23,1
-2016,Borac - Derventa,1.41,1
-2016,RK Konjuh - Celik Zenica,1.23,1
-2016,Vogosca - Borac,1.45,1
-2016,Doboj - Gorazde,1.41,1
-2016,Prijedor - Krivaja,1.41,1
-2016,Vogosca - Derventa,1.2,0
-2016,Krivaja - Doboj,1.19,1
-2016,Maglaj - Hercegovina,1.12,1
-2016,Celik Zenica - Prijedor,1.45,1
-2016,Sarajevo - Krivaja,1.31,0
-2016,RK Konjuh - Maglaj,1.29,1
-2016,Zrinjski Mostar - Gorazde,1.02,1
-2016,Krivaja - Zrinjski Mostar,1.3,1
-2015,Borac - Maglaj,1.1,1
-2015,Izvidac - Vogosca,1.41,1
-2015,Sarajevo - Bosna Visoko,1.31,1
-2015,Zrinjski Mostar - Prijedor,1.14,1
-2015,Izvidac - Maglaj,1.01,1
-2015,Sarajevo - Prijedor,1.28,1
-2015,Celik Zenica - RK Konjuh,1.25,0
-2015,Maglaj - Vogosca,1.26,0
-2015,Derventa - RK Gracanica,1.02,1
-2015,Zrinjski Mostar - Vogosca,1.3,0
-2015,Vogosca - Derventa,1.1,0
-2015,Sarajevo - Vogosca,1.34,1
-2015,RK Gracanica - Izvidac,1.03,1
-2015,Sarajevo - Celik Zenica,1.29,1
-2015,Doboj - RK Gracanica,1.31,1
-2015,Izvidac - RK Konjuh,1.01,1
-2015,Doboj - RK Sloboda,1.07,1
-2015,Zrinjski Mostar - Derventa,1.34,1
-2015,Zrinjski Mostar - RK Konjuh,1.26,0
-2015,Maglaj - Izvidac,1.26,0
-2015,Zrinjski Mostar - Krajina,1.31,1
-2015,Gradacac - RK Sloboda,1.28,1
-2015,Doboj - Izvidac,1.1,1
-2015,Bosna Visoko - Izvidac,1.26,1
-2014,RK Gracanica - Gradacac,1.12,1
-2014,RK Sloboda - RK Konjuh,1.4,1
-2014,Brcko - Gradacac,1.2,1
-2014,Gradacac - Sarajevo,1.33,1
-2014,Celik Zenica - RK Sloboda,1.05,1
-2014,Bosna Visoko - Brcko,1.07,1
-2014,Sarajevo - RK Sloboda,1.12,1
-2014,Zrinjski Mostar - Brcko,1.09,1
-2014,Brcko - Celik Zenica,1.04,1
-2014,Gradacac - Brcko,1.05,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2016,Borac - RK Konjuh,1.16,1,1
+2016,Izvidac - Vogosca,1.3,1,1
+2016,Vogosca - RK Konjuh,1.29,1,1
+2016,Sarajevo - Celik Zenica,1.04,1,1
+2016,RK Konjuh - Krajina,1.08,1,1
+2016,Krivaja - Celik Zenica,1.18,1,1
+2016,Sarajevo - Maglaj,1.3,1,1
+2016,Borac - Sarajevo,1.18,1,1
+2016,Krivaja - Maglaj,1.46,1,1
+2016,Sarajevo - Vogosca,1.48,2,2
+2016,Zrinjski Mostar - Derventa,1.5,1,1
+2016,Celik Zenica - Borac,1.15,2,2
+2016,Vogosca - Celik Zenica,1.01,1,1
+2016,Celik Zenica - Krajina,1.26,1,1
+2016,Celik Zenica - Hercegovina,1.17,1,1
+2016,Sarajevo - Doboj,1.23,1,1
+2016,Borac - Derventa,1.41,1,1
+2016,RK Konjuh - Celik Zenica,1.23,1,1
+2016,Vogosca - Borac,1.45,1,1
+2016,Doboj - Gorazde,1.41,1,1
+2016,Prijedor - Krivaja,1.41,1,1
+2016,Vogosca - Derventa,1.2,1,2
+2016,Krivaja - Doboj,1.19,1,1
+2016,Maglaj - Hercegovina,1.12,1,1
+2016,Celik Zenica - Prijedor,1.45,1,1
+2016,Sarajevo - Krivaja,1.31,1,0
+2016,RK Konjuh - Maglaj,1.29,1,1
+2016,Zrinjski Mostar - Gorazde,1.02,1,1
+2016,Krivaja - Zrinjski Mostar,1.3,1,1
+2015,Borac - Maglaj,1.1,1,1
+2015,Izvidac - Vogosca,1.41,1,1
+2015,Sarajevo - Bosna Visoko,1.31,1,1
+2015,Zrinjski Mostar - Prijedor,1.14,1,1
+2015,Izvidac - Maglaj,1.01,1,1
+2015,Sarajevo - Prijedor,1.28,1,1
+2015,Celik Zenica - RK Konjuh,1.25,1,2
+2015,Maglaj - Vogosca,1.26,1,2
+2015,Derventa - RK Gracanica,1.02,1,1
+2015,Zrinjski Mostar - Vogosca,1.3,2,1
+2015,Vogosca - Derventa,1.1,1,0
+2015,Sarajevo - Vogosca,1.34,2,2
+2015,RK Gracanica - Izvidac,1.03,2,2
+2015,Sarajevo - Celik Zenica,1.29,1,1
+2015,Doboj - RK Gracanica,1.31,1,1
+2015,Izvidac - RK Konjuh,1.01,1,1
+2015,Doboj - RK Sloboda,1.07,1,1
+2015,Zrinjski Mostar - Derventa,1.34,2,2
+2015,Zrinjski Mostar - RK Konjuh,1.26,1,2
+2015,Maglaj - Izvidac,1.26,2,1
+2015,Zrinjski Mostar - Krajina,1.31,1,1
+2015,Gradacac - RK Sloboda,1.28,1,1
+2015,Doboj - Izvidac,1.1,2,2
+2015,Bosna Visoko - Izvidac,1.26,2,2
+2014,RK Gracanica - Gradacac,1.12,1,1
+2014,RK Sloboda - RK Konjuh,1.4,1,1
+2014,Brcko - Gradacac,1.2,2,2
+2014,Gradacac - Sarajevo,1.33,1,1
+2014,Celik Zenica - RK Sloboda,1.05,1,1
+2014,Bosna Visoko - Brcko,1.07,1,1
+2014,Sarajevo - RK Sloboda,1.12,1,1
+2014,Zrinjski Mostar - Brcko,1.09,1,1
+2014,Brcko - Celik Zenica,1.04,2,2
+2014,Gradacac - Brcko,1.05,1,1

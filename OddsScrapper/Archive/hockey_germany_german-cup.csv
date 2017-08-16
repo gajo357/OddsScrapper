@@ -1,68 +1,69 @@
-2012,Schwenninger - Kaufbeuren,1.32,0
-2012,Landshut - Bremerhaven,1.5,0
-2012,Rostock - Deggendorfer,1.35,1
-2012,Tolzer Lowen - Dresdner Eislowen,1.25,1
-2012,Heilbronner - EC Hannover,1.5,1
-2012,Timmendorfer - Lausitzer Fuchse,1.1,1
-2012,Erding - Landshut,1.14,1
-2012,Fussen - Riessersee,1.23,1
-2012,Regensburg - Kaufbeuren,1.25,0
-2012,Halle - Starbulls Rosenheim,1.15,1
-2012,Selber - Bietigheim/Bissingen,1.23,1
-2012,Schonheide - Schwenninger,1.05,1
-2008,Hannover Scorpions - Kassel,1.4,0
-2008,Freiburg - Adler Mannheim,1.2,1
-2008,Tolzer Lowen - Augsburger Panther,1.45,0
-2008,Heilbronner - Frankfurt Lowen,1.25,0
-2008,Crimmitschau - Hannover Scorpions,1.25,1
-2008,Dresdner Eislowen - Hamburg Freezers,1.25,1
-2008,Fussen - Iserlohn Roosters,1.14,1
-2008,Landsberg - Nurnberg Ice Tigers,1.1,1
-2008,Landshut - ERC Ingolstadt,1.45,1
-2008,Munchen - Straubing Tigers,1.45,1
-2008,Leipzig - Eisbaren Berlin,1.1,1
-2008,Lausitzer Fuchse - Grizzly Wolfsburg,1.35,1
-2008,Riessersee - Dusseldorf,1.25,1
-2008,Schwenninger - Krefeld Pinguine,1.45,1
-2008,Munchen - ERC Ingolstadt,1.34,1
-2008,Fussen - Nurnberg Ice Tigers,1.14,1
-2008,Landsberg - Iserlohn Roosters,1.11,1
-2008,Tolzer Lowen - Dusseldorf,1.26,1
-2008,Freiburg - Krefeld Pinguine,1.35,1
-2008,Heilbronner - Kassel,1.45,1
-2008,Lausitzer Fuchse - Hamburg Freezers,1.25,1
-2008,Bietigheim/Bissingen - Frankfurt Lowen,1.38,0
-2008,Crimmitschau - Eisbaren Berlin,1.31,1
-2008,Dresdner Eislowen - Grizzly Wolfsburg,1.44,1
-2008,Leipzig - Hannover Scorpions,1.16,1
-2008,Bremerhaven - Kolner,1.37,0
-2008,Schwenninger - Adler Mannheim,1.37,1
-2007,Eisbaren Berlin - Augsburger Panther,1.34,1
-2007,Dusseldorf - Augsburger Panther,1.42,0
-2007,Hamburg Freezers - Grizzly Wolfsburg,1.4,1
-2007,Dusseldorf - Fuchse Duisburg,1.3,1
-2007,Frankfurt Lowen - Straubing Tigers,1.45,1
-2007,Bietigheim/Bissingen - Adler Mannheim,1.4,0
-2007,Munchen - Nurnberg Ice Tigers,1.5,0
-2007,Ravensburg - Hannover Scorpions,1.5,1
-2007,Crimmitschau - Frankfurt Lowen,1.25,0
-2007,Kaufbeuren - Augsburger Panther,1.3,1
-2007,Lausitzer Fuchse - Straubing Tigers,1.4,1
-2007,Starbulls Rosenheim - Hamburg Freezers,1.2,1
-2007,Heilbronner - Dusseldorf,1.4,1
-2007,Dresdner Eislowen - Grizzly Wolfsburg,1.4,1
-2006,Fuchse Duisburg - Grizzly Wolfsburg,1.5,0
-2006,Tolzer Lowen - Adler Mannheim,1.28,1
-2006,Ravensburg - Kolner,1.2,0
-2006,Heilbronner - Hamburg Freezers,1.2,1
-2005,Lausitzer Fuchse - Eisbaren Berlin,1.5,0
-2005,Dusseldorf - Fuchse Duisburg,1.45,1
-2005,Lausitzer Fuchse - Krefeld Pinguine,1.4,0
-2005,Weiden - Iserlohn Roosters,1.1,1
-2005,Essen - Hamburg Freezers,1.45,1
-2005,Crimmitschau - ERC Ingolstadt,1.1,1
-2005,Neuwied - Straubing Tigers,1.4,1
-2005,Regensburg - Frankfurt Lowen,1.4,0
-2005,Kaufbeuren - Nurnberg Ice Tigers,1.2,1
-2005,Bremerhaven - Hannover Scorpions,1.3,0
-2005,Bayreuth - Augsburger Panther,1.1,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2012,Schwenninger - Kaufbeuren,1.32,1,0
+2012,Landshut - Bremerhaven,1.5,1,0
+2012,Rostock - Deggendorfer,1.35,2,2
+2012,Tolzer Lowen - Dresdner Eislowen,1.25,2,2
+2012,Heilbronner - EC Hannover,1.5,1,1
+2012,Timmendorfer - Lausitzer Fuchse,1.1,2,2
+2012,Erding - Landshut,1.14,2,2
+2012,Fussen - Riessersee,1.23,2,2
+2012,Regensburg - Kaufbeuren,1.25,2,0
+2012,Halle - Starbulls Rosenheim,1.15,2,2
+2012,Selber - Bietigheim/Bissingen,1.23,2,2
+2012,Schonheide - Schwenninger,1.05,2,2
+2008,Hannover Scorpions - Kassel,1.4,1,0
+2008,Freiburg - Adler Mannheim,1.2,2,2
+2008,Tolzer Lowen - Augsburger Panther,1.45,2,1
+2008,Heilbronner - Frankfurt Lowen,1.25,2,1
+2008,Crimmitschau - Hannover Scorpions,1.25,2,2
+2008,Dresdner Eislowen - Hamburg Freezers,1.25,2,2
+2008,Fussen - Iserlohn Roosters,1.14,2,2
+2008,Landsberg - Nurnberg Ice Tigers,1.1,2,2
+2008,Landshut - ERC Ingolstadt,1.45,2,2
+2008,Munchen - Straubing Tigers,1.45,2,2
+2008,Leipzig - Eisbaren Berlin,1.1,2,2
+2008,Lausitzer Fuchse - Grizzly Wolfsburg,1.35,2,2
+2008,Riessersee - Dusseldorf,1.25,2,2
+2008,Schwenninger - Krefeld Pinguine,1.45,2,2
+2008,Munchen - ERC Ingolstadt,1.34,2,2
+2008,Fussen - Nurnberg Ice Tigers,1.14,2,2
+2008,Landsberg - Iserlohn Roosters,1.11,2,2
+2008,Tolzer Lowen - Dusseldorf,1.26,2,2
+2008,Freiburg - Krefeld Pinguine,1.35,2,2
+2008,Heilbronner - Kassel,1.45,2,2
+2008,Lausitzer Fuchse - Hamburg Freezers,1.25,2,2
+2008,Bietigheim/Bissingen - Frankfurt Lowen,1.38,2,1
+2008,Crimmitschau - Eisbaren Berlin,1.31,2,2
+2008,Dresdner Eislowen - Grizzly Wolfsburg,1.44,2,2
+2008,Leipzig - Hannover Scorpions,1.16,2,2
+2008,Bremerhaven - Kolner,1.37,2,1
+2008,Schwenninger - Adler Mannheim,1.37,2,2
+2007,Eisbaren Berlin - Augsburger Panther,1.34,1,1
+2007,Dusseldorf - Augsburger Panther,1.42,1,2
+2007,Hamburg Freezers - Grizzly Wolfsburg,1.4,1,1
+2007,Dusseldorf - Fuchse Duisburg,1.3,1,1
+2007,Frankfurt Lowen - Straubing Tigers,1.45,1,1
+2007,Bietigheim/Bissingen - Adler Mannheim,1.4,2,0
+2007,Munchen - Nurnberg Ice Tigers,1.5,2,1
+2007,Ravensburg - Hannover Scorpions,1.5,2,2
+2007,Crimmitschau - Frankfurt Lowen,1.25,2,0
+2007,Kaufbeuren - Augsburger Panther,1.3,2,2
+2007,Lausitzer Fuchse - Straubing Tigers,1.4,2,2
+2007,Starbulls Rosenheim - Hamburg Freezers,1.2,2,2
+2007,Heilbronner - Dusseldorf,1.4,2,2
+2007,Dresdner Eislowen - Grizzly Wolfsburg,1.4,2,2
+2006,Fuchse Duisburg - Grizzly Wolfsburg,1.5,1,0
+2006,Tolzer Lowen - Adler Mannheim,1.28,2,2
+2006,Ravensburg - Kolner,1.2,2,0
+2006,Heilbronner - Hamburg Freezers,1.2,2,2
+2005,Lausitzer Fuchse - Eisbaren Berlin,1.5,2,0
+2005,Dusseldorf - Fuchse Duisburg,1.45,1,1
+2005,Lausitzer Fuchse - Krefeld Pinguine,1.4,2,1
+2005,Weiden - Iserlohn Roosters,1.1,2,2
+2005,Essen - Hamburg Freezers,1.45,2,2
+2005,Crimmitschau - ERC Ingolstadt,1.1,2,2
+2005,Neuwied - Straubing Tigers,1.4,2,2
+2005,Regensburg - Frankfurt Lowen,1.4,2,1
+2005,Kaufbeuren - Nurnberg Ice Tigers,1.2,2,2
+2005,Bremerhaven - Hannover Scorpions,1.3,2,1
+2005,Bayreuth - Augsburger Panther,1.1,2,2

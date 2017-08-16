@@ -101,6 +101,7 @@ basketball,europe,european-championship-u20-b-women,0
 basketball,europe,european-championship-u18-women,0
 basketball,europe,european-championship-u18-b-women,0
 basketball,europe,european-championship-u16-women,0
+basketball,europe,european-championship-u16-b-women,0
 basketball,europe,mel-women,0
 basketball,europe,cewl-women,0
 basketball,europe,waba-league-women,0
@@ -272,7 +273,7 @@ basketball,world,stankovic-continental-cup-2,0
 basketball,world,villeurbanne-tournament,0
 basketball,world,pan-american-games,0
 basketball,world,uleb-cup,0
-basketball,world,beko-supercup,0
+basketball,world,dbb-supercup,0
 basketball,world,tassoni-tournament,0
 basketball,world,spor-toto-world-cup,0
 basketball,world,universiade,0

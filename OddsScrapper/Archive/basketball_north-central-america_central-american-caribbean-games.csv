@@ -1,15 +1,16 @@
-2014,Puerto Rico - Cuba,1.25,1
-2014,Puerto Rico - Dominican Republic,1.35,0
-2014,Mexico - Dominican Republic,1.42,0
-2014,Puerto Rico - Cuba,1.07,1
-2014,Costa Rica - Panama,1.01,1
-2014,Panama - Mexico,1.5,0
-2014,Jamaica - Cuba,1.04,1
-2014,Puerto Rico - Jamaica,1.02,1
-2014,Panama - Dominican Republic,1.12,0
-2010,Dominican Republic - Mexico,1.21,0
-2010,Jamaica - British Virgin Islands,1.1,1
-2010,Dominican Republic - Panama,1.16,1
-2010,British Virgin Islands - Virgin Islands,1.11,1
-2010,Panama - Virgin Islands,1.39,0
-2010,Jamaica - Mexico,1.15,1
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2014,Puerto Rico - Cuba,1.25,1,1
+2014,Puerto Rico - Dominican Republic,1.35,1,2
+2014,Mexico - Dominican Republic,1.42,1,2
+2014,Puerto Rico - Cuba,1.07,1,1
+2014,Costa Rica - Panama,1.01,2,2
+2014,Panama - Mexico,1.5,2,1
+2014,Jamaica - Cuba,1.04,2,2
+2014,Puerto Rico - Jamaica,1.02,1,1
+2014,Panama - Dominican Republic,1.12,2,1
+2010,Dominican Republic - Mexico,1.21,1,2
+2010,Jamaica - British Virgin Islands,1.1,1,1
+2010,Dominican Republic - Panama,1.16,1,1
+2010,British Virgin Islands - Virgin Islands,1.11,2,2
+2010,Panama - Virgin Islands,1.39,1,2
+2010,Jamaica - Mexico,1.15,2,2

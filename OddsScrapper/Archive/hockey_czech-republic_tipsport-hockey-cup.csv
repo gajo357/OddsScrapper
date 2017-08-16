@@ -1,17 +1,18 @@
-2010,Znojmo - Plzen,1.35,0
-2010,Pardubice - Trebic,1.26,1
-2010,Liberec - Usti nad Labem,1.41,1
-2010,Ceske Budejovice - Trebic,1.26,1
-2010,Zlin - Olomouc,1.38,1
-2010,Sparta Prague - Znojmo,1.26,0
-2009,Hradec Kralove - Sparta Prague,1.47,0
-2009,Vrchlabi - Slavia Prague,1.43,0
-2009,Sparta Prague - Chomutov,1.3,1
-2009,Slavia Prague - Jihlava,1.2,0
-2009,Trinec - Znojmo,1.45,1
-2009,Znojmo - Vitkovice,1.4,1
-2009,Pardubice - Jihlava,1.22,1
-2009,Vrchlabi - Pardubice,1.47,1
-2009,Zlin - Znojmo,1.27,1
-2009,Kladno - Vrchlabi,1.45,1
-2009,Plzen - Hradec Kralove,1.3,0
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2010,Znojmo - Plzen,1.35,2,0
+2010,Pardubice - Trebic,1.26,1,1
+2010,Liberec - Usti nad Labem,1.41,1,1
+2010,Ceske Budejovice - Trebic,1.26,1,1
+2010,Zlin - Olomouc,1.38,1,1
+2010,Sparta Prague - Znojmo,1.26,1,2
+2009,Hradec Kralove - Sparta Prague,1.47,2,1
+2009,Vrchlabi - Slavia Prague,1.43,2,0
+2009,Sparta Prague - Chomutov,1.3,1,1
+2009,Slavia Prague - Jihlava,1.2,1,2
+2009,Trinec - Znojmo,1.45,1,1
+2009,Znojmo - Vitkovice,1.4,2,2
+2009,Pardubice - Jihlava,1.22,1,1
+2009,Vrchlabi - Pardubice,1.47,2,2
+2009,Zlin - Znojmo,1.27,1,1
+2009,Kladno - Vrchlabi,1.45,1,1
+2009,Plzen - Hradec Kralove,1.3,1,0

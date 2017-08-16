@@ -1,55 +1,56 @@
-2017,New Zealand - North Korea,1.13,1
-2017,China - Mexico,1.31,1
-2017,Israel - Turkey,1.39,1
-2017,New Zealand - Mexico,1.37,1
-2017,North Korea - Israel,1.41,1
-2017,Turkey - China,1.1,1
-2017,Mexico - Turkey,1.06,0
-2017,China - North Korea,1.18,1
-2017,Mexico - Israel,1.11,0
-2017,Turkey - New Zealand,1.17,1
-2017,Mexico - North Korea,1.17,1
-2016,Mexico - North Korea,1.06,1
-2016,Bulgaria - Israel,1.02,1
-2016,Australia - New Zealand,1.09,1
-2016,Israel - Mexico,1.11,1
-2016,North Korea - Australia,1.06,1
-2016,Bulgaria - New Zealand,1.01,1
-2016,Mexico - Bulgaria,1.01,1
-2016,New Zealand - North Korea,1.12,0
-2016,Australia - Israel,1.14,1
-2016,Australia - Bulgaria,1.01,1
-2016,Mexico - Australia,1.42,0
-2015,China - South Africa,1.26,1
-2015,Israel - Mexico,1.4,1
-2015,New Zealand - Bulgaria,1.25,1
-2015,South Africa - New Zealand,1.26,0
-2015,Bulgaria - Israel,1.16,0
-2015,Mexico - Bulgaria,1.22,1
-2015,South Africa - Bulgaria,1.4,0
-2015,Mexico - South Africa,1.22,1
-2015,Bulgaria - China,1.36,1
-2014,Spain - New Zealand,1.03,1
-2014,China - Turkey,1.26,0
-2014,Mexico - South Africa,1.06,1
-2014,South Africa - Spain,1.01,1
-2014,Turkey - Mexico,1.06,1
-2014,Spain - Turkey,1.06,1
-2014,New Zealand - South Africa,1.25,1
-2014,Mexico - China,1.38,1
-2014,Spain - China,1.08,1
-2014,Turkey - South Africa,1.45,0
-2014,Mexico - Spain,1.04,1
-2014,South Africa - China,1.01,1
-2014,New Zealand - Turkey,1.24,1
-2013,New Zealand - China,1.33,1
-2013,Mexico - Israel,1.45,0
-2013,Turkey - New Zealand,1.14,1
-2013,Israel - Bulgaria,1.23,1
-2013,China - Turkey,1.29,1
-2013,Bulgaria - Mexico,1.38,0
-2013,New Zealand - Israel,1.38,0
-2013,Israel - Turkey,1.16,1
-2013,New Zealand - Mexico,1.4,1
-2013,Turkey - Mexico,1.2,1
-2013,China - Israel,1.2,0
+Season,Participants,Best Odd,Your Bet,Winning Bet
+2017,New Zealand - North Korea,1.13,1,1
+2017,China - Mexico,1.31,1,1
+2017,Israel - Turkey,1.39,1,1
+2017,New Zealand - Mexico,1.37,1,1
+2017,North Korea - Israel,1.41,2,2
+2017,Turkey - China,1.1,2,2
+2017,Mexico - Turkey,1.06,1,2
+2017,China - North Korea,1.19,1,1
+2017,Mexico - Israel,1.11,1,2
+2017,Turkey - New Zealand,1.17,2,2
+2017,Mexico - North Korea,1.17,1,1
+2016,Mexico - North Korea,1.06,1,1
+2016,Bulgaria - Israel,1.02,2,2
+2016,Australia - New Zealand,1.09,1,1
+2016,Israel - Mexico,1.11,2,2
+2016,North Korea - Australia,1.06,2,2
+2016,Bulgaria - New Zealand,1.01,2,2
+2016,Mexico - Bulgaria,1.01,1,1
+2016,New Zealand - North Korea,1.12,1,2
+2016,Australia - Israel,1.14,1,1
+2016,Australia - Bulgaria,1.01,1,1
+2016,Mexico - Australia,1.42,2,0
+2015,China - South Africa,1.26,1,1
+2015,Israel - Mexico,1.4,2,2
+2015,New Zealand - Bulgaria,1.25,1,1
+2015,South Africa - New Zealand,1.26,2,1
+2015,Bulgaria - Israel,1.16,2,1
+2015,Mexico - Bulgaria,1.22,1,1
+2015,South Africa - Bulgaria,1.4,1,2
+2015,Mexico - South Africa,1.22,1,1
+2015,Bulgaria - China,1.36,2,2
+2014,Spain - New Zealand,1.03,1,1
+2014,China - Turkey,1.26,1,2
+2014,Mexico - South Africa,1.06,1,1
+2014,South Africa - Spain,1.01,2,2
+2014,Turkey - Mexico,1.06,2,2
+2014,Spain - Turkey,1.06,1,1
+2014,New Zealand - South Africa,1.25,1,1
+2014,Mexico - China,1.38,1,1
+2014,Spain - China,1.08,1,1
+2014,Turkey - South Africa,1.45,1,2
+2014,Mexico - Spain,1.04,2,2
+2014,South Africa - China,1.01,2,2
+2014,New Zealand - Turkey,1.24,1,1
+2013,New Zealand - China,1.33,1,1
+2013,Mexico - Israel,1.45,2,1
+2013,Turkey - New Zealand,1.14,2,2
+2013,Israel - Bulgaria,1.23,1,1
+2013,China - Turkey,1.29,1,1
+2013,Bulgaria - Mexico,1.38,2,0
+2013,New Zealand - Israel,1.38,1,2
+2013,Israel - Turkey,1.16,1,1
+2013,New Zealand - Mexico,1.4,1,1
+2013,Turkey - Mexico,1.2,2,2
+2013,China - Israel,1.2,1,2
