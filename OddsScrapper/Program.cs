@@ -17,21 +17,23 @@ namespace OddsScrapper
         private const string WaterPolo = "water-polo";
         private const string Volleyball = "volleyball";
 
+        private static string[] AllSports = new[] { Football, Basketball, Handball, Hockey, Baseball, AmericanFootball, RugbyLeague, RugbyUnion, WaterPolo, Volleyball };
 
         [STAThread]
         public static void Main(string[] args)
         {
-            var scrapper = new ArchiveOddsScrapper();
-            scrapper.Scrape(BaseWebsite, new[] { Basketball, Handball, Hockey, Baseball, AmericanFootball, RugbyLeague, RugbyUnion, WaterPolo, Volleyball });
+            //var scrapper = new ArchiveOddsScrapper();
+            //scrapper.Scrape(BaseWebsite, AllSports);
+
+            var analyser = new ArchiveDataAnalysis();
+            analyser.Analyse();
 
             //var scrapper = new CommingMatchesScrapper();
-            //scrapper.Scrape(BaseWebsite, new[] { Football, Basketball, Handball, Hockey, Baseball, AmericanFootball });
+            //var date = scrapper.Scrape(BaseWebsite, AllSports);
 
-            //var analyser = new ArchiveDataAnalysis();
-            //analyser.Analyse();
-
-            //var matcher = new OddsMatcher();
-            //matcher.MatchGamesWithArchivedData();
+            var date = "17Aug2017";
+            var matcher = new OddsMatcher();
+            matcher.MatchGamesWithArchivedData(date);
         }
     }
 }

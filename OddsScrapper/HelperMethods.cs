@@ -1,8 +1,22 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace OddsScrapper
 {
+    public enum ResultType
+    {
+        All,
+        Seasonal
+    }
+
+    public enum AnalysisType
+    {
+        TenPercent,
+        Negative,
+        Positive
+    }
+
     public static class HelperMethods
     {
         public const string ArchiveFolder = "Archive";
@@ -24,26 +38,74 @@ namespace OddsScrapper
             return Path.Combine(GetSolutionDirectory(), TommorowsGamesFolder);
         }
 
-        public static string GetAllAnalysedResultsFile()
+        public static string GetAnalysedResultsFile(int bet, ResultType resultType)
         {
-            return Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_all.csv");
+            var type = GetResultTypeText(resultType);
+            return Path.Combine(GetAnalysedArchivedDataFolderPath(), $"results_{type}_{bet}.csv");
+        }
+
+        public static string GetAnalysedResultsFile(int bet, ResultType resultType, AnalysisType analysisType)
+        {
+            var type = GetResultTypeText(resultType);
+            var analysisText = GetAnalysisTypeText(analysisType);
+
+            return Path.Combine(GetAnalysedArchivedDataFolderPath(), $"results_{type}_{analysisText}_{bet}.csv");
         }
 
         public static string[] GetAnalysedResultsFiles()
         {
             return new[]
             {
-                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_all_10percent.csv"),
-                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons_10percent.csv"),
-                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_all_negative.csv"),
-                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons_allnegative.csv"),
-                Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons_allpositive.csv")
+                GetAnalysedResultsFile(1, ResultType.All, AnalysisType.TenPercent),
+                GetAnalysedResultsFile(2, ResultType.All, AnalysisType.TenPercent),
+                GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Negative),
+                GetAnalysedResultsFile(2, ResultType.All, AnalysisType.Negative),
+
+                GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.TenPercent),
+                GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.TenPercent),
+                GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.Negative),
+                GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.Negative),
+                GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.Positive),
+                GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.Positive),
             };
         }
 
-        public static string GetBySeasonsAnalysedResultsFile()
+        private static string GetBetText(int bet)
         {
-            return Path.Combine(GetAnalysedArchivedDataFolderPath(), "results_byseasons.csv");
+            if (bet == 0)
+                return "draw";
+            if (bet == 1)
+                return "home";
+
+            return "away";
+        }
+
+        public static string GetResultTypeText(ResultType resultType)
+        {
+            switch (resultType)
+            {
+                case ResultType.All:
+                    return "all";
+                case ResultType.Seasonal:
+                    return "byseason";
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private static string GetAnalysisTypeText(AnalysisType analysisType)
+        {
+            switch(analysisType)
+            {
+                case AnalysisType.TenPercent:
+                    return "10percent";
+                case AnalysisType.Negative:
+                    return "negative";
+                case AnalysisType.Positive:
+                    return "positive";
+                default:
+                    return string.Empty;
+            }
         }
 
         public static string GetSolutionDirectory()
@@ -57,6 +119,29 @@ namespace OddsScrapper
             string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
 
             return Regex.Replace(name, invalidRegStr, "_");
+        }
+
+        /// <summary>
+        /// Returns 1 for home bet, 0 for draw and 2 for away
+        /// </summary>
+        /// <param name="length"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static int GetBetComboFromIndex(int length, int index)
+        {
+            if (index == 0)
+            {
+                // first index is always a home win
+                return 1;
+            }
+            if (index == length - 1)
+            {
+                // last index is always a visitor win
+                return 2;
+            }
+
+            // else it's a draw
+            return 0;
         }
     }
 }

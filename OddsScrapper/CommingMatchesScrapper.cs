@@ -9,25 +9,32 @@ namespace OddsScrapper
     {
         private HtmlReader WebReader { get; } = new HtmlReader();
 
-        public void Scrape(string baseWebsite, string[] sports)
+        public string Scrape(string baseWebsite, string[] sports)
         {
+            string date = null;
             foreach(var sport in sports)
             {
                 var tommorowsGames = GetTommorowGames($"{baseWebsite}/matches/{sport}/");
                 if (tommorowsGames == null)
-                    return;
+                    break;
 
-                WriteResultsToFile(tommorowsGames, sport);
+                var s = WriteResultsToFile(tommorowsGames, sport);
+                if (string.IsNullOrEmpty(date))
+                    date = s;
             }
+
+            return date;
         }
 
-        private void WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
+        private string WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
         {
             var date = GetDate(tommorowsGames);
 
             var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"{sport}_{date}.csv");
             using (var fileStream = File.AppendText(fileName))
             {
+                fileStream.WriteLine("Sport,Country,League,Participants,Odds");
+
                 var div = tommorowsGames.GetElementbyId("table-matches");
                 var table = div.Element(HtmlTagNames.Table);
                 foreach (var tr in table.Element(HtmlTagNames.Tbody).ChildNodes)
@@ -64,9 +71,11 @@ namespace OddsScrapper
                     fileStream.WriteLine($"{sport},{country},{league},{name},{String.Join(",", odds.Select(s => s.InnerText).ToArray())}");
                 }
             }
+
+            return date;
         }
 
-        private object GetDate(HtmlDocument tommorowsGames)
+        private string GetDate(HtmlDocument tommorowsGames)
         {
             var div = tommorowsGames.GetElementbyId("col-content");
             if (div == null)

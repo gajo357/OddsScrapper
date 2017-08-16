@@ -17,15 +17,16 @@ namespace OddsScrapper
             if (leaguesPage == null)
                 return;
 
-            //Parallel.ForEach(sports, (sport) =>
-            foreach(var sport in sports)
+            foreach (var sport in sports)
             {
+                var leagueFileName = Path.Combine(HelperMethods.GetArchiveFolderPath(), $"leagues_{sport}.txt");
+                File.AppendAllLines(leagueFileName, new[] { "Sport,Country,LeagueName,IsFirst" });
                 foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
                 {
                     var fileName = HelperMethods.MakeValidFileName($"{league.Sport}_{league.Country}_{league.Name}.csv");
 
                     Console.WriteLine(fileName);
-                    File.AppendAllLines(Path.Combine(HelperMethods.GetArchiveFolderPath(), $"leagues_{sport}.txt"), new[] { league.ToString() });
+                    File.AppendAllLines(leagueFileName, new[] { league.ToString() });
                     using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetArchiveFolderPath(), fileName)))
                     {
                         fileStream.WriteLine("Season,Participants,Best Odd,Your Bet,Winning Bet");
@@ -53,7 +54,6 @@ namespace OddsScrapper
                     }
                 }
             }
-            //);            
         }
 
         private IEnumerable<string> ReadResultsFromPage(HtmlDocument resultsPage)
@@ -244,34 +244,11 @@ namespace OddsScrapper
                     continue;
                 
                 // 1 is home win, 2 is away win, 0 is draw
-                int winCombo = GetBetComboFromIndex(odds.Length, winIndex);
-                int betCombo = GetBetComboFromIndex(odds.Length, oddIndex);
+                int winCombo = HelperMethods.GetBetComboFromIndex(odds.Length, winIndex);
+                int betCombo = HelperMethods.GetBetComboFromIndex(odds.Length, oddIndex);
 
                 yield return $"{participants},{odd},{betCombo},{winCombo}";
             }
-        }
-
-        /// <summary>
-        /// Returns 1 for home bet, 0 for draw and 2 for away
-        /// </summary>
-        /// <param name="length"></param>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        private int GetBetComboFromIndex(int length, int index)
-        {
-            if (index == 0)
-            {
-                // first index is always a home win
-                return 1;
-            }
-            if (index == length - 1)
-            {
-                // last index is always a visitor win
-                return 2;
-            }
-            
-            // else it's a draw
-            return 0;
         }
 
         public static double GetOddFromTdNode(HtmlNode tdNode)
@@ -305,8 +282,6 @@ namespace OddsScrapper
 
             // WAIT until the dynamic text is set
             return !string.IsNullOrEmpty(table.InnerText);
-        }
-
-        
+        }        
     }
 }

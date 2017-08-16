@@ -7,9 +7,8 @@ namespace OddsScrapper
 {
     public class OddsMatcher
     {
-        public void MatchGamesWithArchivedData()
+        public void MatchGamesWithArchivedData(string date)
         {
-            var date = "16Aug2017";
             var games = GetAllTommorowsGames(date);
 
             var results_files = HelperMethods.GetAnalysedResultsFiles();
@@ -23,10 +22,13 @@ namespace OddsScrapper
 
         private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date, string fileName)
         {
-            var filteredGames = GetFilteredGames(archivedData, games);
+            var filteredGames = GetFilteredGames(archivedData, games, fileName);
 
             using (var fileStream = File.AppendText($"GamesToBet_{date}_{fileName}.csv"))
             {
+                var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Participants,Odds";
+                fileStream.WriteLine(headerLine);
+
                 foreach (var game in filteredGames.OrderByDescending(s => s.MoneyPerGame))
                 {
                     var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
@@ -35,11 +37,26 @@ namespace OddsScrapper
             }
         }
 
-        private IEnumerable<GameInfo> GetFilteredGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games)
+        private IEnumerable<GameInfo> GetFilteredGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string fileName)
         {
+            var bet = int.Parse(fileName.Last().ToString());
+
             foreach (var game in games)
             {
-                var bestOdd = game.Odds.Min();
+                var bestBet = -1;
+                var bestOdd = double.MaxValue;
+                
+                for (var i = 0; i < game.Odds.Length; i++)
+                {
+                    if(game.Odds[i] < bestOdd)
+                    {
+                        bestBet = HelperMethods.GetBetComboFromIndex(game.Odds.Length, i);
+                        bestOdd = game.Odds[i];
+                    }
+                }
+                if (bet != bestBet)
+                    continue;
+
                 LeagueTypeData league = archivedData.FirstOrDefault(s => s.Info.Sport == game.Sport &&
                                                                          s.Info.Country == game.Country &&
                                                                          s.Info.Name == game.League &&
@@ -70,6 +87,9 @@ namespace OddsScrapper
                 {
                     var data = line.Split(',');
                     var sport = data[0];
+                    if (sport == "Sport")
+                        continue;
+
                     var country = data[1];
                     var name = data[2];
                     var participants = data[3];
@@ -105,14 +125,14 @@ namespace OddsScrapper
                 if (!double.TryParse(data[i++], out margin))
                     continue;
                 var total = double.Parse(data[i++]);
-                if(file.Contains("_byseasons_"))
+                if(file.Contains($"_{HelperMethods.GetResultTypeText(ResultType.Seasonal)}_"))
                     i++;
                 var success = double.Parse(data[i++]);
                 var avgOdd = double.Parse(data[i++]);
                 var successRate = double.Parse(data[i++]);
                 var moneyMade = double.Parse(data[i++]);
                 var moneyPerGame = double.Parse(data[i++]);
-                var rateOFAvailableMoney = double.Parse(data[i++]);
+                var rateOfAvailableMoney = double.Parse(data[i++]);
 
                 //if (success < 50 ||
                 //    //successRate < 0.9 ||
@@ -132,7 +152,7 @@ namespace OddsScrapper
                     SuccessRecords = (int)success,
                     SuccessRate = successRate,
                     MoneyMade = moneyMade,
-                    RateOfAvailableMoney = rateOFAvailableMoney,
+                    RateOfAvailableMoney = rateOfAvailableMoney,
                     MoneyPerGame = moneyPerGame
                 };
 

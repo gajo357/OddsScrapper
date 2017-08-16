@@ -37,7 +37,7 @@ namespace OddsScrapper
 
         public LeagueInfo Info { get; }
 
-        private LeagueTypeData[] Data { get; }
+        public LeagueTypeData[] Data { get; }
 
 
         public void AddData(double odd, bool success, string season)
@@ -106,7 +106,7 @@ namespace OddsScrapper
             stream.WriteLine(line);
         }
 
-        public void WriteLeagueDataBySeasons(StreamWriter stream)
+        public void WriteLeagueDataBySeasons(StreamWriter stream, bool check10Percent = false, bool checkAllPositive = false, bool checkAllNegative = false)
         {
             if (TotalRecords == 0)
                 return;
@@ -147,6 +147,14 @@ namespace OddsScrapper
 
                 if (data.Value.MoneyPerGame > 0)
                     numOfPositiveSeasons++;
+
+
+                if (check10Percent && data.Value.MoneyPerGame < 0.1)
+                    return;
+                if (checkAllNegative && data.Value.SuccessRate > 0.5)
+                    return;
+                if (checkAllPositive && data.Value.MoneyPerGame <= 0)
+                    return;
             }
 
             totalRecords /= numberOfSeasons;
