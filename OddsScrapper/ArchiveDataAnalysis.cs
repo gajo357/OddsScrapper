@@ -32,29 +32,23 @@ namespace OddsScrapper
             {
                 var bet = data.Key;
 
-                using (var stream10percent = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.Seasonal, AnalysisType.TenPercent)))
+                using (var streamNegative = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.Seasonal, AnalysisType.Negative)))
                 {
-                    stream10percent.WriteLine(ResultsBySeasonsHeader);
+                    streamNegative.WriteLine(ResultsBySeasonsHeader);
 
-                    using (var streamNegative = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.Seasonal, AnalysisType.Negative)))
+                    using (var streamPositive = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.Seasonal, AnalysisType.Positive)))
                     {
-                        streamNegative.WriteLine(ResultsBySeasonsHeader);
+                        streamPositive.WriteLine(ResultsBySeasonsHeader);
 
-                        using (var streamPositive = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.Seasonal, AnalysisType.Positive)))
+                        foreach (var league in data.Value)
                         {
-                            streamPositive.WriteLine(ResultsBySeasonsHeader);
-
-                            foreach (var league in data.Value)
+                            foreach (var ltd in league.Data)
                             {
-                                foreach (var ltd in league.Data)
-                                {
-                                    if (ltd.TotalRecords < 20)
-                                        continue;
+                                if (ltd.TotalRecords < 20)
+                                    continue;
 
-                                    ltd.WriteLeagueDataBySeasons(streamNegative, checkAllNegative: true);
-                                    ltd.WriteLeagueDataBySeasons(stream10percent, check10Percent: true);
-                                    ltd.WriteLeagueDataBySeasons(streamPositive, checkAllPositive: true);
-                                }
+                                ltd.WriteLeagueDataBySeasons(streamNegative, checkAllNegative: true);
+                                ltd.WriteLeagueDataBySeasons(streamPositive, checkAllPositive: true);
                             }
                         }
                     }
@@ -68,9 +62,9 @@ namespace OddsScrapper
             {
                 var bet = data.Key;
 
-                using (var stream10percent = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.All, AnalysisType.TenPercent)))
+                using (var streamPositive = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.All, AnalysisType.Positive)))
                 {
-                    stream10percent.WriteLine(AllResultsHeader);
+                    streamPositive.WriteLine(AllResultsHeader);
                     using (var streamNegative = File.AppendText(HelperMethods.GetAnalysedResultsFile(bet, ResultType.All, AnalysisType.Negative)))
                     {
                         streamNegative.WriteLine(AllResultsHeader);
@@ -82,11 +76,11 @@ namespace OddsScrapper
                                 if (ltd.TotalRecords < 20)
                                     continue;
 
-                                if(ltd.SuccessRate <= 0.5)
+                                if(ltd.KellyPercentage < 0)
                                     ltd.WriteLeagueData(streamNegative);
 
-                                if (ltd.MoneyPerGame >= 0.1)
-                                    ltd.WriteLeagueData(stream10percent);
+                                if (ltd.KellyPercentage > 0)
+                                    ltd.WriteLeagueData(streamPositive);
                             }
                         }
                     }
@@ -94,8 +88,8 @@ namespace OddsScrapper
             }
         }
 
-        private const string AllResultsHeader = "Sport,Country,League Name,Margin,Total Records,Success Records,Avg. Odd,Success Rate,Money Made,Money Per Game,Rate Of Available Money";
-        private const string ResultsBySeasonsHeader = "Sport,Country,League Name,Margin,Total Records,Records Per Season,Success Records,Avg. Odd,Success Rate,Money Made,Money Per Game,Rate Of Available Money,Number Of Seasons,No Of Positive Seasons,Money Low,Money High,Rate Low,Rate High";
+        private const string AllResultsHeader = "Sport,Country,League Name,Margin,Total Records,Avg. Odd,Success Rate,Money Per Game,Kelly";
+        private const string ResultsBySeasonsHeader = "Sport,Country,League Name,Margin,Total Records,Avg. Odd,Success Rate,Money Per Game,Kelly,Number Of Seasons,No Of Positive Seasons,Money Low,Money High";
         private void WriteLeaguesToFilesUnfiltered(Dictionary<int, IList<LeagueOddsData>> allLeagues)
         {
             foreach (var data in allLeagues)

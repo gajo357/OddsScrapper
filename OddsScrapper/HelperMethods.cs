@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.RegularExpressions;
 
 namespace OddsScrapper
@@ -12,7 +11,6 @@ namespace OddsScrapper
 
     public enum AnalysisType
     {
-        TenPercent,
         Negative,
         Positive
     }
@@ -56,13 +54,11 @@ namespace OddsScrapper
         {
             return new[]
             {
-                GetAnalysedResultsFile(1, ResultType.All, AnalysisType.TenPercent),
-                GetAnalysedResultsFile(2, ResultType.All, AnalysisType.TenPercent),
+                GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Positive),
+                GetAnalysedResultsFile(2, ResultType.All, AnalysisType.Positive),
                 GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Negative),
                 GetAnalysedResultsFile(2, ResultType.All, AnalysisType.Negative),
 
-                GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.TenPercent),
-                GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.TenPercent),
                 GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.Negative),
                 GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.Negative),
                 GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.Positive),
@@ -97,8 +93,6 @@ namespace OddsScrapper
         {
             switch(analysisType)
             {
-                case AnalysisType.TenPercent:
-                    return "10percent";
                 case AnalysisType.Negative:
                     return "negative";
                 case AnalysisType.Positive:
@@ -142,6 +136,11 @@ namespace OddsScrapper
 
             // else it's a draw
             return 0;
+        }
+
+        public static double CalculateKellyCriterionPercentage(double odd, double successRate)
+        {
+            return (successRate * odd - 1) / (odd - 1);
         }
     }
 }

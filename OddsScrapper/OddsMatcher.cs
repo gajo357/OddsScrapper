@@ -26,12 +26,13 @@ namespace OddsScrapper
 
             using (var fileStream = File.AppendText($"GamesToBet_{date}_{fileName}.csv"))
             {
-                var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Participants,Odds";
+                var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds";
                 fileStream.WriteLine(headerLine);
 
                 foreach (var game in filteredGames.OrderByDescending(s => s.MoneyPerGame))
                 {
-                    var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
+                    var kelly = HelperMethods.CalculateKellyCriterionPercentage(game.BestOdd, game.SuccessRate);
+                    var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{kelly:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
                     fileStream.WriteLine(line);
                 }
             }
@@ -68,6 +69,7 @@ namespace OddsScrapper
                 game.MoneyPerGame = league.MoneyPerGame;
                 game.TotalRecords = league.TotalRecords;
                 game.SuccessRate = league.SuccessRate;
+                game.BestOdd = bestOdd;
 
                 yield return game;
             }
@@ -125,14 +127,10 @@ namespace OddsScrapper
                 if (!double.TryParse(data[i++], out margin))
                     continue;
                 var total = double.Parse(data[i++]);
-                if(file.Contains($"_{HelperMethods.GetResultTypeText(ResultType.Seasonal)}_"))
-                    i++;
-                var success = double.Parse(data[i++]);
                 var avgOdd = double.Parse(data[i++]);
                 var successRate = double.Parse(data[i++]);
-                var moneyMade = double.Parse(data[i++]);
                 var moneyPerGame = double.Parse(data[i++]);
-                var rateOfAvailableMoney = double.Parse(data[i++]);
+                var kelly = double.Parse(data[i++]);
 
                 //if (success < 50 ||
                 //    //successRate < 0.9 ||
@@ -149,10 +147,8 @@ namespace OddsScrapper
                 var league = new LeagueTypeData(margin - 0.1, margin, info)
                 {
                     TotalRecords = (int)total,
-                    SuccessRecords = (int)success,
                     SuccessRate = successRate,
-                    MoneyMade = moneyMade,
-                    RateOfAvailableMoney = rateOfAvailableMoney,
+                    KellyPercentage = kelly,
                     MoneyPerGame = moneyPerGame
                 };
 

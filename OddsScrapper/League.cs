@@ -82,6 +82,9 @@ namespace OddsScrapper
 
         public double DownMargin { get; }
         public double UpMargin { get; }
+
+        public double KellyPercentage;
+
         public double OddsSum = 0;
 
         public int TotalRecords = 0;
@@ -93,8 +96,6 @@ namespace OddsScrapper
 
         public double SuccessRate = 0;
 
-        public double RateOfAvailableMoney = 0;
-
         public double AvgOdd = 0;
 
         public void WriteLeagueData(StreamWriter stream)
@@ -102,70 +103,49 @@ namespace OddsScrapper
             if (TotalRecords == 0)
                 return;
 
-            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{SuccessRecords},{AvgOdd:F4},{SuccessRate:F4},{MoneyMade},{MoneyPerGame:F4},{RateOfAvailableMoney:F4}";
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{AvgOdd:F4},{SuccessRate:F4},{MoneyPerGame:F4},{KellyPercentage:F4}";
             stream.WriteLine(line);
         }
 
-        public void WriteLeagueDataBySeasons(StreamWriter stream, bool check10Percent = false, bool checkAllPositive = false, bool checkAllNegative = false)
+        public void WriteLeagueDataBySeasons(StreamWriter stream, bool checkAllPositive = false, bool checkAllNegative = false)
         {
             if (TotalRecords == 0)
                 return;
 
             var numberOfSeasons = DataBySeasons.Count;
-            var totalRecords = 0.0;
-            var successRecords = 0.0;
             var avgOdd = 0.0;
-            var money = 0.0;
             var moneyPerGame = 0.0;
             var successRate = 0.0;
-            var rateOfAvailableMoney = 0.0;
 
             var numOfPositiveSeasons = 0;
             var moneyHigh = double.MinValue;
             var moneyLow = double.MaxValue;
-            var rateHigh = double.MinValue;
-            var rateLow = double.MaxValue;
             foreach (var data in DataBySeasons)
             {
-                totalRecords += data.Value.TotalRecords;
-                successRecords += data.Value.SuccessRecords;
                 avgOdd += data.Value.AvgOdd;
-                money += data.Value.MoneyMade;
                 moneyPerGame += data.Value.MoneyPerGame;
                 successRate += data.Value.SuccessRate;
-                rateOfAvailableMoney += data.Value.RateOfAvailableMoney;
 
                 if (data.Value.MoneyPerGame > moneyHigh)
                     moneyHigh = data.Value.MoneyPerGame;
                 if (data.Value.MoneyPerGame < moneyLow)
                     moneyLow = data.Value.MoneyPerGame;
 
-                if (data.Value.RateOfAvailableMoney > rateHigh)
-                    rateHigh = data.Value.RateOfAvailableMoney;
-                if (data.Value.RateOfAvailableMoney < rateLow)
-                    rateLow = data.Value.RateOfAvailableMoney;
-
                 if (data.Value.MoneyPerGame > 0)
                     numOfPositiveSeasons++;
-
-
-                if (check10Percent && data.Value.MoneyPerGame < 0.1)
+                
+                if (checkAllNegative && data.Value.KellyPercentage > 0)
                     return;
-                if (checkAllNegative && data.Value.SuccessRate > 0.5)
-                    return;
-                if (checkAllPositive && data.Value.MoneyPerGame <= 0)
+                if (checkAllPositive && data.Value.KellyPercentage <= 0)
                     return;
             }
 
-            totalRecords /= numberOfSeasons;
-            successRecords /= numberOfSeasons;
             avgOdd /= numberOfSeasons;
-            money /= numberOfSeasons;
             moneyPerGame /= numberOfSeasons;
             successRate /= numberOfSeasons;
-            rateOfAvailableMoney /= numberOfSeasons;
+            var kelly = HelperMethods.CalculateKellyCriterionPercentage(avgOdd, successRate);
 
-            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{totalRecords},{successRecords},{avgOdd:F4},{successRate:F4},{money},{moneyPerGame:F4},{rateOfAvailableMoney:F4},{numberOfSeasons},{numOfPositiveSeasons},{moneyLow},{moneyHigh},{rateLow},{rateHigh}";
+            var line = $"{Info.Sport},{Info.Country},{HelperMethods.MakeValidFileName(Info.Name)},{UpMargin:F2},{TotalRecords},{avgOdd:F4},{successRate:F4},{moneyPerGame:F4},{kelly:F4},{numberOfSeasons},{numOfPositiveSeasons},{moneyLow},{moneyHigh}";
             stream.WriteLine(line);
         }
         
@@ -192,10 +172,9 @@ namespace OddsScrapper
             OddsSum += odd;
 
             AvgOdd = OddsSum / TotalRecords;
-            RateOfAvailableMoney = MoneyMade / (OddsSum - TotalRecords);
             MoneyPerGame = MoneyMade / TotalRecords;
             SuccessRate = (double)SuccessRecords / TotalRecords;
-            
+            KellyPercentage = HelperMethods.CalculateKellyCriterionPercentage(AvgOdd, SuccessRate);
 
             if (string.IsNullOrEmpty(season))
                 return;
@@ -220,5 +199,7 @@ namespace OddsScrapper
         public string Participants;
 
         public double[] Odds;
+
+        public double BestOdd;
     }
 }
