@@ -11,13 +11,46 @@ namespace OddsScrapper
         {
             var games = GetAllTommorowsGames(date);
 
-            var results_files = HelperMethods.GetAnalysedResultsFiles();
-            foreach(var file in results_files)
+            //var resultsFiles = HelperMethods.GetAnalysedResultsFiles();
+            //foreach(var file in resultsFiles)
+            //{
+            //    var archivedData = GetArchivedData(file);
+            //    var fileName = Path.GetFileNameWithoutExtension(file).Replace("results_", string.Empty);
+            //    MatchGames(archivedData, games, date, fileName);
+            //}
+
+            var dataBySeasonsHome = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.Seasonal));
+            var dataAllPositive = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Positive));
+            var positiveData = MatchTwoArchives(dataBySeasonsHome, dataAllPositive);
+            MatchGames(positiveData, games, date, "positive_1");
+        }
+
+        /// <summary>
+        /// Get the data that is positive in both All and BySeasons categories
+        /// </summary>
+        /// <param name="dataBySeasonsHome"></param>
+        /// <param name="dataAllPositive"></param>
+        /// <returns></returns>
+        private LeagueTypeData[] MatchTwoArchives(LeagueTypeData[] dataBySeasonsHome, LeagueTypeData[] dataAllPositive)
+        {
+            var results = new List<LeagueTypeData>();
+            foreach (var allPositiveData in dataAllPositive)
             {
-                var archivedData = GetArchivedData(file);
-                var fileName = Path.GetFileNameWithoutExtension(file).Replace("results_", string.Empty);
-                MatchGames(archivedData, games, date, fileName);
+                var bySeasonsData = dataBySeasonsHome.FirstOrDefault(s => s.Info.Sport == allPositiveData.Info.Sport &&
+                                                                          s.Info.Country == allPositiveData.Info.Country &&
+                                                                          s.Info.Name == allPositiveData.Info.Name &&
+                                                                          s.DoesOddBelong(allPositiveData.UpMargin));
+
+                if (bySeasonsData == null)
+                    continue;
+
+                if (bySeasonsData.KellyPercentage <= 0)
+                    continue;
+
+                results.Add(allPositiveData);
             }
+
+            return results.ToArray();
         }
 
         private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date, string fileName)
@@ -75,8 +108,10 @@ namespace OddsScrapper
             }
         }
 
-        private IEnumerable<GameInfo> GetAllTommorowsGames(string gameDate)
+        private IList<GameInfo> GetAllTommorowsGames(string gameDate)
         {
+            var results = new List<GameInfo>();
+
             var dataDirectory = HelperMethods.GetTommorowsGamesFolderPath();
             var files = Directory.GetFiles(dataDirectory, "*.csv");
             foreach(var file in files)
@@ -108,9 +143,11 @@ namespace OddsScrapper
                         Odds = odds.ToArray()
                     };
 
-                    yield return game;
+                    results.Add(game);
                 }
             }
+
+            return results;
         }
 
         private LeagueTypeData[] GetArchivedData(string file)

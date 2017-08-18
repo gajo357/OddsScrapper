@@ -1,0 +1,11 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+soccer,spain,laliga,64,0.8750,0.2688,0.6090,Girona - Atl. Madrid,7.88,4.34,1.47
+soccer,northern-ireland,nifl-premiership,55,0.9091,0.2482,0.6417,Dungannon - Linfield,7.43,5,1.34
+soccer,uzbekistan,professional-football-league,33,0.8788,0.2033,0.5325,Obod - Buxoro,7.91,4.9,1.35
+soccer,italy,serie-a,80,0.8000,0.1730,0.3238,Verona - Napoli,7.81,4.85,1.42
+american-football,canada,cfl,26,0.7692,0.1108,0.3076,BC Lions - Calgary Stampeders,2.6,1.5
+hockey,australia,aihl,21,0.7619,0.1033,0.2760,Sydney Ice Dogs - Melbourne Ice,4.93,4.34,1.49
+basketball,usa,wnba,77,0.8312,0.0497,0.2685,Chicago Sky W - Los Angeles Sparks W,3.52,1.3
+soccer,germany,oberliga-hessen,33,0.7576,0.0224,0.1025,Vellmar - Baunatal,5.45,5,1.37
+soccer,australia,capital-territory,25,0.8800,0.0116,0.2484,Monaro Panthers - Tuggeranong Utd,9.12,6.61,1.19
+basketball,asia,asia-cup,36,0.8889,0.0050,-0.0369,New Zealand - Australia,7.8,1.12
