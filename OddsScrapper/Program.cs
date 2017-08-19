@@ -28,10 +28,10 @@ namespace OddsScrapper
             //var analyser = new ArchiveDataAnalysis();
             //analyser.Analyse();
 
-            //var scrapper = new CommingMatchesScrapper();
-            //var date = scrapper.Scrape(BaseWebsite, AllSports);
+            var scrapper = new CommingMatchesScrapper();
+            var date = scrapper.Scrape(BaseWebsite, AllSports);
 
-            var date = "19Aug2017";
+            //var date = "19Aug2017";
             var matcher = new OddsMatcher();
             matcher.MatchGamesWithArchivedData(date);
         }

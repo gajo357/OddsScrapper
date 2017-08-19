@@ -7,17 +7,18 @@ namespace OddsScrapper
 {
     public class OddsMatcher
     {
+        private const string BetsFolderName = "GamesToBet";
         public void MatchGamesWithArchivedData(string date)
         {
             var games = GetAllTommorowsGames(date);
 
-            //var resultsFiles = HelperMethods.GetAnalysedResultsFiles();
-            //foreach(var file in resultsFiles)
-            //{
-            //    var archivedData = GetArchivedData(file);
-            //    var fileName = Path.GetFileNameWithoutExtension(file).Replace("results_", string.Empty);
-            //    MatchGames(archivedData, games, date, fileName);
-            //}
+            var resultsFiles = HelperMethods.GetAnalysedResultsFiles();
+            foreach (var file in resultsFiles)
+            {
+                var archivedData = GetArchivedData(file);
+                var fileName = Path.GetFileNameWithoutExtension(file).Replace("results_", string.Empty);
+                MatchGames(archivedData, games, date, fileName);
+            }
 
             var dataBySeasonsHome = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.Seasonal));
             var dataAllPositive = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Positive));
@@ -57,7 +58,7 @@ namespace OddsScrapper
         {
             var filteredGames = GetFilteredGames(archivedData, games, fileName);
 
-            using (var fileStream = File.AppendText($"GamesToBet_{date}_{fileName}.csv"))
+            using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetSolutionDirectory(), BetsFolderName, $"GamesToBet_{date}_{fileName}.csv")))
             {
                 var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds";
                 fileStream.WriteLine(headerLine);
