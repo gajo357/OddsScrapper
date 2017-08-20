@@ -36,13 +36,13 @@ namespace OddsWebsite.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AwayTeam");
+                    b.Property<int?>("AwayTeamId");
 
                     b.Property<int>("Bet");
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<string>("HomeTeam");
+                    b.Property<int?>("HomeTeamId");
 
                     b.Property<int?>("LeagueId");
 
@@ -53,6 +53,10 @@ namespace OddsWebsite.Migrations
                     b.Property<double>("WinningOdd");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AwayTeamId");
+
+                    b.HasIndex("HomeTeamId");
 
                     b.HasIndex("LeagueId");
 
@@ -93,8 +97,32 @@ namespace OddsWebsite.Migrations
                     b.ToTable("Sports");
                 });
 
+            modelBuilder.Entity("OddsWebsite.Models.Team", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("LeagueId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeagueId");
+
+                    b.ToTable("Teams");
+                });
+
             modelBuilder.Entity("OddsWebsite.Models.Game", b =>
                 {
+                    b.HasOne("OddsWebsite.Models.Team", "AwayTeam")
+                        .WithMany()
+                        .HasForeignKey("AwayTeamId");
+
+                    b.HasOne("OddsWebsite.Models.Team", "HomeTeam")
+                        .WithMany()
+                        .HasForeignKey("HomeTeamId");
+
                     b.HasOne("OddsWebsite.Models.League")
                         .WithMany("Games")
                         .HasForeignKey("LeagueId");
@@ -109,6 +137,13 @@ namespace OddsWebsite.Migrations
                     b.HasOne("OddsWebsite.Models.Sport", "Sport")
                         .WithMany()
                         .HasForeignKey("SportId");
+                });
+
+            modelBuilder.Entity("OddsWebsite.Models.Team", b =>
+                {
+                    b.HasOne("OddsWebsite.Models.League")
+                        .WithMany("Teams")
+                        .HasForeignKey("LeagueId");
                 });
 #pragma warning restore 612, 618
         }

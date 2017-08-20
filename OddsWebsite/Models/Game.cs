@@ -6,8 +6,8 @@ namespace OddsWebsite.Models
     {
         public int Id { get; set; }
 
-        public string HomeTeam { get; set; }
-        public string AwayTeam { get; set; }
+        public Team HomeTeam { get; set; }
+        public Team AwayTeam { get; set; }
 
         public double WinningOdd { get; set; }
 

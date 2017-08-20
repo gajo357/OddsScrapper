@@ -11,6 +11,7 @@ namespace OddsWebsite.Models
         }
 
         public DbSet<League> Leagues { get; set; }
+        public DbSet<Team> Teams { get; set; }
         public DbSet<Game> Games { get; set; }
         public DbSet<Sport> Sports { get; set; }
         public DbSet<Country> Countries { get; set; }

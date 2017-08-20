@@ -14,5 +14,6 @@ namespace OddsWebsite.Models
         public bool IsFirst { get; set; }
 
         public IList<Game> Games { get; set; }
+        public IList<Team> Teams { get; set; }
     }
 }

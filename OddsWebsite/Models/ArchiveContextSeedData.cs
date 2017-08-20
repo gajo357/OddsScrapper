@@ -74,6 +74,7 @@ namespace OddsWebsite.Models
                         league.Name = leagueName;
                         league.IsFirst = isFirst;
                         league.Games = new List<Game>();
+                        league.Teams = new List<Team>();
 
                         result.Add(key, league);
                         ArchiveContext.Leagues.Add(league);
@@ -89,6 +90,7 @@ namespace OddsWebsite.Models
             var dataDirectory = FolderStructureHelpers.GetArchiveFolderPath();
             var files = Directory.GetFiles(dataDirectory, "*.csv");
 
+            var teams = new Dictionary<Tuple<string, string, string, string>, Team>();
             foreach (var file in files)
             {
                 var fileName = Path.GetFileNameWithoutExtension(file).Split('_');
@@ -118,8 +120,10 @@ namespace OddsWebsite.Models
                     var winBet = int.Parse(data[4]);
                     var success = bestBet == winBet;
 
-                    var homeTeam = participants.First().Trim();
-                    var awayTeam = participants.Last().Trim();
+                    var homeTeamName = participants.First().Trim();
+                    var awayTeamName = participants.Last().Trim();
+                    var homeTeam = GetOrCreateTeam(teams, sport, country, leagueName, league, homeTeamName);
+                    var awayTeam = GetOrCreateTeam(teams, sport, country, leagueName, league, awayTeamName);
 
                     var game = new Game();
                     game.HomeTeam = homeTeam;
@@ -136,5 +140,18 @@ namespace OddsWebsite.Models
             }
         }
 
+        private Team GetOrCreateTeam(Dictionary<Tuple<string, string, string, string>, Team> teams, string sport, string country, string leagueName, League league, string teamName)
+        {
+            var teamKey = new Tuple<string, string, string, string>(sport, country, leagueName, teamName);
+            if (!teams.ContainsKey(teamKey))
+            {
+                var newTeam = new Team() { Name = teamName };
+
+                teams.Add(teamKey, newTeam);
+                ArchiveContext.Teams.Add(newTeam);
+                league.Teams.Add(newTeam);
+            }
+            return teams[teamKey];
+        }
     }
 }
