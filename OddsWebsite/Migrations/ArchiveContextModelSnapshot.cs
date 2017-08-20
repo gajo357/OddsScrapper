@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using OddsRepository.Context;
+using OddsWebsite.Models;
 using System;
 
 namespace OddsWebsite.Migrations
@@ -17,10 +17,9 @@ namespace OddsWebsite.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.0.0-rtm-26452");
 
-            modelBuilder.Entity("OddsRepository.Models.Country", b =>
+            modelBuilder.Entity("OddsWebsite.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -32,30 +31,42 @@ namespace OddsWebsite.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("OddsRepository.Models.GameInfo", b =>
+            modelBuilder.Entity("OddsWebsite.Models.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<double>("AwayOdd");
-
                     b.Property<string>("AwayTeam");
 
-                    b.Property<double>("HomeOdd");
+                    b.Property<int>("Bet");
+
+                    b.Property<DateTime>("Date");
 
                     b.Property<string>("HomeTeam");
 
+                    b.Property<int?>("LeagueId");
+
+                    b.Property<int>("Season");
+
                     b.Property<int>("Winner");
 
+                    b.Property<double>("WinningOdd");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("LeagueId");
 
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("OddsRepository.Models.LeagueInfo", b =>
+            modelBuilder.Entity("OddsWebsite.Models.League", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<int?>("CountryId");
+
+                    b.Property<bool>("IsFirst");
 
                     b.Property<string>("Name");
 
@@ -63,12 +74,14 @@ namespace OddsWebsite.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CountryId");
+
                     b.HasIndex("SportId");
 
                     b.ToTable("Leagues");
                 });
 
-            modelBuilder.Entity("OddsRepository.Models.Sport", b =>
+            modelBuilder.Entity("OddsWebsite.Models.Sport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -80,9 +93,20 @@ namespace OddsWebsite.Migrations
                     b.ToTable("Sports");
                 });
 
-            modelBuilder.Entity("OddsRepository.Models.LeagueInfo", b =>
+            modelBuilder.Entity("OddsWebsite.Models.Game", b =>
                 {
-                    b.HasOne("OddsRepository.Models.Sport", "Sport")
+                    b.HasOne("OddsWebsite.Models.League")
+                        .WithMany("Games")
+                        .HasForeignKey("LeagueId");
+                });
+
+            modelBuilder.Entity("OddsWebsite.Models.League", b =>
+                {
+                    b.HasOne("OddsWebsite.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryId");
+
+                    b.HasOne("OddsWebsite.Models.Sport", "Sport")
                         .WithMany()
                         .HasForeignKey("SportId");
                 });

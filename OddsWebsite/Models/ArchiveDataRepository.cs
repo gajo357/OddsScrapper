@@ -12,7 +12,7 @@ namespace OddsWebsite.Models
 
         private ArchiveContext Context { get; }
 
-        public IEnumerable<LeagueInfo> GetAllLeagues()
+        public IEnumerable<League> GetAllLeagues()
         {
             return Context.Leagues.ToList();
         }

@@ -10,8 +10,8 @@ namespace OddsWebsite.Models
 
         }
 
-        public DbSet<LeagueInfo> Leagues { get; set; }
-        public DbSet<GameInfo> Games { get; set; }
+        public DbSet<League> Leagues { get; set; }
+        public DbSet<Game> Games { get; set; }
         public DbSet<Sport> Sports { get; set; }
         public DbSet<Country> Countries { get; set; }
 
@@ -19,8 +19,8 @@ namespace OddsWebsite.Models
         {
             base.OnConfiguring(optionsBuilder);
 
-            var connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=ArchiveDataDb;Trusted_Connection=true;MultipleActiveResultSets=true";
-            optionsBuilder.UseSqlServer(connectionString, sqlServerOptionsAction: b => b.MigrationsAssembly("OddsWebsite"));
+            var connectionString = "Data Source=ArchiveData.db";
+            optionsBuilder.UseSqlite(connectionString);
         }
     }
 }
