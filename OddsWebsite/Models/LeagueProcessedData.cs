@@ -1,68 +1,82 @@
-﻿using OddsWebsite.Helpers;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using OddsWebsite.Helpers;
 
 namespace OddsWebsite.Models
 {
     public class LeagueProcessedData
     {
-        public LeagueProcessedData(double downMargin, double upMargin)
-        {
-            DownMargin = downMargin;
-            UpMargin = upMargin;
+        private IDictionary<int, LeagueAnalysisInfo> DataBySeasons { get; } = new Dictionary<int, LeagueAnalysisInfo>();
+        
+        public List<LeagueAnalysisInfo> SeasonsData { get; } = new List<LeagueAnalysisInfo>();
 
-            SummaryBySeasons = new LeagueProcessedData(downMargin, upMargin);
+        public LeagueAnalysisInfo SeasonsSummary { get; } = new LeagueAnalysisInfo();
+
+        public LeagueAnalysisInfo FullSummary { get; } = new LeagueAnalysisInfo();
+        
+        public void AddGames(IEnumerable<Game> games)
+        {
+            foreach (var game in games)
+            {
+                AddGame(game);
+            }
         }
 
-        private IDictionary<int, LeagueProcessedData> DataBySeasons { get; }
-
-        public LeagueProcessedData SummaryBySeasons { get; }
-
-        public double DownMargin { get; }
-        public double UpMargin { get; }
-
-        public double KellyPercentage;
-
-        public double OddsSum = 0;
-
-        public int TotalRecords = 0;
-        public int SuccessRecords = 0;
-
-        public double MoneyMade = 0;
-
-        public double MoneyPerGame = 0;
-
-        public double SuccessRate = 0;
-
-        public double AvgOdd = 0;
-
-        public void AddGame(Game game, bool saveBySeasons = true)
+        private void AddGame(Game game)
         {
-            TotalRecords++;
-
-            var success = game.Bet == game.Winner;
-            var odd = game.WinningOdd;
             var season = game.Season;
 
-            if (success)
-            {
-                SuccessRecords++;
-                MoneyMade += odd - 1;
-            }
-            else
-            {
-                MoneyMade -= 1;
-            }
-            OddsSum += odd;
-
-            AvgOdd = OddsSum / TotalRecords;
-            MoneyPerGame = MoneyMade / TotalRecords;
-            SuccessRate = (double)SuccessRecords / TotalRecords;
-            KellyPercentage = CalculationHelper.CalculateKellyCriterionPercentage(AvgOdd, SuccessRate);
+            FullSummary.AddGame(game);
 
             if (!DataBySeasons.ContainsKey(season))
-                DataBySeasons.Add(season, new LeagueProcessedData(DownMargin, UpMargin));
+            {
+                DataBySeasons.Add(season, new LeagueAnalysisInfo());
+                SeasonsData.Add(DataBySeasons[season]);
+            }
 
-            DataBySeasons[season].AddGame(game, false);
+            DataBySeasons[season].AddGame(game);
+
+            CalculateSeasonsSummary();
+        }
+
+        private void CalculateSeasonsSummary()
+        {
+            if (FullSummary.TotalRecords == 0)
+                return;
+
+            var numberOfSeasons = DataBySeasons.Count;
+            var avgOdd = 0.0;
+            var moneyPerGame = 0.0;
+            var successRate = 0.0;
+
+            var numOfPositiveSeasons = 0;
+            var moneyHigh = double.MinValue;
+            var moneyLow = double.MaxValue;
+            foreach (var data in DataBySeasons)
+            {
+                avgOdd += data.Value.AvgOdd;
+                moneyPerGame += data.Value.MoneyPerGame;
+                successRate += data.Value.SuccessRate;
+
+                if (data.Value.MoneyPerGame > moneyHigh)
+                    moneyHigh = data.Value.MoneyPerGame;
+                if (data.Value.MoneyPerGame < moneyLow)
+                    moneyLow = data.Value.MoneyPerGame;
+
+                if (data.Value.MoneyPerGame > 0)
+                    numOfPositiveSeasons++;
+            }
+
+            avgOdd /= numberOfSeasons;
+            moneyPerGame /= numberOfSeasons;
+            successRate /= numberOfSeasons;
+            var kelly = CalculationHelper.CalculateKellyCriterionPercentage(avgOdd, successRate);
+
+            SeasonsSummary.KellyPercentage = kelly;
+            SeasonsSummary.AvgOdd = avgOdd;
+            SeasonsSummary.MoneyPerGame = moneyPerGame;
+            SeasonsSummary.SuccessRate = successRate;
+            SeasonsSummary.TotalRecords = FullSummary.TotalRecords;
+            SeasonsSummary.SuccessRecords = FullSummary.SuccessRecords;
         }
     }
 }

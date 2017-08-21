@@ -17,7 +17,6 @@ namespace OddsWebsite.Controllers
 
         public IActionResult Results()
         {
-
             return View();
         }
 

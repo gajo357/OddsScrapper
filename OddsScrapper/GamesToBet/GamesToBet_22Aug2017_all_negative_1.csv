@@ -1,0 +1,14 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+soccer,europe,champions-league,235,0.6809,-0.0142,-0.0443,Sevilla (Esp) - Basaksehir (Tur) ,1.44,4.81,7
+soccer,england,carabao-cup,76,0.6842,-0.0182,-0.0677,Crystal Palace - Ipswich,1.42,4.45,7.87
+soccer,england,carabao-cup,76,0.6842,-0.0182,0.0263,Fulham - Bristol Rovers,1.48,4.49,6.48
+soccer,england,carabao-cup,76,0.6842,-0.0182,0.0263,Middlesbrough - Scunthorpe,1.48,4.32,6.85
+soccer,lithuania,a-lyga,159,0.7610,-0.0431,-0.1242,Trakai - Atlantas,1.27,5.21,10.62
+soccer,colombia,torneo-aguila,180,0.6444,-0.0632,-0.1458,Orsomarso - Atletico F.C.,1.45,3.84,6.76
+soccer,morocco,coupe-du-trone,21,0.6190,-0.1133,-0.2881,IR Tanger - Sidi Kacem,1.42,3.78,9.8
+soccer,england,carabao-cup,116,0.6379,-0.1343,-0.3679,Brighton - Barnet,1.36,5.2,8.15
+soccer,england,carabao-cup,116,0.6379,-0.1343,-0.4271,Leeds - Newport,1.34,5.27,8.61
+soccer,england,carabao-cup,116,0.6379,-0.1343,-0.4271,Norwich - Charlton,1.34,5.25,8.47
+baseball,south-korea,kbo,185,0.4703,-0.3154,-0.6107,Nexen Heroes - Samsung Lions,1.49,2.73
+soccer,south-africa,premier-league,70,0.5000,-0.3200,-0.7500,Mamelodi Sundowns - Polokwane,1.4,4.75,8.15
+soccer,czech-republic,division-2,84,0.4762,-0.4030,-1.2698,Opava - Mas Taborsko,1.3,5.03,8.49
