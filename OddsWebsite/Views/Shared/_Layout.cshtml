@@ -18,6 +18,13 @@
 </head>
 <body>
     <div class="container body-content">
+        <div id="header">
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Login" asp-action="Logout">Logout</a>
+            }
+        </div>
+
         @RenderBody()
         <hr />
         <div id="footer">

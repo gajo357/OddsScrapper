@@ -24,6 +24,59 @@ namespace OddsScrapper
             var dataAllPositive = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Positive));
             var positiveData = MatchTwoArchives(dataBySeasonsHome, dataAllPositive);
             MatchGames(positiveData, games, date, "positive_1");
+
+            dataBySeasonsHome = GetArchivedData(HelperMethods.GetAnalysedResultsFile(2, ResultType.Seasonal));
+            dataAllPositive = GetArchivedData(HelperMethods.GetAnalysedResultsFile(2, ResultType.All, AnalysisType.Positive));
+            positiveData = MatchTwoArchives(dataBySeasonsHome, dataAllPositive);
+            MatchGames(positiveData, games, date, "positive_2");
+
+            var allGames1 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All));
+            MatchGames(allGames1, games, date, "all_1", g => g.Kelly);
+
+            var allGames2 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All));
+            MatchGames(allGames2, games, date, "all_2", g => g.Kelly);
+
+            WriteMustWinGames(games, date);
+        }
+
+        private void WriteMustWinGames(IList<GameInfo> games, string date)
+        {
+            const string headerLine = "Sport,Country,League,Participants,Odds,Must Win";
+
+            using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetSolutionDirectory(), BetsFolderName, $"MustWin_{date}.csv")))
+            {
+                var headerWritten = false;
+                foreach (var game in games)
+                {
+                    var mustWinBets = GetMustWinBets(game.Odds);
+                    if (!mustWinBets)
+                        continue;
+
+                    if(!headerWritten)
+                    {
+                        fileStream.WriteLine(headerLine);
+                        headerWritten = true;
+                    }
+
+                    var line = $"{game.Sport},{game.Country},{game.League},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
+                    fileStream.WriteLine(line);
+                }
+            }
+        }
+
+        private bool GetMustWinBets(double[] odds)
+        {
+            if(odds.Length == 2)
+            {                
+                return ((odds[0] - 1.0) * (odds[1] - 1.0)) > 1.0;
+            }
+
+            if(odds.Length == 3)
+            {
+                return ((odds[0] * (odds[1] + odds[2])) / (odds[1]* odds[2]*(odds[0] - 1.0))) < 1.0;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -54,8 +107,11 @@ namespace OddsScrapper
             return results.ToArray();
         }
 
-        private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date, string fileName)
+        private void MatchGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string date, string fileName, Func<GameInfo, double> orderBy = null)
         {
+            if (orderBy == null)
+                orderBy = f => f.MoneyPerGame;
+
             var filteredGames = GetFilteredGames(archivedData, games, fileName);
 
             using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetSolutionDirectory(), BetsFolderName, $"GamesToBet_{date}_{fileName}.csv")))
@@ -63,10 +119,9 @@ namespace OddsScrapper
                 var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds";
                 fileStream.WriteLine(headerLine);
 
-                foreach (var game in filteredGames.OrderByDescending(s => s.MoneyPerGame))
+                foreach (var game in filteredGames.OrderByDescending(orderBy))
                 {
-                    var kelly = HelperMethods.CalculateKellyCriterionPercentage(game.BestOdd, game.SuccessRate);
-                    var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{kelly:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
+                    var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{game.Kelly:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
                     fileStream.WriteLine(line);
                 }
             }
@@ -104,7 +159,8 @@ namespace OddsScrapper
                 game.TotalRecords = league.TotalRecords;
                 game.SuccessRate = league.SuccessRate;
                 game.BestOdd = bestOdd;
-
+                game.Kelly = HelperMethods.CalculateKellyCriterionPercentage(game.BestOdd, game.SuccessRate);
+                
                 yield return game;
             }
         }

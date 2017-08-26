@@ -27,11 +27,8 @@ namespace OddsScrapper
             Info = info;
             Data = new[]
             {
-                new LeagueTypeData(1.0, 1.1, info),
-                new LeagueTypeData(1.1, 1.2, info),
-                new LeagueTypeData(1.2, 1.3, info),
-                new LeagueTypeData(1.3, 1.4, info),
-                new LeagueTypeData(1.4, 1.5, info)
+                new LeagueTypeData(1.0, 1.3, info),
+                new LeagueTypeData(1.3, 1.5, info)
             };
         }
 
@@ -201,5 +198,7 @@ namespace OddsScrapper
         public double[] Odds;
 
         public double BestOdd;
+
+        public double Kelly;
     }
 }

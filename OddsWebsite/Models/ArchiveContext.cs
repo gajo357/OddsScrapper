@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace OddsWebsite.Models
 {
-    public class ArchiveContext : DbContext
+    public class ArchiveContext : IdentityDbContext<OddsAppUser>
     {
         public ArchiveContext(DbContextOptions<ArchiveContext> options)
             : base(options)

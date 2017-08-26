@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OddsWebsite.Models;
@@ -9,9 +11,12 @@ namespace OddsWebsite
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly IHostingEnvironment _env;
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -19,9 +24,21 @@ namespace OddsWebsite
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc(config =>
+            {
+                if(_env.IsProduction())    
+                    config.Filters.Add(new RequireHttpsAttribute());
+            });
+
+            services.AddIdentity<OddsAppUser, IdentityRole>(config =>
+            {
+                config.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ArchiveContext>();
+
             services.AddTransient<IEmailService, EmailService>();
 
-            services.AddDbContext<ArchiveContext>();
+            services.AddEntityFrameworkSqlite().AddDbContext<ArchiveContext>();
             services.AddScoped<IArchiveDataRepository, ArchiveDataRepository>();
             services.AddTransient<ArchiveContextSeedData>();
 
@@ -30,18 +47,10 @@ namespace OddsWebsite
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ArchiveContextSeedData archiveContextSeed)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
+        {            
             app.UseStaticFiles();
+
+            AuthAppBuilderExtensions.UseAuthentication(app);
 
             app.UseMvc(routes =>
             {
@@ -50,7 +59,7 @@ namespace OddsWebsite
                     template: "{controller=Home}/{action=Contact}/{id?}");
             });
 
-            //archiveContextSeed.EnsureDataSeed().Wait();
+            archiveContextSeed.EnsureDataSeed().Wait();
         }
     }
 }

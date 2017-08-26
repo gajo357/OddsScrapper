@@ -1,0 +1,5 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+soccer,europe,europa-league,26,1.0000,0.1677,1.0000,Fenerbahce (Tur) - Vardar (Mac) ,1.12,8.32,22.02
+soccer,europe,europa-league,26,1.0000,0.1677,1.0000,Marseille (Fra) - Domzale (Slo) ,1.2,6.34,15.8
+basketball,usa,wnba,208,0.9808,0.1300,0.8437,Connecticut Sun W - Dallas Wings W,1.14,6.04
+basketball,world,friendly-international,56,0.7679,0.1193,0.3037,Great Britain - Hungary,1.5,2.43

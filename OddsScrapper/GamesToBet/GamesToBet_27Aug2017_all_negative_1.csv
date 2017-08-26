@@ -1,0 +1,30 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+american-football,canada,cfl,160,0.8250,-0.0038,0.0641,Calgary Stampeders - Toronto Argonauts,1.23,4.24
+soccer,russia,premier-league,387,0.6925,-0.0171,0.0519,CSKA Moscow - Akhmat Grozny,1.48,4.01,7.17
+soccer,slovakia,fortuna-liga,266,0.8045,-0.0222,0.0804,Slovan Bratislava - Podbrezova,1.27,5.04,9.07
+soccer,czech-republic,1-liga,444,0.6982,-0.0263,-0.0037,Teplice - Jihlava,1.43,4.26,7.27
+american-football,usa,nfl,654,0.6942,-0.0302,-0.0008,New York Giants - New York Jets,1.44,2.78
+american-football,usa,nfl,654,0.6942,-0.0302,0.0571,Tampa Bay Buccaneers - Cleveland Browns,1.48,2.65
+soccer,norway,nm-cup,189,0.6825,-0.0335,0.0210,Rosenborg - Valerenga,1.48,4.33,6.28
+basketball,usa,wnba,639,0.6870,-0.0390,-0.0086,Washington Mystics W - Dallas Wings W,1.45,3.02
+soccer,germany,regionalliga-nordost,24,0.7917,-0.0692,-0.1140,Energie Cottbus - Meuselwitz,1.23,5.87,9.88
+soccer,sweden,division-1-sodra,192,0.6667,-0.0813,-0.0579,Landskrona - Kristianstads,1.46,4.4,5.14
+soccer,sweden,division-1-sodra,192,0.6667,-0.0813,0.0001,Oddevold - Rosengard,1.5,4.31,4.78
+soccer,sweden,division-1-sodra,192,0.6667,-0.0813,-0.0579,Utsiktens - Angelholms,1.46,4.45,5.1
+soccer,czech-republic,youth-league,267,0.6592,-0.0869,-0.0981,Slovacko U21 - Brno U21,1.45,5.05,4.55
+soccer,england,premier-league,534,0.7547,-0.0878,-0.2265,Tottenham - Burnley,1.25,6.27,13.8
+soccer,belarus,vysshaya-liga,282,0.6489,-0.0943,-0.1676,Din. Minsk - Gorodeja,1.43,3.95,6.34
+soccer,fyr-of-macedonia,first-league,320,0.6406,-0.0969,-0.1952,Shkendija - Akademija Pandev,1.43,4.17,6.15
+handball,germany,2-bundesliga,717,0.7922,-0.1041,-0.0390,Nordhorn-Lingen - Saarlouis,1.25,11.14,4.55
+handball,germany,2-bundesliga,717,0.7922,-0.1041,-0.0070,Bietigheim-Metterzimmern - Rhein Vikings,1.26,10.92,4.52
+soccer,spain,segunda-division-b-group-4,249,0.6426,-0.1054,-0.2084,UCAM Murcia - Las Palmas B,1.42,4.21,6.46
+basketball,world,universiade,48,0.7917,-0.1063,-0.0762,Germany Univ. - Latvia Univ.,1.24,4.15
+baseball,usa,il,221,0.6018,-0.1090,-0.2454,Toledo Mud Hens - Louisville Bats,1.47,2.69
+soccer,russia,division-1,411,0.6204,-0.1235,-0.1704,FK Krylya Sovetov Samara - Sibir,1.48,3.84,6.57
+soccer,denmark,superliga,284,0.6197,-0.1295,-0.2070,Midtjylland - Lyngby,1.46,4.48,6.5
+soccer,norway,division-2-group-2,227,0.6035,-0.1615,-0.3186,Hodd - Fana,1.43,4.37,5.68
+soccer,russia,division-2-south,185,0.5676,-0.1982,-0.3148,SKA Rostov - Legion Dynamo,1.49,3.77,5.82
+soccer,russia,division-2-south,185,0.5676,-0.1982,-0.3524,Spartak Nalchik - Vladikavkaz,1.47,3.82,6.15
+soccer,mexico,primera-division,227,0.5110,-0.2794,-0.6262,U.A.N.L.- Tigres - Lobos BUAP,1.43,4.34,7.19
+hockey,russia,khl,22,0.5000,-0.3700,-1.2241,SKA St. Petersburg - Podolsk,1.29,6.79,7.22
+soccer,peru,segunda-division,23,0.4783,-0.4217,-1.6085,Cesar Vallejo - Defensor La Bocana,1.25,5.18,9.4

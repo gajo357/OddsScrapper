@@ -1,0 +1,17 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+basketball,world,friendly-international,449,0.9109,0.0157,0.6037,Germany - France,3.31,1.29
+rugby-league,australia,intrust-super-cup,225,0.8889,0.0508,0.4774,Tweed Heads - PNG Hunters,3.6,26,1.27
+soccer,croatia,1-hnl,310,0.8613,0.0248,0.3065,Lok. Zagreb - D. Zagreb,10.18,5.36,1.25
+soccer,portugal,primeira-liga,291,0.7629,0.0710,0.2360,Braga - FC Porto,7.47,4.13,1.45
+baseball,usa,mlb,566,0.7438,0.0720,0.2314,Philadelphia Phillies - Chicago Cubs,2.69,1.5
+soccer,morocco,coupe-du-trone,32,0.7188,0.0119,0.1564,US Temara - Berkane,6.4,3.82,1.5
+soccer,netherlands,eredivisie,412,0.7282,0.0281,0.1373,Venlo - Ajax,6.11,4.71,1.46
+soccer,morocco,coupe-du-trone,32,0.7188,0.0119,0.0329,Olympique Marrakech - Olympique Khouribga,8.16,3.86,1.41
+soccer,sweden,division-2-norra-gotaland,94,0.7021,0.0023,0.0251,Vanersborgs IF - Trollhattan,4.97,4.58,1.44
+soccer,sweden,division-2-norra-gotaland,94,0.7021,0.0023,0.0093,Lidkopings FK - Vanersborgs FK,5.01,4.64,1.43
+hockey,russia,khl,286,0.6923,-0.0165,0.0085,Din. Minsk - CSKA Moscow,5.74,5.11,1.45
+soccer,ukraine,premier-league,379,0.7757,-0.1030,0.0023,Mariupol - Dyn. Kiev,8,5.25,1.29
+soccer,sweden,division-2-norra-svealand,113,0.7876,-0.0500,-0.0293,S. Kerbura - Gute,7.4,5.42,1.26
+soccer,germany,junioren-bundesliga-north,141,0.6879,-0.0377,-0.0552,Union Berlin U19 - Osnabruck U19,4.93,4.93,1.42
+rugby-union,new-zealand,mitre-10-cup,106,0.6226,-0.1232,-0.2551,Manawatu - Tasman,2.81,22.91,1.43
+soccer,ukraine,premier-league,379,0.7757,-0.1030,-0.2924,Veres Rivne - Shakhtar Donetsk,12.16,5.41,1.21

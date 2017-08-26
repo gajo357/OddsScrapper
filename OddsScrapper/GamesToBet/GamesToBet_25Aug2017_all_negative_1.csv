@@ -1,0 +1,36 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+soccer,bolivia,liga-de-futbol-prof,187,0.7914,-0.0075,-0.2019,Bolivar - Sport Boys,1.21,6.11,10.86
+baseball,japan,npb,671,0.6721,-0.0167,-0.0905,Hiroshima Carp - Chunichi Dragons,1.43,2.84
+soccer,tunisia,ligue-professionnelle-1,44,0.7727,-0.0168,-0.2605,Sfaxien - JS Kairouan,1.22,5.74,10.61
+volleyball,europe,european-championships,82,0.9268,-0.0298,0.0118,France - Belgium,1.08,7.48
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-5.8074,St. Liege W (Bel) - Rigas W (Lat) ,1.01,16.74,22.51
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-1.3141,Sarajevo W (Bih) - Bettembourg W (Lux) ,1.03,14.55,20.51
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-1.3141,Gintra W (Ltu) - Martve Kutaisi W (Geo) ,1.03,10.89,29.57
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-5.8074,Ol. Cluj W (Rou) - Swansea W (Wal) ,1.01,19.51,21.34
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-0.4154,Shymkent W (Kaz) - Hajvalia W (Kos) ,1.05,10.2,19.3
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-0.7524,Subotica W (Srb) - Breznica W (Mne) ,1.04,10.1,19.01
+soccer,europe,champions-league-women,178,0.9326,-0.0335,-5.8074,Apollon W (Cyp) - Noroc W (Mda) ,1.01,19.7,24.17
+soccer,romania,liga-1,253,0.7075,-0.0381,-0.0425,CS U. Craiova - Gaz Metan Medias,1.39,4.15,9.09
+soccer,czech-republic,msfl,68,0.7059,-0.0435,-0.1591,Kromeriz - Mohelnice,1.34,4.98,5.97
+soccer,austria,regionalliga-east,57,0.7544,-0.0486,-0.1902,Amstetten - Schwechat,1.26,5.43,7.2
+baseball,japan,npb,330,0.7000,-0.0513,-0.0500,Rakuten Gold. Eagles - Nippon Ham Fighters,1.4,2.94
+baseball,japan,npb,330,0.7000,-0.0513,-0.1824,Fukuoka S. Hawks - Chiba Lotte Marines,1.34,3.29
+hockey,russia,khl,187,0.6471,-0.0582,-0.1549,Lokomotiv Yaroslavl - Slovan Bratislava,1.44,5.15,5.93
+hockey,russia,khl,187,0.6471,-0.0582,-0.1931,SKA St. Petersburg - Jokerit,1.42,5.74,5.63
+soccer,slovakia,2-liga,104,0.6923,-0.0585,-0.1624,Bardejov - Trebisov,1.36,4.48,6.54
+rugby-league,australia,nrl,176,0.8068,-0.0643,-0.5732,Canberra Raiders - Newcastle Knights,1.14,27.68,5.49
+soccer,slovakia,2-liga,60,0.8000,-0.0680,-0.6286,Lok. Kosice - Komarno,1.14,7.03,10.77
+soccer,malta,premier-league,51,0.6863,-0.0733,-0.2363,Floriana - Tarxien,1.34,4.8,6.66
+soccer,turkey,super-lig,256,0.6797,-0.0773,-0.2624,Galatasaray - Sivasspor,1.34,5.31,8.6
+soccer,czech-republic,msfl,150,0.6200,-0.0923,-0.2244,Velke Mezirici - Uhersky Brod,1.45,4.49,4.99
+baseball,usa,il,221,0.6018,-0.1090,-0.2639,Indianapolis Indians - Louisville Bats,1.46,2.62
+soccer,israel,leumit-league,102,0.5882,-0.1418,-0.3477,Hapoel Tel Aviv - Hapoel Bnei Lod,1.44,4.07,6
+soccer,europe,champions-league-women,95,0.7368,-0.1539,-0.8114,Medyk Konin W (Pol) - Linfield W (Nir) ,1.17,7.11,9.25
+handball,germany,2-bundesliga,238,0.6681,-0.1718,-0.6595,Emsdetten - Hagen,1.25,11.33,4.57
+soccer,ireland,fai-cup,23,0.5652,-0.1735,-0.4700,Drogheda - Cobh Wanderers,1.42,4.33,6.19
+baseball,cuba,serie-nacional,99,0.5556,-0.1789,-0.3899,Artemisa - Guantanamo,1.47,2.65
+soccer,russia,division-2-ural-povolzhye,44,0.5455,-0.2014,-0.4425,Kamaz - Krylya Sovetov Samara 2,1.46,3.84,6.35
+basketball,world,universiade,24,0.7500,-0.2042,-5.5000,Argentina Univ. - Romania Univ.,1.04,5.3
+basketball,world,universiade,24,0.7500,-0.2042,-2.3750,Lithuania Univ. - Russia Univ.,1.08,7
+basketball,philippines,governors-cup,37,0.6216,-0.2265,-0.7298,San Miguel Beermen - Global Port,1.28,3.57
+soccer,finland,kakkonen-group-a,23,0.4783,-0.3609,-0.9317,Klubi 04 - Keski-Uusimaa,1.37,4.83,5.52

@@ -56,11 +56,7 @@ namespace OddsScrapper
             {
                 GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Positive),
                 GetAnalysedResultsFile(2, ResultType.All, AnalysisType.Positive),
-                GetAnalysedResultsFile(1, ResultType.All, AnalysisType.Negative),
-                GetAnalysedResultsFile(2, ResultType.All, AnalysisType.Negative),
 
-                GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.Negative),
-                GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.Negative),
                 GetAnalysedResultsFile(1, ResultType.Seasonal, AnalysisType.Positive),
                 GetAnalysedResultsFile(2, ResultType.Seasonal, AnalysisType.Positive),
             };

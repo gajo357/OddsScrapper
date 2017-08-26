@@ -1,4 +1,5 @@
-﻿using OddsWebsite.Helpers;
+﻿using Microsoft.AspNetCore.Identity;
+using OddsWebsite.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,15 +10,28 @@ namespace OddsWebsite.Models
 {
     public class ArchiveContextSeedData
     {
-        public ArchiveContextSeedData(ArchiveContext archiveContext)
+        public ArchiveContextSeedData(ArchiveContext archiveContext, UserManager<OddsAppUser> userManager)
         {
             ArchiveContext = archiveContext;
+            UserManager = userManager;
         }
 
         private ArchiveContext ArchiveContext { get; }
+        private UserManager<OddsAppUser> UserManager { get; }
 
         public async Task EnsureDataSeed()
         {
+            if(await UserManager.FindByEmailAsync("gajo357@gmail.com") == null)
+            {
+                var user = new OddsAppUser()
+                {
+                    UserName = "gajo357",
+                    Email = "gajo357@gmail.com"
+                };
+
+                await UserManager.CreateAsync(user, "MojaSifra12");
+            }
+
             if (ArchiveContext.Leagues.Any())
                 return;
 

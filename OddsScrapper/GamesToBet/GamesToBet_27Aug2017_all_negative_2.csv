@@ -1,0 +1,8 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds
+soccer,netherlands,eredivisie,106,0.6698,-0.0311,-0.0480,Venlo - Ajax,6.11,4.71,1.46
+basketball,world,friendly-international,97,0.8351,-0.0364,0.2665,Germany - France,3.31,1.29
+baseball,usa,mlb,33,0.6667,-0.0533,0.0001,Philadelphia Phillies - Chicago Cubs,2.69,1.5
+hockey,russia,khl,33,0.6667,-0.0867,-0.0740,Din. Minsk - CSKA Moscow,5.74,5.11,1.45
+soccer,portugal,primeira-liga,164,0.6341,-0.1046,-0.1790,Braga - FC Porto,7.47,4.13,1.45
+rugby-union,new-zealand,mitre-10-cup,52,0.5769,-0.1938,-0.4071,Manawatu - Tasman,2.81,22.91,1.43
+soccer,germany,junioren-bundesliga-north,64,0.5625,-0.2069,-0.4792,Union Berlin U19 - Osnabruck U19,4.93,4.93,1.42
