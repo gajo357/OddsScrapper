@@ -33,16 +33,22 @@ namespace OddsWebsite
             services.AddIdentity<OddsAppUser, IdentityRole>(config =>
             {
                 config.User.RequireUniqueEmail = true;
+                
             })
             .AddEntityFrameworkStores<ArchiveContext>();
 
-            services.AddTransient<IEmailService, EmailService>();
+            services.AddAuthentication("MyCookieAuthenticationScheme")
+                    .AddCookie(options =>
+                    {
+                        options.AccessDeniedPath = "/Account/Forbidden/";
+                        options.LoginPath = "/Account/Unauthorized/";
+                    });
 
             services.AddEntityFrameworkSqlite().AddDbContext<ArchiveContext>();
             services.AddScoped<IArchiveDataRepository, ArchiveDataRepository>();
             services.AddTransient<ArchiveContextSeedData>();
 
-            services.AddMvc();
+            services.AddTransient<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,8 +61,10 @@ namespace OddsWebsite
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Contact}/{id?}");
+                    name: "Default",
+                    template: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" });
+                
             });
 
             archiveContextSeed.EnsureDataSeed().Wait();

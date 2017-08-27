@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OddsWebsite.Models;
 using Microsoft.AspNetCore.Authorization;
 using OddsWebsite.ViewModels;
@@ -17,7 +16,6 @@ namespace OddsWebsite.Controllers
             Repository = repository;
         }
 
-        [Authorize]
         public IActionResult Index()
         {
             ViewData["Message"] = "Your contact page.";
@@ -25,10 +23,18 @@ namespace OddsWebsite.Controllers
             return View();
         }
 
+        [Authorize]
+        public IActionResult Results()
+        {
+            ViewData["Message"] = "Your results page.";
+
+            return View();
+        }
+
         [HttpPost]
         public IActionResult Index(IndexViewModel viewModel)
         {
-            EmailService.SendEmail(contactInfo);
+            //EmailService.SendEmail();
 
             ViewData["Message"] = "Your contact page.";
 

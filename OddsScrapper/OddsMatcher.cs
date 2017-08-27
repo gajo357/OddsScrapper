@@ -157,7 +157,8 @@ namespace OddsScrapper
 
                 game.MoneyPerGame = league.MoneyPerGame;
                 game.TotalRecords = league.TotalRecords;
-                game.SuccessRate = league.SuccessRate;
+                // count this game as a miss, to lower the percentage
+                game.SuccessRate = (league.SuccessRate * league.TotalRecords) / (league.TotalRecords + 1);
                 game.BestOdd = bestOdd;
                 game.Kelly = HelperMethods.CalculateKellyCriterionPercentage(game.BestOdd, game.SuccessRate);
                 

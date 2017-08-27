@@ -47,6 +47,11 @@ namespace OddsWebsite.Models
             return _analysedLeagueData[key];
         }
 
+        public object GetResultsForUser(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         private int OddToCategory(double odd)
         {
             if (odd <= 1.1)

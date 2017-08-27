@@ -1,5 +1,4 @@
-﻿using OddsWebsite.Models;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
 
 namespace OddsWebsite.Services
@@ -8,26 +7,12 @@ namespace OddsWebsite.Services
     {
         public void SendEmail(string name, string email, string subject, string body)
         {
-        }
-
-        private const string _fromMail = "gajo357@gmail.com";
-
-        public void SendEmail(ContactInfoModel contactInfo)
-        {
-            if (contactInfo == null)
-                return;
-
-            if (contactInfo.Email != _fromMail)
-                return;
-
-            if (contactInfo.Name != "petarpan")
+            if (email != _fromMail)
                 return;
 
             var fromAddress = new MailAddress(_fromMail, "me");
             var toAddress = new MailAddress(_fromMail, "me");
             const string fromPassword = "fromPassword";
-            const string subject = "Subject";
-            const string body = "Body";
 
             var smtp = new SmtpClient
             {
@@ -44,5 +29,7 @@ namespace OddsWebsite.Services
                 smtp.Send(message);
             }
         }
+
+        private const string _fromMail = "gajo357@gmail.com";
     }
 }

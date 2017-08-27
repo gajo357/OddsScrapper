@@ -31,7 +31,7 @@ namespace OddsScrapper
             //var scrapper = new CommingMatchesScrapper();
             //var date = scrapper.Scrape(BaseWebsite, AllSports);
 
-            var date = "27Aug2017";
+            var date = "28Aug2017";
             var matcher = new OddsMatcher();
             matcher.MatchGamesWithArchivedData(date);
         }
