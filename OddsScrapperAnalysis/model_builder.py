@@ -78,10 +78,35 @@ def train_model(data, model_creator, save_model):
     print(reg.score(features_test, labels_test))
     print()
 
+
+def data_stats(data):
+    data_count = data.shape[0]
+    print('data count')
+    print(data_count)
+
+    home_winners = data[data['Bet'] == 1][data['Winner'] == 1]['Winner'].count()
+    home_bets = data[data['Bet'] == 1]['Bet'].count()
+    print('home bet percentage')
+    print(home_bets * 1.0 / data_count)
+    print('home win percentage')
+    print(home_winners * 1.0 / home_bets)
+
+    away_winners = data[data['Bet'] == 2][data['Winner'] == 2]['Winner'].count()
+    away_bets = data[data['Bet'] == 2]['Bet'].count()
+    print('away bet percentage')
+    print(away_bets * 1.0 / data_count)
+    print('away win percentage')
+    print(away_winners * 1.0 / away_bets)
+
+    win_count = data[data['Bet'] == data['Winner']]['Bet'].count()
+    print('win percentage')
+    print(win_count * 1.0 / data_count)
+
 if __name__ == '__main__':
     db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsWebsite', 'ArchiveData.db'))
 
     db_data = load_data(db_name)
-    train_different_clf(db_data)
+    data_stats(db_data)
+    #train_different_clf(db_data)
     #train_model(data, ExtraTreeClassifier, True)
