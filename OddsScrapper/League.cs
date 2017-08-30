@@ -199,6 +199,8 @@ namespace OddsScrapper
 
         public double BestOdd;
 
+        public int Bet;
+
         public double Kelly;
     }
 }

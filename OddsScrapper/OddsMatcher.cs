@@ -36,7 +36,7 @@ namespace OddsScrapper
             var allGames2 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All));
             MatchGames(allGames2, games, date, "all_2", g => g.Kelly);
 
-            WriteMustWinGames(games, date);
+            //WriteMustWinGames(games, date);
         }
 
         private void WriteMustWinGames(IList<GameInfo> games, string date)
@@ -58,7 +58,7 @@ namespace OddsScrapper
                         headerWritten = true;
                     }
 
-                    var line = $"{game.Sport},{game.Country},{game.League},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
+                    var line = $"{game.Sport},{game.Country},{game.League},{game.Participants},{game.BestOdd},{game.Bet}";
                     fileStream.WriteLine(line);
                 }
             }
@@ -116,12 +116,12 @@ namespace OddsScrapper
 
             using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetSolutionDirectory(), BetsFolderName, $"GamesToBet_{date}_{fileName}.csv")))
             {
-                var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,Odds";
+                var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,WinningOdd,Bet";
                 fileStream.WriteLine(headerLine);
 
                 foreach (var game in filteredGames.OrderByDescending(orderBy))
                 {
-                    var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{game.Kelly:F4},{game.Participants},{String.Join(",", game.Odds.Select(s => s).ToArray())}";
+                    var line = $"{game.Sport},{game.Country},{game.League},{game.TotalRecords},{game.SuccessRate:F4},{game.MoneyPerGame:F4},{game.Kelly:F4},{game.Participants},{game.BestOdd},{game.Bet}";
                     fileStream.WriteLine(line);
                 }
             }
@@ -133,24 +133,13 @@ namespace OddsScrapper
 
             foreach (var game in games)
             {
-                var bestBet = -1;
-                var bestOdd = double.MaxValue;
-                
-                for (var i = 0; i < game.Odds.Length; i++)
-                {
-                    if(game.Odds[i] < bestOdd)
-                    {
-                        bestBet = HelperMethods.GetBetComboFromIndex(game.Odds.Length, i);
-                        bestOdd = game.Odds[i];
-                    }
-                }
-                if (bet != bestBet)
+                if (bet != game.Bet)
                     continue;
 
                 LeagueTypeData league = archivedData.FirstOrDefault(s => s.Info.Sport == game.Sport &&
                                                                          s.Info.Country == game.Country &&
                                                                          s.Info.Name == game.League &&
-                                                                         s.DoesOddBelong(bestOdd));
+                                                                         s.DoesOddBelong(game.BestOdd));
 
                 if (league == null)
                     continue;
@@ -159,7 +148,6 @@ namespace OddsScrapper
                 game.TotalRecords = league.TotalRecords;
                 // count this game as a miss, to lower the percentage
                 game.SuccessRate = (league.SuccessRate * league.TotalRecords) / (league.TotalRecords + 1);
-                game.BestOdd = bestOdd;
                 game.Kelly = HelperMethods.CalculateKellyCriterionPercentage(game.BestOdd, game.SuccessRate);
                 
                 yield return game;
@@ -170,39 +158,32 @@ namespace OddsScrapper
         {
             var results = new List<GameInfo>();
 
-            var dataDirectory = HelperMethods.GetTommorowsGamesFolderPath();
-            var files = Directory.GetFiles(dataDirectory, "*.csv");
-            foreach(var file in files)
+            var file = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"games_{gameDate}.csv");
+            foreach(var line in File.ReadLines(file))
             {
-                var date = Path.GetFileNameWithoutExtension(file).Split('_').Last();
-                if (date != gameDate)
+                var data = line.Split(',');
+                var sport = data[0];
+                if (sport == "Sport")
                     continue;
 
-                foreach(var line in File.ReadLines(file))
+                var country = data[1];
+                var leagueName = data[2];
+                var season = data[3];
+                var participants = data[4];
+                var odds = double.Parse(data[5]);
+                var bet = int.Parse(data[6]);
+
+                var game = new GameInfo()
                 {
-                    var data = line.Split(',');
-                    var sport = data[0];
-                    if (sport == "Sport")
-                        continue;
+                    Sport = sport,
+                    Country = country,
+                    League = leagueName,
+                    Participants = participants,
+                    BestOdd = odds,
+                    Bet = bet
+                };
 
-                    var country = data[1];
-                    var name = data[2];
-                    var participants = data[3];
-                    var odds = new List<double>();
-                    for (var i = 4; i < data.Length; i++)
-                        odds.Add(double.Parse(data[i]));
-
-                    var game = new GameInfo()
-                    {
-                        Sport = sport,
-                        Country = country,
-                        League = name,
-                        Participants = participants,
-                        Odds = odds.ToArray()
-                    };
-
-                    results.Add(game);
-                }
+                results.Add(game);
             }
 
             return results;

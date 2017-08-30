@@ -1,0 +1,60 @@
+data count 1
+9917
+Bet - 6514, Winner - 5563
+Bet / data count
+0.6568518705253605
+(Winner and Bet) / Bet
+0.7559103469450414
+(Winner and Bet) / Winner
+0.8851339205464678
+
+data count 0
+9917
+Bet - 10, Winner - 565
+Bet / data count
+0.0010083694665725521
+(Winner and Bet) / Bet
+1.0
+(Winner and Bet) / Winner
+0.017699115044247787
+
+data count 2
+9917
+Bet - 3393, Winner - 3789
+Bet / data count
+0.34213976000806695
+(Winner and Bet) / Bet
+0.7615679339817271
+(Winner and Bet) / Winner
+0.6819741356558459
+
+data count 1
+9917
+Winner - 5563, Prediction - 5687
+Winner / data count
+0.5609559342543108
+(Prediction and Winner) / Winner
+0.7930972496854215
+(Prediction and Winner) / Prediction
+0.7758044663267101
+
+data count 0
+9917
+Winner - 565, Prediction - 563
+Winner / data count
+0.0569728748613492
+(Prediction and Winner) / Winner
+0.3929203539823009
+(Prediction and Winner) / Prediction
+0.39431616341030196
+
+data count 2
+9917
+Winner - 3789, Prediction - 3667
+Winner / data count
+0.38207119088434
+(Prediction and Winner) / Winner
+0.692531010820797
+(Prediction and Winner) / Prediction
+0.7155713116989365
+

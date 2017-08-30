@@ -12,29 +12,33 @@ namespace OddsScrapper
         public string Scrape(string baseWebsite, string[] sports)
         {
             string date = null;
-            foreach(var sport in sports)
+            
+            var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"{Path.GetRandomFileName()}.csv");
+            using (var fileStream = File.AppendText(fileName))
             {
-                var tommorowsGames = GetTommorowGames($"{baseWebsite}/matches/{sport}/");
-                if (tommorowsGames == null)
-                    break;
+                fileStream.WriteLine("Sport,Country,League,Season,Participants,WinningOdd,Bet");
+                foreach (var sport in sports)
+                {
+                    var tommorowsGames = GetTommorowGames($"{baseWebsite}/matches/{sport}/");
+                    if (tommorowsGames == null)
+                        break;
 
-                var s = WriteResultsToFile(tommorowsGames, sport);
-                if (string.IsNullOrEmpty(date))
-                    date = s;
+                    var s = WriteResultsToFile(tommorowsGames, sport, fileStream);
+                    if (string.IsNullOrEmpty(date))
+                        date = s;
+                }
             }
+            File.Copy(fileName, Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"games_{date}.csv"), true);
+            File.Delete(fileName);
 
             return date;
         }
 
-        private string WriteResultsToFile(HtmlDocument tommorowsGames, string sport)
+        private string WriteResultsToFile(HtmlDocument tommorowsGames, string sport, StreamWriter fileStream)
         {
             var date = GetDate(tommorowsGames);
 
-            var fileName = Path.Combine(HelperMethods.GetTommorowsGamesFolderPath(), $"{sport}_{date}.csv");
-            using (var fileStream = File.AppendText(fileName))
             {
-                fileStream.WriteLine("Sport,Country,League,Participants,Odds");
-
                 var div = tommorowsGames.GetElementbyId("table-matches");
                 var table = div.Element(HtmlTagNames.Table);
                 foreach (var tr in table.Element(HtmlTagNames.Tbody).ChildNodes)
@@ -49,15 +53,28 @@ namespace OddsScrapper
                     if (odds.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok")))
                         continue;
 
-                    var goodOdd = odds.FirstOrDefault(s => ArchiveOddsScrapper.GetOddFromTdNode(s) <= 1.5);
-                    if (goodOdd == null)
+                    int oddIndex = -1;
+                    double odd = 0;
+                    for (var i = 0; i < odds.Length; i++)
+                    {
+                        var nodeOdd = ArchiveOddsScrapper.GetOddFromTdNode(odds[i]);
+                        if (nodeOdd <= 1.5)
+                        {
+                            odd = nodeOdd;
+                            oddIndex = i;
+                            break;
+                        }
+                    }
+                    if (oddIndex < 0)
                         continue;
+
+                    int betCombo = HelperMethods.GetBetComboFromIndex(odds.Length, oddIndex);
 
                     var nameTd = tds.First(s => s.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("table-participant"));
                     var nameElement = nameTd.Elements(HtmlTagNames.A).First(s => !string.IsNullOrEmpty(s.GetAttributeValue(HtmlAttributes.Href, null)) &&
                                                                                 !s.Attributes[HtmlAttributes.Href].Value.Contains("javascript"));
 
-                    var name = nameElement.InnerText;
+                    var participants = nameElement.InnerText;
                     var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
                     if (!gameLink.Contains(sport))
                         continue;
@@ -68,7 +85,7 @@ namespace OddsScrapper
                     var country = gameLinkParts[1];
                     var league = gameLinkParts[2];
 
-                    fileStream.WriteLine($"{sport},{country},{league},{name},{String.Join(",", odds.Select(s => s.InnerText).ToArray())}");
+                    fileStream.WriteLine($"{sport},{country},{league},2018,{participants},{odd},{betCombo}");
                 }
             }
 

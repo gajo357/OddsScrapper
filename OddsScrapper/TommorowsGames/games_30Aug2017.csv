@@ -1,0 +1,91 @@
+Sport,Country,League,Season,Participants,WinningOdd,Bet
+soccer,mexico,copa-mexico,2018,Club Tijuana - Atlante,1.33,1
+soccer,russia,division-2-east,2018,Chita - Omsk,1.34,1
+soccer,bangladesh,premier-league,2018,Abahani Limited - Arambagh,1.36,1
+soccer,turkey,turkish-cup,2018,Manisa - Bergama Bld.,1.5,1
+soccer,bangladesh,premier-league,2018,Muktijoddha Sangsad - Abahani Chittagong,1.33,2
+soccer,czech-republic,cfl,2018,Chrudim - Prevysov,1.31,1
+soccer,czech-republic,cfl,2018,Zapy - Nymburk,1.34,1
+soccer,czech-republic,cfl,2018,Domazlice - Cizova,1.21,1
+soccer,czech-republic,cfl,2018,Vltavin - Stechovice,1.43,1
+soccer,fyr-of-macedonia,macedonian-cup,2018,Lok. Skopje - Vardar,1.02,2
+soccer,fyr-of-macedonia,macedonian-cup,2018,KF Gostivar - Shkendija,1.16,2
+soccer,ghana,premier-league,2018,Hearts of Oak - Aduana Stars,1.5,1
+soccer,montenegro,division-2,2018,Mornar Bar - Celik Niksic,1.27,1
+soccer,poland,iii-liga-group-iv-2017-2018,2018,Ostrowiec Swietokrzyski - MKS Trzebinia Siersza,1.36,1
+soccer,poland,iii-liga-group-iv-2017-2018,2018,NKP Podhale Nowy Targ - Spartakus Daleszyce,1.33,1
+soccer,poland,iii-liga-group-iv-2017-2018,2018,R. Rzeszow - Unia Tarnow,1.36,1
+soccer,slovakia,divison-c-bratislava,2018,Vajnory - Raca,1.5,2
+soccer,slovakia,divison-c-bratislava,2018,Slovan Bratislava B - Pezinok,1.05,1
+soccer,slovakia,divison-c-bratislava,2018,Devinska N. Ves - Bahon,1.4,1
+soccer,world,club-friendly,2018,B. Monchengladbach (Ger) - Duisburg (Ger) ,1.49,1
+soccer,denmark,landspokal-cup,2018,Norresundby - Skive,1.26,2
+soccer,denmark,landspokal-cup,2018,RKG - Fredericia,1.11,2
+soccer,denmark,landspokal-cup,2018,Varde - Horsens,1.03,2
+soccer,denmark,landspokal-cup,2018,Vanlose - F. Amager,1.25,2
+soccer,norway,norway-cup-women,2018,Arna-Bjornar W - Grand Bodo W,1.25,1
+soccer,world,club-friendly,2018,Kickers Offenbach (Ger) - Bayern Munich (Ger) ,1.14,2
+soccer,world,club-friendly,2018,NTSV Strand 08 (Ger) - Hamburger SV (Ger) ,1.08,2
+soccer,denmark,3f-ligaen-women,2018,Vejle W - VSK Aarhus W,1.26,2
+soccer,sweden,allsvenskan-women,2018,Bunkeflo W - Rosengard W,1.16,2
+soccer,poland,iii-liga-group-iv-2017-2018,2018,Lublin - Karpaty Krosno,1.36,1
+soccer,world,club-friendly,2018,TV Herkenrath (Ger) - FC Koln (Ger) ,1.13,2
+soccer,spain,copa-del-rey,2018,UD Logrones - Real Aviles,1.09,1
+soccer,spain,copa-del-rey,2018,Murcia - Cacereno,1.29,1
+soccer,world,club-friendly,2018,Guadalajara (Esp) - Leganes (Esp) ,1.11,2
+soccer,world,club-friendly,2018,Massese (Ita) - Genoa (Ita) ,1.1,2
+soccer,scotland,highland-league,2018,Brora Rangers - Forres Mechanics,1.3,1
+soccer,scotland,highland-league,2018,Cove Rangers - Deveronvale,1.12,1
+soccer,scotland,highland-league,2018,Lossiemouth - Fort William,1.22,1
+soccer,scotland,highland-league,2018,Strathspey Thistle - Inverurie Loco Works,1.12,2
+soccer,wales,league-cup,2018,Holywell - Prestatyn,1.42,2
+soccer,scotland,highland-league,2018,Buckie Thistle - Rothes,1.22,1
+soccer,scotland,highland-league,2018,Clachnacuddin - Keith,1.33,1
+soccer,scotland,highland-league,2018,Huntly - Fraserburgh,1.36,2
+soccer,scotland,highland-league,2018,Nairn County - Wick Academy,1.4,1
+basketball,world,americup,2018,Uruguay - USA,1.02,2
+basketball,world,americup,2018,Virgin Islands - Argentina,1.17,2
+basketball,philippines,governors-cup,2018,Blackwater Elite - TNT KaTropa,1.35,2
+basketball,philippines,governors-cup,2018,Phoenix Fuelmasters - Barangay Ginebra San Miguel,1.21,2
+handball,europe,seha-liga,2018,Presov (Svk) - Meshkov Brest (Blr) ,1.28,2
+handball,austria,hla,2018,Linz - Bregenz,1.18,2
+handball,europe,seha-liga,2018,Vojvodina (Srb) - Dinamo (Srb) ,1.24,1
+handball,germany,bundesliga,2018,N-Lubbecke - Kiel,1.06,2
+handball,switzerland,nla,2018,Zurich - HC Kriens,1.25,2
+handball,switzerland,nla,2018,St. Gallen - Kadetten,1.07,2
+handball,switzerland,nla,2018,Wacker Thun - Gossau,1.06,1
+handball,switzerland,nla,2018,Bern - TV Endingen,1.2,1
+handball,france,division-1-women,2018,Fleury Loiret W - Havre W,1.41,1
+handball,france,division-1-women,2018,Bourg De Peage W - Issy W,1.29,2
+handball,switzerland,nla,2018,Suhr Aarau - Pfadi Winterthur,1.2,2
+handball,france,division-1-women,2018,Besancon W - Toulon W,1.5,1
+handball,france,division-1-women,2018,Nice W - Metz W,1.41,2
+handball,norway,grundigligaen-women,2018,Sola W - Storhamar W,1.39,2
+baseball,usa,mlb,2018,Toronto Blue Jays - Boston Red Sox,1.42,2
+baseball,usa,mlb,2018,Chicago Cubs - Pittsburgh Pirates,1.47,1
+baseball,usa,mlb,2018,Minnesota Twins - Chicago White Sox,1.48,1
+baseball,japan,npb,2018,Yomiuri Giants - Hiroshima Carp,1.5,2
+baseball,japan,npb,2018,Nippon Ham Fighters - Fukuoka S. Hawks,1.43,2
+baseball,south-korea,kbo,2018,Samsung Lions - KIA Tigers,1.47,2
+baseball,south-korea,kbo,2018,KT Wiz Suwon - NC Dinos,1.28,2
+baseball,cuba,serie-nacional,2018,Santiago de Cuba - Mayabeque,1.44,1
+baseball,usa,mlb,2018,Washington Nationals - Miami Marlins,1.47,1
+rugby-union,new-zealand,mitre-10-cup,2018,Auckland - Waikato,1.39,1
+water-polo,world,universiade,2018,Hungary Univ. - Japan Univ.,1.16,1
+water-polo,world,universiade,2018,France Univ. - Italy Univ.,1.13,2
+water-polo,world,universiade,2018,Serbia Univ. - Russia Univ.,1.35,1
+volleyball,world,friendly-international-women,2018,USA W - Brazil W,1.27,1
+volleyball,russia,russia-cup,2018,Novokuybyishevsk - Sterlitamak,1.17,1
+volleyball,russia,russia-cup,2018,Yaroslavl - Din. Moscow,1.1,2
+volleyball,russia,russia-cup,2018,Orenburg - Novosibirsk,1.03,2
+volleyball,russia,russia-cup,2018,Zenit Kazan - Dinamo-Lo,1.37,1
+volleyball,russia,russia-cup,2018,Krasnoyarsk - Chelyabinsk,1.17,1
+volleyball,russia,russia-cup,2018,Nizhievartovsk - Groznyj,1.08,1
+volleyball,russia,russia-cup,2018,Kemerovo - Makhachkala,1.25,1
+volleyball,europe,european-championships,2018,Bulgaria - Finland,1.16,1
+volleyball,europe,european-championships,2018,Italy - Turkey,1.2,1
+volleyball,russia,russia-cup,2018,Zenit St. Petersburg - N. Novgorod,1.01,1
+volleyball,russia,russia-cup,2018,Barnaul - Belgorod,1.02,2
+volleyball,russia,russia-cup,2018,Ufa - Lokomotiv Izumrud,1.29,1
+volleyball,europe,european-championships,2018,France - Czech Republic,1.02,1
+volleyball,europe,european-championships,2018,Poland - Slovenia,1.29,1

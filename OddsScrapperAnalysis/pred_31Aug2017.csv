@@ -1,0 +1,54 @@
+Sport,Country,League,Season,Participants,WinningOdd,Bet,SportId,CountryId,LeagueId,HomeTeamId,AwayTeamId,Prediction
+soccer,chile,chilean-cup,2018,Iberia - Colo Colo,1.33,2,9,138,1580,29260,29255,2
+soccer,brazil,brasileiro-u20,2018,Sao Paulo U20 - Chapecoense-SC U20,1.48,1,9,99,1622,0,0,1
+soccer,colombia,copa-aguila,2018,Atl. Nacional - Patriotas,1.21,1,9,79,1570,30228,30222,1
+soccer,brazil,primeira-liga,2018,Cruzeiro - Gremio,1.46,1,9,99,1676,31178,0,1
+soccer,canada,csl,2018,Milton - Vorkuta,1.1,2,9,100,1583,29328,29330,2
+soccer,mexico,copa-mexico,2018,Toluca - Leones Negros,1.39,1,9,83,85,0,0,1
+soccer,costa-rica,primera-division,2018,Santos DG - Guadalupe,1.46,1,9,36,741,18495,0,1
+soccer,turkey,turkish-cup,2018,Duzyurtspor - Hopaspor,1.33,1,9,128,133,0,0,1
+soccer,world,club-friendly,2018,Bayer Leverkusen (Ger) - Bochum (Ger) ,1.46,1,9,97,161,0,0,0
+soccer,europe,euro-u21,2018,Faroe Islands U21 - Denmark U21,1.14,2,9,103,352,32559,32569,2
+soccer,slovakia,slovak-cup,2018,Simonovany - Z. Moravce,1.03,2,9,124,43,4231,4113,1
+soccer,world,club-friendly,2018,Cagliari (Ita) - Tortoli (Ita) ,1.14,1,9,97,161,0,0,1
+soccer,world,friendly-international,2018,Slovenia U19 - Kazakhstan U19,1.18,1,9,97,162,0,0,1
+soccer,europe,euro-u21,2018,Israel U21 - Azerbaijan U21,1.35,1,9,103,352,32621,32615,1
+soccer,europe,euro-u21,2018,Russia U21 - Armenia U21,1.26,1,9,103,352,32631,32590,1
+soccer,world,club-friendly,2018,Hannover (Ger) - Arminia Hannover (Ger) ,1.08,1,9,97,161,0,0,1
+soccer,world,club-friendly,2018,Monaco (Fra) - Nimes (Fra) ,1.29,1,9,97,161,0,0,1
+soccer,europe,euro-u21,2018,Moldova U21 - Croatia U21,1.34,2,9,103,352,32588,32612,2
+soccer,sweden,allsvenskan-women,2018,Goteborg W - Linkopings W,1.47,2,9,111,223,3570,3567,1
+soccer,sweden,division-2-norrland,2018,Skelleftea - Moron,1.18,1,9,111,234,2434,2481,1
+soccer,world,club-friendly,2018,KVV Quick 20 (Ned) - Heracles (Ned) ,1.06,2,9,97,161,0,0,2
+soccer,world,club-friendly,2018,Gutersloh (Ger) - Schalke (Ger) ,1.05,2,9,97,161,0,0,2
+basketball,usa,wnba,2018,Indiana Fever W - Minnesota Lynx W,1.06,2,7,113,1336,27559,27052,2
+basketball,world,americup,2018,Panama - Uruguay,1.02,2,7,97,1375,0,0,2
+handball,germany,bundesliga,2018,SC Magdeburg - Ludwigshafen,1.02,1,6,114,1185,23341,0,1
+handball,germany,bundesliga,2018,HSG Wetzlar - Minden,1.12,1,6,114,1185,23343,23351,1
+handball,germany,bundesliga,2018,Leipzig - Huttenberg,1.11,1,6,114,1185,23353,23329,1
+handball,denmark,888ligaen,2018,Sonderjyske - Skanderborg,1.43,1,6,102,1167,19948,19945,2
+handball,slovakia,extraliga,2018,Modra - Malacky,1.29,1,6,124,1112,23718,23717,1
+handball,europe,seha-liga,2018,PPD Zagreb (Cro) - Nexe (Cro) ,1.26,1,6,103,1144,20048,0,1
+handball,germany,bundesliga,2018,Erlangen - Lemgo,1.38,1,6,114,1185,23340,23346,0
+handball,germany,bundesliga,2018,MT Melsungen - Gummersbach,1.09,1,6,114,1185,23349,23347,1
+handball,germany,bundesliga,2018,Hannover-Burgdorf - Flensburg-H.,1.14,2,6,114,1185,23375,23342,2
+hockey,europe,champions-league,2018,Malmo (Swe) - Stavanger (Nor) ,1.33,1,5,103,1783,0,0,2
+hockey,russia,khl,2018,Bars Kazan - Lada,1.5,1,5,110,1717,36219,36228,1
+hockey,europe,champions-league,2018,Esbjerg (Den) - HV 71 (Swe) ,1.26,2,5,103,1783,0,0,2
+hockey,europe,champions-league,2018,Klagenfurt (Aut) - Frolunda (Swe) ,1.46,2,5,103,1783,0,0,1
+hockey,europe,champions-league,2018,Zug (Sui) - Neman Grodno (Blr) ,1.27,1,5,103,1783,0,0,2
+hockey,europe,champions-league,2018,Zurich (Sui) - Gap (Fra) ,1.03,1,5,103,1783,0,0,0
+hockey,europe,champions-league,2018,Cardiff (Gbr) - Liberec (Cze) ,1.24,2,5,103,1783,0,0,2
+hockey,europe,champions-league,2018,Nottingham (Gbr) - Mountfield HK (Cze) ,1.31,2,5,103,1783,35469,0,2
+baseball,usa,mlb,2018,Houston Astros - Texas Rangers,1.47,1,8,113,1306,0,25939,2
+baseball,usa,mlb,2018,Chicago Cubs - Pittsburgh Pirates,1.47,1,8,113,1306,25952,25940,2
+baseball,usa,mlb,2018,Minnesota Twins - Chicago White Sox,1.42,1,8,113,1306,25941,25967,1
+baseball,japan,npb,2018,Chunichi Dragons - Yokohama Baystars,1.48,2,8,82,1307,25482,25481,1
+baseball,japan,npb,2018,Hanshin Tigers - Yakult Swallows,1.47,1,8,82,1307,25497,25511,1
+american-football,usa,ncaa,2018,UCF - FIU,1.08,1,1,113,1273,25988,26041,1
+rugby-league,australia,nrl,2018,NQ Cowboys - Brisbane Broncos,1.49,2,4,94,1860,34743,34736,1
+rugby-league,england,super-league,2018,Leeds Rhinos - Hull FC,1.32,1,4,66,1845,38108,38009,2
+rugby-union,new-zealand,mitre-10-cup,2018,Bay of Plenty - Wellington,1.38,2,3,133,1531,37716,37715,2
+volleyball,world,world-championship,2018,Argentina - Chile,1.01,1,2,97,719,14182,0,1
+volleyball,europe,european-championships,2018,Serbia - Bulgaria,1.39,1,2,103,543,11874,11872,1
+volleyball,russia,russia-cup,2018,Lokomotiv Izumrud - Novyi Urengoy,1.29,2,2,110,660,13378,13371,1

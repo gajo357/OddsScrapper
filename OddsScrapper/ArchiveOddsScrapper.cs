@@ -10,6 +10,37 @@ namespace OddsScrapper
     {
         private HtmlReader WebReader { get; } = new HtmlReader();
 
+        public void GetRecentResults(string baseWebsite, string[] sports)
+        {
+            // page with results of all sports
+            var leaguesPage = ReadLeaguesPage(baseWebsite, sports[0]);
+            if (leaguesPage == null)
+                return;
+
+            var filename = Path.Combine(HelperMethods.GetArchiveFolderPath(), $"recentdata.csv");
+            using (var fileStream = File.AppendText(filename))
+            {
+                fileStream.WriteLine("Sport,Country,League,Season,Participants,Best Odd,Your Bet,Winning Bet");
+
+                foreach (var sport in sports)
+                {
+                    foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
+                    {
+                        Console.WriteLine(league.Name);
+
+                        var resultsPage = WebReader.GetHtmlFromWebpage($"{baseWebsite}{league.Link}", TournamentTableDivLoaded);
+                        foreach (var resultLine in ReadResultsFromPage(resultsPage))
+                        {
+                            if (string.IsNullOrEmpty(resultLine))
+                                continue;
+
+                            fileStream.WriteLine($"{sport},{league.Country},{league.Name},2018,{resultLine}");
+                        }
+                    }
+                }
+            }
+        }
+        
         public void Scrape(string baseWebsite, string[] sports)
         {
             // page with results of all sports

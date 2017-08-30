@@ -23,15 +23,16 @@ namespace OddsScrapper
         public static void Main(string[] args)
         {
             //var scrapper = new ArchiveOddsScrapper();
+            //scrapper.GetRecentResults(BaseWebsite, AllSports);
             //scrapper.Scrape(BaseWebsite, AllSports);
 
             //var analyser = new ArchiveDataAnalysis();
             //analyser.Analyse();
 
-            var scrapper = new CommingMatchesScrapper();
-            var date = scrapper.Scrape(BaseWebsite, AllSports);
+            var commingMatches = new CommingMatchesScrapper();
+            var date = commingMatches.Scrape(BaseWebsite, AllSports);
 
-            //var date = "28Aug2017";
+            //var date = "30Aug2017";
             var matcher = new OddsMatcher();
             matcher.MatchGamesWithArchivedData(date);
         }
