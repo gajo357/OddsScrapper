@@ -1,0 +1,17 @@
+Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,WinningOdd,Bet
+soccer,germany,regionalliga-west,154,0.8065,0.1431,0.4194,RW Essen - Wiedenbruck,1.5,1
+soccer,sweden,division-2-ostra-gotaland,85,0.8024,0.1687,0.4071,Hassleholms IF - Rappe GOIF,1.5,1
+soccer,germany,regionalliga-bayern,111,0.8572,0.0715,0.3811,Munich 1860 - Ingolstadt II,1.3,1
+soccer,russia,division-2-ural-povolzhye,134,0.8296,0.0069,0.2616,M. Saransk - Anzhi-Junior Zelenodolsk,1.3,1
+soccer,europe,euro-u21,230,0.7056,-0.0035,0.0657,Switzerland U21 - Wales U21,1.46,1
+soccer,world,friendly-international,369,0.8000,-0.0526,0.0002,Germany U21 - Hungary U21,1.25,1
+soccer,world,friendly-international,479,0.6875,-0.0362,-0.0071,Austria U21 - Finland U21,1.45,1
+soccer,russia,division-2-ural-povolzhye,120,0.6777,-0.0447,-0.0898,Chelyabinsk - Lada Togliatti,1.42,1
+soccer,ireland,division-1,219,0.6591,-0.0708,-0.0985,Waterford - Shelbourne,1.45,1
+soccer,slovakia,2-liga,204,0.6439,-0.0931,-0.1473,Skalica - Sered,1.45,1
+soccer,england,fa-cup,467,0.7884,-0.0701,-0.1734,Kingstonian - Shoreham,1.22,1
+soccer,netherlands,eerste-divisie,540,0.6340,-0.1047,-0.2171,Maastricht - Den Bosch,1.43,1
+soccer,mexico,copa-mexico,125,0.6190,-0.1371,-0.2880,U.N.A.M.- Pumas - Celaya,1.42,1
+soccer,romania,liga-2,30,0.5806,-0.1480,-0.3946,Targu Mures - Braila,1.43,1
+soccer,argentina,copa-argentina,55,0.3929,-0.4484,-0.8989,Talleres Cordoba - Gimnasia Mendoza,1.47,1
+basketball,philippines,governors-cup,63,0.6093,-0.2627,-0.9534,TNT KaTropa - Global Port,1.25,1

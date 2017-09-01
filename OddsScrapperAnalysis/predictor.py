@@ -91,13 +91,14 @@ def predict_results(db_name, games_to_bet_file, date_of_bet):
     reg = joblib.load('models/model.pkl')
     predictions = reg.predict(games)
     probabilities = reg.predict_proba(games)
-
+    print(probabilities)
+    
     games_df['Prediction'] = predictions.tolist()
 
     games_df.to_csv('pred_{}.csv'.format(date_of_bet), index=False)
 
 if __name__ == '__main__':
-    date_str = '31Aug2017'
+    date_str = '01Sep2017'
 
     db = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsWebsite', 'ArchiveData.db'))

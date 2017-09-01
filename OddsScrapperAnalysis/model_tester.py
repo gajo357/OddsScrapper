@@ -94,8 +94,19 @@ def predict_results(db_name, games_to_bet_file):
 
     reg = joblib.load('models/model.pkl')
     predictions = reg.predict(games)
+    probabilities = reg.predict_proba(games)
+    draw = []
+    home = []
+    away = []
+    for d, h, a in probabilities:
+        draw.append(d)
+        home.append(h)
+        away.append(a)
 
     games_df['Prediction'] = predictions.tolist()
+    games_df['HomeProba'] = home
+    games_df['DrawProba'] = draw
+    games_df['AwayProba'] = away
 
     games_df.to_csv('pred.csv', index=False)
 
@@ -130,7 +141,7 @@ def analyse_result():
     all_data = pd.read_csv('pred.csv', encoding="ISO-8859-1")
     # no duplicates
     all_data = all_data[~all_data['Duplicate']]
-    all_data = all_data[all_data['WinningOdd'] <= 1.35]
+    #all_data = all_data[all_data['WinningOdd'] <= 1.35]
     # known teams
     #all_data = all_data[(all_data['HomeTeamId'] > 0) & (all_data['AwayTeamId'] > 0)]
 
@@ -154,13 +165,13 @@ def analyse_result():
     
 if __name__ == '__main__':
     # db = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-    #                         os.pardir, 'OddsWebsite', 'ArchiveData.db'))
+    #                         os.pardir, 'ArchiveData.db'))
     
     # games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
     #                        os.pardir, 'OddsScrapper', 'Archive', 'recentdata.csv'))
 
-    #predict_results(db, games_file)
-    #predict_results('', '')
+    # predict_results(db, games_file)
+    predict_results('', '')
     analyse_result()
 
     pass
