@@ -1,0 +1,83 @@
+handball
+
+BET
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       199
+          1       0.79      0.90      0.84      2029
+          2       0.78      0.71      0.74      1265
+
+avg / total       0.74      0.78      0.76      3493
+
+NB
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00       199
+          1       0.79      0.90      0.84      2029
+          2       0.78      0.71      0.74      1265
+
+avg / total       0.74      0.78      0.76      3493
+
+DTC
+             precision    recall  f1-score   support
+
+          0       0.07      0.12      0.09       199
+          1       0.75      0.76      0.76      2029
+          2       0.67      0.58      0.62      1265
+
+avg / total       0.68      0.66      0.67      3493
+
+DTC
+             precision    recall  f1-score   support
+
+          0       0.04      0.01      0.02       145
+          1       0.79      0.84      0.81      1575
+          2       0.70      0.69      0.70       948
+
+avg / total       0.71      0.74      0.73      2668
+
+ETC
+             precision    recall  f1-score   support
+
+          0       0.09      0.06      0.07       199
+          1       0.76      0.86      0.81      2029
+          2       0.75      0.63      0.68      1265
+
+avg / total       0.72      0.73      0.72      3493
+
+ETC
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00        62
+          1       0.84      0.93      0.89       848
+          2       0.83      0.78      0.80       479
+
+avg / total       0.80      0.84      0.82      1389
+
+KN
+             precision    recall  f1-score   support
+
+          0       0.08      0.03      0.04       199
+          1       0.68      0.79      0.73      2029
+          2       0.57      0.48      0.52      1265
+
+avg / total       0.61      0.63      0.62      3493
+
+KN
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00        48
+          1       0.80      0.93      0.86       640
+          2       0.74      0.57      0.64       274
+
+avg / total       0.75      0.78      0.75       962
+
+ALL
+             precision    recall  f1-score   support
+
+          0       0.00      0.00      0.00        92
+          1       0.83      0.95      0.88      1256
+          2       0.81      0.67      0.73       576
+
+avg / total       0.78      0.82      0.80      1924
+

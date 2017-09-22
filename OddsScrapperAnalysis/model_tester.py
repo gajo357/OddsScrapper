@@ -5,11 +5,9 @@
 import os
 import sqlite3
 import pandas as pd
+from sklearn.metrics import classification_report, precision_recall_fscore_support
 from sklearn.externals import joblib
-from model_builder import features
-
-sports = [(1, 'american-football'), (2, 'volleyball'), (3, 'rugby-union'), (4, 'rugby-league'), (5, 'hockey'), (6, 'handball'), (7, 'basketball'), (8, 'baseball'), (9, 'soccer'), (10, 'water-polo')]
-
+from model_builder import features, sports
 
 def get_participant(participants, first):
     pars = participants.replace("&nbsp;", '').replace("\'", '').split(' - ', 1)
@@ -86,29 +84,31 @@ def prepare_games(db_name, games_to_bet_file):
 
     return games_df
 
-def predict_results(db_name, games_to_bet_file):
+def predict_results(db_name, games_to_bet_file, reg):
     #games_df = prepare_games(db_name, games_to_bet_file)
-    games_df = pd.read_csv('pred.csv', encoding="ISO-8859-1")
-    
+    games_df = pd.read_csv('pred.csv', encoding="ISO-8859-1")    
     games = games_df.as_matrix(features)
 
-    reg = joblib.load('models/model.pkl')
     predictions = reg.predict(games)
     probabilities = reg.predict_proba(games)
+
     draw = []
     home = []
     away = []
-    for d, h, a in probabilities:
+    for i, proba in enumerate(probabilities):
+        (d, h, a) = proba
         draw.append(d)
         home.append(h)
         away.append(a)
+        if proba[predictions[i]] < 0.9:
+            predictions[i] = 3
 
     games_df['Prediction'] = predictions.tolist()
     games_df['HomeProba'] = home
     games_df['DrawProba'] = draw
     games_df['AwayProba'] = away
 
-    games_df.to_csv('pred.csv', index=False)
+    return games_df
 
 def analyse_data(data, bet_name, winner_name, prediction_name, bet):
     data_count = data.shape[0]
@@ -137,32 +137,31 @@ def analyse_data(data, bet_name, winner_name, prediction_name, bet):
         print(prediction_winner * 1.0 / predictions_count)
     print()
 
-def analyse_result():
-    all_data = pd.read_csv('pred.csv', encoding="ISO-8859-1")
+def analyse_result(all_data):
+
     # no duplicates
-    all_data = all_data[~all_data['Duplicate']]
     #all_data = all_data[all_data['WinningOdd'] <= 1.35]
     # known teams
     #all_data = all_data[(all_data['HomeTeamId'] > 0) & (all_data['AwayTeamId'] > 0)]
 
+    report = "Sport,SportId,Precision0,Precision1,Precision2"
+    report += '\n'
     for sport_id, sport in sports:        
         data = all_data[all_data['SportId'] == sport_id]
 
         print(sport)
         
-        data_count = data.shape[0]
-        print('data count')
-        print(data_count)
         print()
-        
-        print('{0} - {1}'.format('Winner', 'Prediction'))
-        print(pd.crosstab(data['Winner'], data['Prediction'], rownames=['True'], colnames=['Predicted'], margins=True))
-        print()
+        p, r, f1, s = precision_recall_fscore_support(data['Winner'].values, data['Prediction'].values, 
+                                                    labels=[0, 1, 2, 3], average=None, sample_weight=None)
+        report += '{0},{1},{2},{3},{4}'.format(sport, sport_id,p[0],p[1],p[2])
+        report += '\n'
+            
+        print(classification_report(data['Winner'].values, data['Prediction'].values))     
 
-        analyse_data(data, 'Bet', 'Winner', 'Prediction', 1)
-        analyse_data(data, 'Bet', 'Winner', 'Prediction', 0)
-        analyse_data(data, 'Bet', 'Winner', 'Prediction', 2)        
-    
+    with open("output.csv", "w") as text_file:
+        text_file.write(report)
+
 if __name__ == '__main__':
     # db = os.path.abspath(os.path.join(os.path.dirname(__file__),\
     #                         os.pardir, 'ArchiveData.db'))
@@ -170,8 +169,10 @@ if __name__ == '__main__':
     # games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
     #                        os.pardir, 'OddsScrapper', 'Archive', 'recentdata.csv'))
 
-    # predict_results(db, games_file)
-    predict_results('', '')
-    analyse_result()
-
+    #clf = joblib.load('models/model.pkl')
+    #pred_df = predict_results(db, games_file, clf)
+    # pred_df = predict_results('', '', clf)
+    # pred_df.to_csv('pred.csv', index=False)
+    pred_data = pd.read_csv('test_predictions.csv', encoding="ISO-8859-1")
+    analyse_result(pred_data)
     pass

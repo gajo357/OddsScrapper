@@ -7,7 +7,6 @@ namespace OddsScrapper
 {
     public class OddsMatcher
     {
-        private const string BetsFolderName = "GamesToBet";
         public void MatchGamesWithArchivedData(string date)
         {
             var games = GetAllTommorowsGames(date);
@@ -30,55 +29,14 @@ namespace OddsScrapper
             positiveData = MatchTwoArchives(dataBySeasonsHome, dataAllPositive);
             MatchGames(positiveData, games, date, "positive_2");
 
-            var allGames1 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All));
-            MatchGames(allGames1, games, date, "all_1", g => g.Kelly);
+            var allGames1 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All)).ToList();
+            var allGames2 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(2, ResultType.All));
+            allGames1.AddRange(allGames2);
+            MatchGames(allGames1.ToArray(), games, date, "all", g => g.Kelly);
 
-            var allGames2 = GetArchivedData(HelperMethods.GetAnalysedResultsFile(1, ResultType.All));
-            MatchGames(allGames2, games, date, "all_2", g => g.Kelly);
-
-            //WriteMustWinGames(games, date);
+            //MatchGames(allGames2, games, date, "all_2", g => g.Kelly);
         }
-
-        private void WriteMustWinGames(IList<GameInfo> games, string date)
-        {
-            const string headerLine = "Sport,Country,League,Participants,Odds,Must Win";
-
-            using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetSolutionDirectory(), BetsFolderName, $"MustWin_{date}.csv")))
-            {
-                var headerWritten = false;
-                foreach (var game in games)
-                {
-                    var mustWinBets = GetMustWinBets(game.Odds);
-                    if (!mustWinBets)
-                        continue;
-
-                    if(!headerWritten)
-                    {
-                        fileStream.WriteLine(headerLine);
-                        headerWritten = true;
-                    }
-
-                    var line = $"{game.Sport},{game.Country},{game.League},{game.Participants},{game.BestOdd},{game.Bet}";
-                    fileStream.WriteLine(line);
-                }
-            }
-        }
-
-        private bool GetMustWinBets(double[] odds)
-        {
-            if(odds.Length == 2)
-            {                
-                return ((odds[0] - 1.0) * (odds[1] - 1.0)) > 1.0;
-            }
-
-            if(odds.Length == 3)
-            {
-                return ((odds[0] * (odds[1] + odds[2])) / (odds[1]* odds[2]*(odds[0] - 1.0))) < 1.0;
-            }
-
-            return false;
-        }
-
+        
         /// <summary>
         /// Get the data that is positive in both All and BySeasons categories
         /// </summary>
@@ -114,7 +72,7 @@ namespace OddsScrapper
 
             var filteredGames = GetFilteredGames(archivedData, games, fileName);
 
-            using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetSolutionDirectory(), BetsFolderName, $"GamesToBet_{date}_{fileName}.csv")))
+            using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetGamesToBetFolderPath(), $"GamesToBet_{date}_{fileName}.csv")))
             {
                 var headerLine = "Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,WinningOdd,Bet";
                 fileStream.WriteLine(headerLine);
@@ -129,11 +87,13 @@ namespace OddsScrapper
 
         private IEnumerable<GameInfo> GetFilteredGames(LeagueTypeData[] archivedData, IEnumerable<GameInfo> games, string fileName)
         {
-            var bet = int.Parse(fileName.Last().ToString());
+            int bet;
+            if(!int.TryParse(fileName.Last().ToString(), out bet))
+                bet = -1;
 
             foreach (var game in games)
             {
-                if (bet != game.Bet)
+                if (bet >= 0 && bet != game.Bet)
                     continue;
 
                 LeagueTypeData league = archivedData.FirstOrDefault(s => s.Info.Sport == game.Sport &&

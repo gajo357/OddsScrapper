@@ -91,20 +91,33 @@ def predict_results(db_name, games_to_bet_file, date_of_bet):
     reg = joblib.load('models/model.pkl')
     predictions = reg.predict(games)
     probabilities = reg.predict_proba(games)
-    print(probabilities)
     
+    draw = []
+    home = []
+    away = []
+    for i, proba in enumerate(probabilities):
+        (d, h, a) = proba
+        draw.append(d)
+        home.append(h)
+        away.append(a)
+        if proba[predictions[i]] < 0.8:
+            predictions[i] = 3
+
     games_df['Prediction'] = predictions.tolist()
+    games_df['HomeProba'] = home
+    games_df['DrawProba'] = draw
+    games_df['AwayProba'] = away
 
     games_df.to_csv('pred_{}.csv'.format(date_of_bet), index=False)
 
 if __name__ == '__main__':
-    date_str = '01Sep2017'
+    date_str = '02Sep2017'
 
     db = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsWebsite', 'ArchiveData.db'))
 
     games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-                            os.pardir, 'OddsScrapper', 'TommorowsGames', 'games_{}.csv'.format(date_str)))
+                            os.pardir, 'OddsScrapper', 'GamesToBet', 'GamesToBet_{}_all.csv'.format(date_str)))
 
     predict_results(db, games_file, date_str)
 

@@ -1,0 +1,13 @@
+DELETE   FROM Games
+WHERE    rowid NOT IN
+         (
+         SELECT  min(rowid)
+         FROM    Games
+         GROUP BY
+                 Date,
+                 HomeTeamId,
+                 AwayTeamId,
+                 HomeTeamScore,
+                 AwayTeamScore
+         );
+SELECT count(*) FROM Games;

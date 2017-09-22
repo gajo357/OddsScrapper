@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
+using OddsScrapper.DbModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -9,6 +11,7 @@ namespace OddsScrapper
     public class ArchiveOddsScrapper
     {
         private HtmlReader WebReader { get; } = new HtmlReader();
+        private DbRepository DbRepository { get; } = new DbRepository(Path.Combine(HelperMethods.GetSolutionDirectory(), "ArchiveData1.db")); 
 
         public void GetRecentResults(string baseWebsite, string[] sports)
         {
@@ -31,8 +34,8 @@ namespace OddsScrapper
                         var resultsPage = WebReader.GetHtmlFromWebpage($"{baseWebsite}{league.Link}", TournamentTableDivLoaded);
                         foreach (var resultLine in ReadResultsFromPage(resultsPage))
                         {
-                            if (string.IsNullOrEmpty(resultLine))
-                                continue;
+                            //if (string.IsNullOrEmpty(resultLine))
+                            //    continue;
 
                             fileStream.WriteLine($"{sport},{league.Country},{league.Name},2018,{resultLine}");
                         }
@@ -50,55 +53,52 @@ namespace OddsScrapper
 
             foreach (var sport in sports)
             {
-                var leagueFileName = Path.Combine(HelperMethods.GetArchiveFolderPath(), $"leagues_{sport}.txt");
-                File.AppendAllLines(leagueFileName, new[] { "Sport,Country,LeagueName,IsFirst" });
+                var sportId = DbRepository.GetSportId(sport);
+
                 foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
                 {
-                    var fileName = HelperMethods.MakeValidFileName($"{league.Sport}_{league.Country}_{league.Name}.csv");
-
-                    Console.WriteLine(fileName);
-                    File.AppendAllLines(leagueFileName, new[] { league.ToString() });
-                    using (var fileStream = File.AppendText(Path.Combine(HelperMethods.GetArchiveFolderPath(), fileName)))
+                    if(sport == "soccer" && string.CompareOrdinal(league.Country, "england") <= 0)
                     {
-                        fileStream.WriteLine("Season,Participants,Best Odd,Your Bet,Winning Bet");
+                        continue;
+                    }
 
-                        var seasons = ReadSeasons($"{baseWebsite}{league.Link}");
-                        if (seasons == null)
-                            continue;
-                        foreach (var seasonInfo in seasons)
+                    var countryId = DbRepository.GetOrCreateCountryId(league.Country);
+                    var leagueId = DbRepository.GetOrCreateLeagueId(sportId, countryId, league);
+
+                    Console.WriteLine(league.Name);
+
+                    var seasons = ReadSeasons(WebReader, $"{baseWebsite}{league.Link}");
+                    if (seasons == null)
+                        continue;
+                    foreach (var seasonInfo in seasons)
+                    {
+                        var seasonLink = seasonInfo.Item2;
+                        int season;
+                        if(!int.TryParse(seasonInfo.Item1, out season))
+                            season = DateTime.Now.Year;
+
+                        Console.WriteLine(seasonLink);
+                        foreach (var resultsPage in ReadSeasonPages(WebReader, $"{baseWebsite}{seasonLink}"))
                         {
-                            var seasonLink = seasonInfo.Item2;
-                            var season = seasonInfo.Item1;
-
-                            Console.WriteLine(seasonLink);
-                            foreach (var resultsPage in ReadSeasonPages($"{baseWebsite}{seasonLink}"))
-                            {
-                                foreach (var resultLine in ReadResultsFromPage(resultsPage))
-                                {
-                                    if (string.IsNullOrEmpty(resultLine))
-                                        continue;
-
-                                    fileStream.WriteLine($"{season},{resultLine}");
-                                }
-                            }
+                            DbRepository.InsertGames(leagueId, season, ReadResultsFromPage(resultsPage));
                         }
                     }
                 }
             }
         }
 
-        private IEnumerable<string> ReadResultsFromPage(HtmlDocument resultsPage)
+        private IEnumerable<Game> ReadResultsFromPage(HtmlDocument resultsPage)
         {
             var resultsDiv = FindResultsDiv(resultsPage);
             if (resultsDiv == null)
-                return new string[] { };
+                return Enumerable.Empty<Game>();
 
             return FindAndReadResultsTable(resultsDiv);
         }
 
-        private IEnumerable<HtmlDocument> ReadSeasonPages(string link)
+        private IEnumerable<HtmlDocument> ReadSeasonPages(HtmlReader reader, string link)
         {
-            var seasonHtml = WebReader.GetHtmlFromWebpage(link, TournamentTableDivLoaded);
+            var seasonHtml = reader.GetHtmlFromWebpage(link, TournamentTableDivLoaded);
 
             // first page of the season
             var divTable = FindResultsDiv(seasonHtml);
@@ -117,18 +117,18 @@ namespace OddsScrapper
                     resultPage.FirstChild.GetAttributeValue(HtmlAttributes.Class, null) != "arrow")
                 {
                     var pagePage = resultPage.Attributes[HtmlAttributes.Href].Value;
-                    var pageResult = WebReader.GetHtmlFromWebpage(pagePage, TournamentTableDivLoaded);
+                    var pageResult = reader.GetHtmlFromWebpage(pagePage, TournamentTableDivLoaded);
                     yield return pageResult;
                 }
             }
         }
 
-        private IEnumerable<Tuple<string, string>> ReadSeasons(string link)
+        private IEnumerable<Tuple<string, string>> ReadSeasons(HtmlReader reader, string link)
         {
             var nextYear = "2018";
-            var lastYear = new[] { "1999", "1998", "1997", "1996" };
+            var lastYear = new[] { "1995", "1994", "1993", "1992" };
 
-            var html = WebReader.GetHtmlFromWebpage(link);
+            var html = reader.GetHtmlFromWebpage(link);
             if (html == null)
                 yield break;
 
@@ -163,6 +163,8 @@ namespace OddsScrapper
             return leaguesPage;
         }
 
+        private string[] CupNames = new[] { "cup", "copa", "cupen", "coupe", "coppa" };
+        private string Women = "women";
         private IEnumerable<LeagueInfo> ReadLeaguesForSport(HtmlDocument page, string sport)
         {
             var results = new List<LeagueInfo>();
@@ -213,9 +215,11 @@ namespace OddsScrapper
                         league.IsFirst = true;
                         leagueCountryCount.Add(country, 1);
                     }
+                    league.Sport = sport;
 
                     var leagueNameParts = leagueName.Split('-');
-                    league.Sport = sport;
+                    league.IsCup = CupNames.Any(leagueNameParts.Contains);
+                    league.IsWomen = leagueNameParts.Contains(Women);
 
                     results.Add(league);
                 }
@@ -231,64 +235,144 @@ namespace OddsScrapper
             return divs?.FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Id, null) == "tournamentTable");
         }
 
-        private IEnumerable<string> FindAndReadResultsTable(HtmlNode divNode)
+        private IEnumerable<Game> FindAndReadResultsTable(HtmlNode divNode)
         {
+            const string dateFromat = "dd MMM yyyy";
+
             var resultsTable = divNode.Element(HtmlTagNames.Table);
             if (resultsTable == null)
                 yield break;
 
+            var date = DateTime.MinValue;
+            var isPlayoffs = false;
             foreach (var tr in resultsTable.Element(HtmlTagNames.Tbody).ChildNodes)
             {
                 var attribute = tr.GetAttributeValue(HtmlAttributes.Class, null);
-                if (string.IsNullOrEmpty(attribute) ||
-                    !attribute.Contains("deactivate"))
+                if (string.IsNullOrEmpty(attribute))
                     continue;
 
-                var participants = string.Empty;
-                var participantElement = tr.Elements(HtmlTagNames.Td).FirstOrDefault(s => s.Attributes[HtmlAttributes.Class].Value.Contains("name table-participant"));
-                if (participantElement != null)
-                    participants = participantElement.InnerText;
-
-                var odds = tr.Elements(HtmlTagNames.Td).Where(s => s.Attributes[HtmlAttributes.Class].Value.Contains("odds-nowrp")).ToArray();
-                // has a winner?
-                if (!odds.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok")))
-                    continue;
-
-                int winIndex = -1;
-                int oddIndex = -1;
-                double odd = 0;
-                for (var i = 0; i < odds.Length; i++)
+                if (attribute.Contains("center nob-border"))
                 {
-                    var nodeOdd = GetOddFromTdNode(odds[i]);
-                    if (nodeOdd <= 1.5)
+                    // date
+                    var dateElement = tr.Element("th").Element(HtmlTagNames.Span);
+                    if (dateElement == null)
+                        continue;
+
+                    var dateAttribute = dateElement.GetAttributeValue(HtmlAttributes.Class, null);
+                    if (string.IsNullOrEmpty(dateAttribute) || !dateAttribute.Contains("datet"))
+                        continue;
+
+                    isPlayoffs = tr.InnerText.Contains("Play Offs");
+
+
+                    var dateString = dateElement.InnerText;
+                    if (dateString.Contains(","))
                     {
-                        odd = nodeOdd;
-                        oddIndex = i;
+                        dateString = dateString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)[1];
+                        var year = DateTime.Now.Year;
+                        dateString = $"{dateString} {year}";
                     }
 
-                    if (odds[i].Attributes[HtmlAttributes.Class].Value.Contains("result-ok"))
-                        winIndex = i;
+                    DateTime.TryParseExact($"{dateString}", dateFromat, null, DateTimeStyles.None, out date);
+
+                    continue;
                 }
 
-                if (winIndex < 0 ||
-                    oddIndex < 0)
+                if (!attribute.Contains("deactivate"))
                     continue;
-                
+
+                var oddTags = tr.Elements(HtmlTagNames.Td).Where(s => s.Attributes[HtmlAttributes.Class].Value.Contains("odds-nowrp")).ToArray();
+                // has a winner?
+                if (!oddTags.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok")))
+                    continue;
+
+                var participantsString = string.Empty;
+                var participantElement = tr.Elements(HtmlTagNames.Td).FirstOrDefault(s => s.Attributes[HtmlAttributes.Class].Value.Contains("name table-participant"));
+                if (participantElement != null)
+                    participantsString = participantElement.InnerText;
+
+                var scoreString = string.Empty;
+                var scoreElement = tr.Elements(HtmlTagNames.Td).FirstOrDefault(s => s.Attributes[HtmlAttributes.Class].Value.Contains("table-score"));
+                if (scoreElement != null)
+                    scoreString = scoreElement.InnerText;
+
+                int winIndex = -1;
+                int lowestOddIndex = -1;
+                var lowestOdd = double.MaxValue;
+                double homeOdd = 0;
+                double drawOdd = 0;
+                double awayOdd = 0;
+                for (var i = 0; i < oddTags.Length; i++)
+                {
+                    var nodeOdd = HelperMethods.GetOddFromTdNode(oddTags[i]);
+                    if (i == 0)
+                    {
+                        homeOdd = nodeOdd;
+                    }
+                    else if (i == 1 && oddTags.Length == 3)
+                    {
+                        drawOdd = nodeOdd;
+                    }
+                    else
+                    {
+                        awayOdd = nodeOdd;
+                    }
+
+                    if (nodeOdd < lowestOdd)
+                    {
+                        lowestOdd = nodeOdd;
+                        lowestOddIndex = i;
+                    }
+
+                    if (oddTags[i].Attributes[HtmlAttributes.Class].Value.Contains("result-ok"))
+                    {
+                        winIndex = i;
+                    }
+                }
+
                 // 1 is home win, 2 is away win, 0 is draw
-                int winCombo = HelperMethods.GetBetComboFromIndex(odds.Length, winIndex);
-                int betCombo = HelperMethods.GetBetComboFromIndex(odds.Length, oddIndex);
+                int winCombo = HelperMethods.GetBetComboFromIndex(oddTags.Length, winIndex);
+                int betCombo = HelperMethods.GetBetComboFromIndex(oddTags.Length, lowestOddIndex);
 
-                yield return $"{participants},{odd},{betCombo},{winCombo}";
+                var participants = participantsString.Replace("&nbsp;", string.Empty).Replace("&amp;", "and").Replace("'", " ").Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+                if (participants.Length < 2)
+                    continue;
+
+                var isOvertime = false;
+                if (scoreString.Contains("&nbsp;"))
+                    //|| scoreString.Contains("OT") 
+                    //|| scoreString.Contains("pen.")
+                    //|| scoreString.Contains("ET"))
+                {
+                    isOvertime = true;
+                    scoreString = scoreString.Remove(scoreString.IndexOf("&nbsp;"));
+                }
+                var scores = scoreString.Split(new[] { ':', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                if (scores.Length < 2)
+                    continue;
+                int homeScore;
+                if (!int.TryParse(scores[0], out homeScore))
+                    continue;
+                int awayScore;
+                if (!int.TryParse(scores[1], out awayScore))
+                    continue;
+
+                var game = new Game();
+                game.HomeTeam = participants[0];
+                game.AwayTeam = participants[1];
+                game.HomeOdd = homeOdd;
+                game.DrawOdd = drawOdd;
+                game.AwayOdd = awayOdd;
+                game.Bet = betCombo;
+                game.Winner = winCombo;
+                game.Date = date;
+                game.IsOvertime = isOvertime;
+                game.IsPlayoffs = isPlayoffs;
+                game.HomeTeamScore = homeScore;
+                game.AwayTeamScore = awayScore;
+
+                yield return game;
             }
-        }
-
-        public static double GetOddFromTdNode(HtmlNode tdNode)
-        {
-            double odd;
-            if (double.TryParse(tdNode.FirstChild.InnerText, out odd))
-                return odd;
-
-            return double.NaN;
         }
 
         private static bool LeaguesTableLoaded(System.Windows.Forms.WebBrowser webBrowser)

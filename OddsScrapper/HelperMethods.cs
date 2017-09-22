@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using HtmlAgilityPack;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace OddsScrapper
@@ -20,20 +21,26 @@ namespace OddsScrapper
         public const string ArchiveFolder = "Archive";
         public const string TommorowsGamesFolder = "TommorowsGames";
         public const string AnalysedArchivedDataFolder = "AnalysedArchivedData";
-        
+        public const string BetsFolderName = "GamesToBet";
+
         public static string GetArchiveFolderPath()
         {
-            return Path.Combine(GetSolutionDirectory(), ArchiveFolder);
+            return Path.Combine(GetProjectDirectory(), ArchiveFolder);
         }
 
         public static string GetAnalysedArchivedDataFolderPath()
         {
-            return Path.Combine(GetSolutionDirectory(), AnalysedArchivedDataFolder);
+            return Path.Combine(GetProjectDirectory(), AnalysedArchivedDataFolder);
         }
 
         public static string GetTommorowsGamesFolderPath()
         {
-            return Path.Combine(GetSolutionDirectory(), TommorowsGamesFolder);
+            return Path.Combine(GetProjectDirectory(), TommorowsGamesFolder);
+        }
+
+        public static string GetGamesToBetFolderPath()
+        {
+            return Path.Combine(GetProjectDirectory(), BetsFolderName);
         }
 
         public static string GetAnalysedResultsFile(int bet, ResultType resultType)
@@ -100,6 +107,11 @@ namespace OddsScrapper
 
         public static string GetSolutionDirectory()
         {
+            return Directory.GetParent(GetProjectDirectory()).FullName;
+        }
+
+        public static string GetProjectDirectory()
+        {
             return Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
         }
 
@@ -137,6 +149,15 @@ namespace OddsScrapper
         public static double CalculateKellyCriterionPercentage(double odd, double successRate)
         {
             return (successRate * odd - 1) / (odd - 1);
+        }
+
+        public static double GetOddFromTdNode(HtmlNode tdNode)
+        {
+            double odd;
+            if (double.TryParse(tdNode.FirstChild.InnerText, out odd))
+                return odd;
+
+            return double.NaN;
         }
     }
 }
