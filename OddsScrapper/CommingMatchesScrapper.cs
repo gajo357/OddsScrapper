@@ -213,12 +213,12 @@ namespace OddsScrapper
             return WebReader.GetHtmlFromWebpage(a.Attributes[HtmlAttributes.Href].Value, GamesTableLoaded);
         }
 
-        private static bool FirstPageLoaded(System.Windows.Forms.WebBrowser webBrowser)
+        private static bool FirstPageLoaded(HtmlDocument document)
         {
             // WAIT until the dynamic text is set
-            foreach(System.Windows.Forms.HtmlElement span in webBrowser.Document.GetElementsByTagName(HtmlTagNames.Span))
+            foreach(var span in document.DocumentNode.Descendants(HtmlTagNames.Span))
             {
-                var attribute = span.GetAttribute(HtmlAttributes.ClassName);
+                var attribute = span.GetAttributeValue(HtmlAttributes.Class, null);
                 if (attribute == "next-games-date")
                 {
                     return !string.IsNullOrEmpty(span.InnerHtml);
@@ -228,16 +228,17 @@ namespace OddsScrapper
             return false;
         }
 
-        private static bool GamesTableLoaded(System.Windows.Forms.WebBrowser webBrowser)
+        private static bool GamesTableLoaded(HtmlDocument document)
         {
             // WAIT until the dynamic text is set
-            return !string.IsNullOrEmpty(webBrowser.Document.GetElementById("table-matches").InnerText);
+            string script = string.Format("document.getElementById('startMonth').value;");
+            return !string.IsNullOrEmpty(document.GetElementbyId("table-matches").InnerText);
         }
 
-        private static bool OddsTableLoaded(System.Windows.Forms.WebBrowser webBrowser)
+        private static bool OddsTableLoaded(HtmlDocument document)
         {
             // WAIT until the dynamic text is set
-            return !string.IsNullOrEmpty(webBrowser.Document.GetElementById("odds-data-table").InnerText);
+            return !string.IsNullOrEmpty(document.GetElementbyId("odds-data-table").InnerText);
         }
     }
 }

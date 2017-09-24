@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CefSharp;
+using System;
 
 namespace OddsScrapper
 {
@@ -22,19 +23,26 @@ namespace OddsScrapper
         [STAThread]
         public static void Main(string[] args)
         {
-            //var scrapper = new ArchiveOddsScrapper();
+            Cef.Initialize(new CefSettings());
+
+            var scrapper = new ArchiveOddsScrapper();
             //scrapper.GetRecentResults(BaseWebsite, AllSports);
-            //scrapper.Scrape(BaseWebsite, AllSports);
+            scrapper.Scrape(BaseWebsite, AllSports);
 
             //var analyser = new ArchiveDataAnalysis();
             //analyser.Analyse();
 
-            var commingMatches = new CommingMatchesScrapper();
-            var date = commingMatches.Scrape(BaseWebsite, AllSports);
+            //var commingMatches = new CommingMatchesScrapper();
+            //var date = commingMatches.Scrape(BaseWebsite, AllSports);
 
             //var date = "02Sep2017";
             //var matcher = new OddsMatcher();
             //matcher.MatchGamesWithArchivedData(date);
+
+
+            // Clean up Chromium objects.  You need to call this in your application otherwise
+            // you will get a crash when closing.
+            Cef.Shutdown();
         }
     }
 }

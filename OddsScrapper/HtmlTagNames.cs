@@ -19,7 +19,6 @@
     {
         public const string Href = "href";
         public const string Class = "class";
-        public const string ClassName = "className";
         public const string Id = "id";
     }
 }

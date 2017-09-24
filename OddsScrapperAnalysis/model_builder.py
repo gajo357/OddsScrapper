@@ -162,9 +162,9 @@ def analyse_all():
         print(classification_report(win.values, sub['BET'].values))
 
 if __name__ == '__main__':
-    # db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-    #                         os.pardir, 'ArchiveData.db'))
-    # db_data = load_data(db_name)
+    db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
+                            os.pardir, 'ArchiveData.db'))
+    db_data = load_data(db_name)
 
     db_data = pd.read_csv('archive.csv')
     #db_data = db_data[db_data['SportId'] == 9]

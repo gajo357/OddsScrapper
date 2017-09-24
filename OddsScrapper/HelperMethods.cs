@@ -112,7 +112,7 @@ namespace OddsScrapper
 
         public static string GetProjectDirectory()
         {
-            return Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
+            return Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
         }
 
         public static string MakeValidFileName(string name)

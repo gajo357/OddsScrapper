@@ -57,11 +57,6 @@ namespace OddsScrapper
 
                 foreach (var league in ReadLeaguesForSport(leaguesPage, sport))
                 {
-                    if(sport == "soccer" && string.CompareOrdinal(league.Country, "england") <= 0)
-                    {
-                        continue;
-                    }
-
                     var countryId = DbRepository.GetOrCreateCountryId(league.Country);
                     var leagueId = DbRepository.GetOrCreateLeagueId(sportId, countryId, league);
 
@@ -107,19 +102,14 @@ namespace OddsScrapper
 
             yield return seasonHtml;
 
-            var pagination = divTable.Element(HtmlTagNames.Div);
-            if (pagination == null)
-                yield break;
-
-            foreach (var resultPage in pagination.ChildNodes)
+            for (var pageIndex = 2; pageIndex <= 50; pageIndex++)
             {
-                if (resultPage.Name == HtmlTagNames.A &&
-                    resultPage.FirstChild.GetAttributeValue(HtmlAttributes.Class, null) != "arrow")
-                {
-                    var pagePage = resultPage.Attributes[HtmlAttributes.Href].Value;
-                    var pageResult = reader.GetHtmlFromWebpage(pagePage, TournamentTableDivLoaded);
-                    yield return pageResult;
-                }
+                var pagePage = $"{link}#/page/{pageIndex}/";
+                var pageResult = reader.GetHtmlFromWebpage(pagePage, TournamentTableDivLoaded);
+                if (pageResult == null)
+                    yield break;
+
+                yield return pageResult;
             }
         }
 
@@ -132,7 +122,10 @@ namespace OddsScrapper
             if (html == null)
                 yield break;
 
-            var mainDiv = html.DocumentNode.Descendants(HtmlTagNames.Div).First(s => s.GetAttributeValue(HtmlAttributes.Class, null) == "main-menu2 main-menu-gray");
+            var mainDiv = html.DocumentNode.Descendants(HtmlTagNames.Div).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Class, null) == "main-menu2 main-menu-gray");
+            if (mainDiv == null)
+                yield break;
+
             var ul = mainDiv.Element(HtmlTagNames.Ul);
             foreach (var a in ul.Descendants(HtmlTagNames.A))
             {
@@ -375,12 +368,13 @@ namespace OddsScrapper
             }
         }
 
-        private static bool LeaguesTableLoaded(System.Windows.Forms.WebBrowser webBrowser)
+        private static bool LeaguesTableLoaded(HtmlDocument document)
         {
             // WAIT until the dynamic text is set
-            foreach (System.Windows.Forms.HtmlElement table in webBrowser.Document.GetElementsByTagName(HtmlTagNames.Table))
+            foreach (var table in document.DocumentNode.Descendants(HtmlTagNames.Table))
             {
-                if (table.GetAttribute(HtmlAttributes.ClassName) == LeaguesTableClassAttribute)
+                var attribute = table.GetAttributeValue(HtmlAttributes.Class, string.Empty);
+                if (attribute == LeaguesTableClassAttribute)
                 {
                     return !string.IsNullOrEmpty(table.InnerHtml);
                 }
@@ -389,14 +383,15 @@ namespace OddsScrapper
             return false;
         }
 
-        private static bool TournamentTableDivLoaded(System.Windows.Forms.WebBrowser webBrowser)
+        private static bool TournamentTableDivLoaded(HtmlDocument document)
         {
-            var table = webBrowser.Document.GetElementById("tournamentTable");
+            var table = document.GetElementbyId("tournamentTable");
             if (table == null)
                 return false;
 
             // WAIT until the dynamic text is set
-            return !string.IsNullOrEmpty(table.InnerText);
+            return !string.IsNullOrEmpty(table.InnerText) &&
+                !table.InnerText.ToLower().Equals("no data available");
         }        
     }
 }
