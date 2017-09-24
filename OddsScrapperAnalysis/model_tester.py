@@ -2,13 +2,13 @@
 """A module that tests trained sklear models for predicting data.
 """
 
-import os
+from analyse_row_data import plot_data, find_league_averages
 import sqlite3
 import pandas as pd
 import numpy as np
 from sklearn.metrics import classification_report, precision_recall_fscore_support
 from sklearn.externals import joblib
-from model_builder import features, sports
+from model_builder import features, label, sports
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.style.use('ggplot')
@@ -156,120 +156,61 @@ def analyse_result(all_data):
         print(sport)
         
         print()
-        p, r, f1, s = precision_recall_fscore_support(data['Winner'].values, data['Prediction'].values, 
+        p, r, f1, s = precision_recall_fscore_support(data[label].values, data['Prediction'].values, 
                                                     labels=[0, 1, 2, 3], average=None, sample_weight=None)
         report += '{0},{1},{2},{3},{4}'.format(sport, sport_id,p[0],p[1],p[2])
         report += '\n'
             
-        print(classification_report(data['Winner'].values, data['Prediction'].values))     
+        print(classification_report(data[label].values, data['Prediction'].values))     
 
     with open("output.csv", "w") as text_file:
         text_file.write(report)
 
-
-
-def plot_data(data, axis_x, plot, winner_selector, no_bins = 20):
-    arguments = []
-    values = []
-    counts = []
-    
-    # get steps
-    minx = data[axis_x].min()
-    maxx = data[axis_x].max()
-    steps, step_size = np.linspace(minx, maxx, no_bins, endpoint=False, retstep=True)
-    for step in steps.tolist():
-        # get data from range
-        df = data[(data[axis_x] >= step) & (data[axis_x] < step + step_size)]
-        if df.shape[0] <= 0:
-            continue
-        whole_count = df.shape[0]
-        # count the number of correct predictions
-        win_count = df[winner_selector(df)].shape[0]
-        
-        arguments.append(step + step_size/2)
-        values.append(1.0 * win_count / whole_count)
-        counts.append(whole_count)
-
-    rects = plot.bar(arguments, values, step_size)
-    
-    # create some labels
-    # rects = plot.patches
-    for i, rect in enumerate(rects):
-        label = '{0:.2f} - {1}'.format(values[i], counts[i])
-        plot.text(rect.get_x() + rect.get_width()/2., 1.05 * rect.get_height(), label, ha='center', va='bottom')
-
-def plot_by_sport(all_data):
+def plot_by_sport(all_data, test_column = 'NB'):
+    all_data = all_data[all_data['{}_proba'.format(test_column)] > .80]
     for sport_id, sport in sports:
         df = all_data[all_data['SportId'] == sport_id]
         plot_id = sport_id
         i = 0         
 
-        data = df[(df['Bet'] == 1)]
+        data = df[(df[test_column] == 1) & (df['Bet'] == 1)]
         plt.figure(i)
         i += 1
         ax1 = plt.subplot(4, 3, plot_id)
         ax1.set_title('{0} {1}'.format(sport, sport_id))
-        plot_data(data, 'HomeOdd', ax1, lambda x: ((x['Winner'] == 1) & (x['Winner'] == x['NB'])))
+        plot_data(data, 'HomeOdd', ax1, lambda x: ((x[label] == 1)))
         
+        data = df[(df[test_column] == 2) & (df['Bet'] == 2)]
         plt.figure(i)
         i += 1
         ax1 = plt.subplot(4, 3, plot_id)
         ax1.set_title('{0} {1}'.format(sport, sport_id))
-        plot_data(data, 'HomeOdd', ax1, lambda x: ((x['Bet'] != x['NB']) & (x['Bet'] != x['Winner'])))
-
-        plt.figure(i)
-        i += 1
-        ax1 = plt.subplot(4, 3, plot_id)
-        ax1.set_title('{0} {1}'.format(sport, sport_id))
-        plot_data(data, 'HomeOdd', ax1, lambda x: ((x['NB'] == x['Winner'])))
-        
-        data = df[(df['Bet'] == 2)]
-        plt.figure(i)
-        i += 1
-        ax1 = plt.subplot(4, 3, plot_id)
-        ax1.set_title('{0} {1}'.format(sport, sport_id))
-        plot_data(data, 'AwayOdd', ax1, lambda x: ((x['Winner'] == 2) & (x['Winner'] == x['NB'])))
-
-        plt.figure(i)
-        i += 1
-        ax1 = plt.subplot(4, 3, plot_id)
-        ax1.set_title('{0} {1}'.format(sport, sport_id))
-        plot_data(data, 'AwayOdd', ax1, lambda x: ((x['Bet'] != x['NB']) & (x['Bet'] != x['Winner'])))
-
-        plt.figure(i)
-        i += 1
-        ax1 = plt.subplot(4, 3, plot_id)
-        ax1.set_title('{0} {1}'.format(sport, sport_id))
-        plot_data(data, 'AwayOdd', ax1, lambda x: ((x['NB'] == x['Winner'])))
+        plot_data(data, 'AwayOdd', ax1, lambda x: ((x[label] == 2)))
         
     plt.show()
 
-def plot_histograms(df):
+def plot_histograms(df, test_column = 'NB'):
     #df = df[df['Bet'] == df[label]]
     #df = df[df['HomeOdd'] < 3]
     #df = df[df['SportId'] == 9]
     #df.plot().hist(column='WinningOdd',by='SportId', bins=10)
     
-    pd.DataFrame.hist(df[(df['Winner'] == df['NB']) & (df['Bet'] == 1)], column='HomeOdd', by='SportId', bins=20)
-    pd.DataFrame.hist(df[(df['Bet'] != df['NB']) & (df['Bet'] != df['Winner']) & (df['Bet'] == 1)], column='HomeOdd', by='SportId', bins=20)
+    pd.DataFrame.hist(df[(df[label] == df[test_column]) & (df['Bet'] == 1)], column='HomeOdd', by='SportId', bins=20)
+    pd.DataFrame.hist(df[(df['Bet'] != df[test_column]) & (df['Bet'] != df[label]) & (df['Bet'] == 1)], column='HomeOdd', by='SportId', bins=20)
     
-    pd.DataFrame.hist(df[(df['Winner'] == df['NB']) & (df['Bet'] == 2)], column='AwayOdd', by='SportId', bins=20)
-    pd.DataFrame.hist(df[(df['Bet'] != df['NB']) & (df['Bet'] != df['Winner']) & (df['Bet'] == 2)], column='AwayOdd', by='SportId', bins=20)
+    pd.DataFrame.hist(df[(df[label] == df[test_column]) & (df['Bet'] == 2)], column='AwayOdd', by='SportId', bins=20)
+    pd.DataFrame.hist(df[(df['Bet'] != df[test_column]) & (df['Bet'] != df[label]) & (df['Bet'] == 2)], column='AwayOdd', by='SportId', bins=20)
     
     plt.show()
 
 if __name__ == '__main__':
-    # db = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-    #                         os.pardir, 'ArchiveData.db'))
-    
-    # games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-    #                        os.pardir, 'OddsScrapper', 'Archive', 'recentdata.csv'))
-
     #clf = joblib.load('models/model.pkl')
     #pred_df = predict_results(db, games_file, clf)
     # pred_df = predict_results('', '', clf)
     # pred_df.to_csv('pred.csv', index=False)
     pred_data = pd.read_csv('test_predictions.csv', encoding="ISO-8859-1")
     #plot_histograms(pred_data)
-    plot_by_sport(pred_data)
+    #plot_by_sport(pred_data, 'KN')
+    find_league_averages(pred_data, 'KN')
+    print('Done')
     pass

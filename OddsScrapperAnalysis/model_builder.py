@@ -71,7 +71,7 @@ def train_different_clf(data):
     features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
     
     pred = pd.Series(labels_test)
-    result = pd.DataFrame(pred, columns=['Winer'])
+    result = pd.DataFrame(pred, columns=['Winner'])
     result['Bet'] = pd.Series(features_test[:, 3]).astype(int)
     result['SportId'] = pd.Series(features_test[:, 0]).astype(int)
     result['LeagueId'] = pd.Series(features_test[:, 2]).astype(int)
