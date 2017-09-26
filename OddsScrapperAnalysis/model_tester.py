@@ -2,10 +2,9 @@
 """A module that tests trained sklear models for predicting data.
 """
 
-from analyse_row_data import plot_data, find_league_averages
 import sqlite3
+from analyse_row_data import plot_data, find_league_averages
 import pandas as pd
-import numpy as np
 from sklearn.metrics import classification_report, precision_recall_fscore_support
 from sklearn.externals import joblib
 from model_builder import features, label, sports
@@ -167,7 +166,6 @@ def analyse_result(all_data):
         text_file.write(report)
 
 def plot_by_sport(all_data, test_column = 'NB'):
-    all_data = all_data[all_data['{}_proba'.format(test_column)] > .80]
     for sport_id, sport in sports:
         df = all_data[all_data['SportId'] == sport_id]
         plot_id = sport_id
@@ -209,8 +207,9 @@ if __name__ == '__main__':
     # pred_df = predict_results('', '', clf)
     # pred_df.to_csv('pred.csv', index=False)
     pred_data = pd.read_csv('test_predictions.csv', encoding="ISO-8859-1")
+    pred_data = pred_data[pred_data['MLP_proba'] > .70]
     #plot_histograms(pred_data)
-    #plot_by_sport(pred_data, 'KN')
-    find_league_averages(pred_data, 'KN')
+    plot_by_sport(pred_data, 'MLP')
+    find_league_averages(pred_data, 'MLP')
     print('Done')
     pass

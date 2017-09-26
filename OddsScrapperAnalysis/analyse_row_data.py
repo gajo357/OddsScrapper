@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """A module that creates trained sklear models for predicting data.
 """
-import os
-import sqlite3
 import pandas as pd
-from sklearn.metrics import classification_report, precision_score
-from model_builder import features, label, sports
+import numpy as np
+from sklearn.metrics import classification_report
+from model_builder import label, sports
 import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.style.use('ggplot')

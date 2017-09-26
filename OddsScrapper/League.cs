@@ -14,6 +14,8 @@ namespace OddsScrapper
         internal bool IsWomen;
         internal string Sport;
 
+        public int Id { get; internal set; }
+
         public override string ToString()
         {
             return $"{Sport},{Country},{HelperMethods.MakeValidFileName(Name)},{(IsFirst ? 1 : 0)}";

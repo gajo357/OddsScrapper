@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -144,6 +145,62 @@ namespace OddsScrapper
 
             // else it's a draw
             return 0;
+        }
+
+        public static Tuple<string, string> GetParticipants(string participantsString)
+        {
+            var participants = participantsString.Replace("&nbsp;", string.Empty).Replace("&amp;", "and").Replace("'", " ").Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+            if (participants.Length < 2)
+                return null;
+
+            return new Tuple<string, string>(participants[0], participants[1]);
+        }
+
+        public static void PopulateOdds(Game game, HtmlNode[] oddTags)
+        {
+            int winIndex = -1;
+            int lowestOddIndex = -1;
+            var lowestOdd = double.MaxValue;
+            double homeOdd = 0;
+            double drawOdd = 0;
+            double awayOdd = 0;
+            for (var i = 0; i < oddTags.Length; i++)
+            {
+                var nodeOdd = HelperMethods.GetOddFromTdNode(oddTags[i]);
+                if (i == 0)
+                {
+                    homeOdd = nodeOdd;
+                }
+                else if (i == 1 && oddTags.Length == 3)
+                {
+                    drawOdd = nodeOdd;
+                }
+                else
+                {
+                    awayOdd = nodeOdd;
+                }
+
+                if (nodeOdd < lowestOdd)
+                {
+                    lowestOdd = nodeOdd;
+                    lowestOddIndex = i;
+                }
+
+                if (oddTags[i].Attributes[HtmlAttributes.Class].Value.Contains("result-ok"))
+                {
+                    winIndex = i;
+                }
+            }
+
+            // 1 is home win, 2 is away win, 0 is draw
+            int winCombo = GetBetComboFromIndex(oddTags.Length, winIndex);
+            int betCombo = GetBetComboFromIndex(oddTags.Length, lowestOddIndex);
+            
+            game.HomeOdd = homeOdd;
+            game.DrawOdd = drawOdd;
+            game.AwayOdd = awayOdd;
+            game.Bet = betCombo;
+            game.Winner = winCombo;
         }
 
         public static double CalculateKellyCriterionPercentage(double odd, double successRate)

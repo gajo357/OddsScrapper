@@ -4,12 +4,15 @@
 import os
 import sqlite3
 import pandas as pd
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.externals import joblib
 from sklearn.model_selection import cross_val_score, train_test_split, KFold
 from sklearn.naive_bayes import GaussianNB
 from sklearn.tree import ExtraTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
 
 features = ['SportId', 'CountryId', 'LeagueId', 'Bet', 'HomeTeamId', 'AwayTeamId', 'HomeOdd', 'DrawOdd', 'AwayOdd', 'IsPlayoffs', 'IsCup', 'IsWomen'] # 
 label = 'Winner'
@@ -67,6 +70,7 @@ def validate_model(model, X, y, features_train, labels_train, features_test, lab
 def train_different_clf(data):
     X = data.as_matrix(features)
     y = data[label].values
+
     ### split the data
     features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
     
@@ -79,8 +83,14 @@ def train_different_clf(data):
     result['DrawOdd'] = pd.Series(features_test[:, 7])
     result['AwayOdd'] = pd.Series(features_test[:, 8])
 
-    print('Real result')
-    print(classification_report(labels_test, features_test[:, 3]))
+    # print('Real result')
+    # print(classification_report(labels_test, features_test[:, 3]))    
+
+    scaler = StandardScaler()
+    scaler.fit(features_train)
+    joblib.dump(scaler, 'models/scaler.pkl')
+    features_train = scaler.transform(features_train)
+    features_test = scaler.transform(features_test)
     
     print('Gaussian NB')
     model = GaussianNB()
@@ -99,6 +109,12 @@ def train_different_clf(data):
     pred, proba = validate_model(model, X, y, features_train, labels_train, features_test, labels_test)
     result['KN'] = pred
     result['KN_proba'] = proba
+    
+    print('Neural')
+    model = MLPClassifier(hidden_layer_sizes=(len(features)),max_iter=200, tol=1e-4)
+    pred, proba = validate_model(model, X, y, features_train, labels_train, features_test, labels_test)
+    result['MLP'] = pred
+    result['MLP_proba'] = proba
 
     result.to_csv('test_predictions.csv', index=False)
 
@@ -106,9 +122,18 @@ def train_model(data, reg, save_model):
     X = data.as_matrix(features)
     y = data[label].values
     
-    features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.02, random_state = 0)
+    features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
     
+    print('Ready to train')
+    scaler = StandardScaler()
+    scaler.fit(features_train)
+    if save_model:
+        joblib.dump(scaler, 'models/scaler.pkl')
+    features_train = scaler.transform(features_train)
+    features_test = scaler.transform(features_test)
+
     reg.fit(features_train, labels_train) 
+    print('Trained')
     
     if save_model:
         joblib.dump(reg, 'models/model.pkl')
@@ -117,9 +142,13 @@ def train_model(data, reg, save_model):
     print(reg.score(features_test, labels_test))
     prediction = reg.predict(features_test)
     
+    print('Predicted')
     y_true = pd.Series(labels_test)
     y_pred = pd.Series(prediction)
     print(pd.crosstab(y_true, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
+    print()
+    print(confusion_matrix(labels_test, prediction))
+    print()
     print(classification_report(labels_test, prediction))
     print()
 
@@ -162,15 +191,14 @@ def analyse_all():
         print(classification_report(win.values, sub['BET'].values))
 
 if __name__ == '__main__':
-    db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-                            os.pardir, 'ArchiveData.db'))
-    db_data = load_data(db_name)
+    # db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
+    #                         os.pardir, 'ArchiveData.db'))
+    # db_data = load_data(db_name)
 
     db_data = pd.read_csv('archive.csv')
-    #db_data = db_data[db_data['SportId'] == 9]
-    #db_data = db_data[(db_data['HomeOdd'] >= 2) & (db_data['AwayOdd'] >= 2)]
 
-    train_different_clf(db_data)
-    #train_model(db_data, ExtraTreeClassifier(min_samples_leaf=2), True)
+    #train_different_clf(db_data)
 
-    #analyse_all()
+    train_model(db_data, MLPClassifier(hidden_layer_sizes=(len(features)),max_iter=200, tol=1e-4), True)
+
+    print('Done')

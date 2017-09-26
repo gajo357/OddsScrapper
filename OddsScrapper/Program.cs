@@ -25,15 +25,15 @@ namespace OddsScrapper
         {
             Cef.Initialize(new CefSettings());
 
-            var scrapper = new ArchiveOddsScrapper();
+            //var scrapper = new ArchiveOddsScrapper();
+            //scrapper.Scrape(BaseWebsite, AllSports);
             //scrapper.GetRecentResults(BaseWebsite, AllSports);
-            scrapper.Scrape(BaseWebsite, AllSports);
 
             //var analyser = new ArchiveDataAnalysis();
             //analyser.Analyse();
 
-            //var commingMatches = new CommingMatchesScrapper();
-            //var date = commingMatches.Scrape(BaseWebsite, AllSports);
+            var commingMatches = new CommingMatchesScrapper();
+            var date = commingMatches.Scrape(BaseWebsite, AllSports);
 
             //var date = "02Sep2017";
             //var matcher = new OddsMatcher();

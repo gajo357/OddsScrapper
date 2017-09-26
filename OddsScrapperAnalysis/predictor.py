@@ -2,124 +2,56 @@
 """A module that creates trained sklear models for predicting data.
 """
 import os
-import sqlite3
 import pandas as pd
 from sklearn.externals import joblib
-from model_builder import features, label
+from model_builder import features
 
-def get_participant(participants, first):
-    pars = participants.replace("&nbsp;", '').replace("\'", '').split(' - ', 1)
-    if first:
-        return pars[0]
-    return pars[1]
+def calculate_kelly(row):
+    win_probability = row['Probability']
+    bet = row['Prediction']
+    odd = -1
+    if bet == 0:
+        odd = row['DrawOdd']
+    elif bet == 1:
+        odd = row['HomeOdd']
+    elif bet == 2:
+        odd = row['AwayOdd']
+        
+    return 1.0 * (win_probability * odd - 1.0) / (odd - 1.0)
 
-def create_columns(row, cur):
-    league_id = 0
-    country_id = 0
-    home_team_id = 0
-    away_team_id = 0
-
-    home_team = get_participant(row['Participants'], True)
-    away_team = get_participant(row['Participants'], False)
-
-    command = "select Id from Sports where Name = '{0}';".format(row['Sport'])
-    sport_id = cur.execute(command).fetchone()[0]    
-    command = "select Id from Countries where Name = '{0}';".format(row['Country'])
-    country_id = cur.execute(command).fetchone()
-    if country_id:
-        country_id = country_id[0]
+def predict_results(games_to_bet_file, date_of_bet):
+    games_df = pd.read_csv(games_to_bet_file, encoding="ISO-8859-1")
     
-        command = "select Id from Leagues where Name = '{0}' AND SportId = '{1}' AND CountryId = '{2}';".format(row['League'], sport_id, country_id)
-        league_id = cur.execute(command).fetchone()
-        if league_id:
-            league_id = league_id[0]
-
-            command = "select Id from Teams where Name = '{0}' AND LeagueId = '{1}';".format(home_team, league_id)
-            home_team_id = cur.execute(command).fetchone()
-            command = "select Id from Teams where Name = '{0}' AND LeagueId = '{1}';".format(away_team, league_id)
-            away_team_id = cur.execute(command).fetchone()
-
-            if not home_team_id:
-                home_team_id = 0
-            else:
-                home_team_id = home_team_id[0]
-            if not away_team_id:
-                away_team_id = 0
-            else:
-                away_team_id = away_team_id[0]
-    else:
-        country_id = 0
-
-    return(sport_id, country_id, league_id, home_team_id, away_team_id)
-    
-def prepare_games(db_name, games_to_bet_file):
-    games_df = pd.read_csv(games_to_bet_file)
-
-    conn = sqlite3.connect(db_name)
-    cur = conn.cursor()
-    
-    games_df['SportId'], games_df['CountryId'], games_df['LeagueId'], games_df['HomeTeamId'], games_df['AwayTeamId'] = \
-        zip(*games_df.apply(lambda row: create_columns(row, cur), axis=1))
-
-    # games_df['HomeTeam'] = games_df['Participants'].apply(lambda x = get_participant(x, True))
-    # games_df['AwayTeam'] = games_df['Participants'].apply(lambda x = get_participant(x, False))
-
-    # command = "select Id from Sports where Name={0};"
-    # games_df['SportId'] = games_df['Sport'].apply(lambda x = cur.execute(command.format(x)).fetchone())
-    # command = "select Id from Countries where Name={0};"
-    # games_df['CountryId'] = games_df['Country'].apply(lambda x = cur.execute(command.format(x)).fetchone())
-    
-    # command = "select Id from Leagues where Name={0},SportId={1},CountryId={2};"
-    # games_df['LeagueId'] = games_df['League'].apply(lambda x = cur.execute(command.format(x)).fetchone())
-
-    # command = "select Id from Teams where Name={0};"
-    # games_df['HomeTeamId'] = games_df['HomeTeam'].apply(lambda x = cur.execute(command.format(x)).fetchone())
-    # games_df['AwayTeamId'] = games_df['AwayTeam'].apply(lambda x = cur.execute(command.format(x)).fetchone())
-
-    cur.close()
-    conn.close()
-
     games_df.dropna(axis=0, how='any', inplace=True)
-    return games_df
+    games_df = games_df[~games_df.isin(['NaN']).any(axis=1)]
 
-def predict_results(db_name, games_to_bet_file, date_of_bet):
-    games_df = prepare_games(db_name, games_to_bet_file)
-    #games_df = pd.read_csv('games.csv', encoding="ISO-8859-1")
-    
     games = games_df.as_matrix(features)
 
+    scaler = joblib.load('models/scaler.pkl')
+    games = scaler.transform(games)
     reg = joblib.load('models/model.pkl')
     predictions = reg.predict(games)
     probabilities = reg.predict_proba(games)
     
-    draw = []
-    home = []
-    away = []
+    # interested only in probability of predicted result
+    win_proba = []
+    kelly = []
     for i, proba in enumerate(probabilities):
-        (d, h, a) = proba
-        draw.append(d)
-        home.append(h)
-        away.append(a)
-        if proba[predictions[i]] < 0.8:
-            predictions[i] = 3
+        win_proba.append(proba[predictions[i]])
 
     games_df['Prediction'] = predictions.tolist()
-    games_df['HomeProba'] = home
-    games_df['DrawProba'] = draw
-    games_df['AwayProba'] = away
+    games_df['Probability'] = win_proba
+    games_df['Kelly'] = games_df.apply(lambda row: calculate_kelly(row), axis=1)
 
+    games_df.sort_values(by='Kelly', ascending=False, inplace=True)
     games_df.to_csv('pred_{}.csv'.format(date_of_bet), index=False)
 
 if __name__ == '__main__':
-    date_str = '02Sep2017'
-
-    db = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-                            os.pardir, 'OddsWebsite', 'ArchiveData.db'))
-
+    date_str = '27Sep2017'
     games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
-                            os.pardir, 'OddsScrapper', 'GamesToBet', 'GamesToBet_{}_all.csv'.format(date_str)))
+                            os.pardir, 'OddsScrapper', 'TommorowsGames', 'games_{}.csv'.format(date_str)))
 
-    predict_results(db, games_file, date_str)
+    predict_results(games_file, date_str)
 
-    pass
+    print('Done')
     

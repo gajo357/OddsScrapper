@@ -289,46 +289,10 @@ namespace OddsScrapper
                 if (scoreElement != null)
                     scoreString = scoreElement.InnerText;
 
-                int winIndex = -1;
-                int lowestOddIndex = -1;
-                var lowestOdd = double.MaxValue;
-                double homeOdd = 0;
-                double drawOdd = 0;
-                double awayOdd = 0;
-                for (var i = 0; i < oddTags.Length; i++)
-                {
-                    var nodeOdd = HelperMethods.GetOddFromTdNode(oddTags[i]);
-                    if (i == 0)
-                    {
-                        homeOdd = nodeOdd;
-                    }
-                    else if (i == 1 && oddTags.Length == 3)
-                    {
-                        drawOdd = nodeOdd;
-                    }
-                    else
-                    {
-                        awayOdd = nodeOdd;
-                    }
+                var game = new Game();
 
-                    if (nodeOdd < lowestOdd)
-                    {
-                        lowestOdd = nodeOdd;
-                        lowestOddIndex = i;
-                    }
-
-                    if (oddTags[i].Attributes[HtmlAttributes.Class].Value.Contains("result-ok"))
-                    {
-                        winIndex = i;
-                    }
-                }
-
-                // 1 is home win, 2 is away win, 0 is draw
-                int winCombo = HelperMethods.GetBetComboFromIndex(oddTags.Length, winIndex);
-                int betCombo = HelperMethods.GetBetComboFromIndex(oddTags.Length, lowestOddIndex);
-
-                var participants = participantsString.Replace("&nbsp;", string.Empty).Replace("&amp;", "and").Replace("'", " ").Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
-                if (participants.Length < 2)
+                var participants = HelperMethods.GetParticipants(participantsString);
+                if (participants == null)
                     continue;
 
                 var isOvertime = false;
@@ -350,14 +314,9 @@ namespace OddsScrapper
                 if (!int.TryParse(scores[1], out awayScore))
                     continue;
 
-                var game = new Game();
-                game.HomeTeam = participants[0];
-                game.AwayTeam = participants[1];
-                game.HomeOdd = homeOdd;
-                game.DrawOdd = drawOdd;
-                game.AwayOdd = awayOdd;
-                game.Bet = betCombo;
-                game.Winner = winCombo;
+                HelperMethods.PopulateOdds(game, oddTags);
+                game.HomeTeam = participants.Item1;
+                game.AwayTeam = participants.Item2;
                 game.Date = date;
                 game.IsOvertime = isOvertime;
                 game.IsPlayoffs = isPlayoffs;

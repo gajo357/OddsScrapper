@@ -1,8 +1,0 @@
-Sport,Country,League,Total Records,Success Rate,Money Per Game,Kelly,Participants,WinningOdd,Bet
-hockey,europe,champions-league,31,0.9375,0.1965,0.6969,Esbjerg (Den) - HV 71 (Swe) ,1.26,2
-hockey,europe,champions-league,31,0.9375,0.1965,0.6769,Cardiff (Gbr) - Liberec (Cze) ,1.24,2
-volleyball,russia,russia-cup,249,0.8920,0.0042,0.5197,Lokomotiv Izumrud - Novyi Urengoy,1.29,2
-soccer,sweden,allsvenskan-women,132,0.8346,0.1768,0.4826,Goteborg W - Linkopings W,1.47,2
-hockey,europe,champions-league,53,0.8148,0.1472,0.4123,Klagenfurt (Aut) - Frolunda (Swe) ,1.46,2
-rugby-league,australia,nrl,559,0.7071,-0.0076,0.1095,NQ Cowboys - Brisbane Broncos,1.49,2
-baseball,japan,npb,1001,0.6806,-0.0281,0.0152,Chunichi Dragons - Yokohama Baystars,1.48,2
