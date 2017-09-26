@@ -61,15 +61,6 @@ namespace OddsScrapper
 
                     if (attribute.Contains("center nob-border"))
                     {
-                        // date
-                        var dateElement = tr.Element("th").Element(HtmlTagNames.Span);
-                        if (dateElement == null)
-                            continue;
-
-                        var dateAttribute = dateElement.GetAttributeValue(HtmlAttributes.Class, null);
-                        if (string.IsNullOrEmpty(dateAttribute) || !dateAttribute.Contains("datet"))
-                            continue;
-
                         isPlayoffs = tr.InnerText.Contains("Play Offs");
                     }
 
@@ -118,7 +109,7 @@ namespace OddsScrapper
                         awayTeamId = DbRepository.GetTeamId(league.Id, game.AwayTeam);
                     }
 
-                    fileStream.WriteLine($"{sport},{country},{leagueName},{participantsString},{sportId},{countryId},{league.Id},{game.Bet},{homeTeamId},{awayTeamId},{game.HomeOdd},{game.DrawOdd},{game.AwayOdd},{(game.IsPlayoffs ? 1 : 0)},{(league.IsCup ? 1 : 0)},{(league.IsWomen ? 1 : 0)}");
+                    fileStream.WriteLine($"{sport},{country},{leagueName},{participantsString},{sportId},{countryId},{(league == null ? 0 : league.Id)},{game.Bet},{homeTeamId},{awayTeamId},{game.HomeOdd},{game.DrawOdd},{game.AwayOdd},{(game.IsPlayoffs ? 1 : 0)},{(league != null && league.IsCup ? 1 : 0)},{(league != null && league.IsWomen ? 1 : 0)}");
                 }
             }
 

@@ -19,7 +19,7 @@ def calculate_kelly(row):
         
     return 1.0 * (win_probability * odd - 1.0) / (odd - 1.0)
 
-def predict_results(games_to_bet_file, date_of_bet):
+def predict_results(games_to_bet_file):
     games_df = pd.read_csv(games_to_bet_file, encoding="ISO-8859-1")
     
     games_df.dropna(axis=0, how='any', inplace=True)
@@ -44,14 +44,14 @@ def predict_results(games_to_bet_file, date_of_bet):
     games_df['Kelly'] = games_df.apply(lambda row: calculate_kelly(row), axis=1)
 
     games_df.sort_values(by='Kelly', ascending=False, inplace=True)
-    games_df.to_csv('pred_{}.csv'.format(date_of_bet), index=False)
+    games_df.to_csv(games_to_bet_file, index=False)
 
 if __name__ == '__main__':
     date_str = '27Sep2017'
     games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsScrapper', 'TommorowsGames', 'games_{}.csv'.format(date_str)))
 
-    predict_results(games_file, date_str)
+    predict_results(games_file)
 
     print('Done')
     
