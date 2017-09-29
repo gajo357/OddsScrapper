@@ -4,7 +4,9 @@
 import os
 import pandas as pd
 from sklearn.externals import joblib
-from model_builder import features
+#from model_builder import features
+
+features = ['SportId', 'CountryId', 'LeagueId', 'Bet', 'HomeTeamId', 'AwayTeamId', 'HomeOdd', 'DrawOdd', 'AwayOdd', 'IsPlayoffs', 'IsCup', 'IsWomen'] # 
 
 def calculate_kelly(row):
     win_probability = row['Probability']
@@ -47,7 +49,7 @@ def predict_results(games_to_bet_file):
     games_df.to_csv(games_to_bet_file, index=False)
 
 if __name__ == '__main__':
-    date_str = '27Sep2017'
+    date_str = '30Sep2017'
     games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsScrapper', 'TommorowsGames', 'games_{}.csv'.format(date_str)))
 

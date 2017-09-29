@@ -206,10 +206,10 @@ if __name__ == '__main__':
     #pred_df = predict_results(db, games_file, clf)
     # pred_df = predict_results('', '', clf)
     # pred_df.to_csv('pred.csv', index=False)
-    pred_data = pd.read_csv('test_predictions.csv', encoding="ISO-8859-1")
-    pred_data = pred_data[pred_data['MLP_proba'] > .70]
+    pred_data = pd.read_csv('train_predictions.csv', encoding="ISO-8859-1")
+    pred_data = pred_data[pred_data['Probability'] > .70]
     #plot_histograms(pred_data)
-    plot_by_sport(pred_data, 'MLP')
-    find_league_averages(pred_data, 'MLP')
+    plot_by_sport(pred_data, 'Prediction')
+    find_league_averages(pred_data, 'Prediction')
     print('Done')
     pass

@@ -3,45 +3,105 @@
 """
 import os
 import sqlite3
+from datetime import datetime
 import pandas as pd
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.externals import joblib
-from sklearn.model_selection import cross_val_score, train_test_split, KFold
+from sklearn.model_selection import cross_val_score, train_test_split, KFold, GridSearchCV, LeaveOneOut
+from sklearn.pipeline import make_pipeline
 from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import LinearSVC
+from sklearn.linear_model import SGDClassifier
 from sklearn.tree import ExtraTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
-from sklearn.cluster import KMeans
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-features = ['SportId', 'CountryId', 'LeagueId', 'Bet', 'HomeTeamId', 'AwayTeamId', 'HomeOdd', 'DrawOdd', 'AwayOdd', 'IsPlayoffs', 'IsCup', 'IsWomen'] # 
+features = ['SportIndex', 'CountryIndex', 'LeagueIndex', 'Bet', 'HomeTeamIndex', 'AwayTeamIndex', 'HomeOdd', 'DrawOdd', 'AwayOdd', 'IsPlayoffs', 'IsCup', 'IsWomen', 'Year', 'Month', 'Day'] # 
 label = 'Winner'
 
 sports = [(1, 'american-football'), (2, 'volleyball'), (3, 'rugby-union'), (4, 'rugby-league'), (5, 'hockey'), (6, 'handball'), (7, 'basketball'), (8, 'baseball'), (9, 'soccer'), (10, 'water-polo')]
 
-def create_columns(league_id, cur):
-    command = "select SportId,CountryId,Name,IsWomen,IsCup from Leagues where Id = '{0}';".format(league_id)
-    sport_id, country_id, name, is_women, is_cup = cur.execute(command).fetchone()
+def populate_index_column(cur):
+    command = "SELECT Id from Countries;"
+    all_ids = cur.execute(command).fetchall()
+    for i, (country_id,) in enumerate(all_ids):
+        command = "UPDATE Countries SET [Index]=? WHERE Id=?"
+        cur.execute(command, (i, country_id))
+
+    leagues = {}
+    command = "select SportId,CountryId,Id from Leagues;"
+    all_leagues = cur.execute(command).fetchall()
+    for (sport_id, country_id, league_id) in all_leagues:
+        i = 0
+        if (sport_id, country_id) not in leagues:
+            leagues[(sport_id, country_id)] = 0
+        else:
+            leagues[(sport_id, country_id)] += 1
+            i = leagues[(sport_id, country_id)]
+
+        command = "UPDATE Leagues SET [Index]=? WHERE Id=?"
+        cur.execute(command, (i, league_id))
     
-    return (sport_id, country_id, is_women, is_cup)
+    teams = {}
+    command = "SELECT LeagueId,Id from Teams;"
+    all_teams = cur.execute(command).fetchall()
+    for (league_id, team_id) in all_teams:
+        i = 0
+        if league_id not in teams:
+            teams[league_id] = 0
+        else:
+            teams[league_id] += 1
+            i = teams[league_id]
+
+        command = "UPDATE Teams SET [Index]=? WHERE Id=?"
+        cur.execute(command, (i, team_id))
+    
+    print('finished')
+
+def create_columns(row, cur):
+    league_id = row['LeagueId']
+    home_team_id = row['HomeTeamId']
+    away_team_id = row['AwayTeamId']
+
+    command = "SELECT SportId,CountryId,IsWomen,IsCup,[Index] FROM Leagues WHERE Id=?;"
+    sport_id, country_id, is_women, is_cup,league_index = cur.execute(command, (league_id,)).fetchone()
+
+    command = "SELECT [Index] FROM Teams WHERE Id=?;"
+    (home_index,) = cur.execute(command, (home_team_id,)).fetchone()
+    (away_index,) = cur.execute(command, (away_team_id,)).fetchone()
+
+    command = "SELECT [Index] FROM Countries WHERE Id=?;"
+    (country_index,) = cur.execute(command, (country_id,)).fetchone()
+
+    command = "SELECT [Index] FROM Sports WHERE Id=?;"
+    (sport_index,) = cur.execute(command, (sport_id,)).fetchone()
+    
+    dt = datetime.strptime(row['Date'], "%m/%d/%Y %I:%M:%S %p")
+
+    return (sport_index, country_index, league_index, away_index, home_index, 
+            is_women, is_cup, dt.year, dt.month, dt.day)
         
-def read_games_from_db(db_name):
-    conn = sqlite3.connect(db_name)
-    cur = conn.cursor()
+def read_games_from_db(file_name):
+    conn = sqlite3.connect(file_name)
+    with conn:
+        cur = conn.cursor()
 
-    df = pd.read_sql_query("select * from Games;", conn)
-    df['SportId'], df['CountryId'], df['IsWomen'], df['IsCup'] = zip(*df.apply(lambda row: create_columns(row['LeagueId'], cur), axis=1))
+        df = pd.read_sql_query("select * from Games;", conn)
+        (df['SportIndex'], df['CountryIndex'], df['LeagueIndex'], df['AwayTeamIndex'], df['HomeTeamIndex'], 
+        df['IsWomen'], df['IsCup'], df['Year'], df['Month'], df['Day']) = zip(*df.apply(lambda row: create_columns(row, cur), axis=1))
 
-    cur.close()
+        cur.close()
     conn.close()
+
     return df
 
-def load_data(db_name):
+def load_data(file_name):
     useful = list(features)
     useful.append(label)
     useful.append('IsOvertime')
 
-    data = read_games_from_db(db_name)
+    data = read_games_from_db(file_name)
     data = data[useful]
     data.dropna(axis=0, how='any', inplace=True)
     data = data[~data.isin(['NaN']).any(axis=1)]
@@ -66,8 +126,43 @@ def validate_model(model, X, y, features_train, labels_train, features_test, lab
     shuffle = KFold(n_splits=5, shuffle=True, random_state=0)
     print(cross_val_score(model, X, y, cv = shuffle))
     return (predictions.tolist(), win_proba)
+def find_best_clfs(data):
+    X = data.as_matrix(features)
+    y = data[label].values
 
-def train_different_clf(data):
+    print('LinearSVC')
+    scaler = StandardScaler()
+    reg = LinearSVC(dual=False)
+    pipe = make_pipeline(scaler, reg)
+    parameters = {"linearsvc__C":[0.1, 1, 5, 10]}
+    clf = GridSearchCV(pipe, parameters, n_jobs= 2)
+    clf.fit(X, y)
+    model = clf.best_estimator_
+    print(model)
+
+    print()
+    print('ETC')
+    scaler = StandardScaler()
+    reg = ExtraTreeClassifier()
+    pipe = make_pipeline(scaler, reg)
+    parameters = {"extratreeclassifier__min_samples_leaf":[50, 70, 100, 150] }
+    clf = GridSearchCV(pipe, parameters, n_jobs= 2)
+    clf.fit(X, y)
+    model = clf.best_estimator_
+    print(model)
+
+    print()
+    print('KN')
+    scaler = StandardScaler()
+    reg = KNeighborsClassifier()
+    pipe = make_pipeline(scaler, reg)
+    parameters = {"kneighborsclassifier__n_neighbors":[2, 10, 30, 50], "kneighborsclassifier__leaf_size":[1, 5, 30], "kneighborsclassifier__weights":['distance', 'uniform'] }
+    clf = GridSearchCV(pipe, parameters, n_jobs= 2)
+    clf.fit(X, y)
+    model = clf.best_estimator_
+    print(model)
+
+def train_different_clf(data):    
     X = data.as_matrix(features)
     y = data[label].values
 
@@ -84,22 +179,34 @@ def train_different_clf(data):
     result['AwayOdd'] = pd.Series(features_test[:, 8])
 
     # print('Real result')
-    # print(classification_report(labels_test, features_test[:, 3]))    
+    # print(classification_report(labels_test, features_test[:, 3]))
 
-    scaler = StandardScaler()
+    encoder = OneHotEncoder(categorical_features=[0,1,2,4,5])
+    encoder.fit(X)
+    X = encoder.transform(X)
+    features_train = encoder.transform(features_train)
+    features_test = encoder.transform(features_test)
+
+    scaler = StandardScaler(with_mean=False)
     scaler.fit(features_train)
-    joblib.dump(scaler, 'models/scaler.pkl')
+    X = scaler.transform(X)
     features_train = scaler.transform(features_train)
     features_test = scaler.transform(features_test)
     
-    print('Gaussian NB')
-    model = GaussianNB()
+    # print('NB')
+    # model = SGDClassifier(loss="log", penalty="l1")
+    # pred, proba = validate_model(model, X, y, features_train, labels_train, features_test, labels_test)
+    # result['NB'] = pred
+    # result['NB_proba'] = proba
+    
+    print('LinearSVC')
+    model = LinearSVC(dual=False, C=0.1)
     pred, proba = validate_model(model, X, y, features_train, labels_train, features_test, labels_test)
-    result['NB'] = pred
-    result['NB_proba'] = proba
+    result['SVC'] = pred
+    result['SVC_proba'] = proba
 
     print('ETC')
-    model = ExtraTreeClassifier(min_samples_leaf=2)
+    model = ExtraTreeClassifier(min_samples_leaf=50)
     pred, proba = validate_model(model, X, y, features_train, labels_train, features_test, labels_test)
     result['ETC'] = pred
     result['ETC_proba'] = proba
@@ -124,24 +231,22 @@ def train_model(data, reg, save_model):
     
     features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
     
-    print('Ready to train')
-    scaler = StandardScaler()
+    scaler = StandardScaler(with_mean=True)
     scaler.fit(features_train)
     if save_model:
         joblib.dump(scaler, 'models/scaler.pkl')
     features_train = scaler.transform(features_train)
     features_test = scaler.transform(features_test)
 
-    reg.fit(features_train, labels_train) 
-    print('Trained')
+    print('Scaled')
+        
+    reg.fit(features_train, labels_train)
     
+    print('Trained')
     if save_model:
         joblib.dump(reg, 'models/model.pkl')
     
-    print(reg.score(features_train, labels_train))
-    print(reg.score(features_test, labels_test))
     prediction = reg.predict(features_test)
-    
     print('Predicted')
     y_true = pd.Series(labels_test)
     y_pred = pd.Series(prediction)
@@ -152,44 +257,51 @@ def train_model(data, reg, save_model):
     print(classification_report(labels_test, prediction))
     print()
 
+def train_neural_network(data):
+    save_model = False
+    X = data.as_matrix(features)
+    y = data[label].values
 
-def analyse_single(df, column):
-    #sub = df[df['BET'] == df[column]]
-    sub = df
-    if sub.shape[0] < 10:
-        return
+    features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+
+    print('Ready to train')
+
+    encoder = OneHotEncoder(categorical_features=[0, 1, 2, 4, 5, 12, 13, 14])
+    encoder.fit(X)
+    if save_model:
+        joblib.dump(encoder, 'models/encoder.pkl')
+    X = encoder.transform(X)
+    features_train = encoder.transform(features_train)
+    features_test = encoder.transform(features_test)
+    print('Encoded')
+
+    scaler = StandardScaler(with_mean=False)
+    scaler.fit(features_train)
+    if save_model:
+        joblib.dump(scaler, 'models/scaler.pkl')
+    features_train = scaler.transform(features_train)
+    features_test = scaler.transform(features_test)
+    print('Scaled')
+
+    no_features = X.shape[1]
+    print(no_features)
+
+    clf = MLPClassifier(activation='logistic', alpha=0.001, hidden_layer_sizes=(no_features,), learning_rate='constant', solver='adam')        
+    clf.fit(features_train, labels_train)
+
+    print('Trained')
+    if save_model:
+        joblib.dump(clf, 'models/model.pkl')
     
-    print(column)
-    print(classification_report(sub['WIN'].values, sub[column].values))
-
-def analyse_model(df, column):
-    analyse_single(df, column)
-    proba = '{}_proba'.format(column)
-    analyse_single(df[df[proba] >= 0.9], column)
-
-def analyse_all():
-    data = pd.read_csv('predictions.csv')
-    for sport_id, sport in sports:        
-        df = data[data['SportId'] == sport_id]
-
-        print(sport)
-        
-        print()
-
-
-        analyse_single(df, 'BET')
-
-        analyse_model(df, 'NB')
-        analyse_model(df, 'DTC')
-        analyse_model(df, 'ETC')
-        analyse_model(df, 'KN')
-
-        sub = df[(df['BET'] == df['DTC']) & (df['BET'] == df['ETC']) & (df['BET'] == df['KN']) & (df['BET'] == df['NB'])]
-        win = sub['WIN']
-
-        print('ALL')
-        print(classification_report(win.values, sub['BET'].values))
-
+    prediction = clf.predict(features_test)
+    print('Predicted')
+    y_true = pd.Series(labels_test)
+    y_pred = pd.Series(prediction)
+    print(pd.crosstab(y_true, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
+    print()
+    print(classification_report(labels_test, prediction))
+    print()
+    
 if __name__ == '__main__':
     # db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
     #                         os.pardir, 'ArchiveData.db'))
@@ -198,7 +310,7 @@ if __name__ == '__main__':
     db_data = pd.read_csv('archive.csv')
 
     #train_different_clf(db_data)
-
-    train_model(db_data, MLPClassifier(hidden_layer_sizes=(len(features)),max_iter=200, tol=1e-4), True)
-
+    # train_model(db_data, clf, False)
+    #find_best_clfs(db_data)
+    train_neural_network(db_data)
     print('Done')
