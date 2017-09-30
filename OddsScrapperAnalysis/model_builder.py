@@ -181,7 +181,7 @@ def train_different_clf(data):
     # print('Real result')
     # print(classification_report(labels_test, features_test[:, 3]))
 
-    encoder = OneHotEncoder(categorical_features=[0,1,2,4,5])
+    encoder = OneHotEncoder(categorical_features=[0, 1, 2, 4, 5, 12, 13, 14])
     encoder.fit(X)
     X = encoder.transform(X)
     features_train = encoder.transform(features_train)
@@ -258,11 +258,9 @@ def train_model(data, reg, save_model):
     print()
 
 def train_neural_network(data):
-    save_model = False
+    save_model = True
     X = data.as_matrix(features)
     y = data[label].values
-
-    features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
     print('Ready to train')
 
@@ -271,31 +269,32 @@ def train_neural_network(data):
     if save_model:
         joblib.dump(encoder, 'models/encoder.pkl')
     X = encoder.transform(X)
-    features_train = encoder.transform(features_train)
-    features_test = encoder.transform(features_test)
     print('Encoded')
 
     scaler = StandardScaler(with_mean=False)
-    scaler.fit(features_train)
-    if save_model:
-        joblib.dump(scaler, 'models/scaler.pkl')
-    features_train = scaler.transform(features_train)
-    features_test = scaler.transform(features_test)
-    print('Scaled')
+    scaler.fit(X)
+    X = scaler.transform(X)
 
     no_features = X.shape[1]
     print(no_features)
 
-    clf = MLPClassifier(activation='logistic', alpha=0.001, hidden_layer_sizes=(no_features,), learning_rate='constant', solver='adam')        
-    clf.fit(features_train, labels_train)
+    clf = MLPClassifier(learning_rate='constant', solver='adam')
+
+    scaler = StandardScaler(with_mean=False)
+    pipe = make_pipeline(clf)
+    parameters = {"mlpclassifier__activation":['relu', 'logistic'], "mlpclassifier__alpha":[1e-5, 1e-4,1e-3], "mlpclassifier__hidden_layer_sizes":[(no_features,), (int(no_features * 0.6),), (int(no_features * 0.7),)], }
+    grid = GridSearchCV(pipe, parameters, n_jobs= 2)
+    grid.fit(X, y)
+    clf = grid.best_estimator_
+    print(clf)
 
     print('Trained')
     if save_model:
         joblib.dump(clf, 'models/model.pkl')
     
-    prediction = clf.predict(features_test)
+    prediction = clf.predict(X)
     print('Predicted')
-    y_true = pd.Series(labels_test)
+    y_true = pd.Series(Y)
     y_pred = pd.Series(prediction)
     print(pd.crosstab(y_true, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
     print()
