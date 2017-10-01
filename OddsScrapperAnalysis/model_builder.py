@@ -5,17 +5,18 @@ import os
 import sqlite3
 from datetime import datetime
 import pandas as pd
-from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix, roc_curve
 from sklearn.externals import joblib
 from sklearn.model_selection import cross_val_score, train_test_split, KFold, GridSearchCV, LeaveOneOut
 from sklearn.pipeline import make_pipeline
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import LinearSVC
-from sklearn.linear_model import SGDClassifier
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.tree import ExtraTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.ensemble import GradientBoostingClassifier
 
 features = ['SportIndex', 'CountryIndex', 'LeagueIndex', 'Bet', 'HomeTeamIndex', 'AwayTeamIndex', 'HomeOdd', 'DrawOdd', 'AwayOdd', 'IsPlayoffs', 'IsCup', 'IsWomen', 'Year', 'Month', 'Day'] # 
 label = 'Winner'
@@ -162,13 +163,13 @@ def find_best_clfs(data):
     model = clf.best_estimator_
     print(model)
 
-def train_different_clf(data):    
+def train_different_clf(data):
     X = data.as_matrix(features)
     y = data[label].values
 
     ### split the data
-    features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
-    
+    features_train, features_test, labels_train, labels_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
     pred = pd.Series(labels_test)
     result = pd.DataFrame(pred, columns=['Winner'])
     result['Bet'] = pd.Series(features_test[:, 3]).astype(int)
@@ -262,6 +263,51 @@ def train_neural_network(data):
     X = data.as_matrix(features)
     y = data[label].values
 
+    # split for train and test
+    features_train, features_test, labels_train, labels_test = train_test_split(X, y,
+                                                                test_size=0.2, random_state=42)
+    print('Ready to train')
+
+    encoder = OneHotEncoder(categorical_features=[0, 1, 2, 4, 5, 12, 13, 14])
+    encoder.fit(X)
+    if save_model:
+        joblib.dump(encoder, 'models/encoder_nn.pkl')
+    features_train = encoder.transform(features_train)
+    features_test = encoder.transform(features_test)
+    print('Encoded')
+
+    scaler = StandardScaler(with_mean=False)
+    scaler.fit(features_train)
+    if save_model:
+        joblib.dump(scaler, 'models/scaler_nn.pkl')
+    features_train = scaler.transform(features_train)
+    features_test = scaler.transform(features_test)
+
+    no_features = features_train.shape[1]
+    print(no_features)
+
+    clf = MLPClassifier(learning_rate='constant', solver='adam', activation='relu',
+        alpha=1e-4, hidden_layer_sizes=(int(no_features*0.7),), )
+    clf.fit(features_train, labels_train)
+    if save_model:
+        joblib.dump(clf, 'models/model_nn.pkl')
+
+    predictions = clf.predict(features_test)
+    print('Predictions done')
+
+    y_true = pd.Series(labels_test)
+    y_pred = pd.Series(predictions)
+    print(pd.crosstab(y_true, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
+    print()
+    print(classification_report(labels_test, predictions))
+    print()
+
+
+def find_best_neural_network(data):
+    save_model = True
+    X = data.as_matrix(features)
+    y = data[label].values
+
     print('Ready to train')
 
     encoder = OneHotEncoder(categorical_features=[0, 1, 2, 4, 5, 12, 13, 14])
@@ -283,7 +329,7 @@ def train_neural_network(data):
     scaler = StandardScaler(with_mean=False)
     pipe = make_pipeline(clf)
     parameters = {"mlpclassifier__activation":['relu', 'logistic'], "mlpclassifier__alpha":[1e-5, 1e-4,1e-3], "mlpclassifier__hidden_layer_sizes":[(no_features,), (int(no_features * 0.6),), (int(no_features * 0.7),)], }
-    grid = GridSearchCV(pipe, parameters, n_jobs= 2)
+    grid = GridSearchCV(pipe, parameters, n_jobs=2)
     grid.fit(X, y)
     clf = grid.best_estimator_
     print(clf)
@@ -301,6 +347,66 @@ def train_neural_network(data):
     print(classification_report(labels_test, prediction))
     print()
     
+
+def train_gradient_boost(data):
+    save_model = True
+    X = data.as_matrix(features)
+    y = data[label].values
+
+    # split for train and test
+    features_train, features_test, labels_train, labels_test = train_test_split(X, y,
+                                                                test_size=0.2, random_state=42)
+    # split the data for both classifier and regressor
+    features_train, features_train_lr, labels_train, labels_train_lr = train_test_split(features_train,
+        labels_train, test_size=0.5, random_state=42)
+    
+    print('Ready to train')
+    # create classifier, train it on training data
+    # grd = GradientBoostingClassifier(n_estimators=1000)
+    # grd.fit(features_train, labels_train)
+    # if save_model:
+    #     joblib.dump(grd, 'models/model_grd.pkl')
+    grd = joblib.load('models/model_grd.pkl')
+    print('Classifier fitted')
+    # create encoder
+    # encoder = OneHotEncoder(categorical_features=[0, 1, 2, 4, 5, 12, 13, 14])
+    # # fit it on the output of classifier
+    # encoder.fit(grd.apply(features_train)[:, :, 0])
+    # if save_model:
+    #     joblib.dump(encoder, 'models/encoder_grd.pkl')
+    encoder = joblib.load('models/encoder_grd.pkl')
+    print('encoder fitted')
+    # # create LogisticRegression
+    # grd_lm = LogisticRegression()
+    # # fit on encoded output of classifier
+    # grd_lm.fit(encoder.transform(grd.apply(features_train_lr)[:, :, 0]), labels_train_lr)
+    # if save_model:
+    #     joblib.dump(grd_lm, 'models/model_grd_lm.pkl')
+    grd_lm = joblib.load('models/model_grd_lm.pkl')
+    print('Regressor fitted')
+
+    enc = encoder.transform(grd.apply(features_test)[:, :, 0])
+    predictions = grd_lm.predict(enc)
+    probabilities = grd_lm.predict_proba(enc)
+    win_proba = []
+    # interested only in probability of predicted result
+    for i, proba in enumerate(probabilities):
+        win_proba.append(proba[predictions[i]])
+    print('Predictions done')
+
+    pred = pd.Series(labels_test)
+    result = pd.DataFrame(pred, columns=['Winner'])
+    result['Prediction'] = predictions.tolist()
+    result['Probability'] = win_proba
+    result.to_csv('test_predictions_grd.csv', index=False)
+
+    y_true = pd.Series(labels_test)
+    y_pred = pd.Series(predictions)
+    print(pd.crosstab(y_true, y_pred, rownames=['True'], colnames=['Predicted'], margins=True))
+    print()
+    print(classification_report(labels_test, predictions))
+    print()
+
 if __name__ == '__main__':
     # db_name = os.path.abspath(os.path.join(os.path.dirname(__file__),\
     #                         os.pardir, 'ArchiveData.db'))
@@ -311,5 +417,6 @@ if __name__ == '__main__':
     #train_different_clf(db_data)
     # train_model(db_data, clf, False)
     #find_best_clfs(db_data)
-    train_neural_network(db_data)
+    # train_neural_network(db_data)
+    train_gradient_boost(db_data)
     print('Done')
