@@ -360,6 +360,14 @@ def train_gradient_boost(data):
     features_train, features_train_lr, labels_train, labels_train_lr = train_test_split(features_train,
         labels_train, test_size=0.5, random_state=42)
     
+    pred = pd.Series(labels_test)
+    result = pd.DataFrame(pred, columns=['Winner'])
+    result['SportIndex'] = pd.Series(features_test[:, 0]).astype(int)
+    result['Bet'] = pd.Series(features_test[:, 3]).astype(int)
+    result['HomeOdd'] = pd.Series(features_test[:, 6])
+    result['DrawOdd'] = pd.Series(features_test[:, 7])
+    result['AwayOdd'] = pd.Series(features_test[:, 8])
+
     print('Ready to train')
     # create classifier, train it on training data
     # grd = GradientBoostingClassifier(n_estimators=1000)
