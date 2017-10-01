@@ -402,8 +402,6 @@ def train_gradient_boost(data):
         win_proba.append(proba[predictions[i]])
     print('Predictions done')
 
-    pred = pd.Series(labels_test)
-    result = pd.DataFrame(pred, columns=['Winner'])
     result['Prediction'] = predictions.tolist()
     result['Probability'] = win_proba
     result.to_csv('test_predictions_grd.csv', index=False)
