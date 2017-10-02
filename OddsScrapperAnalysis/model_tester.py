@@ -167,9 +167,9 @@ def analyse_result(all_data):
 
 def plot_by_sport(all_data, test_column = 'NB'):
     for sport_id, sport in sports:
-        df = all_data[all_data['SportId'] == sport_id]
+        df = all_data[all_data['SportId'] == sport_id - 1]
         plot_id = sport_id
-        i = 0         
+        i = 0
 
         data = df[(df[test_column] == 1) & (df['Bet'] == 1)]
         plt.figure(i)
@@ -177,14 +177,14 @@ def plot_by_sport(all_data, test_column = 'NB'):
         ax1 = plt.subplot(4, 3, plot_id)
         ax1.set_title('{0} {1}'.format(sport, sport_id))
         plot_data(data, 'HomeOdd', ax1, lambda x: ((x[label] == 1)))
-        
+
         data = df[(df[test_column] == 2) & (df['Bet'] == 2)]
         plt.figure(i)
         i += 1
         ax1 = plt.subplot(4, 3, plot_id)
         ax1.set_title('{0} {1}'.format(sport, sport_id))
         plot_data(data, 'AwayOdd', ax1, lambda x: ((x[label] == 2)))
-        
+
     plt.show()
 
 def plot_histograms(df, test_column = 'NB'):
@@ -206,10 +206,10 @@ if __name__ == '__main__':
     #pred_df = predict_results(db, games_file, clf)
     # pred_df = predict_results('', '', clf)
     # pred_df.to_csv('pred.csv', index=False)
-    pred_data = pd.read_csv('train_predictions.csv', encoding="ISO-8859-1")
+    pred_data = pd.read_csv('AnalysedFiles/test_predictions_grd.csv')
     pred_data = pred_data[pred_data['Probability'] > .70]
     #plot_histograms(pred_data)
+
     plot_by_sport(pred_data, 'Prediction')
-    find_league_averages(pred_data, 'Prediction')
+    # find_league_averages(pred_data, 'Prediction')
     print('Done')
-    pass

@@ -1,0 +1,5 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,ProbaLeague,Kelly,Probability,Prediction
+soccer,algeria,ligue-1,Bel Abbes - USM Alger,1,2.08,3.29,3.13,0.5842105263157895,0.19922027290448352,0.4272571928376692,1
+soccer,germany,regionalliga-sudwest,Hoffenheim II - FSV Frankfurt,1,1.46,4.39,5.83,0.7155963302752294,0.09732748304746695,0.6306732662965594,1
+soccer,germany,regionalliga-bayern,Unterfohring - Seligenporten,1,2.1,3.52,3.12,0.5163398692810458,0.07664884135472383,0.4298741458534096,1
+soccer,germany,regionalliga-sudwest,Kassel - Freiburg II,1,2.22,3.35,2.98,0.4774193548387097,0.049074563722898,0.4057219291754627,1

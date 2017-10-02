@@ -1,0 +1,18 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,Probability,Kelly
+hockey,france,ligue-magnus,Nice - Angers,2,2.39,4.55,2.16,0.5775862068965517,0.21343638525564804
+soccer,cyprus,first-division,Achnas - AEL Limassol,2,5.51,3.64,1.55,0.7195121951219512,0.2095343680709534
+hockey,france,ligue-magnus,Mulhouse - Epinal,2,2.58,4.66,2.01,0.5775862068965517,0.1593547285763058
+soccer,guatemala,liga-nacional,Marquense - Antigua,1,2.37,3.02,2.74,0.5126050420168067,0.15684229896338098
+soccer,guatemala,liga-nacional,Xelaju - Municipal,1,2.22,3.1,2.95,0.5126050420168067,0.11310097809615655
+soccer,austria,tipico-bundesliga,Austria Vienna - Altach,1,1.86,3.7,3.95,0.5828877005347594,0.09787339883099122
+soccer,germany,3-liga,Zwickau - Paderborn,2,2.66,3.23,2.59,0.43712574850299396,0.08311678529732981
+soccer,chile,primera-division,U. Catolica - Colo Colo,2,2.72,3.35,2.46,0.4509803921568628,0.07493956486704284
+soccer,netherlands,eredivisie,AZ Alkmaar - Feyenoord,2,2.9,3.48,2.37,0.4645161290322581,0.07365198963974577
+soccer,uruguay,primera-division,Juventud - Danubio,2,3.36,3.3,2.02,0.5302013422818792,0.0696144229503882
+soccer,france,ligue-1,Troyes - St Etienne,2,3.43,3.19,2.29,0.475,0.06802325581395348
+soccer,france,ligue-1,Angers - Lyon,2,3.22,3.42,2.29,0.475,0.06802325581395348
+soccer,mexico,liga-de-ascenso,Dorados de Sinaloa - Murcielagos,1,2.24,3.0,3.05,0.4732510288065844,0.0484534713925396
+soccer,norway,eliteserien,Odd - Haugesund,1,2.02,3.41,3.72,0.5164473684210527,0.042376160990712224
+soccer,paraguay,primera-division,Nacional Asuncion - Libertad Asuncion,2,3.52,3.27,2.03,0.5038167938931297,0.02208552582820693
+soccer,poland,ekstraklasa,Lech Poznan - Legia,1,2.4,3.17,3.03,0.4219409282700422,0.009041591320072382
+soccer,costa-rica,primera-division,Alajuelense - Grecia,1,1.4,4.46,6.12,0.7166666666666667,0.008333333333332972

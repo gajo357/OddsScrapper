@@ -22,7 +22,7 @@ namespace OddsScrapper
             {
                 using (var sureWinFileStream = File.AppendText(sureWinName))
                 {
-                    fileStream.WriteLine("Sport,Country,League,Participants,SportId,CountryId,LeagueId,Bet,HomeTeamId,AwayTeamId,HomeOdd,DrawOdd,AwayOdd,IsPlayoffs,IsCup,IsWomen");
+                    fileStream.WriteLine("Sport,Country,League,Participants,SportId,SportIndex,CountryId,CountryIndex,LeagueId,LeagueIndex,Bet,HomeTeamId,HomeTeamIndex,AwayTeamId,AwayTeamIndex,HomeOdd,DrawOdd,AwayOdd,IsPlayoffs,IsCup,IsWomen");
                     foreach (var sport in sports)
                     {
                         var tommorowsGames = GetTommorowGames(baseWebsite, sport);
@@ -45,7 +45,7 @@ namespace OddsScrapper
             return date;
         }
 
-        private string WriteResultsToFile(HtmlDocument tommorowsGames, string baseWebsite, string sport, StreamWriter fileStream, StreamWriter sureWinFileStream, ref bool sureWinHeaderWritten)
+        private string WriteResultsToFile(HtmlDocument tommorowsGames, string baseWebsite, string sportName, StreamWriter fileStream, StreamWriter sureWinFileStream, ref bool sureWinHeaderWritten)
         {
             var date = GetDate(tommorowsGames);
 
@@ -80,7 +80,7 @@ namespace OddsScrapper
 
                     var participantsString = nameElement.InnerText;
                     var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
-                    if (!gameLink.Contains(sport))
+                    if (!gameLink.Contains(sportName))
                         continue;
 
                     var game = new Game();
@@ -90,26 +90,26 @@ namespace OddsScrapper
                     game.HomeTeam = participants.Item1;
                     game.AwayTeam = participants.Item2;
 
-                    gameLink = gameLink.Substring(gameLink.IndexOf($"/{sport}/"));
+                    gameLink = gameLink.Substring(gameLink.IndexOf($"/{sportName}/"));
                     var gameLinkParts = gameLink.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
                     //var gameSport = gameLinkParts[0];
-                    var country = gameLinkParts[1];
+                    var countryName = gameLinkParts[1];
                     var leagueName = gameLinkParts[2];
 
-                    CheckIsSureWin(sureWinFileStream, baseWebsite, gameLink, sport, country, leagueName, participantsString, ref sureWinHeaderWritten);
+                    CheckIsSureWin(sureWinFileStream, baseWebsite, gameLink, sportName, countryName, leagueName, participantsString, ref sureWinHeaderWritten);
 
-                    var sportId = DbRepository.GetSportId(sport);
-                    var countryId = DbRepository.GetCountryId(country);
-                    var league = DbRepository.GetLeague(sportId, countryId, leagueName);
-                    var homeTeamId = 0;
-                    var awayTeamId = 0;
+                    var sport = DbRepository.GetSport(sportName);
+                    var country = DbRepository.GetCountry(countryName);
+                    var league = DbRepository.GetLeague(sport.Id, country.Id, leagueName);
+                    DbInfo homeTeam = null;
+                    DbInfo awayTeam = null;
                     if(league != null)
                     {
-                        homeTeamId = DbRepository.GetTeamId(league.Id, game.HomeTeam);
-                        awayTeamId = DbRepository.GetTeamId(league.Id, game.AwayTeam);
+                        homeTeam = DbRepository.GetTeam(league.Id, game.HomeTeam);
+                        awayTeam = DbRepository.GetTeam(league.Id, game.AwayTeam);
                     }
 
-                    fileStream.WriteLine($"{sport},{country},{leagueName},{participantsString},{sportId},{countryId},{(league == null ? 0 : league.Id)},{game.Bet},{homeTeamId},{awayTeamId},{game.HomeOdd},{game.DrawOdd},{game.AwayOdd},{(game.IsPlayoffs ? 1 : 0)},{(league != null && league.IsCup ? 1 : 0)},{(league != null && league.IsWomen ? 1 : 0)}");
+                    fileStream.WriteLine($"{sportName},{countryName},{leagueName},{participantsString},{sport.Id},{sport.Index},{country.Id},{country.Index},{(league == null ? 0 : league.Id)},{(league == null ? -1 : league.Index)},{game.Bet},{(homeTeam == null ? 0 :homeTeam.Id)},{(homeTeam == null ? 0 : homeTeam.Index)},{(awayTeam == null ? 0 : awayTeam.Id)},{(awayTeam == null ? 0 : awayTeam.Index)},{game.HomeOdd},{game.DrawOdd},{game.AwayOdd},{(game.IsPlayoffs ? 1 : 0)},{(league != null && league.IsCup ? 1 : 0)},{(league != null && league.IsWomen ? 1 : 0)}");
                 }
             }
 

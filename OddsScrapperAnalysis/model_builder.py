@@ -80,8 +80,8 @@ def create_columns(row, cur):
     
     dt = datetime.strptime(row['Date'], "%m/%d/%Y %I:%M:%S %p")
 
-    return (sport_index, country_index, league_index, away_index, home_index, 
-            is_women, is_cup, dt.year, dt.month, dt.day)
+    return (sport_id, sport_index, country_id, country_index, league_id, league_index,
+            away_index, home_index, is_women, is_cup, dt.year, dt.month, dt.day)
         
 def read_games_from_db(file_name):
     conn = sqlite3.connect(file_name)
@@ -89,7 +89,8 @@ def read_games_from_db(file_name):
         cur = conn.cursor()
 
         df = pd.read_sql_query("select * from Games;", conn)
-        (df['SportIndex'], df['CountryIndex'], df['LeagueIndex'], df['AwayTeamIndex'], df['HomeTeamIndex'], 
+        (df['SportId'], df['SportIndex'], df['CountryId'], df['CountryIndex'], df['LeagueId'],
+        df['LeagueIndex'], df['AwayTeamIndex'], df['HomeTeamIndex'], 
         df['IsWomen'], df['IsCup'], df['Year'], df['Month'], df['Day']) = zip(*df.apply(lambda row: create_columns(row, cur), axis=1))
 
         cur.close()
@@ -101,6 +102,9 @@ def load_data(file_name):
     useful = list(features)
     useful.append(label)
     useful.append('IsOvertime')
+    useful.append('SportId')
+    useful.append('CountryId')
+    useful.append('LeagueId')
 
     data = read_games_from_db(file_name)
     data = data[useful]
@@ -424,5 +428,5 @@ if __name__ == '__main__':
     # train_model(db_data, clf, False)
     #find_best_clfs(db_data)
     # train_neural_network(db_data)
-    train_gradient_boost(db_data)
+    #train_gradient_boost(db_data)
     print('Done')

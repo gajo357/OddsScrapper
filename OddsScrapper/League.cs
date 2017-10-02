@@ -3,18 +3,23 @@ using System.IO;
 
 namespace OddsScrapper
 {
-    public class LeagueInfo
+    public class DbInfo
+    {
+        public int Id { get; set; }
+        public int Index { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class LeagueInfo : DbInfo
     {
         public bool IsFirst;
         public string Country;
-        public string Name;
 
         public string Link;
         internal bool IsCup;
         internal bool IsWomen;
         internal string Sport;
-
-        public int Id { get; internal set; }
+        
 
         public override string ToString()
         {

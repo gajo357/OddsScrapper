@@ -83,12 +83,6 @@ namespace OddsScrapper.DbModels
             return GetOrCreateId(getCommand, insertCommand);
         }
 
-        internal int GetCountryId(string country)
-        {
-            var getCommand = GetCoutrnyIdCommand(country);
-            return GetId(getCommand);
-        }
-
         private string GetCoutrnyIdCommand(string country)
         {
             return $"SELECT Id FROM {CountriesTable} WHERE Name='{country}';";
@@ -129,7 +123,7 @@ namespace OddsScrapper.DbModels
 
         public LeagueInfo GetLeague(int sportId, int countryId, string name)
         {
-            var commandText = $"SELECT Id,IsFirst,IsWomen,IsCup FROM {LeaguesTable} WHERE Name='{name}' AND SportId='{sportId}' AND CountryId='{countryId}';";
+            var commandText = $"SELECT Id,IsFirst,IsWomen,IsCup,[Index] FROM {LeaguesTable} WHERE Name='{name}' AND SportId='{sportId}' AND CountryId='{countryId}';";
 
             using (var command = _sqlConnection.CreateCommand())
             {
@@ -144,8 +138,84 @@ namespace OddsScrapper.DbModels
                         league.IsFirst = reader.GetInt32(1) == 1;
                         league.IsWomen = reader.GetInt32(2) == 1;
                         league.IsCup = reader.GetInt32(3) == 1;
+                        league.Index = reader.GetInt32(4);
 
                         return league;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        internal DbInfo GetSport(string sportName)
+        {
+            var commandText = $"SELECT Id,[Index],Name FROM {SportsTable} WHERE Name='{sportName}';";
+
+            using (var command = _sqlConnection.CreateCommand())
+            {
+                command.CommandText = commandText;
+                using (var reader = command.ExecuteReader())
+                {
+                    // Always call Read before accessing data.
+                    while (reader.Read())
+                    {
+                        var data = new DbInfo();
+                        data.Id = reader.GetInt32(0);
+                        data.Index = reader.GetInt32(1);
+                        data.Name = reader.GetString(2);
+
+                        return data;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        internal DbInfo GetCountry(string countryName)
+        {
+            var commandText = $"SELECT Id,[Index],Name FROM {CountriesTable} WHERE Name='{countryName}';";
+
+            using (var command = _sqlConnection.CreateCommand())
+            {
+                command.CommandText = commandText;
+                using (var reader = command.ExecuteReader())
+                {
+                    // Always call Read before accessing data.
+                    while (reader.Read())
+                    {
+                        var data = new DbInfo();
+                        data.Id = reader.GetInt32(0);
+                        data.Index = reader.GetInt32(1);
+                        data.Name = reader.GetString(2);
+
+                        return data;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        internal DbInfo GetTeam(int leagueId, string teamName)
+        {
+            var commandText = $"SELECT Id,[Index],Name FROM {TeamsTable} WHERE Name='{teamName}';";
+
+            using (var command = _sqlConnection.CreateCommand())
+            {
+                command.CommandText = commandText;
+                using (var reader = command.ExecuteReader())
+                {
+                    // Always call Read before accessing data.
+                    while (reader.Read())
+                    {
+                        var data = new DbInfo();
+                        data.Id = reader.GetInt32(0);
+                        data.Index = reader.GetInt32(1);
+                        data.Name = reader.GetString(2);
+
+                        return data;
                     }
                 }
             }
