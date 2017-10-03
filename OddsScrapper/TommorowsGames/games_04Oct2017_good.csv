@@ -1,0 +1,4 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,ProbaLeague,Kelly,Probability,Prediction
+hockey,canada,qmjhl,Moncton Wildcats - Cape Breton Screaming Eagles,1,2.3,4.5,2.49,0.4808853118712274,0.04828973843058359,0.4209509723512529,1
+soccer,iran,division-1,Gol Gohar - Baderan Tehran,1,2.37,2.98,2.78,0.4770114942528736,0.041187739463601575,0.37434427663033737,1
+hockey,canada,whl,Tri-City Americans - Seattle Thunderbirds,1,2.24,4.39,2.39,0.4633620689655173,0.016163793103448433,0.42501382446192176,1

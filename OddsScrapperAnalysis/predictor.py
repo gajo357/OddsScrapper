@@ -65,11 +65,13 @@ def create_columns(row, leagues_info):
     if not odd or odd <= 1:
         return (0, 0)
 
+    
     leagues = leagues_info[(leagues_info['LeagueId'] == league_id) & (leagues_info['Bet'] == bet) & (leagues_info['MinOdd'] <= odd) & (leagues_info['MaxOdd'] > odd)]
     if leagues.empty:
         return (0, 0)
-    probability = leagues.iloc[0]['Score']
-    return (probability, calculate_kelly(probability, odd))
+    league = leagues.iloc[0]
+    probability = league['Score']
+    return (probability, calculate_kelly(probability, league['MinOdd']))
 
 def predict_results_byleague(date_str, games_to_bet_file):
     file_name = 'AnalysedFiles/best_leagues.csv'
@@ -89,7 +91,7 @@ def predict_results_byleague(date_str, games_to_bet_file):
     games_df.to_csv(games_to_bet_file.replace(date_str, '{0}_good'.format(date_str)), index=False)
 
 if __name__ == '__main__':
-    date_str = '03Oct2017'
+    date_str = '04Oct2017'
     games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsScrapper', 'TommorowsGames', 'games_{}.csv'.format(date_str)))
 
