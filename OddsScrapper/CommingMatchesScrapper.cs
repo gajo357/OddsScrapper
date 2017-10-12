@@ -175,10 +175,22 @@ namespace OddsScrapper
                 if (!sureWinHeaderWritten)
                 {
                     sureWinHeaderWritten = true;
-                    sureWinFileStream.WriteLine("Sport,Country,League,Participants,Odds");
+                    sureWinFileStream.WriteLine("Sport,Country,League,Participants,Home Odd,Draw Odd,Away Odd");
+                }
+                var homeOdd = odds[0];
+                var drawOdd = 0.0;
+                var awayOdd = 0.0;
+                if(odds.Length == 2)
+                {
+                    awayOdd = odds[1];
+                }
+                else
+                {
+                    drawOdd = odds[1];
+                    awayOdd = odds[2];
                 }
 
-                sureWinFileStream.WriteLine($"{sport},{country},{league},{participants},{odds}");
+                sureWinFileStream.WriteLine($"{sport},{country},{league},{participants},{homeOdd},{drawOdd},{awayOdd}");
             }
         }
 

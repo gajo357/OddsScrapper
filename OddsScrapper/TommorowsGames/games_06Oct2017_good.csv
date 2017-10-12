@@ -1,0 +1,8 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,ProbaLeague,Kelly,Probability,Prediction
+soccer,austria,regionalliga-central,SC Weiz - Bad Gleichenberg,1,1.92,3.72,3.1,0.611764705882353,0.12647058823529428,0.4317761642177833,1
+soccer,austria,regionalliga-west,Hohenems - Kufstein,1,2.17,3.71,2.65,0.55,0.10000000000000009,0.4061432874971404,1
+soccer,austria,regionalliga-west,Seekirchen - Wals-Grunau,1,2.01,3.72,2.86,0.55,0.10000000000000009,0.43451581962760544,1
+soccer,slovakia,2-liga,Pohronie - Samorin,1,1.84,3.4,3.58,0.5949367088607594,0.08860759493670878,0.4789954462757482,1
+american-football,usa,ncaa,North Carolina State - Louisville,2,2.32,0.0,1.61,0.655367231638418,0.08097928436911482,0.5972240276493916,2
+hockey,slovakia,tipsport-liga,Nove Zamky - Nitra,2,3.27,4.64,1.81,0.5689655172413793,0.030172413793103647,0.5598266063291271,2
+basketball,spain,leb-oro,Castello - Palencia,2,2.39,0.0,1.54,0.7168141592920354,0.008849557522123687,0.6110705458914221,2

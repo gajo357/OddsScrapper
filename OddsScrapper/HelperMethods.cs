@@ -166,7 +166,7 @@ namespace OddsScrapper
             double awayOdd = 0;
             for (var i = 0; i < oddTags.Length; i++)
             {
-                var nodeOdd = HelperMethods.GetOddFromTdNode(oddTags[i]);
+                var nodeOdd = GetOddFromTdNode(oddTags[i]);
                 if (i == 0)
                 {
                     homeOdd = nodeOdd;
