@@ -78,7 +78,7 @@ namespace OddsScrapper
                     var nameElement = nameTd.Elements(HtmlTagNames.A).First(s => !string.IsNullOrEmpty(s.GetAttributeValue(HtmlAttributes.Href, null)) &&
                                                                                 !s.Attributes[HtmlAttributes.Href].Value.Contains("javascript"));
 
-                    var participantsString = nameElement.InnerText;
+                    var participantsString = nameTd.InnerText;
                     var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
                     if (!gameLink.Contains(sportName))
                         continue;

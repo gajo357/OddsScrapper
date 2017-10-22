@@ -1,0 +1,6 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,ProbaLeague,Kelly,Probability,Prediction
+hockey,austria,ebel,TWK Innsbruck - Graz 99ers,1,1.97,4.7,2.83,0.5676328502415459,0.027173913043478104,0.4974732848087723,1
+soccer,bolivia,liga-de-futbol-prof,San Jose - Wilstermann,1,2.11,3.24,3.17,0.5093167701863354,0.01863354037267073,0.4219211099912799,1
+hockey,canada,whl,Saskatoon Blades - Vancouver Giants,1,2.21,4.62,2.35,0.4633620689655173,0.016163793103448433,0.4296753171790795,1
+hockey,czech-republic,extraliga,Jihlava - Sparta Prague,2,3.37,4.4,1.82,0.5596330275229358,0.009174311926605505,0.5087794658264111,2
+hockey,russia,mhl,HC MVD - MHC Spartak,2,2.71,4.39,2.03,0.502092050209205,0.004184100418409997,0.4550440150833978,2

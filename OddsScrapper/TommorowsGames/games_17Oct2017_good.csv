@@ -1,0 +1,9 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,ProbaLeague,Kelly,Probability,Prediction
+soccer,algeria,ligue-1,USM Blida - Bel Abbes,1,2.03,3.25,3.29,0.5842105263157895,0.16842105263157903,0.4373709886916328,1
+soccer,algeria,ligue-1,Constantine - ES Setif,1,2.01,3.01,3.63,0.5842105263157895,0.16842105263157903,0.4363289863138467,1
+soccer,brazil,serie-b,Criciuma - Vila Nova FC,1,2.39,3.05,3.0,0.4965986394557823,0.07709750566893435,0.3776976098582755,1
+hockey,canada,qmjhl,Halifax Mooseheads - Moncton Wildcats,1,2.35,4.7,2.38,0.4808853118712274,0.04828973843058359,0.40826084190578005,1
+hockey,sweden,hockeyallsvenskan,Almtuna - Modo,1,2.27,4.15,2.55,0.4807692307692308,0.04807692307692309,0.4160813545199293,1
+hockey,slovakia,tipsport-liga,Zilina - Ban. Bystrica,2,2.97,4.51,1.93,0.5689655172413793,0.030172413793103647,0.4266464328714751,2
+baseball,venezuela,lvbp,La Guaira - Magallanes,1,1.9,0.0,1.9,0.5669642857142857,0.025669642857142905,0.5015659433322044,1
+hockey,denmark,metal-ligaen,Frederikshavn - Herning Blue Fox,1,2.32,4.33,2.39,0.4603174603174603,0.010582010582010543,0.4465847785656332,1

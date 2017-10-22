@@ -17,11 +17,11 @@ def data_stats(data):
     print(data_count)
 
     print('home bet')
-    home_bets = data[(data['Bet'] == 1) & (data['HomeOdd'] >= 2)]
+    home_bets = data[(data['Bet'] == 1)]
     print(classification_report(home_bets[label].values, home_bets['Bet'].values))
 
     print('away bet')
-    away_bets = data[(data['Bet'] == 2) & (data['AwayOdd'] >= 2)]
+    away_bets = data[(data['Bet'] == 2)]
     print(classification_report(away_bets[label].values, away_bets['Bet'].values))
 
     print('all bets')
@@ -67,7 +67,10 @@ def find_league_averages(data, test_column = 'Bet'):
                 min_odd = 1.01
             find_league_averages_for_data(data_odd, out_file, test_column, min_odd, odd + step)
             odd += step
+def plot_trendinodds(data):
+    data.plot.scatter(x="HomeOdd", y="AwayOdd",c='IsOvertime')
 
+    plt.show()
 def plot_histograms(df):
     #df = df[df['Bet'] == df[label]]
     #df = df[df['HomeOdd'] < 3]
@@ -141,10 +144,13 @@ def plot_by_sport(all_data):
 
 if __name__ == '__main__':
     db_data = pd.read_csv('archive.csv')
+    db_data = db_data[db_data["LeagueId"] == 3026]
 
     #db_data = db_data[db_data['SportId'] == 9]
-    #plot_histograms(db_data)
-    #data_stats(db_data)
-    find_league_averages(db_data)
+
+    plot_histograms(db_data)
+    data_stats(db_data)
+    # find_league_averages(db_data)
     #plot_by_sport(db_data)
+    plot_trendinodds(db_data)
     print('Done')
