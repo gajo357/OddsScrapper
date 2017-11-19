@@ -20,6 +20,11 @@ def data_stats(data):
     home_bets = data[(data['Bet'] == 1)]
     print(classification_report(home_bets[label].values, home_bets['Bet'].values))
 
+    home_under15 = home_bets[home_bets['HomeOdd'] < 1.6]
+    away_win = home_under15[home_under15[label] == 2].shape[0]
+    per = 1.0 * away_win / home_under15.shape[0]
+    print("Away wins on home under 1.5: {0}".format(per))
+
     print('away bet')
     away_bets = data[(data['Bet'] == 2)]
     print(classification_report(away_bets[label].values, away_bets['Bet'].values))
@@ -144,13 +149,13 @@ def plot_by_sport(all_data):
 
 if __name__ == '__main__':
     db_data = pd.read_csv('archive.csv')
-    db_data = db_data[db_data["LeagueId"] == 3026]
+    # db_data = db_data[db_data["LeagueId"] == 3026]
 
-    #db_data = db_data[db_data['SportId'] == 9]
+    db_data = db_data[db_data['SportId'] == 9]
 
-    plot_histograms(db_data)
+    # plot_histograms(db_data)
     data_stats(db_data)
     # find_league_averages(db_data)
     #plot_by_sport(db_data)
-    plot_trendinodds(db_data)
+    # plot_trendinodds(db_data)
     print('Done')

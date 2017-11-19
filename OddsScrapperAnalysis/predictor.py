@@ -91,7 +91,7 @@ def predict_results_byleague(date_str, games_to_bet_file):
     games_df.to_csv(games_to_bet_file.replace(date_str, '{0}_good'.format(date_str)), index=False)
 
 if __name__ == '__main__':
-    date_str = '23Oct2017'
+    date_str = '30Oct2017'
     games_file = os.path.abspath(os.path.join(os.path.dirname(__file__),\
                             os.pardir, 'OddsScrapper', 'TommorowsGames', 'games_{}.csv'.format(date_str)))
 

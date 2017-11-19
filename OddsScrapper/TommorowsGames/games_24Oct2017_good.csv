@@ -1,0 +1,4 @@
+Sport,Country,League,Participants,Bet,HomeOdd,DrawOdd,AwayOdd,ProbaLeague,Kelly,Probability,Prediction
+soccer,cyprus,first-division,Doxa - AEK Larnaca,2,5.11,3.91,1.56,0.7195121951219512,0.018292682926829288,0.5827418155156739,2
+soccer,cyprus,first-division,Nea Salamis - Omonia,2,5.22,4.08,1.52,0.7195121951219512,0.018292682926829288,0.5946590752032475,2
+soccer,england,vanarama-national-league-north,Gainsborough - Telford,2,2.78,3.43,2.27,0.4628378378378378,0.01520270270270259,0.39995389406721377,2

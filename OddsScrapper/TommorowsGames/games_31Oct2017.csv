@@ -1,0 +1,224 @@
+Sport,Country,League,Participants,SportId,SportIndex,CountryId,CountryIndex,LeagueId,LeagueIndex,Bet,HomeTeamId,HomeTeamIndex,AwayTeamId,AwayTeamIndex,HomeOdd,DrawOdd,AwayOdd,IsPlayoffs,IsCup,IsWomen
+soccer,argentina,primera-b-nacional,Aldosivi - CDJU Gualeguaychu,9,8,160,4,1951,1,1,39739,27,39773,20,1.69,3.33,5.32,0,0,0
+soccer,argentina,superliga,&nbsp;Tigre - Rosario Central,9,8,160,4,1950,0,2,39738,26,39719,7,2.93,3.13,2.46,0,0,0
+soccer,colombia,liga-aguila,Bucaramanga - Junior,9,8,183,27,2092,0,1,43749,14,43741,6,2.1,3.06,3.6,0,0,0
+soccer,usa,mls,&nbsp;Houston Dynamo - Portland Timbers&nbsp;,9,8,293,137,2688,0,1,56345,112,56244,11,2.22,3.37,3.2,0,0,0
+soccer,jamaica,premier-league-2017-2018,Waterhouse - Cavalier,9,8,222,66,0,-1,1,0,0,0,0,2.12,2.78,3.56,0,0,0
+soccer,asia,afc-championship-u19,East Timor U19 - Malaysia U19,9,8,162,6,1969,7,2,40771,13,40721,40,5.45,4.07,1.48,0,0,0
+soccer,philippines,pfl,Meralco Sparks - JP Voltes,9,8,261,105,2496,0,1,57458,3,57460,5,1.55,4.04,4.44,0,0,0
+soccer,asia,afc-championship-u19,Maldives U19 - Sri Lanka U19,9,8,162,6,1969,7,2,40704,23,40715,34,3.6,3.5,1.8,0,0,0
+soccer,czech-republic,u19-league,Ostrava U19 - FK Pardubice U19,9,8,187,31,2122,12,1,44600,5,44602,7,1.99,3.73,2.87,0,0,0
+soccer,germany,oberliga-hamburg,Pinneberg - Turkiye Wilhelmsburg,9,8,204,48,2252,13,1,49232,5,49236,9,1.9,3.6,3.2,0,0,0
+soccer,asia,afc-championship-u19,Oman U19 - United Arab Emirates U19,9,8,162,6,1969,7,2,40700,19,40692,11,3,3.5,2,0,0,0
+soccer,germany,dfb-junioren-pokal,Magdeburg U19 - Hertha U19,9,8,204,48,2277,38,2,50035,35,50012,12,7.5,5.5,1.25,0,0,0
+soccer,iran,persian-gulf-pro-league,Padideh Khorasan - Foolad,9,8,216,60,2328,0,1,51438,15,51425,2,2.4,2.67,3.25,0,0,0
+soccer,singapore,s-league,Home Utd - Young Lions,9,8,274,118,2569,0,1,40537,184,59790,3,1.1,9.19,13.53,0,0,0
+soccer,asia,afc-championship-u19,Bangladesh U19 - Tajikistan U19,9,8,162,6,1969,7,2,40712,31,40686,5,10,8,1.12,0,0,0
+soccer,germany,oberliga-schleswig-holstein,VfR Neumunster - Frisia Risum-Lindholm,9,8,204,48,2251,12,1,48772,36,49181,6,1.62,3.6,4.5,0,0,0
+soccer,iran,persian-gulf-pro-league,Tractor - Zob Ahan,9,8,216,60,2328,0,1,40300,132,40329,161,2.53,2.63,3.07,0,0,0
+soccer,croatia,croatian-cup,Novigrad - D. Zagreb,9,8,185,29,2102,2,2,43908,3,43885,2,25.12,10.92,1.05,0,1,0
+soccer,germany,oberliga-nofv-nord,Hansa Rostock II - Wismar,9,8,204,48,2249,10,1,48795,59,49117,9,1.8,4,3.25,0,0,0
+soccer,germany,oberliga-nofv-nord,Lichtenberg - 1.FC Frankfurt,9,8,204,48,2249,10,1,49110,2,49121,13,1.15,7,10,0,0,0
+soccer,europe,euro-u19-women,Ukraine U19 W - Spain U19 W,9,8,196,40,2198,34,2,47249,24,47226,1,24.11,18.02,1.01,0,0,1
+soccer,europe,uefa-youth-league,Lok. Zagreb U19 - Zeljeznicar U19&nbsp;,9,8,196,40,2168,4,1,0,0,0,0,2.14,3.42,2.88,0,0,0
+soccer,germany,oberliga-bayern-sud,Holzkirchen - Hankofen-Hailing,9,8,204,48,2259,20,1,49518,44,49550,17,1.61,4,4,0,0,0
+soccer,germany,oberliga-bayern-sud,Wolfratshausen - Rain/Lech,9,8,204,48,2259,20,2,49517,43,49013,30,4.32,4,1.57,0,0,0
+soccer,germany,oberliga-niedersachsen,Cloppenburg - SVG Gottingen,9,8,204,48,2254,15,1,48763,27,49321,15,1.9,3.6,3.2,0,0,0
+soccer,germany,oberliga-nofv-nord,Zehlendorf - Seelow,9,8,204,48,2249,10,1,49112,4,49119,11,1.33,5,6,0,0,0
+soccer,germany,oberliga-nofv-nord,Staaken - Schwerin,9,8,204,48,2249,10,1,0,0,49115,7,1.8,3.6,3.6,0,0,0
+soccer,germany,oberliga-schleswig-holstein,Flensburg - Schilksee,9,8,204,48,2251,12,1,49193,18,48764,28,1.8,3.6,3.6,0,0,0
+soccer,germany,regionalliga-bayern,Unterfohring - Schweinfurt,9,8,204,48,2246,7,2,49551,18,49007,24,5.11,4.14,1.53,0,0,0
+soccer,germany,regionalliga-bayern,Garching - Pipinsried,9,8,204,48,2246,7,1,48996,13,48985,2,1.95,3.57,3.35,0,0,0
+soccer,germany,regionalliga-bayern,Seligenporten - Bayern II,9,8,204,48,2246,7,2,48986,3,48730,46,4.2,3.92,1.67,0,0,0
+soccer,germany,regionalliga-bayern,Rosenheim - Burghausen,9,8,204,48,2246,7,1,48999,16,48676,47,2.1,3.41,3.12,0,0,0
+soccer,germany,regionalliga-north,Eutin - Luneburger Hansa,9,8,204,48,2242,3,2,49176,1,48751,15,3.12,3.54,2.01,0,0,0
+soccer,germany,regionalliga-sudwest,Stuttgart II - Kickers Offenbach,9,8,204,48,2245,6,2,48710,26,48675,46,2.72,3.47,2.29,0,0,0
+soccer,germany,regionalliga-sudwest,TuS Koblenz - Ulm,9,8,204,48,2245,6,2,48671,42,48949,18,2.63,3.19,2.51,0,0,0
+soccer,germany,regionalliga-sudwest,FSV Frankfurt - Rochling,9,8,204,48,2245,6,1,48652,23,49386,1,1.89,3.49,3.63,0,0,0
+soccer,germany,regionalliga-bayern,Munich 1860 - SpVgg Bayreuth,9,8,204,48,2246,7,1,48628,34,49002,19,1.39,4.85,6.06,0,0,0
+soccer,iran,persian-gulf-pro-league,Sepahan - Paykan,9,8,216,60,2328,0,1,40308,140,51426,3,2.51,2.64,3.12,0,0,0
+soccer,germany,oberliga-rheinland-pfalz-saar,SV Saar 05 Saarbrucken - Salmrohr,9,8,204,48,2257,18,1,48961,30,49449,17,2.1,3.4,2.9,0,0,0
+soccer,uganda,premier-league,Maroons - Proline,9,8,294,138,2697,0,2,64516,18,64503,5,2.85,2.75,2.5,0,0,0
+soccer,uganda,premier-league,UPDF - Police,9,8,294,138,2697,0,0,64509,11,59220,4,NaN,NaN,NaN,0,0,0
+soccer,europe,uefa-youth-league,Atl. Madrid U19 - Qarabag U19,9,8,196,40,2168,4,1,46423,6,0,0,1.03,13,24.94,0,0,0
+soccer,europe,uefa-youth-league,Sporting U19 - Juventus U19,9,8,196,40,2168,4,1,46443,26,46438,21,1.54,4.01,4.96,0,0,0
+soccer,germany,oberliga-hamburg,Wandsbeker Concordia - Sasel,9,8,204,48,2252,13,1,49249,22,49264,37,1.9,3.6,3.2,0,0,0
+soccer,germany,oberliga-hessen,Viktoria Griesheim - Hadamar,9,8,204,48,2256,17,1,49397,12,49395,10,2.36,3.6,2.36,0,0,0
+soccer,germany,oberliga-niederrhein,SW Essen - Krefeld-Fischeln,9,8,204,48,2262,23,1,49678,1,49680,3,2.1,3.75,2.7,0,0,0
+soccer,iran,persian-gulf-pro-league,Esteghlal F.C. - Naft Tehran,9,8,216,60,2328,0,1,40285,117,51436,13,1.9,2.68,4.98,0,0,0
+soccer,saudi-arabia,saudi-professional-league,Al-Ettifaq - Al-Raed,9,8,269,113,2550,0,1,40301,133,40809,20,2.11,3.61,2.86,0,0,0
+soccer,europe,uefa-youth-league,Basel U19 - CSKA Moscow U19,9,8,196,40,2168,4,1,46433,16,46424,7,1.44,4.39,5.62,0,0,0
+soccer,europe,uefa-youth-league,Paris SG U19 - Anderlecht U19,9,8,196,40,2168,4,1,46430,13,46464,47,1.37,4.83,6.2,0,0,0
+soccer,morocco,coupe-du-trone,Difaa El Jadidi - Berkane&nbsp;,9,8,245,89,2441,2,1,39342,180,55791,7,2.16,2.72,4.75,0,1,0
+soccer,germany,regionalliga-bayern,Buchbach - Nurnberg II,9,8,204,48,2246,7,1,49000,17,49005,22,2.31,3.41,2.73,0,0,0
+soccer,europe,uefa-youth-league,Olympiakos Piraeus U19 - Barcelona U19,9,8,196,40,2168,4,2,46469,52,46420,3,6.43,5.1,1.33,0,0,0
+soccer,lithuania,a-lyga,Zalgiris - Trakai,9,8,234,78,2409,0,1,46905,108,55056,14,1.9,3.31,3.57,0,0,0
+soccer,mali,premiere-division,Real Bamako - Bakaridjan,9,8,239,83,2421,0,1,39329,167,55390,1,2.2,3.25,2.85,0,0,0
+soccer,saudi-arabia,saudi-professional-league,Al Ahli SC - Al Feiha,9,8,269,113,2550,0,1,40290,122,59293,5,1.22,5.7,9.6,0,0,0
+soccer,czech-republic,division-2,Znojmo - Vlasim,9,8,187,31,2111,1,1,44174,19,44197,14,2.01,3.23,3.41,0,0,0
+soccer,europe,uefa-youth-league,Celtic U19 - Bayern U19,9,8,196,40,2168,4,2,46455,38,46454,37,2.98,3.66,2.04,0,0,0
+soccer,sudan,premier-league,Al-Khartoum - Ahli Shendi,9,8,282,126,2629,0,1,39349,187,39318,156,1.67,3.2,5,0,0,0
+soccer,austria,erste-liga,&nbsp;Ried - Hartberg,9,8,165,9,2006,1,1,41454,6,41482,14,1.64,3.97,4.69,0,0,0
+soccer,austria,erste-liga,&nbsp;Kapfenberg - FAC Wien,9,8,165,9,2006,1,1,41461,13,41470,2,1.66,3.89,4.63,0,0,0
+soccer,south-africa,premier-league,Bloem Celtic - Maritzburg Utd,9,8,277,121,2589,0,1,60352,13,60351,12,2.56,2.68,3.05,0,0,0
+soccer,south-africa,premier-league,Polokwane - Kaizer Chiefs,9,8,277,121,2589,0,2,60353,14,60349,10,3.37,3.03,2.15,0,0,0
+soccer,austria,regionalliga-central,Allerheiligen - AC Wolfsberger (Am),9,8,165,9,2008,3,1,41549,0,41568,19,1.58,4.02,4.4,0,0,0
+soccer,austria,regionalliga-east,Parndorf - Ebreichsdorf,9,8,165,9,2007,2,2,41483,15,41516,10,3.84,4.06,1.69,0,0,0
+soccer,austria,regionalliga-west,Kitzbuhel - Wals-Grunau,9,8,165,9,2009,4,0,41612,17,41622,27,NaN,NaN,NaN,0,0,0
+soccer,germany,oberliga-bayern-sud,Munich 1860 II - Vilzing,9,8,204,48,2259,20,1,48780,44,49520,46,2.36,3.6,2.36,0,0,0
+soccer,argentina,primera-c-metropolitana,Laferrere - Sportivo Barracas,9,8,160,4,1953,3,1,39851,0,39868,17,2.25,3.1,2.87,0,0,0
+soccer,argentina,primera-c-metropolitana,Berazategui - Central Cordoba,9,8,160,4,1953,3,1,39855,4,39753,0,2.5,3,2.63,0,0,0
+soccer,austria,regionalliga-central,LASK Juniors - Bad Gleichenberg,9,8,165,9,2008,3,0,0,0,0,0,NaN,NaN,NaN,0,0,0
+soccer,austria,regionalliga-east,Traiskirchen - Neusiedl,9,8,165,9,2007,2,1,41511,5,41508,2,1.59,3.77,4.64,0,0,0
+soccer,austria,regionalliga-west,SV Worgl - Johann,9,8,165,9,2009,4,1,41502,34,41610,15,2.42,3.85,2.63,0,0,0
+soccer,austria,regionalliga-east,Horn - Wiener Sportklub,9,8,165,9,2007,2,1,41472,4,41520,14,1.21,5.94,8.69,0,0,0
+soccer,spain,segunda-division-b-group-2,R. Sociedad B - Leioa,9,8,280,124,2616,3,1,61507,115,61437,45,1.74,3.47,4.45,0,0,0
+soccer,england,checkatrade-trophy,Doncaster - Scunthorpe,9,8,193,37,3869,20,1,45381,35,45390,44,2.48,3.24,2.7,0,0,0
+soccer,scotland,lowland-league,Edinburgh University - Selkirk,9,8,270,114,2557,4,0,59528,77,91746,91,NaN,NaN,NaN,0,0,0
+soccer,trinidad-and-tobago,pro-league,North East Stars - S.A. Rangers,9,8,290,134,2664,0,1,63269,3,63270,4,1.33,4.78,6.5,0,0,0
+soccer,england,bostik-league,Margate - Metropolitan,9,8,193,37,2155,9,1,45613,76,45829,4,2.26,3.69,2.52,0,0,0
+soccer,england,bostik-league,Staines - Enfield Town,9,8,193,37,2155,9,1,45697,30,45828,3,1.62,3.74,4.4,0,0,0
+soccer,england,championship,Burton - Barnsley,9,8,193,37,2147,1,1,45356,10,45359,13,2.46,3.37,2.86,0,0,0
+soccer,england,championship,Hull City - Middlesbrough,9,8,193,37,2147,1,2,45314,6,45319,11,2.8,3.31,2.54,0,0,0
+soccer,england,championship,Norwich - Wolves,9,8,193,37,2147,1,2,45329,21,45338,30,2.67,3.35,2.65,0,0,0
+soccer,england,championship,Sheffield Wed - Millwall,9,8,193,37,2147,1,1,45348,2,45379,33,1.91,3.46,4.19,0,0,0
+soccer,england,championship,Cardiff - Ipswich,9,8,193,37,2147,1,1,45332,24,45363,17,1.59,3.9,6.03,0,0,0
+soccer,england,checkatrade-trophy,Mansfield - Everton U23,9,8,193,37,3869,20,1,45481,8,45883,5,2.15,3.31,3.15,0,0,0
+soccer,england,checkatrade-trophy,Bristol Rovers - West Ham U23,9,8,193,37,3869,20,1,45412,8,45879,1,1.78,3.56,4.13,0,0,0
+soccer,england,checkatrade-trophy,Forest Green - Swansea U23,9,8,193,37,3869,20,2,45538,1,45900,22,2.77,3.35,2.36,0,0,0
+soccer,england,fa-trophy,Thurrock - Kingstonian&nbsp;,9,8,193,37,3866,17,0,45706,39,45839,14,NaN,NaN,NaN,0,0,0
+soccer,england,fa-trophy,Merstham - Sittingbourne&nbsp;,9,8,193,37,3866,17,0,45831,6,88930,333,NaN,NaN,NaN,0,0,0
+soccer,england,fa-trophy,Bedford - Brentwood&nbsp;,9,8,193,37,3866,17,0,45753,37,45851,26,NaN,NaN,NaN,0,0,0
+soccer,england,fa-trophy,Harlow - Aylesbury FC&nbsp;,9,8,193,37,3866,17,0,45842,17,88985,388,NaN,NaN,NaN,0,0,0
+soccer,england,fa-trophy,Chalfont St Peter - Bury Town&nbsp;,9,8,193,37,3866,17,0,89015,418,45856,31,NaN,NaN,NaN,0,0,0
+soccer,england,fa-trophy,Ramsbottom - Shaw Lane&nbsp;,9,8,193,37,3866,17,0,45799,27,89351,114,NaN,NaN,NaN,0,0,0
+soccer,england,fa-trophy,Stalybridge - Prescot&nbsp;,9,8,193,37,3866,17,0,45621,7,89495,258,NaN,NaN,NaN,0,0,0
+soccer,england,league-one,Blackburn - Fleetwood Town,9,8,193,37,2148,2,1,45336,28,45406,2,1.72,3.68,4.96,0,0,0
+soccer,england,northern-premier-league,Ashton Utd - Matlock,9,8,193,37,2154,8,1,45776,4,45786,14,1.81,3.73,3.43,0,0,0
+soccer,england,northern-premier-league,Halesowen - Coalville,9,8,193,37,2154,8,1,45767,51,45780,8,1.58,3.98,4.38,0,0,0
+soccer,england,northern-premier-league,Lancaster - Marine,9,8,193,37,2154,8,1,88722,125,45784,12,1.73,3.73,3.76,0,0,0
+soccer,england,northern-premier-league,Stafford - Barwell,9,8,193,37,2154,8,1,45602,65,45756,40,2.11,3.73,2.71,0,0,0
+soccer,england,northern-premier-league,Witton - Farsley,9,8,193,37,2154,8,1,45806,34,45601,64,2.25,3.72,2.5,0,0,0
+soccer,england,southern-premier-league,Bishop's Stortford - Kettering,9,8,193,37,2153,7,2,45651,37,45591,54,2.5,3.71,2.26,0,0,0
+soccer,england,vanarama-national-league-north,Boston - Salford,9,8,193,37,2151,5,2,45531,58,45616,2,4.14,3.6,1.76,0,0,0
+soccer,england,vanarama-national-league-south,Poole Town - Concord,9,8,193,37,2152,6,1,45686,19,45680,13,1.9,3.5,3.62,0,0,0
+soccer,europe,champions-league,Basel - CSKA Moscow,9,8,196,40,2165,1,1,46156,25,46154,23,1.8,3.66,4.78,0,0,0
+soccer,europe,champions-league,Paris SG - Anderlecht,9,8,196,40,2165,1,1,46143,12,42002,3,1.06,14.29,42.14,0,0,0
+soccer,europe,champions-league,Atl. Madrid - Qarabag,9,8,196,40,2165,1,1,46133,2,41800,1,1.11,9.44,33.1,0,0,0
+soccer,europe,champions-league,Sporting - Juventus,9,8,196,40,2165,1,2,46151,20,46131,0,3.9,3.44,2.03,0,0,0
+soccer,northern-ireland,nifl-premiership,Coleraine - Ballinamallard,9,8,253,97,2467,0,1,46972,5,46974,7,1.15,6.89,12.41,0,0,0
+soccer,scotland,premiership,Kilmarnock - Hibernian,9,8,270,114,2553,0,2,59337,11,46832,35,4.65,3.51,1.75,0,0,0
+soccer,england,championship,Reading - Nottingham,9,8,193,37,2147,1,1,45334,26,45362,16,2.2,3.39,3.31,0,0,0
+soccer,colombia,liga-aguila,Huila - Once Caldas,9,8,183,27,2092,0,1,43750,15,43742,7,1.88,3.06,4.33,0,0,0
+soccer,trinidad-and-tobago,pro-league,San Juan Jabloteh - W Connection,9,8,290,134,2664,0,2,56364,131,56241,8,4,3.8,1.66,0,0,0
+soccer,brazil,serie-b,Goias - Criciuma,9,8,175,19,2043,1,1,42511,24,42513,26,1.86,3.28,4.32,0,0,0
+soccer,trinidad-and-tobago,pro-league,Central FC - Morvant Caledonia United,9,8,290,134,2664,0,1,56246,13,56354,121,2.2,3.6,2.62,0,0,0
+soccer,colombia,liga-aguila,Petrolera - Dep. Cali,9,8,183,27,2092,0,2,43747,12,43748,13,2.76,3.13,2.42,0,0,0
+soccer,trinidad-and-tobago,pro-league,Police - Sando,9,8,290,134,2664,0,2,59220,4,63273,7,4,3.79,1.66,0,0,0
+soccer,brazil,serie-b,Parana - Oeste,9,8,175,19,2043,1,1,42523,36,42536,8,1.83,3.19,4.65,0,0,0
+basketball,usa,nba,&nbsp;Memphis Grizzlies - Charlotte Hornets,7,6,293,137,3026,0,1,71550,11,71556,17,1.41,0,3.04,0,0,0
+basketball,usa,nba,&nbsp;Houston Rockets - Philadelphia 76ers,7,6,293,137,3026,0,1,71544,5,71561,22,1.38,0,3.22,0,0,0
+basketball,uruguay,liga-capital,Bohemios - Goes,7,6,297,141,3047,0,2,72384,14,72379,9,1.92,0,1.76,0,0,0
+basketball,usa,nba,&nbsp;Utah Jazz - Dallas Mavericks,7,6,293,137,3026,0,1,71545,6,71558,19,1.29,0,3.86,0,0,0
+basketball,usa,nba,&nbsp;Los Angeles Clippers - Golden State Warriors,7,6,293,137,3026,0,2,71547,8,71539,0,2.83,0,1.46,0,0,0
+basketball,south-korea,kbl,&nbsp;Sonic Boom - Incheon,7,6,279,123,3006,0,2,71198,6,61162,7,1.92,0,1.85,0,0,0
+basketball,china,cba,&nbsp;Chongqing Dragons - Shandong,7,6,182,26,2835,0,2,68133,10,68129,6,2.23,0,1.7,0,0,0
+basketball,china,cba,&nbsp;Guangdong - Foshan,7,6,182,26,2835,0,1,43618,25,68134,11,1.04,0,13.5,0,0,0
+basketball,china,cba,&nbsp;Tianjin - Shanghai,7,6,182,26,2835,0,2,68142,19,68127,4,2.71,0,1.5,0,0,0
+basketball,europe,champions-league,&nbsp;Enisey - Juventus,7,6,196,40,2853,3,1,68530,5,46131,0,1.26,0,3.79,0,0,0
+basketball,russia,super-league,Novosibirsk - St. Petersburg,7,6,266,110,2986,1,1,70837,1,68475,64,1.04,0,11,0,0,0
+basketball,europe,baltic-league,&nbsp;Siauliai - Betsafe/Liepaja,7,6,196,40,2867,17,1,46731,3,0,0,1.08,0,6.74,0,0,0
+basketball,europe,alpe-adria-cup,Decin - Tajfun Sentjur,7,6,196,40,2884,34,0,68210,1,68860,15,NaN,0,NaN,0,1,0
+basketball,europe,baltic-league,&nbsp;Tallinna Kalev - Atyrau,7,6,196,40,2867,17,1,45935,13,54818,0,1.31,0,3.19,0,0,0
+basketball,estonia,korvpalli-meistriliiga,BC Kalev/Cramo - Valga,7,6,194,38,2848,0,0,68324,1,68330,7,NaN,0,NaN,0,0,0
+basketball,europe,champions-league,&nbsp;Zielona Gora - Avellino,7,6,196,40,2853,3,1,57831,119,51974,8,1.86,0,1.91,0,0,0
+basketball,europe,champions-league,&nbsp;Pinar Karsiyaka - Hapoel Holon,7,6,196,40,2853,3,1,68437,26,51898,77,1.22,0,4.1,0,0,0
+basketball,europe,fiba-europe-cup,Szombathely - Karpos,7,6,196,40,2854,4,1,69890,1,68858,13,1.02,0,12.11,0,1,0
+basketball,denmark,basketligaen,Stevnsgade - Horsholm,7,6,188,32,2844,0,2,68287,6,68285,4,13.38,0,1.01,0,0,0
+basketball,poland,tauron-basket-liga,Anwil Wloclawek - Lublin,7,6,262,106,2974,0,1,70620,4,57550,47,1.06,0,8.04,0,0,0
+basketball,austria,abl,Traiskirchen Lions - Wels,7,6,165,9,2818,0,1,67909,5,41586,37,1.19,0,4.5,0,0,0
+basketball,europe,eurocup,&nbsp;MoraBanc Andorra - Levallois,7,6,196,40,2852,2,1,71214,5,0,0,1.3,0,3.47,0,0,0
+basketball,slovakia,extraliga,Kosice - BK Svit,7,6,275,119,2995,0,0,71014,2,71018,6,NaN,0,NaN,0,0,0
+basketball,europe,champions-league,&nbsp;Sassari - Monaco,7,6,196,40,2853,3,1,68443,32,46134,3,1.61,0,2.29,0,0,0
+basketball,europe,champions-league,&nbsp;Estudiantes - Petrol Olimpija,7,6,196,40,2853,3,1,67607,5,0,0,1.1,0,6.55,0,0,0
+basketball,europe,eurocup,&nbsp;Limoges - Partizan,7,6,196,40,2852,2,1,48233,34,46202,71,1.14,0,5.66,0,0,0
+basketball,europe,fiba-europe-cup,Belfius Mons - Khimik,7,6,196,40,2854,4,1,67995,6,58885,30,1.07,0,7.15,0,1,0
+basketball,usa,nba,&nbsp;Indiana Pacers - Sacramento Kings,7,6,293,137,3026,0,0,71555,16,71593,10,NaN,0,NaN,0,0,0
+handball,hungary,nb-i,Telekom Veszprem - Komloi,6,5,212,56,3157,0,0,74129,2,75589,11,NaN,19.33,20,0,0,0
+handball,hungary,nb-i-women,Ferencvaros W - Gyor W,6,5,212,56,3159,2,2,74236,7,74229,0,3.99,9.33,1.32,0,0,1
+handball,poland,superliga-women,MKS Perla Lublin W - Vistal Gdynia W,6,5,262,106,3181,2,1,0,0,74877,116,1.25,11.22,4.56,0,0,1
+handball,sweden,handbollsligan,Malmo - Lugi,6,5,283,127,3204,0,1,76383,6,74355,63,1.42,9.58,3.61,0,0,0
+handball,denmark,hth-go-ligaen-women,Randers W - Midtjylland W,6,5,188,32,3109,4,2,73964,11,73956,3,7.31,12.94,1.14,0,0,1
+handball,spain,division-de-honor-women,Porrino W - Bera Bera W,6,5,280,124,3203,5,2,76354,8,74272,43,5.5,13,1.18,0,0,1
+hockey,usa,nhl,&nbsp;St. Louis Blues - Los Angeles Kings,5,4,293,137,3383,0,1,79800,7,79815,22,2.31,3.84,2.73,0,0,0
+hockey,usa,nhl,&nbsp;San Jose Sharks - Toronto Maple Leafs,5,4,293,137,3383,0,1,79803,10,79801,8,2.36,3.96,2.6,0,0,0
+hockey,russia,whl-women,&nbsp;St. Petersburg W - Nizhny Novgorod W,5,4,266,110,3882,6,1,76122,11,0,0,1.72,4.1,3.7,0,0,1
+hockey,asia,asia-league,&nbsp;Nikko Ice Bucks - Anyang,5,4,162,6,3241,0,2,77505,2,61183,9,3.02,4.37,1.87,0,0,0
+hockey,russia,khl,&nbsp;Vladivostok - Salavat Ufa,5,4,266,110,3341,0,2,78873,9,77969,86,2.83,4.34,2.1,0,0,0
+hockey,asia,asia-league,&nbsp;Tohoku Free Blades - High1,5,4,162,6,3241,0,1,77506,3,77511,8,1.71,4.68,3.37,0,0,0
+hockey,poland,polish-hockey-league,PZHL Katowice U20 - Jastrzebie,5,4,262,106,3336,0,2,78837,10,78835,8,23,29,1.01,0,0,0
+hockey,russia,mhl,Serebryanye Lvi - Tayfun,5,4,266,110,3343,2,1,99217,34,99218,35,1.55,4.9,4.15,0,0,0
+hockey,russia,khl,&nbsp;Kunlun - Niznekamsk,5,4,266,110,3341,0,1,78875,11,78882,18,2.17,3.97,2.88,0,0,0
+hockey,russia,mhl,Sibirskie Snaipery - Altay,5,4,266,110,3343,2,1,78928,5,63446,41,1.2,8.23,7.9,0,0,0
+hockey,germany,del,&nbsp;Schwenninger - Bremerhaven,5,4,204,48,3315,0,1,78284,13,69702,9,2.13,4.45,2.67,0,0,0
+hockey,kazakhstan,championship,Pavlodar - Temirtau,5,4,225,69,3329,0,1,78013,18,78735,1,1.83,4.45,3.5,0,0,0
+hockey,kazakhstan,championship,Almaty - Gornyak Rudny,5,4,225,69,3329,0,1,70328,5,78742,8,1.93,3.98,3.45,0,0,0
+hockey,russia,mhl,Tolpar - Stalnye Lisy,5,4,266,110,3343,2,2,78941,18,78933,10,2.73,4.19,2.07,0,0,0
+hockey,russia,khl,&nbsp;Yekaterinburg - Lada,5,4,266,110,3341,0,1,68794,21,78187,0,1.56,4.8,4.77,0,0,0
+hockey,russia,mhl,Chaika - Russkie Vityazi,5,4,266,110,3343,2,1,78935,12,78930,7,1.76,4.2,3.57,0,0,0
+hockey,germany,del,&nbsp;Nurnberg Ice Tigers - Augsburger Panther,5,4,204,48,3315,0,1,78274,3,78271,0,1.84,4.59,3.25,0,0,0
+hockey,russia,mhl,Dinamo St. Petersburg - Krasnaya Armiya,5,4,266,110,3343,2,1,78898,5,78923,0,1.77,4.5,3.24,0,0,0
+hockey,russia,vhl-b,Tambov - HC Rostov,5,4,266,110,3344,3,0,70878,8,78953,0,NaN,NaN,NaN,0,0,0
+hockey,europe,champions-league,&nbsp;Liberec - Frolunda&nbsp;,5,4,196,40,3273,5,2,44157,2,62234,49,2.9,4.36,1.99,0,0,0
+hockey,germany,del2,Kaufbeuren - Lausitzer Fuchse,5,4,204,48,3316,1,1,78474,5,78478,9,1.72,4.84,3.4,0,0,0
+hockey,germany,oberliga-north,Leipzig - Erfurt,5,4,204,48,3319,4,0,69747,28,48681,52,NaN,NaN,NaN,0,0,0
+hockey,russia,khl,&nbsp;Lokomotiv Yaroslavl - Cherepovets,5,4,266,110,3341,0,1,78200,1,59013,26,1.53,4.78,5.1,0,0,0
+hockey,russia,mhl,SKA-1946 - HC MVD,5,4,266,110,3343,2,1,78929,6,78946,23,1.43,5.29,5.01,0,0,0
+hockey,russia,vhl,CSK VVS - Tyumen,5,4,266,110,3342,1,2,78960,7,58873,18,5.71,5.89,1.36,0,0,0
+hockey,slovakia,tipsport-liga,Slovakia U20 - Kosice,5,4,275,119,3347,0,2,68635,14,71014,2,9.63,7.79,1.18,0,0,0
+hockey,austria,ebel,Medvescak Zagreb - Znojmo,5,4,165,9,3245,0,1,77538,12,44174,19,2,4.46,2.85,0,0,0
+hockey,czech-republic,extraliga,&nbsp;Zlin - Jihlava,5,4,187,31,3257,0,1,44164,9,44162,7,1.78,4.39,3.58,0,0,0
+hockey,russia,khl,Dyn. Moscow - Nizhny Novgorod,5,4,266,110,3341,0,1,78870,6,68396,20,2.25,3.84,2.82,0,0,0
+hockey,russia,khl,&nbsp;SKA St. Petersburg - Dinamo Riga,5,4,266,110,3341,0,1,77991,18,55018,33,1.12,10.6,15.26,0,0,0
+hockey,europe,champions-league,&nbsp;Jyvaskyla - Tappara&nbsp;,5,4,196,40,3273,5,1,77897,14,77914,31,2.24,4.16,2.58,0,0,0
+hockey,germany,oberliga-north,Harzer F. - Preussen,5,4,204,48,3319,4,0,78557,16,78558,17,NaN,NaN,NaN,0,0,0
+hockey,latvia,optibet-hokeja-liga,Riga Prizma - Mogo,5,4,230,74,3331,0,0,78761,5,78012,17,NaN,NaN,NaN,0,0,0
+hockey,poland,polish-hockey-league,Tychy - MMKS Podhale,5,4,262,106,3336,0,1,57521,18,78830,3,1.3,7,6.1,0,0,0
+hockey,europe,champions-league,&nbsp;Malmo - Trinec&nbsp;,5,4,196,40,3273,5,1,76383,6,44184,1,1.98,4.33,2.94,0,0,0
+hockey,germany,del2,Freiburg - Riessersee,5,4,204,48,3316,1,2,78468,21,78486,17,2.58,4.56,2.1,0,0,0
+hockey,germany,oberliga-north,Herner - Fuchse Duisburg,5,4,204,48,3319,4,0,78493,2,78467,20,NaN,NaN,NaN,0,0,0
+hockey,germany,oberliga-north,Hannover Scorpions - Timmendorfer,5,4,204,48,3319,4,0,78462,15,78510,19,NaN,NaN,NaN,0,0,0
+hockey,poland,polish-hockey-league,Krakow - Opole,5,4,262,106,3336,0,1,78031,36,78834,7,0,0,0,0,0,0
+hockey,denmark,metal-ligaen,Rungsted - Sonderjyske Ishockey,5,4,188,32,3266,0,1,77845,7,77843,5,2.09,4.23,2.71,0,0,0
+hockey,denmark,metal-ligaen,Rodovre Mighty Bulls - Hvidovre,5,4,188,32,3266,0,1,77847,9,44727,19,1.37,5.7,5.68,0,0,0
+hockey,denmark,metal-ligaen,Gentofte - Esbjerg,5,4,188,32,3266,0,1,77839,1,44698,13,2.3,4.16,2.46,0,0,0
+hockey,europe,champions-league,&nbsp;Kometa Brno - Zug&nbsp;,5,4,196,40,3273,5,1,77683,4,62972,7,1.93,4.42,3,0,0,0
+hockey,germany,oberliga-north,Crocodiles Hamburg - Halle,5,4,204,48,3319,4,0,78551,10,42133,14,NaN,NaN,NaN,0,0,0
+hockey,norway,get-ligaen,Frisk Asker - Stavanger,5,4,254,98,3334,0,1,78777,0,75796,15,1.77,4.63,3.44,0,0,0
+hockey,poland,polish-hockey-league,Janow - Unia Oswiecim,5,4,262,106,3336,0,0,78839,12,78833,6,NaN,NaN,NaN,0,0,0
+hockey,sweden,hockeyallsvenskan,Pantern - AIK,5,4,283,127,3354,1,1,79106,12,46769,20,2.26,4.11,2.57,0,0,0
+hockey,austria,ebel,Bolzano - Liwest Linz,5,4,165,9,3245,0,2,77529,3,77531,5,2.5,4.46,2.2,0,0,0
+hockey,austria,alps-hockey-league,Feldkirch - Asiago,5,4,165,9,3246,1,2,41632,37,77542,1,2.65,4.5,2,0,0,0
+hockey,europe,champions-league,&nbsp;Salzburg - Vaxjo&nbsp;,5,4,196,40,3273,5,2,41456,8,77886,3,3.8,4.93,1.64,0,0,0
+hockey,europe,champions-league,&nbsp;Bern - Munchen&nbsp;,5,4,196,40,3273,5,1,74744,4,77908,25,1.85,4.56,3.15,0,0,0
+hockey,switzerland,national-league,Langnau Tigers - EHC Kloten,5,4,284,128,3380,0,1,78285,14,77990,17,1.91,4.3,3.16,0,0,0
+hockey,switzerland,swiss-league,Olten - Thurgau,5,4,284,128,3381,1,1,78283,12,79746,8,1.61,5.04,3.65,0,0,0
+hockey,france,ligue-magnus,Strasbourg - Lyon,5,4,200,44,3311,0,2,46380,141,46152,21,5.2,5.91,1.35,0,0,0
+hockey,switzerland,swiss-league,GCK Lions - La Chaux-de-Fonds,5,4,284,128,3381,1,2,79749,11,79741,3,3.33,4.89,1.69,0,0,0
+hockey,france,ligue-magnus,Bordeaux - Grenoble,5,4,200,44,3311,0,2,46212,81,47934,33,2.3,4.52,2.26,0,0,0
+hockey,france,ligue-magnus,Angers - Nice,5,4,200,44,3311,0,1,47903,2,46931,134,1.74,4.77,3.19,0,0,0
+hockey,usa,ahl,Cleveland Monsters - Rockford IceHogs,5,4,293,137,3384,1,1,79833,12,79842,21,2.27,4.09,2.5,0,0,0
+hockey,usa,nhl,&nbsp;New York Rangers - Vegas Golden Knights,5,4,293,137,3383,0,1,79799,6,0,0,1.93,3.99,3.43,0,0,0
+baseball,japan,npb,&nbsp;Yokohama BayStars - Fukuoka S. Hawks&nbsp;,8,7,223,67,3452,0,2,0,0,80988,9,2.19,0,1.68,0,0,0
+baseball,taiwan,cpbl,Chinatrust Brothers - Lamigo Monkeys&nbsp;,8,7,309,153,3459,0,2,81068,0,81069,1,2.06,0,1.8,0,0,0
+american-football,usa,nfl,Kansas City Chiefs - Denver Broncos,1,0,293,137,3487,0,1,81308,6,81317,15,1.31,0,3.6,0,0,0
+volleyball,china,cvl-women,Bayi W - Henan W,2,1,182,26,3657,1,1,83835,4,68151,7,1.07,0,7.25,0,0,1
+volleyball,south-korea,volleyball-league-women,GS Caltex W - IBK W,2,1,279,123,3797,1,2,86719,4,86715,0,2.14,0,1.65,0,0,1
+volleyball,south-korea,volleyball-league,&nbsp;Hyundai Skywalkers - Rush &amp; Cash,2,1,279,123,3796,0,1,86708,1,86710,3,1.77,0,1.96,0,0,0
+volleyball,turkey,division-1-women,Besiktas W - Seramiksan W,2,1,292,136,3812,3,1,69170,30,86921,9,1.32,0,3.19,0,0,1
+volleyball,china,cvl-women,Jiangsu ECE W - Sichuan W,2,1,182,26,3657,1,1,83832,1,68155,11,1.01,0,12.8,0,0,1
+volleyball,china,cvl-women,Zhejiang Kaiyuan W - Hebei W,2,1,182,26,3657,1,1,0,0,0,0,1.03,0,9.63,0,0,1
+volleyball,china,cvl-women,Shanghai W - Shandong W,2,1,182,26,3657,1,1,68149,5,68154,10,1.13,0,5.38,0,0,1
+volleyball,turkey,division-1-women,Ilbank W - Eczacibasi W,2,1,292,136,3812,3,2,84597,91,84320,3,9.72,0,1.03,0,0,1
+volleyball,turkey,division-1-women,Beylikduzu W - Bursa W,2,1,292,136,3812,3,2,86933,21,84751,0,4.2,0,1.2,0,0,1
+volleyball,brazil,superliga-women,Sao Caetano W - Osasco W,2,1,175,19,3649,1,2,68073,18,83712,1,6.27,0,1.1,0,0,1
