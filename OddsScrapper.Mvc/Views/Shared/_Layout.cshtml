@@ -33,13 +33,13 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>
-                        @Html.ActionLink("Home", nameof(GamesController.Index), controllerName, new { area = "", @class = "navbar-brand" })
+                        @Html.ActionLink("Home", nameof(GamesController.Index), controllerName)
                     </li>
                     <li>
-                        @Html.ActionLink("Download Results", nameof(GamesController.DownloadResults), controllerName, new { area = "" })
+                        @Html.ActionLink("Download Results", nameof(GamesController.DownloadResults), controllerName)
                     </li>
                     <li>
-                        @Html.ActionLink("Download Matches", nameof(GamesController.DownloadCommingGames), controllerName, new { area = "" })
+                        @Html.ActionLink("Download Matches", nameof(GamesController.DownloadCommingGames), controllerName)
                     </li>
                 </ul>
             </div>
