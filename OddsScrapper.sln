@@ -1,11 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScrapper", "OddsScrapper\OddsScrapper.csproj", "{A8A594C4-0D60-4261-89AD-E6EB2B5D5F1A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OddsWebsite", "OddsWebsite\OddsWebsite.csproj", "{C6923AE5-513D-4E28-9CEB-96AE2F89D5BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScrapper.Shared", "OddsScrapper.Shared\OddsScrapper.Shared.csproj", "{2422A329-4621-46A7-9474-82D715A503A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScrapper.Mvc", "OddsScrapper.Mvc\OddsScrapper.Mvc.csproj", "{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +35,22 @@ Global
 		{C6923AE5-513D-4E28-9CEB-96AE2F89D5BF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C6923AE5-513D-4E28-9CEB-96AE2F89D5BF}.Release|x86.ActiveCfg = Release|x86
 		{C6923AE5-513D-4E28-9CEB-96AE2F89D5BF}.Release|x86.Build.0 = Release|x86
+		{2422A329-4621-46A7-9474-82D715A503A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Debug|x86.Build.0 = Debug|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Release|x86.ActiveCfg = Release|Any CPU
+		{2422A329-4621-46A7-9474-82D715A503A5}.Release|x86.Build.0 = Release|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Debug|x86.Build.0 = Debug|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Release|x86.ActiveCfg = Release|Any CPU
+		{A9364A96-C27D-41F4-BD87-1E21A4EE6A74}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
