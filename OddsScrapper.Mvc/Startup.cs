@@ -55,8 +55,6 @@ namespace OddsScrapper.Mvc
                     defaults: new { controller = GamesController.ControllerName, action = nameof(GamesController.Index) });
 
             });
-
-            archiveContextSeed.EnsureDataSeedAsync().Wait();
         }
     }
 }

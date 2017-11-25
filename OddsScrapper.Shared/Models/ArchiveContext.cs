@@ -1,7 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace OddsWebsite.Models
 {
+    public class ArchiveContextFactory : IDesignTimeDbContextFactory<ArchiveContext>
+    {
+        public ArchiveContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ArchiveContext>();
+            return new ArchiveContext(optionsBuilder.Options);
+        }
+    }
+
     public class ArchiveContext : DbContext
     {
         public ArchiveContext(DbContextOptions<ArchiveContext> options)
