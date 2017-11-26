@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OddsScrapper.Mvc.ViewModels;
 using OddsWebsite.Models;
+using System.Threading.Tasks;
 
 namespace OddsScrapper.Mvc.Controllers
 {
@@ -18,18 +19,30 @@ namespace OddsScrapper.Mvc.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            ViewBag.Title = "Games";
+
             return View(new IndexViewModel());
         }
 
         [HttpGet]
         public IActionResult DownloadResults()
         {
-            return View(ResultsViewModel.Instance);
+            return View(new ResultsViewModel());
         }
         [HttpPost]
-        public IActionResult DownloadResults(ResultsViewModel viewModel)
+        public async Task<IActionResult> DownloadResults(ResultsViewModel viewModel, string submitButton)
         {
-            viewModel.DownloadResultsAsync();
+            if (submitButton == "cancel")
+            {
+                viewModel.IsDownloading = false;
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    await viewModel.DownloadResultsAsync();
+                }
+            }
 
             return View(viewModel);
         }

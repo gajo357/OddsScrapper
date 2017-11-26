@@ -1,4 +1,5 @@
-﻿using OddsScrapper.Shared.Dto;
+﻿using Microsoft.AspNetCore.Http;
+using OddsScrapper.Shared.Dto;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,10 +9,7 @@ namespace OddsScrapper.Mvc.ViewModels
 {
     public class ResultsViewModel
     {
-        private static ResultsViewModel _instance;
-        public static ResultsViewModel Instance => _instance ?? (_instance = new ResultsViewModel());
-
-        private ResultsViewModel()
+        public ResultsViewModel()
         {
 
         }
@@ -21,18 +19,18 @@ namespace OddsScrapper.Mvc.ViewModels
         [Required]
         public DateTime Date { get; set; } = DateTime.Today;
 
+        [Display(Name = "Save to file")]
         public bool SaveGamesToLocalFile { get; set; }
+        [Display(Name = "Select local file"), FileExtensions(Extensions = "csv", ErrorMessage = "Specify a CSV file. (Comma-separated values)")]
+        public IFormFile File { get; set; }
 
-        public string FileName { get; set; }
-        
-        public void SelectFileForSave()
-        {
-
-        }
+        public bool IsDownloading { get; set; }
 
         public async Task DownloadResultsAsync()
         {
+            IsDownloading = true;
             await Task.Delay(1000);
+            IsDownloading = false;
         }
     }
 }
