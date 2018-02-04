@@ -118,7 +118,8 @@ namespace OddsScrapper
 
         private void CheckIsSureWin(StreamWriter sureWinFileStream, string baseWebsite, string gameLink, string sport, string country, string league, string participants, ref bool sureWinHeaderWritten)
         {
-            var page = WebReader.GetHtmlFromWebpage($"{baseWebsite}{gameLink}", OddsTableLoaded);
+            var fullGameLink = $"{baseWebsite}{gameLink}";
+            var page = WebReader.GetHtmlFromWebpage(fullGameLink, OddsTableLoaded);
             if (page == null)
                 return;
             var div = page.GetElementbyId("odds-data-table");
@@ -146,7 +147,8 @@ namespace OddsScrapper
                 
                 //var nameElement = tds[0].Elements(HtmlTagNames.A).First(s => s.GetAttributeValue(HtmlAttributes.Href, null) == "name");
                 var bookersName = tds[0].InnerText.Replace("&nbsp;", string.Empty).Replace(Environment.NewLine, string.Empty);
-                if (bookersName != "bwin" && bookersName != "bet365")
+                bookersName = bookersName.ToUpperInvariant();
+                if (bookersName != "BWIN" && bookersName != "BET365" && bookersName != "UNIBET")
                     continue;
 
                 var oddsTds = tds.Where(t => t.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("right odds")).ToArray();
@@ -175,7 +177,7 @@ namespace OddsScrapper
                 if (!sureWinHeaderWritten)
                 {
                     sureWinHeaderWritten = true;
-                    sureWinFileStream.WriteLine("Sport,Country,League,Participants,Home Odd,Draw Odd,Away Odd");
+                    sureWinFileStream.WriteLine("Sport,Country,League,Participants,Home Odd,Draw Odd,Away Odd,Link");
                 }
                 var homeOdd = odds[0];
                 var drawOdd = 0.0;
@@ -190,23 +192,17 @@ namespace OddsScrapper
                     awayOdd = odds[2];
                 }
 
-                sureWinFileStream.WriteLine($"{sport},{country},{league},{participants},{homeOdd},{drawOdd},{awayOdd}");
+                sureWinFileStream.WriteLine($"{sport},{country},{league},{participants},{homeOdd},{drawOdd},{awayOdd},{fullGameLink}");
             }
         }
 
         private bool IsMustWinBet(double[] odds)
         {
-            if (odds.Length == 2)
-            {
-                return ((odds[0] - 1.0) * (odds[1] - 1.0)) > 1.0;
-            }
+            var sum = 0.0;
+            foreach (var odd in odds)
+                sum += 1 / odd;
                 
-            if (odds.Length == 3)
-            {
-                return ((odds[0] * (odds[1] + odds[2])) / (odds[1] * odds[2] * (odds[0] - 1.0))) < 1.0;
-            }
-                
-            return false;
+            return sum < 1;
         }
 
         private string GetDate(HtmlDocument tommorowsGames)

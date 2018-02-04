@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OddsWebsite.Models
+namespace OddsScrapper.Shared.Models
 {
     public class League
     {
@@ -16,9 +16,5 @@ namespace OddsWebsite.Models
 
         [Required]
         public bool IsFirst { get; set; }
-        [Required]
-        public bool IsWomen { get; set; }
-        [Required]
-        public bool IsCup { get; set; }
     }
 }

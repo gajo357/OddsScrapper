@@ -1,4 +1,4 @@
-﻿using OddsWebsite.Models;
+﻿using OddsScrapper.Shared.Models;
 
 namespace OddsScrapper.Mvc.ViewModels
 {

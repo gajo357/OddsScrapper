@@ -1,6 +1,8 @@
-﻿using System;
+﻿using OddsScrapper.Shared.Models;
+using System;
+using System.Collections.Generic;
 
-namespace OddsWebsite.Models
+namespace OddsScrapper.Shared.Models
 {
     public class Game
     {
@@ -11,16 +13,16 @@ namespace OddsWebsite.Models
         public Team HomeTeam { get; set; }
         public Team AwayTeam { get; set; }
 
-        public double HomeOdd { get; set; }
-        public double DrawOdd { get; set; }
-        public double AwayOdd { get; set; }
+        public List<GameOdds> Odds { get; } = new List<GameOdds>();
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public int HomeTeamScore { get; set; }
         public int AwayTeamScore { get; set; }
 
         public bool IsPlayoffs { get; set; }
         public bool IsOvertime { get; set; }
+
+        public string GameLink { get; set; }
     }
 }

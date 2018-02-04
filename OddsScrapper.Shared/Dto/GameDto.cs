@@ -1,5 +1,6 @@
-﻿using OddsWebsite.Models;
+﻿using OddsScrapper.Shared.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OddsScrapper.Shared.Dto
@@ -15,16 +16,8 @@ namespace OddsScrapper.Shared.Dto
         public Team HomeTeam { get; set; }
         [Required]
         public Team AwayTeam { get; set; }
-
-        [Required]
-        [Range(1e-10, double.MaxValue)]
-        public double? HomeOdd { get; set; }
-        [Required]
-        [Range(0, double.MaxValue)]
-        public double? DrawOdd { get; set; }
-        [Required]
-        [Range(1e-10, double.MaxValue)]
-        public double? AwayOdd { get; set; }
+        
+        public List<GameOdds> Odds { get; } = new List<GameOdds>();
 
         [Required]
         public DateTime? Date { get; set; }
@@ -41,18 +34,19 @@ namespace OddsScrapper.Shared.Dto
         [Required]
         public bool IsOvertime { get; set; }
 
+        public static implicit operator Game(GameDto dto)
+        {
+            return dto.ToGame();
+        }
+
         public Game ToGame()
         {
-            return new Game
+            var game =  new Game
             {
                 Id = Id,
                 League = League,
                 HomeTeam = HomeTeam,
                 AwayTeam = AwayTeam,
-
-                HomeOdd = HomeOdd.Value,
-                DrawOdd = DrawOdd.Value,
-                AwayOdd = AwayOdd.Value,
 
                 Date = Date.Value,
 
@@ -62,6 +56,10 @@ namespace OddsScrapper.Shared.Dto
                 IsPlayoffs = IsPlayoffs,
                 IsOvertime = IsOvertime
             };
+
+            game.Odds.AddRange(Odds);
+
+            return game;
         }
     }
 }

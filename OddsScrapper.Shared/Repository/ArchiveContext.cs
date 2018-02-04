@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using OddsScrapper.Shared.Models;
 
-namespace OddsWebsite.Models
+namespace OddsScrapper.Shared.Repository
 {
     public class ArchiveContextFactory : IDesignTimeDbContextFactory<ArchiveContext>
     {
@@ -17,7 +18,6 @@ namespace OddsWebsite.Models
         public ArchiveContext(DbContextOptions<ArchiveContext> options)
             : base(options)
         {
-
         }
 
         public DbSet<League> Leagues { get; set; }
@@ -25,6 +25,7 @@ namespace OddsWebsite.Models
         public DbSet<Game> Games { get; set; }
         public DbSet<Sport> Sports { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<Bookkeeper> Bookers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

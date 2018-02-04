@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
-using OddsWebsite.Models;
+using OddsScrapper.Shared.Repository;
 using System;
 
 namespace OddsScrapper.Shared.Migrations
 {
     [DbContext(typeof(ArchiveContext))]
-    [Migration("20171125213447_InitialCreate")]
+    [Migration("20180204120538_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,20 @@ namespace OddsScrapper.Shared.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125");
 
-            modelBuilder.Entity("OddsWebsite.Models.Country", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.Bookkeeper", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Bookers");
+                });
+
+            modelBuilder.Entity("OddsScrapper.Shared.Models.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -33,22 +46,18 @@ namespace OddsScrapper.Shared.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("OddsWebsite.Models.Game", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<double>("AwayOdd");
 
                     b.Property<int?>("AwayTeamId");
 
                     b.Property<int>("AwayTeamScore");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime?>("Date");
 
-                    b.Property<double>("DrawOdd");
-
-                    b.Property<double>("HomeOdd");
+                    b.Property<string>("GameLink");
 
                     b.Property<int?>("HomeTeamId");
 
@@ -71,18 +80,40 @@ namespace OddsScrapper.Shared.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("OddsWebsite.Models.League", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.GameOdds", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<double>("AwayOdd");
+
+                    b.Property<int?>("BookkeeperId");
+
+                    b.Property<double>("DrawOdd");
+
+                    b.Property<int?>("GameId");
+
+                    b.Property<double>("HomeOdd");
+
+                    b.Property<bool>("IsValid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookkeeperId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("GameOdds");
+                });
+
+            modelBuilder.Entity("OddsScrapper.Shared.Models.League", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("CountryId");
 
-                    b.Property<bool>("IsCup");
-
                     b.Property<bool>("IsFirst");
-
-                    b.Property<bool>("IsWomen");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -98,7 +129,7 @@ namespace OddsScrapper.Shared.Migrations
                     b.ToTable("Leagues");
                 });
 
-            modelBuilder.Entity("OddsWebsite.Models.Sport", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.Sport", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -111,56 +142,55 @@ namespace OddsScrapper.Shared.Migrations
                     b.ToTable("Sports");
                 });
 
-            modelBuilder.Entity("OddsWebsite.Models.Team", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.Team", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<int>("LeagueId");
 
                     b.Property<string>("Name")
                         .IsRequired();
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LeagueId");
-
                     b.ToTable("Teams");
                 });
 
-            modelBuilder.Entity("OddsWebsite.Models.Game", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.Game", b =>
                 {
-                    b.HasOne("OddsWebsite.Models.Team", "AwayTeam")
+                    b.HasOne("OddsScrapper.Shared.Models.Team", "AwayTeam")
                         .WithMany()
                         .HasForeignKey("AwayTeamId");
 
-                    b.HasOne("OddsWebsite.Models.Team", "HomeTeam")
+                    b.HasOne("OddsScrapper.Shared.Models.Team", "HomeTeam")
                         .WithMany()
                         .HasForeignKey("HomeTeamId");
 
-                    b.HasOne("OddsWebsite.Models.League", "League")
+                    b.HasOne("OddsScrapper.Shared.Models.League", "League")
                         .WithMany()
                         .HasForeignKey("LeagueId");
                 });
 
-            modelBuilder.Entity("OddsWebsite.Models.League", b =>
+            modelBuilder.Entity("OddsScrapper.Shared.Models.GameOdds", b =>
                 {
-                    b.HasOne("OddsWebsite.Models.Country", "Country")
+                    b.HasOne("OddsScrapper.Shared.Models.Bookkeeper", "Bookkeeper")
+                        .WithMany()
+                        .HasForeignKey("BookkeeperId");
+
+                    b.HasOne("OddsScrapper.Shared.Models.Game")
+                        .WithMany("Odds")
+                        .HasForeignKey("GameId");
+                });
+
+            modelBuilder.Entity("OddsScrapper.Shared.Models.League", b =>
+                {
+                    b.HasOne("OddsScrapper.Shared.Models.Country", "Country")
                         .WithMany()
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("OddsWebsite.Models.Sport", "Sport")
+                    b.HasOne("OddsScrapper.Shared.Models.Sport", "Sport")
                         .WithMany()
                         .HasForeignKey("SportId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("OddsWebsite.Models.Team", b =>
-                {
-                    b.HasOne("OddsWebsite.Models.League", "League")
-                        .WithMany()
-                        .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

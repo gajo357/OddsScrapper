@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OddsWebsite.Models
+namespace OddsScrapper.Shared.Models
 {
     public class Country
     {

@@ -1,15 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace OddsWebsite.Models
+namespace OddsScrapper.Shared.Models
 {
     public class Team
     {
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
-
-        [Required]
-        public League League { get; set; }
+        public string Name { get; set; }        
     }
 }

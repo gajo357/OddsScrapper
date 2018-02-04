@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OddsScrapper.Mvc.ViewModels;
-using OddsWebsite.Models;
+using OddsScrapper.Shared.Repository;
 using System.Threading.Tasks;
 
 namespace OddsScrapper.Mvc.Controllers
@@ -53,9 +53,9 @@ namespace OddsScrapper.Mvc.Controllers
             return View(CommingGamesViewModel.Instance);
         }
         [HttpPost]
-        public IActionResult DownloadCommingGames(CommingGamesViewModel viewModel)
+        public async Task<IActionResult> DownloadCommingGames(CommingGamesViewModel viewModel)
         {
-            viewModel.DownloadResultsAsync();
+            await viewModel.DownloadResultsAsync();
 
             return View(viewModel);
         }

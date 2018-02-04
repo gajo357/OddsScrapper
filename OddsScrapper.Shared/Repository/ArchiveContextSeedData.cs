@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 
-namespace OddsWebsite.Models
+namespace OddsScrapper.Shared.Repository
 {
     public class ArchiveContextSeedData
     {

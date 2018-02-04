@@ -2,7 +2,7 @@
 
 namespace OddsScrapper.Shared.Models
 {
-    public class Sport
+    public class Bookkeeper
     {
         public int Id { get; set; }
 
