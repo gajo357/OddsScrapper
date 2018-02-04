@@ -112,7 +112,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
         private (int homeScore, int awayScore) ReadGameScores(HtmlDocument gameDocument)
         {
-            (int h, int a) defaultResult = (0, 0);
+            (int h, int a) defaultResult = (-1, -1);
 
             var contentDiv = gameDocument.GetElementbyId("event-status");
             if (contentDiv == null)
