@@ -1,8 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Platforms>x64;x86</Platforms>
+    <Platforms>x86;x64</Platforms>
+    <StartupObject></StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -23,11 +25,11 @@
 
   <ItemGroup>
     <PackageReference Include="CefSharp.OffScreen" Version="57.0.0" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.6.16" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OddsScrapper.Shared\OddsScrapper.Shared.csproj" />
+    <ProjectReference Include="..\OddsScrapper.WebsiteScraping\OddsScrapper.WebsiteScraping.csproj" />
   </ItemGroup>
 
 </Project>

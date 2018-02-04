@@ -9,18 +9,16 @@ using System.Threading.Tasks;
 
 namespace OddsScrapper.WebsiteScraping.Scrappers
 {
-    public class FinishedGamesScrapper : BaseScrapper
+    public class FinishedGamesScrapper : BaseScrapper, IGamesScrapper
     {
-        public FinishedGamesScrapper(IArchiveDataRepository repository)
-            : base(repository)
+        public FinishedGamesScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
+            : base(repository, reader)
         {
         }
 
         public async Task<IEnumerable<Game>> ScrapeAsync(string baseWebsite, string[] sports, DateTime date)
         {
-            var reader = new HtmlContentReader();
-
-            var leaguesPage = await reader.GetHtmlFromWebpageAsync($"{baseWebsite}/results/#{sports[0]}");
+            var leaguesPage = await Reader.GetHtmlFromWebpageAsync($"{baseWebsite}/results/#{sports[0]}");
 
             if (leaguesPage == null)
                 return null;
@@ -32,13 +30,13 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
                 foreach (var leagueLink in await ReadLeaguesForSportAsync(leaguesPage, sport))
                 {
-                    var seasons = await ReadSeasonsAsync(reader, $"{baseWebsite}{leagueLink}");
+                    var seasons = await ReadSeasonsAsync($"{baseWebsite}{leagueLink}");
 
                     foreach (var seasonLink in seasons)
                     {
-                        foreach (var resultsPage in await ReadSeasonPagesAsync(reader, $"{baseWebsite}{seasonLink}"))
+                        foreach (var resultsPage in await ReadSeasonPagesAsync($"{baseWebsite}{seasonLink}"))
                         {
-                            var games = await GetGamesFromDocumentAsync(reader, resultsPage, sport.Name, true);
+                            var games = await GetGamesFromDocumentAsync(resultsPage, sport.Name, true);
 
                             await Repository.InsertGamesAsync(games);
                         }
@@ -110,11 +108,11 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return results;
         }
 
-        private async Task<IEnumerable<string>> ReadSeasonsAsync(IHtmlContentReader reader, string link)
+        private async Task<IEnumerable<string>> ReadSeasonsAsync(string link)
         {
             var results = new List<string>();
 
-            var html = await reader.GetHtmlFromWebpageAsync(link);
+            var html = await Reader.GetHtmlFromWebpageAsync(link);
             if (html == null)
                 return results;
 
@@ -137,11 +135,11 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return results;
         }
 
-        private async Task<IEnumerable<HtmlDocument>> ReadSeasonPagesAsync(IHtmlContentReader reader, string link)
+        private async Task<IEnumerable<HtmlDocument>> ReadSeasonPagesAsync(string link)
         {
             var results = new List<HtmlDocument>();
 
-            var seasonHtml = await reader.GetHtmlFromWebpageAsync(link);
+            var seasonHtml = await Reader.GetHtmlFromWebpageAsync(link);
 
             // first page of the season
             var divTable = FindResultsDiv(seasonHtml);
@@ -153,7 +151,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             for (var pageIndex = 2; pageIndex <= 50; pageIndex++)
             {
                 var pageLink = $"{link}#/page/{pageIndex}/";
-                var pageResult = await reader.GetHtmlFromWebpageAsync(pageLink);
+                var pageResult = await Reader.GetHtmlFromWebpageAsync(pageLink);
                 if (pageResult == null)
                     break;
 

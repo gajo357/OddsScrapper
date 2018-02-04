@@ -15,11 +15,13 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
         protected const string DateFormat = "dd MMM yyyy";
         protected const string TimeFormat = "HH:MM";
 
+        protected IHtmlContentReader Reader { get; }
         protected IArchiveDataRepository Repository { get; }
 
-        protected BaseScrapper(IArchiveDataRepository repository)
+        protected BaseScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
         {
             Repository = repository;
+            Reader = reader;
         }
 
         protected (string countryName, string leagueName) GetLeagueAndCountryName(string sportName, string gameLink)
@@ -39,7 +41,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return oddNodes.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok"));
         }
 
-        protected async Task<IEnumerable<Game>> GetGamesFromDocumentAsync(IHtmlContentReader reader, HtmlDocument gamesDocument, string sportName, bool getFinishedGames)
+        protected async Task<IEnumerable<Game>> GetGamesFromDocumentAsync(HtmlDocument gamesDocument, string sportName, bool getFinishedGames)
         {
             var games = new List<Game>();
 
@@ -73,7 +75,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
                 if (!gameLink.Contains(sportName))
                     continue;
 
-                var gameDocument = await reader.GetHtmlFromWebpageAsync(gameLink);
+                var gameDocument = await Reader.GetHtmlFromWebpageAsync(gameLink);
                 if (gameDocument == null)
                     continue;
 

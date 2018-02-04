@@ -11,8 +11,8 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 {
     public class UnfinishedGamesScrapper : BaseScrapper, IGamesScrapper
     {
-        public UnfinishedGamesScrapper(IArchiveDataRepository repository)
-            : base(repository)
+        public UnfinishedGamesScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
+            : base(repository, reader)
         {
         }
 
@@ -22,10 +22,8 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
             foreach(var sport in sports)
             {
-                var reader = new HtmlContentReader();
-
-                var gamesDocument = await GetGamesPlayedOnDateDocumentAsync(reader, baseWebsite, sport, date);
-                var games = await GetGamesFromDocumentAsync(reader, gamesDocument, sport, false);
+                var gamesDocument = await GetGamesPlayedOnDateDocumentAsync(baseWebsite, sport, date);
+                var games = await GetGamesFromDocumentAsync(gamesDocument, sport, false);
 
                 allGames.AddRange(games);
             }
@@ -35,10 +33,10 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return allGames;
         }
 
-        private async Task<HtmlDocument> GetGamesPlayedOnDateDocumentAsync(IHtmlContentReader reader, string baseWebsite, string sport, DateTime date)
+        private async Task<HtmlDocument> GetGamesPlayedOnDateDocumentAsync(string baseWebsite, string sport, DateTime date)
         {
             var link = $"{baseWebsite}/matches/{sport}/";
-            var page = await reader.GetHtmlFromWebpageAsync(link);
+            var page = await Reader.GetHtmlFromWebpageAsync(link);
             if (page == null)
                 return null;
 
@@ -55,7 +53,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             if (!gamesLink.StartsWith(baseWebsite))
                 gamesLink = $"{baseWebsite}{gamesLink}";
 
-            return await reader.GetHtmlFromWebpageAsync(gamesLink);
+            return await Reader.GetHtmlFromWebpageAsync(gamesLink);
         }
 
         private string GetDateAsStringAttribute(DateTime date)
