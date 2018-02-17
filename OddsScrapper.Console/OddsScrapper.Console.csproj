@@ -25,10 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CefSharp.OffScreen" Version="63.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\OddsScrapper.Repository\OddsScrapper.Repository.csproj" />
     <ProjectReference Include="..\OddsScrapper.Shared\OddsScrapper.Shared.csproj" />
     <ProjectReference Include="..\OddsScrapper.WebsiteScraping\OddsScrapper.WebsiteScraping.csproj" />
   </ItemGroup>

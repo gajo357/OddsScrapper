@@ -1,5 +1,4 @@
-﻿using OddsScrapper.Shared.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace OddsScrapper.Shared.Models

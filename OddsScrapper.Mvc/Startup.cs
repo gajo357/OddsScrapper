@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OddsScrapper.Mvc.Controllers;
+using OddsScrapper.Repository.Repository;
 using OddsScrapper.Shared.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
 
@@ -35,7 +36,7 @@ namespace OddsScrapper.Mvc
             services.AddEntityFrameworkSqlite().AddDbContext<ArchiveContext>();
             services.AddScoped<IArchiveDataRepository, ArchiveDataRepository>();
             services.AddTransient<ArchiveContextSeedData>();
-            services.AddScoped<IHtmlContentReader, HtmlContentReader>();
+            services.AddSingleton<IHtmlContentReader, HtmlContentReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

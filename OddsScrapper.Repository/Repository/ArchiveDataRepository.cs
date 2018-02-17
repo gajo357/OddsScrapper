@@ -2,8 +2,9 @@
 using OddsScrapper.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using OddsScrapper.Shared.Repository;
 
-namespace OddsScrapper.Shared.Repository
+namespace OddsScrapper.Repository.Repository
 {
     public class ArchiveDataRepository : IArchiveDataRepository
     {

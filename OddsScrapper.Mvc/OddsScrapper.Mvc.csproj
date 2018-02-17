@@ -28,16 +28,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="CefSharp.OffScreen" Version="63.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\OddsScrapper.Repository\OddsScrapper.Repository.csproj" />
     <ProjectReference Include="..\OddsScrapper.Shared\OddsScrapper.Shared.csproj" />
     <ProjectReference Include="..\OddsScrapper.WebsiteScraping\OddsScrapper.WebsiteScraping.csproj" />
   </ItemGroup>

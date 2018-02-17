@@ -1,5 +1,4 @@
-﻿using CefSharp;
-using OddsScrapper.Shared.Repository;
+﻿using OddsScrapper.Repository.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
 using OddsScrapper.WebsiteScraping.Scrappers;
 using System;
@@ -28,7 +27,7 @@ namespace OddsScrapper.Console
         {
             try
             {
-                Cef.Initialize(new CefSettings());
+                //Cef.Initialize(new CefSettings());
 
                 System.Console.WriteLine("Press 1 to download all history, press 2 to download coming games");
                 var input = System.Console.ReadLine();
@@ -64,7 +63,7 @@ namespace OddsScrapper.Console
             {
                 // Clean up Chromium objects.  You need to call this in your application otherwise
                 // you will get a crash when closing.
-                Cef.Shutdown();
+                //Cef.Shutdown();
             }
         }
     }

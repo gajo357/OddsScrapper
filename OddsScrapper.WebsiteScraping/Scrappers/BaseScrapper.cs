@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using CefSharp;
+using HtmlAgilityPack;
 using OddsScrapper.Shared.Models;
 using OddsScrapper.Shared.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
@@ -17,6 +18,21 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
         protected IHtmlContentReader Reader { get; }
         protected IArchiveDataRepository Repository { get; }
+
+        static BaseScrapper()
+        {
+            try
+            {
+                Cef.Initialize(new CefSettings());
+
+            }
+            finally
+            {
+                // Clean up Chromium objects.  You need to call this in your application otherwise
+                // you will get a crash when closing.
+                //Cef.Shutdown();
+            }
+        }
 
         protected BaseScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
         {
@@ -174,7 +190,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             var contentDiv = gameDocument.GetElementbyId("col-content");
             var header = contentDiv.Element(HtmlTagNames.H1);
 
-            var participants = header.InnerText.Replace("&nbsp;", string.Empty, StringComparison.InvariantCultureIgnoreCase).Replace("&amp;", "and", StringComparison.InvariantCultureIgnoreCase).Replace("'", " ").Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
+            var participants = header.InnerText.Replace("&nbsp;", string.Empty).Replace("&amp;", "and").Replace("'", " ").Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
             if (participants.Length < 2)
                 return (null, null);
 

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Design;
 using OddsScrapper.Shared.Models;
 
-namespace OddsScrapper.Shared.Repository
+namespace OddsScrapper.Repository.Repository
 {
     public class ArchiveContextFactory : IDesignTimeDbContextFactory<ArchiveContext>
     {
