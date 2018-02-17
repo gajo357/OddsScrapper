@@ -36,7 +36,7 @@ namespace OddsScrapper.Mvc
             services.AddEntityFrameworkSqlite().AddDbContext<ArchiveContext>();
             services.AddScoped<IArchiveDataRepository, ArchiveDataRepository>();
             services.AddTransient<ArchiveContextSeedData>();
-            services.AddSingleton<IHtmlContentReader, HtmlContentReader>();
+            services.AddScoped<IHtmlContentReader, HtmlContentReader>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

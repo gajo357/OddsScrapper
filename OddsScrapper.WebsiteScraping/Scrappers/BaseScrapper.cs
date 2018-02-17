@@ -1,5 +1,4 @@
-﻿using CefSharp;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using OddsScrapper.Shared.Models;
 using OddsScrapper.Shared.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
@@ -18,21 +17,6 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
         protected IHtmlContentReader Reader { get; }
         protected IArchiveDataRepository Repository { get; }
-
-        static BaseScrapper()
-        {
-            try
-            {
-                Cef.Initialize(new CefSettings());
-
-            }
-            finally
-            {
-                // Clean up Chromium objects.  You need to call this in your application otherwise
-                // you will get a crash when closing.
-                //Cef.Shutdown();
-            }
-        }
 
         protected BaseScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
         {

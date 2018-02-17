@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using OddsScrapper.WebsiteScrapping;
 
 namespace OddsScrapper.Mvc
 {
@@ -7,7 +8,17 @@ namespace OddsScrapper.Mvc
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+
+            try
+            {
+                ScrapperInitializer.Initialize();
+
+                BuildWebHost(args).Run();
+            }
+            finally
+            {
+                ScrapperInitializer.CleanUp();
+            }
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
