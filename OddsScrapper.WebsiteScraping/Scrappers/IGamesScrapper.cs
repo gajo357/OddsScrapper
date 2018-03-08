@@ -1,4 +1,4 @@
-﻿using OddsScrapper.Shared.Models;
+﻿using OddsScrapper.Repository.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

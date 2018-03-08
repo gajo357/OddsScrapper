@@ -1,24 +1,24 @@
 ﻿using HtmlAgilityPack;
-using OddsScrapper.Shared.Models;
-using OddsScrapper.Shared.Repository;
+using OddsScrapper.Repository.Models;
+using OddsScrapper.Repository.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
+using OddsScrapper.WebsiteScrapping.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace OddsScrapper.WebsiteScraping.Scrappers
 {
     public abstract class BaseScrapper
     {
-        protected const string DateFormat = "dd MMM yyyy";
-        protected const string TimeFormat = "HH:MM";
+        public const string DateFormat = "dd MMM yyyy";
+        public const string TimeFormat = "HH:MM";
 
         protected IHtmlContentReader Reader { get; }
-        protected IArchiveDataRepository Repository { get; }
+        protected IDbRepository Repository { get; }
 
-        protected BaseScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
+        protected BaseScrapper(IDbRepository repository, IHtmlContentReader reader)
         {
             Repository = repository;
             Reader = reader;
@@ -34,227 +34,96 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return (countryName, leagueName);
         }
 
-        protected bool HasGameFinished(HtmlNode[] tds)
-        {
-            var oddNodes = tds.Where(s => s.Attributes[HtmlAttributes.Class].Value.Contains("odds-nowrp"));
-
-            return oddNodes.Any(s => s.Attributes[HtmlAttributes.Class].Value.Contains("result-ok"));
-        }
-
-        protected async Task<IEnumerable<Game>> GetGamesFromDocumentAsync(HtmlDocument gamesDocument, string sportName, bool getFinishedGames)
+        protected async Task<IEnumerable<Game>> GetGamesFromDocumentAsync(HtmlDocument gamesDocument, Sport sport, bool getFinishedGames, League league = null)
         {
             var games = new List<Game>();
 
             var div = gamesDocument.GetElementbyId("table-matches");
-            var gamesTable = div.Element(HtmlTagNames.Table);
-            var isPlayoffs = false;
-            foreach (var tableRow in gamesTable.Element(HtmlTagNames.Tbody).ChildNodes)
-            {
-                var attribute = tableRow.GetAttributeValue(HtmlAttributes.Class, null);
-                if (string.IsNullOrEmpty(attribute))
-                    continue;
+            var gamesTable = div.Elements(HtmlTagNames.Table).FirstOrDefault();
+            if (gamesTable == null)
+                return games;
 
-                if (attribute.Contains("center nob-border"))
+            var isPlayoffs = false;
+            foreach (var tableRow in gamesTable.Element(HtmlTagNames.Tbody).ChildNodes.WithAttribute(HtmlAttributes.Class))
+            {
+                var attribute = tableRow.Attributes[HtmlAttributes.Class];
+                if (attribute.Value.Contains("center nob-border"))
                 {
                     isPlayoffs = tableRow.InnerText.Contains("Play Offs");
                 }
 
                 // date, matchup and odds tds in a row
-                var tds = tableRow.ChildNodes.Where(s => s.Name == HtmlTagNames.Td).ToArray();
+                var tds = tableRow.ChildNodes.WithName(HtmlTagNames.Td).ToArray();
                 if (tds.Length < 4)
                     continue;
 
                 // game has finished?
-                var gameFinished = HasGameFinished(tds);
+                var gameFinished = tds.HasGameFinished();
                 if (getFinishedGames && ! gameFinished)
                     continue;
                 if (!getFinishedGames && gameFinished)
                     continue;
 
-                var gameLink = ReadGameLink(tds);
-                if (!gameLink.Contains(sportName))
+                var gameLink = tds.ReadGameLink();
+                if (!gameLink.Contains(sport.Name))
                     continue;
 
                 var gameDocument = await Reader.GetHtmlFromWebpageAsync(gameLink);
                 if (gameDocument == null)
                     continue;
 
-                var odds = await ReadGameOddsAsync(gameDocument);
+                var odds = gameDocument.ReadGameOddsFromGameDocument();
                 if (!odds.Any())
                     continue;
 
-                var gameDate = ReadDateAndTime(gameDocument);
+                var oddsTask = GetGameOddsWithBookersAsync(odds);
 
-                (string countryName, string leagueName) = GetLeagueAndCountryName(sportName, gameLink);
-                (int homeScore, int awayScore) = ReadGameScores(gameDocument);
-                (string homeTeamName, string awayTeamName) = ReadParticipants(gameDocument);
+                var leagueTask = league == null ?
+                    ReadLeague(sport, gameLink) :
+                    Task.FromResult(league);
 
+                var gameDate = gameDocument.ReadDateAndTimeFromGameDocument();
+                (int homeScore, int awayScore, bool isOvertime) = gameDocument.ReadGameScoresFromGameDocument();
+                (string homeTeamName, string awayTeamName) = gameDocument.ReadParticipantsFromGameDocument();
 
-                var homeTeam = await Repository.GetOrCreateTeamAsync(homeTeamName);
-                var awayTeam = await Repository.GetOrCreateTeamAsync(awayTeamName);
-                var sport = await Repository.GetOrCreateSportAsync(sportName);
-                var country = await Repository.GetOrCreateCountryAsync(countryName);
-                var league = await Repository.GetOrCreateLeagueAsync(sportName, countryName, leagueName);
+                var homeTeam = Repository.GetOrCreateTeamAsync(homeTeamName, sport);
+                var awayTeam = Repository.GetOrCreateTeamAsync(awayTeamName, sport);
 
                 var game = new Game();
+                game.IsOvertime = isOvertime;
                 game.IsPlayoffs = isPlayoffs;
-                game.HomeTeam = homeTeam;
-                game.AwayTeam = awayTeam;
-                game.League = league;
-                game.Odds.AddRange(odds);
+                game.HomeTeam = await homeTeam;
+                game.AwayTeam = await awayTeam;
+                game.League = await leagueTask;
+                game.Odds.AddRange(await oddsTask);
                 game.Date = gameDate;
 
-                games.Add(game);
+                games.Add(await Repository.UpdateOrInsertGameAsync(game));
             }
 
             return games;
         }
 
-        private (int homeScore, int awayScore) ReadGameScores(HtmlDocument gameDocument)
+        private async Task<League> ReadLeague(Sport sport, string gameLink)
         {
-            (int h, int a) defaultResult = (-1, -1);
-
-            var contentDiv = gameDocument.GetElementbyId("event-status");
-            if (contentDiv == null)
-                return defaultResult;
-
-            var statusText = contentDiv.InnerText;
-
-            const string regexPattern = @"Final result (\d+):(\d+)*";
-            var match = Regex.Match(statusText, regexPattern);
-            if (match == null)
-                return defaultResult;
-
-            var home = Convert.ToInt32(match.Groups[1].Value);
-            var away = Convert.ToInt32(match.Groups[2].Value);
-            return (home, away);
+            (string countryName, string leagueName) = GetLeagueAndCountryName(sport.Name, gameLink);
+            var country = await Repository.GetOrCreateCountryAsync(countryName);
+            return await Repository.GetOrCreateLeagueAsync(leagueName, false, sport, country);
         }
 
-        protected string ReadGameLink(HtmlNode[] tds)
+        protected async Task<IList<GameOdds>> GetGameOddsWithBookersAsync(IEnumerable<(string bookersName, GameOdds)> oddsWithName)
         {
-            var nameTd = tds.First(s => s.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("table-participant"));
-            var nameElement = nameTd.Elements(HtmlTagNames.A).First(s => !string.IsNullOrEmpty(s.GetAttributeValue(HtmlAttributes.Href, null)) && !s.Attributes[HtmlAttributes.Href].Value.Contains("javascript"));
+            var result = new List<GameOdds>();
 
-            var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
-
-            return gameLink;
-        }
-
-        protected DateTime? ReadDateAndTime(HtmlDocument gameDocument)
-        {
-            HtmlNode dateNode = null;
-
-            var contentDiv = gameDocument.GetElementbyId("col-content");
-            foreach (var p in contentDiv.Elements("p"))
+            foreach((string bookerName, GameOdds odd) in oddsWithName)
             {
-                if (!p.GetAttributeValue(HtmlAttributes.Class, "").Contains("date"))
-                {
-                    continue;
-                }
-
-                dateNode = p;
-                break;
-            }
-
-            if (dateNode == null)
-                return null;
-
-            var dateStrings = dateNode.InnerText.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            var dateString = dateStrings[1];
-            var timeString = dateStrings[2];
-
-            if (DateTime.TryParseExact($"{dateString} {timeString}", $"{DateFormat} {TimeFormat}", null, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime date))
-                return date;
-
-            return null;
-        }
-
-        protected (string home, string away) ReadParticipants(HtmlDocument gameDocument)
-        {
-            var contentDiv = gameDocument.GetElementbyId("col-content");
-            var header = contentDiv.Element(HtmlTagNames.H1);
-
-            var participants = header.InnerText.Replace("&nbsp;", string.Empty).Replace("&amp;", "and").Replace("'", " ").Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries);
-            if (participants.Length < 2)
-                return (null, null);
-
-            return (participants[0], participants[1]);
-        }
-
-        protected async Task<List<GameOdds>> ReadGameOddsAsync(HtmlDocument gameDocument)
-        {
-            var odds = new List<GameOdds>();
-
-            HtmlNode table = GetOddsTableFromGameDocument(gameDocument);
-            if (table == null)
-                return odds;
-
-            foreach (var tableRow in table.Element(HtmlTagNames.Tbody).ChildNodes)
-            {
-                // date, matchup and odds tds in a row
-                var tds = tableRow.ChildNodes.Where(s => s.Name == HtmlTagNames.Td).ToArray();
-                if (tds.Length < 4)
-                    continue;
-
-                var bookersName = tds[0].InnerText.Replace("&nbsp;", string.Empty).Replace(Environment.NewLine, string.Empty);
-                if (string.IsNullOrEmpty(bookersName))
-                    continue;
-
-                var booker = await Repository.GetOrCreateBookerAsync(bookersName);
-
-                var oddsTds = tds.Where(t => t.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("right odds")).ToArray();
-                if (oddsTds.Length < 2)
-                    continue;
-
-                var deactivated = oddsTds.Any(s => s.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("deactivate"));
-
-                var currentOdds = oddsTds.Select(GetOddFromTdNode).ToArray();
-
-                var odd = new GameOdds();
+                var booker = await Repository.GetOrCreateBookerAsync(bookerName);
                 odd.Bookkeeper = booker;
-                odd.IsValid = !deactivated;
-                odd.HomeOdd = currentOdds[0];
-                if (currentOdds.Length == 2)
-                {
-                    odd.DrawOdd = 0;
-                    odd.AwayOdd = currentOdds[1];
-                }
-                else
-                {
-                    odd.DrawOdd = currentOdds[1];
-                    odd.AwayOdd = currentOdds[2];
-                }
 
-                odds.Add(odd);
+                result.Add(odd);
             }
 
-            return odds;
-        }
-
-        protected HtmlNode GetOddsTableFromGameDocument(HtmlDocument gameDocument)
-        {
-            var div = gameDocument.GetElementbyId("odds-data-table");
-            HtmlNode table = null;
-            foreach (var child in div.ChildNodes)
-            {
-                var t = child.Element(HtmlTagNames.Table);
-                if (t != null && t.GetAttributeValue(HtmlAttributes.Class, string.Empty).Contains("table-main detail-odds sortable"))
-                {
-                    table = t;
-                    break;
-                }
-            }
-
-            return table;
-        }
-
-        private static double GetOddFromTdNode(HtmlNode tdNode)
-        {
-            double odd;
-            if (double.TryParse(tdNode.FirstChild.InnerText, out odd))
-                return odd;
-
-            return double.NaN;
+            return result;
         }
     }
 }

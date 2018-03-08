@@ -1,6 +1,6 @@
 ﻿using HtmlAgilityPack;
-using OddsScrapper.Shared.Models;
-using OddsScrapper.Shared.Repository;
+using OddsScrapper.Repository.Models;
+using OddsScrapper.Repository.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 {
     public class UnfinishedGamesScrapper : BaseScrapper, IGamesScrapper
     {
-        public UnfinishedGamesScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
+        public UnfinishedGamesScrapper(IDbRepository repository, IHtmlContentReader reader)
             : base(repository, reader)
         {
         }
@@ -20,15 +20,14 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
         {
             var allGames = new List<Game>();
 
-            foreach(var sport in sports)
+            foreach(var sportName in sports)
             {
-                var gamesDocument = await GetGamesPlayedOnDateDocumentAsync(baseWebsite, sport, date);
+                var sport = await Repository.GetOrCreateSportAsync(sportName);
+                var gamesDocument = await GetGamesPlayedOnDateDocumentAsync(baseWebsite, sportName, date);
                 var games = await GetGamesFromDocumentAsync(gamesDocument, sport, false);
 
                 allGames.AddRange(games);
             }
-
-            await Repository.SaveChangesAsync();
 
             return allGames;
         }

@@ -1,7 +1,8 @@
 ﻿using HtmlAgilityPack;
-using OddsScrapper.Shared.Models;
-using OddsScrapper.Shared.Repository;
+using OddsScrapper.Repository.Models;
+using OddsScrapper.Repository.Repository;
 using OddsScrapper.WebsiteScraping.Helpers;
+using OddsScrapper.WebsiteScrapping.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,51 +12,113 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 {
     public class FinishedGamesScrapper : BaseScrapper, IGamesScrapper
     {
-        public FinishedGamesScrapper(IArchiveDataRepository repository, IHtmlContentReader reader)
+        public FinishedGamesScrapper(IDbRepository repository, IHtmlContentReader reader)
             : base(repository, reader)
         {
         }
 
         public async Task<IEnumerable<Game>> ScrapeAsync(string baseWebsite, string[] sports, DateTime date)
         {
-            var leaguesPage = await Reader.GetHtmlFromWebpageAsync($"{baseWebsite}/results/#{sports[0]}");
-
-            if (leaguesPage == null)
-                return null;
-
-            var allGames = new List<Game>();
-            foreach (var sportName in sports)
+            var sportLeaguesTasks = ReadLeaguePagesForSports(baseWebsite, sports);
+            foreach (var leaguesTask in sportLeaguesTasks)
             {
-                var sport = await Repository.GetOrCreateSportAsync(sportName);
-
-                foreach (var leagueLink in await ReadLeaguesForSportAsync(leaguesPage, sport))
+                var leagueLinks = ReadLeagueLinksFromLeaguesPage(await leaguesTask);
+                foreach (var leagueLink in leagueLinks)
                 {
-                    var seasons = await ReadSeasonsAsync($"{baseWebsite}{leagueLink}");
+                    var leaguePageTask = Reader.GetHtmlFromWebpageAsync(leagueLink);
+                    var leagueTask = ReadLeague(leagueLink);
+                    var seasonPagesTasks = ReadSeasonLinks(await leaguePageTask)
+                        .Select(s => $"{baseWebsite}{s}")
+                        .Select(s => Tuple.Create(s, Reader.GetHtmlFromWebpageAsync(s)))
+                        .ToList();
 
-                    foreach (var seasonLink in seasons)
+                    foreach (var seasonPageTask in seasonPagesTasks)
                     {
-                        foreach (var resultsPage in await ReadSeasonPagesAsync($"{baseWebsite}{seasonLink}"))
+                        var seasonStartPage = await seasonPageTask.Item2;
+                        foreach (var seasonPage in ReadSeasonPages(seasonPageTask.Item1, seasonStartPage))
                         {
-                            var games = await GetGamesFromDocumentAsync(resultsPage, sport.Name, true);
+                            var league = await leagueTask;
+                            var games = await GetGamesFromDocumentAsync(await seasonPage, league.Sport, true, league);
 
-                            await Repository.InsertGamesAsync(games);
                         }
 
-                        // it is a good question when to persist the changes
-                        await Repository.SaveChangesAsync();
                     }
                 }
             }
 
-
-            return allGames;
+            return Enumerable.Empty<Game>();
         }
 
+        private async Task<League> ReadLeague(string leagueLink)
+        {
+            var linkParts = leagueLink.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
+            if (linkParts.Length < 4)
+                return null;
+
+            var sportName = linkParts[0];
+            var countryName = linkParts[1];
+            var leagueName = linkParts[2];
+
+            if (string.IsNullOrEmpty(sportName) || string.IsNullOrEmpty(leagueName) || string.IsNullOrEmpty(countryName))
+                return null;
+
+            var sportTask = Repository.GetOrCreateSportAsync(sportName);
+            var countryTask = Repository.GetOrCreateCountryAsync(countryName);
+
+            var league = await Repository.GetOrCreateLeagueAsync(leagueName, false, await sportTask, await countryTask);
+
+            return league;
+        }
+
+        private IEnumerable<Task<HtmlDocument>> ReadLeaguePagesForSports(string baseWebsite, string[] sports)
+        {
+            var result = new List<Task<HtmlDocument>>();
+            foreach (var sportName in sports)
+                result.Add(Reader.GetHtmlFromWebpageAsync($"{baseWebsite}/results/#{sportName}"));
+
+            return result;
+        }
 
         private const string LeaguesTableClassAttribute = "table-main sport";
-        private async Task<IEnumerable<string>> ReadLeaguesForSportAsync(HtmlDocument page, Sport sport)
+        private IEnumerable<string> ReadLeagueLinksFromLeaguesPage(HtmlDocument page)
         {
-            var results = new List<string>();
+            if (string.IsNullOrEmpty(page.DocumentNode.InnerText))
+                yield break;
+
+            var tableBody = page
+                .DocumentNode
+                .Descendants(HtmlTagNames.Table)
+                .FirstOrDefault(s => s.AttributeContains(HtmlAttributes.Class, LeaguesTableClassAttribute))
+                .Elements(HtmlTagNames.Tbody)
+                .FirstOrDefault();
+            if (tableBody == null)
+                yield break;
+
+            IDictionary<string, int> leagueCountryCount = new Dictionary<string, int>();
+            foreach (var tr in tableBody.ChildNodes)
+            {
+                // exactly 2 tds in a row
+                var tds = tr.ChildNodes.Where(s => s.Name == HtmlTagNames.Td).ToArray();
+                if (tds.Length != 2)
+                    continue;
+
+                foreach (var td in tds)
+                {
+                    if (string.IsNullOrEmpty(td.InnerText))
+                        continue;
+
+                    var leagueLink = td.Element(HtmlTagNames.A).Attributes[HtmlAttributes.Href].Value;
+                    if (string.IsNullOrEmpty(leagueLink))
+                        continue;
+
+                    yield return leagueLink;
+                }
+            }
+        }
+
+        private async Task<IEnumerable<Task<League>>> ReadLeaguesForSportAsync(HtmlDocument page, Sport sport)
+        {
+            var results = new List<Task<League>>();
 
             var table = page.DocumentNode.Descendants(HtmlTagNames.Table).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Class, null) == LeaguesTableClassAttribute);
 
@@ -89,36 +152,30 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
                     if (string.IsNullOrEmpty(leagueName) || string.IsNullOrEmpty(countryName))
                         continue;
 
-                    var league = await Repository.GetOrCreateLeagueAsync(sport.Name, countryName, leagueName);
+                    var country = await Repository.GetOrCreateCountryAsync(countryName);
+
+                    var league = Repository.GetOrCreateLeagueAsync(leagueName, !leagueCountryCount.ContainsKey(countryName), sport, country);
+                    results.Add(league);
+
                     if (leagueCountryCount.ContainsKey(countryName))
                     {
-                        league.IsFirst = false;
                         leagueCountryCount[countryName]++;
                     }
                     else
                     {
-                        league.IsFirst = true;
                         leagueCountryCount.Add(countryName, 1);
                     }
-
-                    results.Add(leagueName);
                 }
             }
 
             return results;
         }
 
-        private async Task<IEnumerable<string>> ReadSeasonsAsync(string link)
+        private IEnumerable<string> ReadSeasonLinks(HtmlDocument leaguePage)
         {
-            var results = new List<string>();
-
-            var html = await Reader.GetHtmlFromWebpageAsync(link);
-            if (html == null)
-                return results;
-
-            var mainDiv = html.DocumentNode.Descendants(HtmlTagNames.Div).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Class, null) == "main-menu2 main-menu-gray");
+            var mainDiv = leaguePage.DocumentNode.Descendants(HtmlTagNames.Div).FirstOrDefault(s => s.GetAttributeValue(HtmlAttributes.Class, null) == "main-menu2 main-menu-gray");
             if (mainDiv == null)
-                return results;
+                yield break;
 
             var ul = mainDiv.Element(HtmlTagNames.Ul);
             foreach (var a in ul.Descendants(HtmlTagNames.A))
@@ -129,33 +186,25 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
                 if (season.Contains("/"))
                     season = season.Remove(season.IndexOf("/", StringComparison.Ordinal));
 
-                results.Add(seasonResultsLink);
+                yield return seasonResultsLink;
             }
-
-            return results;
         }
 
-        private async Task<IEnumerable<HtmlDocument>> ReadSeasonPagesAsync(string link)
+        private IEnumerable<Task<HtmlDocument>> ReadSeasonPages(string link, HtmlDocument seasonHtml)
         {
-            var results = new List<HtmlDocument>();
-
-            var seasonHtml = await Reader.GetHtmlFromWebpageAsync(link);
+            var results = new List<Task<HtmlDocument>>();
 
             // first page of the season
             var divTable = FindResultsDiv(seasonHtml);
             if (divTable == null)
                 return results;
 
-            results.Add(seasonHtml);
+            results.Add(Task.FromResult(seasonHtml));
 
-            for (var pageIndex = 2; pageIndex <= 50; pageIndex++)
+            for (var pageIndex = 2; pageIndex <= 20; pageIndex++)
             {
                 var pageLink = $"{link}#/page/{pageIndex}/";
-                var pageResult = await Reader.GetHtmlFromWebpageAsync(pageLink);
-                if (pageResult == null)
-                    break;
-
-                results.Add(pageResult);
+                results.Add(Reader.GetHtmlFromWebpageAsync(pageLink));
             }
 
             return results;
