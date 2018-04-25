@@ -19,29 +19,20 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
         public async Task<IEnumerable<Game>> ScrapeAsync(string baseWebsite, string[] sports, DateTime date)
         {
-            var sportLeaguesTasks = ReadLeaguePagesForSports(baseWebsite, sports);
-            foreach (var leaguesTask in sportLeaguesTasks)
+            foreach (var leagueDocument in await ReadLeaguePagesForSports(baseWebsite, sports))
             {
-                var leagueLinks = ReadLeagueLinksFromLeaguesPage(await leaguesTask);
-                foreach (var leagueLink in leagueLinks)
+                foreach (var leagueLink in ReadLeagueLinksFromLeaguesPage(leagueDocument).Select(s => PrependBase(baseWebsite, s)))
                 {
-                    var leaguePageTask = Reader.GetHtmlFromWebpageAsync(leagueLink);
-                    var leagueTask = ReadLeague(leagueLink);
-                    var seasonPagesTasks = ReadSeasonLinks(await leaguePageTask)
-                        .Select(s => $"{baseWebsite}{s}")
-                        .Select(s => Tuple.Create(s, Reader.GetHtmlFromWebpageAsync(s)))
-                        .ToList();
+                    var leaguePage = await Reader.GetHtmlFromWebpageAsync(leagueLink);
+                    var league = await GetOrCreateLeagueAsync(leagueLink);
 
-                    foreach (var seasonPageTask in seasonPagesTasks)
+                    foreach (var seasonLink in ReadSeasonLinks(leaguePage).Select(s => PrependBase(baseWebsite, s)))
                     {
-                        var seasonStartPage = await seasonPageTask.Item2;
-                        foreach (var seasonPage in ReadSeasonPages(seasonPageTask.Item1, seasonStartPage))
+                        var seasonStartPage = await Reader.GetHtmlFromWebpageAsync(seasonLink);
+                        foreach (var seasonPage in await ReadSeasonPages(seasonLink, seasonStartPage))
                         {
-                            var league = await leagueTask;
-                            var games = await GetGamesFromDocumentAsync(await seasonPage, league.Sport, true, league);
-
+                            var games = await GetGamesFromDocumentAsync(baseWebsite, seasonPage, league.Sport, true, league);
                         }
-
                     }
                 }
             }
@@ -49,15 +40,15 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return Enumerable.Empty<Game>();
         }
 
-        private async Task<League> ReadLeague(string leagueLink)
+        private async Task<League> GetOrCreateLeagueAsync(string leagueLink)
         {
             var linkParts = leagueLink.Split(new[] { "/" }, StringSplitOptions.RemoveEmptyEntries);
             if (linkParts.Length < 4)
                 return null;
 
-            var sportName = linkParts[0];
-            var countryName = linkParts[1];
-            var leagueName = linkParts[2];
+            var sportName = linkParts[2];
+            var countryName = linkParts[3];
+            var leagueName = linkParts[4];
 
             if (string.IsNullOrEmpty(sportName) || string.IsNullOrEmpty(leagueName) || string.IsNullOrEmpty(countryName))
                 return null;
@@ -70,11 +61,11 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return league;
         }
 
-        private IEnumerable<Task<HtmlDocument>> ReadLeaguePagesForSports(string baseWebsite, string[] sports)
+        private async Task<IEnumerable<HtmlDocument>> ReadLeaguePagesForSports(string baseWebsite, string[] sports)
         {
-            var result = new List<Task<HtmlDocument>>();
+            var result = new List<HtmlDocument>();
             foreach (var sportName in sports)
-                result.Add(Reader.GetHtmlFromWebpageAsync($"{baseWebsite}/results/#{sportName}"));
+                result.Add(await Reader.GetHtmlFromWebpageAsync($"{baseWebsite}/results/#{sportName}"));
 
             return result;
         }
@@ -190,21 +181,21 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             }
         }
 
-        private IEnumerable<Task<HtmlDocument>> ReadSeasonPages(string link, HtmlDocument seasonHtml)
+        private async Task<IEnumerable<HtmlDocument>> ReadSeasonPages(string link, HtmlDocument seasonHtml)
         {
-            var results = new List<Task<HtmlDocument>>();
+            var results = new List<HtmlDocument>();
 
             // first page of the season
             var divTable = FindResultsDiv(seasonHtml);
             if (divTable == null)
                 return results;
 
-            results.Add(Task.FromResult(seasonHtml));
+            results.Add(seasonHtml);
 
             for (var pageIndex = 2; pageIndex <= 20; pageIndex++)
             {
                 var pageLink = $"{link}#/page/{pageIndex}/";
-                results.Add(Reader.GetHtmlFromWebpageAsync(pageLink));
+                results.Add(await Reader.GetHtmlFromWebpageAsync(pageLink));
             }
 
             return results;

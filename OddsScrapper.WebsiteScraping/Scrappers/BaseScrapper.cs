@@ -13,7 +13,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
     public abstract class BaseScrapper
     {
         public const string DateFormat = "dd MMM yyyy";
-        public const string TimeFormat = "HH:MM";
+        public const string TimeFormat = "HH:mm";
 
         protected IHtmlContentReader Reader { get; }
         protected IDbRepository Repository { get; }
@@ -34,12 +34,11 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return (countryName, leagueName);
         }
 
-        protected async Task<IEnumerable<Game>> GetGamesFromDocumentAsync(HtmlDocument gamesDocument, Sport sport, bool getFinishedGames, League league = null)
+        protected async Task<IEnumerable<Game>> GetGamesFromDocumentAsync(string baseWebsite, HtmlDocument gamesDocument, Sport sport, bool getFinishedGames, League league = null)
         {
             var games = new List<Game>();
 
-            var div = gamesDocument.GetElementbyId("table-matches");
-            var gamesTable = div.Elements(HtmlTagNames.Table).FirstOrDefault();
+            var gamesTable = gamesDocument.GetElementbyId("tournamentTable");
             if (gamesTable == null)
                 return games;
 
@@ -68,6 +67,8 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
                 if (!gameLink.Contains(sport.Name))
                     continue;
 
+                gameLink = PrependBase(baseWebsite, gameLink);
+
                 var gameDocument = await Reader.GetHtmlFromWebpageAsync(gameLink);
                 if (gameDocument == null)
                     continue;
@@ -79,7 +80,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
                 var oddsTask = GetGameOddsWithBookersAsync(odds);
 
                 var leagueTask = league == null ?
-                    ReadLeague(sport, gameLink) :
+                    ReadLeagueAsync(sport, gameLink) :
                     Task.FromResult(league);
 
                 var gameDate = gameDocument.ReadDateAndTimeFromGameDocument();
@@ -92,9 +93,12 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
                 var game = new Game();
                 game.IsOvertime = isOvertime;
                 game.IsPlayoffs = isPlayoffs;
+                game.HomeTeamScore = homeScore;
+                game.AwayTeamScore = awayScore;
                 game.HomeTeam = await homeTeam;
                 game.AwayTeam = await awayTeam;
                 game.League = await leagueTask;
+                game.GameLink = gameLink;
                 game.Odds.AddRange(await oddsTask);
                 game.Date = gameDate;
 
@@ -104,7 +108,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             return games;
         }
 
-        private async Task<League> ReadLeague(Sport sport, string gameLink)
+        private async Task<League> ReadLeagueAsync(Sport sport, string gameLink)
         {
             (string countryName, string leagueName) = GetLeagueAndCountryName(sport.Name, gameLink);
             var country = await Repository.GetOrCreateCountryAsync(countryName);
@@ -125,5 +129,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
 
             return result;
         }
+
+        protected static string PrependBase(string baseWebsite, string link) => $"{baseWebsite}{link}";
     }
 }

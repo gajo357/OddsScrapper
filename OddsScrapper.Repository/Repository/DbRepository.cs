@@ -69,7 +69,6 @@ namespace OddsScrapper.Repository.Repository
 
             var gameTable = new Table(GamesTable)
                 .AddIdColumn()
-                .AddNameColumn()
                 .AddDatetimeColumn("Date")
                 .AddIntegerColumn("HomeTeamScore")
                 .AddIntegerColumn("AwayTeamScore")

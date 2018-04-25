@@ -64,10 +64,12 @@ namespace OddsScrapper.WebsiteScrapping.Extensions
                 return null;
 
             var dateStrings = dateNode.InnerText.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            var dateString = dateStrings[1];
-            var timeString = dateStrings[2];
+            var dateString = dateStrings[1].Replace("  ", " ").Trim();
+            var timeString = dateStrings[2].Trim();
 
-            if (DateTime.TryParseExact($"{dateString} {timeString}", $"{BaseScrapper.DateFormat} {BaseScrapper.TimeFormat}", null, System.Globalization.DateTimeStyles.AssumeUniversal, out DateTime date))
+            var dateTimeString = $"{dateString} {timeString}";
+            var format = $"{BaseScrapper.DateFormat} {BaseScrapper.TimeFormat}";
+            if (DateTime.TryParseExact(dateTimeString, format, null, System.Globalization.DateTimeStyles.AssumeLocal, out DateTime date))
                 return date;
 
             return null;
@@ -139,14 +141,26 @@ namespace OddsScrapper.WebsiteScrapping.Extensions
 
             const string regexPattern = @"Final result (\d+):(\d+)*";
             var match = Regex.Match(statusText, regexPattern);
-            if (match == null)
+            if (match == null || !match.Success)
                 return defaultResult;
 
             statusText = statusText.ToUpper();
             var isOvertime = statusText.Contains("OT") || statusText.Contains("OVERTIME");
 
-            var home = Convert.ToInt32(match.Groups[1].Value);
-            var away = Convert.ToInt32(match.Groups[2].Value);
+            int home, away;
+            try
+            {
+                home = Convert.ToInt32(match.Groups[1].Value);
+                away = Convert.ToInt32(match.Groups[2].Value);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Console.WriteLine($"Could not parse line {statusText}");
+
+                return defaultResult;
+            }
+
             return (home, away, isOvertime);
         }
     }

@@ -24,7 +24,7 @@ namespace OddsScrapper.WebsiteScraping.Scrappers
             {
                 var sport = await Repository.GetOrCreateSportAsync(sportName);
                 var gamesDocument = await GetGamesPlayedOnDateDocumentAsync(baseWebsite, sportName, date);
-                var games = await GetGamesFromDocumentAsync(gamesDocument, sport, false);
+                var games = await GetGamesFromDocumentAsync(baseWebsite, gamesDocument, sport, false);
 
                 allGames.AddRange(games);
             }

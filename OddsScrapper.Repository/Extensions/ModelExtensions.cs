@@ -47,8 +47,8 @@ namespace OddsScrapper.Repository.Extensions
                 ColumnValuePair.Create(nameof(Game.Date), game.Date),
                 ColumnValuePair.Create(nameof(Game.HomeTeamScore), game.HomeTeamScore),
                 ColumnValuePair.Create(nameof(Game.AwayTeamScore), game.AwayTeamScore),
-                ColumnValuePair.Create(nameof(Game.IsOvertime), game.IsOvertime),
                 ColumnValuePair.Create(nameof(Game.IsPlayoffs), game.IsPlayoffs),
+                ColumnValuePair.Create(nameof(Game.IsOvertime), game.IsOvertime),
                 ColumnValuePair.Create(nameof(Game.GameLink), game.GameLink)
             };
         }

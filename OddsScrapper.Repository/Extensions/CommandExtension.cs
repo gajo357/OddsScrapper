@@ -1,6 +1,7 @@
 ﻿using OddsScrapper.Repository.DbBuilder;
 using OddsScrapper.Repository.Helpers;
 using System.Data.Common;
+using System.Data.SQLite;
 using System.Text;
 
 namespace OddsScrapper.Repository.Extensions
@@ -64,7 +65,7 @@ namespace OddsScrapper.Repository.Extensions
             }
 
             // add the id parameter as the last one
-            command.Parameters.Add(id);
+            command.Parameters.Add(new SQLiteParameter("Id",  id));
 
             command.CommandText = $"UPDATE {tableName} SET {setValueList.ToString()} WHERE Id=?;";
         }

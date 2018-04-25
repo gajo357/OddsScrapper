@@ -8,7 +8,10 @@ namespace OddsScrapper.Repository.Extensions
     {
         public static DbParameter ToParameter(this ColumnValuePair columnValuePair)
         {
-            return new SQLiteParameter(columnValuePair.ValueType, columnValuePair.Value);
+            return new SQLiteParameter(columnValuePair.ValueType, columnValuePair.Value)
+            {
+                SourceColumn = columnValuePair.Column
+            };
         }
     }
 }

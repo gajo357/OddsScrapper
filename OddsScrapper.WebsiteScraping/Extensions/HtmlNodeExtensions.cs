@@ -17,7 +17,7 @@ namespace OddsScrapper.WebsiteScrapping.Extensions
 
         public static bool ContainsAttribute(this HtmlNode node, string attributeName)
         {
-            return string.IsNullOrEmpty(node.GetAttributeValue(attributeName, null));
+            return !string.IsNullOrEmpty(node.GetAttributeValue(attributeName, null));
         }
 
         public static bool AttributeContains(this HtmlNode node, string attributeName, string value)
@@ -43,7 +43,7 @@ namespace OddsScrapper.WebsiteScrapping.Extensions
         public static string ReadGameLink(this IEnumerable<HtmlNode> tds)
         {
             var nameTd = tds.WithAttributeContains(HtmlAttributes.Class, "table-participant").First();
-            var nameElement = nameTd.Elements(HtmlTagNames.A).WithAttributeContains(HtmlAttributes.Href, "javascript").First();
+            var nameElement = nameTd.Elements(HtmlTagNames.A).First();
 
             var gameLink = nameElement.Attributes[HtmlAttributes.Href].Value;
 
