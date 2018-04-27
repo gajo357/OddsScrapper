@@ -33,7 +33,7 @@ module ScrapingParts =
         | [] -> [||]
         | head::_ -> 
             head
-            |> GetAllHrefFromElements
+            |> GetAllHrefTextAndAttribute
             |> Seq.toArray
 
     let GetResultsPagesLinks link paginationElement = 
@@ -66,23 +66,29 @@ module ScrapingParts =
 
     let GetOddsFromRow node =
         let tds = GetTdsFromRow node |> Seq.toArray
-        let name = (tds |> Seq.head |> (fun n -> n.Text)).Trim().Replace("\n", System.String.Empty)
-        let oddTds = 
-            tds 
-            |> Seq.filter (ClassAttributeContains "right odds")
-            |> Seq.toArray
-            
-        let odds = 
-            oddTds
-            |> Seq.map (fun n -> n.Text)
-            |> Seq.map ConvertStringToOdd
-            |> Seq.toList
+        match tds with
+        | [||] -> None
+        | _ ->
+            let name = (tds |> Seq.head |> (fun n -> n.Text)).Trim().Replace("\n", System.String.Empty)
+            let oddTds = 
+                tds 
+                |> Seq.filter (ClassAttributeContains "right odds")
+                |> Seq.toArray
 
-        let deactivated = 
-            oddTds
-            |> Seq.exists (ClassAttributeContains "dark")
+            match oddTds with
+            | [||] -> None
+            | _ ->
+                let odds = 
+                    oddTds
+                    |> Seq.map (fun n -> n.Text)
+                    |> Seq.map ConvertStringToOdd
+                    |> Seq.toList
 
-        { Name = name; Odds = odds; Deactivated = deactivated}
+                let deactivated = 
+                    oddTds
+                    |> Seq.exists (ClassAttributeContains "dark")
+
+                Some { Name = name; Odds = odds; Deactivated = deactivated}
 
     let GetOddsFromGamePage tableNode = 
         tableNode
@@ -90,6 +96,7 @@ module ScrapingParts =
         |> GetTableRows
         |> Seq.filter (ClassAttributeContains "lo")
         |> Seq.map GetOddsFromRow
+        |> Seq.choose id
         |> Seq.toArray
 
     let ReadParticipantsNames participantElement = 

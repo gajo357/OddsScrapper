@@ -2,6 +2,7 @@
 using OddsScrapper.Repository.Extensions;
 using OddsScrapper.Repository.Helpers;
 using OddsScrapper.Repository.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.IO;
@@ -74,6 +75,7 @@ namespace OddsScrapper.Repository.Repository
                 .AddIntegerColumn("AwayTeamScore")
                 .AddBoolColumn("IsPlayoffs")
                 .AddBoolColumn("IsOvertime")
+                .AddTextColumn("Season")
                 .AddTextColumn("GameLink")
                 .AddForeignKeyColumn(leagueTable)
                 .AddForeignKeyColumn(teamTable, "HomeTeamId")
@@ -261,7 +263,7 @@ namespace OddsScrapper.Repository.Repository
         public async Task<int> InsertGameAsync(Game game)
         {
             var gameId = await _sqlConnection.InsertAsync(GamesTable, game.CreateColumnValuePairs());
-            await InsertGameOdds(gameId, game.Odds);
+            await InsertGameOddsAsync(gameId, game.Odds);
 
             return gameId;
         }
@@ -271,18 +273,14 @@ namespace OddsScrapper.Repository.Repository
             game.Id = gameId;
 
             await _sqlConnection.UpdateAsync(GamesTable, gameId, game.CreateColumnValuePairs());
-            await InsertGameOdds(gameId, game.Odds);
+            await InsertGameOddsAsync(gameId, game.Odds);
 
             return gameId;
         }
 
         public async Task<Game> UpdateOrInsertGameAsync(Game game)
         {
-            var gameId = await _sqlConnection.GetIdAsync(GamesTable, 
-                ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, TeamsTable, "HomeTeamId").ColumnName, game.HomeTeam.Id),
-                ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, TeamsTable, "AwayTeamId").ColumnName, game.AwayTeam.Id),
-                ColumnValuePair.Create(nameof(Game.Date), game.Date)
-                );
+            var gameId = await GetGameIdAsync(game.HomeTeam, game.AwayTeam, game.Date);
 
             if (gameId > 0)
             {
@@ -297,13 +295,26 @@ namespace OddsScrapper.Repository.Repository
             return game;
         }
 
+        public async Task<bool> GameExistsAsync(Team homeTeam, Team awayTeam, DateTime date)
+        {
+            return await GetGameIdAsync(homeTeam, awayTeam, date) > 0;
+        }
+
+        private async Task<int> GetGameIdAsync(Team homeTeam, Team awayTeam, DateTime? date)
+        {
+            return await _sqlConnection.GetIdAsync(GamesTable,
+                ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, TeamsTable, "HomeTeamId").ColumnName, homeTeam.Id),
+                ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, TeamsTable, "AwayTeamId").ColumnName, awayTeam.Id),
+                ColumnValuePair.Create(nameof(Game.Date), date));
+        }
+
         private async Task<int> DeleteGameOddsAsync(int gameId)
         {
             return await _sqlConnection.DeleteAsync(GameOddsTable, 
                 ColumnValuePair.Create(new ForegnKeyTableColumn(GameOddsTable, GamesTable, "Id").ColumnName, gameId));
         }
 
-        private async Task<int> InsertGameOdds(int gameId, IList<GameOdds> gameOdds)
+        private async Task<int> InsertGameOddsAsync(int gameId, IList<GameOdds> gameOdds)
         {
             using (var transaction = _sqlConnection.BeginTransaction())
             {

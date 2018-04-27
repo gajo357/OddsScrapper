@@ -2,6 +2,7 @@
 
 module NodeExtensions =
     open OpenQA.Selenium
+    open OddsScraper.FSharp.Scraping.Common
 
     let GetElements name (node:IWebElement) =
         node.FindElements(By.TagName(name))
@@ -15,10 +16,14 @@ module NodeExtensions =
 
     let GetAllHrefElements node = GetElements "a" node
 
-    let GetAllHrefFromElements node =
+    let GetAllHrefTextAndAttribute node =
         GetAllHrefElements node
-        |> Seq.map GetHref
-        |> Seq.filter (fun href -> System.String.IsNullOrEmpty(href) = false)
+        |> Seq.map (fun n -> (GetHref n, n.Text))
+        |> Seq.filter (fst >> IsNonEmptyString)
+
+    let GetAllHrefFromElements node =
+        GetAllHrefTextAndAttribute node
+        |> Seq.map fst
 
     let GetClassAtttribute (node:IWebElement) =
         node.GetAttribute("class")

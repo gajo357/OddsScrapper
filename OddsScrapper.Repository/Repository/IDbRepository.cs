@@ -1,4 +1,5 @@
 ﻿using OddsScrapper.Repository.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace OddsScrapper.Repository.Repository
@@ -12,5 +13,6 @@ namespace OddsScrapper.Repository.Repository
         Task<Bookkeeper> GetOrCreateBookerAsync(string bookersName);
         Task<int> InsertGameAsync(Game game);
         Task<Game> UpdateOrInsertGameAsync(Game game);
+        Task<bool> GameExistsAsync(Team homeTeam, Team awayTeam, DateTime date);
     }
 }

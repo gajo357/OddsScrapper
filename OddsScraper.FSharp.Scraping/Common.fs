@@ -18,3 +18,6 @@ module Common =
     
     let TryParseDouble = TryParseWith System.Double.TryParse
 
+    let IsNonEmptyString input =
+        System.String.IsNullOrEmpty(input) = false
+

@@ -22,6 +22,8 @@ namespace OddsScrapper.Repository.Models
         public bool IsPlayoffs { get; set; }
         public bool IsOvertime { get; set; }
 
+        public string Season { get; set; }
+
         public string GameLink { get; set; }
     }
 }

@@ -33,7 +33,7 @@ let GetPageHtml link =
 let PrintLink link =
     printfn "%A" link
 
-let GetSportCountryAndLeagueAsync (leagueLink:string) (repository:DbRepository) =
+let GetSportCountryAndLeagueAsync (repository:DbRepository) (leagueLink:string) =
     async {
         let (sportName, countryName, leagueName) = ExtractSportCountryAndLeagueFromLink (leagueLink.Replace(BaseWebsite, System.String.Empty))
         
@@ -44,7 +44,7 @@ let GetSportCountryAndLeagueAsync (leagueLink:string) (repository:DbRepository) 
         return (sport, league)
     }
 
-let GetParticipants participantsAndDateElement (repository:DbRepository) sport =
+let GetParticipants (repository:DbRepository) sport participantsAndDateElement =
     async {
         let (homeTeamName, awayTeamName) = ReadParticipantsNames participantsAndDateElement
 
@@ -73,13 +73,49 @@ let ConvertToGameOddAsync (repository:DbRepository) (odd:Odd) =
         return gameOdd
     }
 
-let CreateOddsAsync (odds:Odd[]) (repository:DbRepository) =
+let CreateOddsAsync (repository:DbRepository) (odds:Odd[]) =
     async {
         return 
             odds
             |> Seq.map (ConvertToGameOddAsync repository)
             |> Seq.map Async.RunSynchronously
             |> Seq.toList
+    }
+
+let GameExistsAsync (repository:DbRepository) homeTeam awayTeam gameDate =
+    async {
+        return! repository.GameExistsAsync(homeTeam, awayTeam, gameDate) |> Async.AwaitTask
+    }
+
+let ReadGameAsync (repository:DbRepository) gameLink sport league season =
+    let participantsAndDateElement = (element "#col-content")
+    let (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement) |> Async.RunSynchronously
+    let gameDate = ReadGameDate participantsAndDateElement
+                    
+    if not ((GameExistsAsync repository homeTeam awayTeam gameDate) |> Async.RunSynchronously) then
+        let (homeScore, awayScore, isOvertime) = ReadGameScore (element "#event-status")
+        let odds = GetOddsFromGamePage (element "#odds-data-table")
+
+        let game = Game()
+        game.IsOvertime <- isOvertime
+        //game.IsPlayoffs <- isPlayoffs
+        game.HomeTeamScore <- homeScore
+        game.AwayTeamScore <- awayScore
+        game.HomeTeam <- homeTeam
+        game.AwayTeam <- awayTeam
+        game.League <- league
+        game.Season <- season
+        game.GameLink <- gameLink
+        game.Odds.AddRange((CreateOddsAsync repository odds) |> Async.RunSynchronously)
+        game.Date <- (gameDate |> System.Nullable<System.DateTime>)
+
+        Some game
+    else
+        None
+
+let InsertGameAsync (repository:DbRepository) game =
+    async {
+        (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
     }
 
 [<EntryPoint>]
@@ -104,41 +140,27 @@ let main argv =
         
     let sportLinks = sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
     let repository = DbRepository(@"../ArchiveData.db");
-    
+
+    let currentReadGameAsync = ReadGameAsync repository
+    let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
+    let currentInsertGameAsync = InsertGameAsync repository
+
     url (ResultsLinkForSport (Sports |> Seq.head))
-    let leaguesLinks = GetLeaguesLinks sportLinks (element "table")
-    for leagueLink in leaguesLinks do
+    for leagueLink in GetLeaguesLinks sportLinks (element "table") do
         url leagueLink
-        let (sport, league) = (GetSportCountryAndLeagueAsync leagueLink repository) |> Async.RunSynchronously
+        let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
         
-        let seasons = GetSeasonsLinks (elements "div")
-        for seasonLink in seasons do
+        for (seasonLink, season) in GetSeasonsLinks(elements "div") do
             url seasonLink
-            let pagination = GetResultsPagesLinks seasonLink (someElement "#pagination")
-            for pageLink in pagination do
+            for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
                 url pageLink
-                let gameLinks = GetGameLinksFromTable(element "#tournamentTable")
-                for gameLink in gameLinks do
+                for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
                     url gameLink
-                    let odds = GetOddsFromGamePage (element "#odds-data-table")
-                    let participantsAndDateElement = (element "#col-content")
-                    let (homeTeam, awayTeam) = (GetParticipants participantsAndDateElement repository sport) |> Async.RunSynchronously
-                    let gameDate = ReadGameDate participantsAndDateElement
-                    let (homeScore, awayScore, isOvertime) = ReadGameScore (element "#event-status")
 
-                    let game = Game()
-                    game.IsOvertime <- isOvertime
-                    //game.IsPlayoffs <- isPlayoffs
-                    game.HomeTeamScore <- homeScore
-                    game.AwayTeamScore <- awayScore
-                    game.HomeTeam <- homeTeam
-                    game.AwayTeam <- awayTeam
-                    game.League <- league
-                    game.GameLink <- gameLink
-                    game.Odds.AddRange((CreateOddsAsync odds repository) |> Async.RunSynchronously)
-                    game.Date <- (gameDate |> System.Nullable<System.DateTime>)
-
-                    repository.UpdateOrInsertGameAsync(game) |> ignore
+                    match currentReadGameAsync gameLink sport league season with
+                    | Some game -> 
+                        currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
+                    | None _ -> ()
 
     System.Console.WriteLine("Press any key to exit...")
     System.Console.Read() |> ignore
