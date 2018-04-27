@@ -3,6 +3,9 @@
 module NodeExtensions =
     open OpenQA.Selenium
     open OddsScraper.FSharp.Scraping.Common
+    
+    let GetText (node:IWebElement) =
+        node.Text.Trim()
 
     let GetElements name (node:IWebElement) =
         node.FindElements(By.TagName(name))
