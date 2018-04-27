@@ -20,7 +20,7 @@ module ScrapingParts =
         mainTable
         |> GetAllHrefFromElements
         |> Seq.filter (fun a -> sportLinks |> Seq.exists (fun sl -> a.StartsWith(sl) && ((GetLinkParts(a.Replace(sl, ""))).Length >= 3)))
-        |> Seq.take 5
+        //|> Seq.take 5
         |> Seq.toArray
 
     let GetSeasonsLinks allDivElements = 
@@ -59,6 +59,11 @@ module ScrapingParts =
         |> Seq.distinct
         |> Seq.toArray
 
+    let ConvertStringToOdd input =
+        match TryParseDouble input with
+        | Some value -> value
+        | None -> 1.0
+
     let GetOddsFromRow node =
         let tds = GetTdsFromRow node |> Seq.toArray
         let name = (tds |> Seq.head |> (fun n -> n.Text)).Trim().Replace("\n", System.String.Empty)
@@ -70,13 +75,12 @@ module ScrapingParts =
         let odds = 
             oddTds
             |> Seq.map (fun n -> n.Text)
-            |> Seq.map System.Convert.ToDouble
+            |> Seq.map ConvertStringToOdd
             |> Seq.toList
 
         let deactivated = 
             oddTds
-            |> Seq.head
-            |> (ClassAttributeContains "dark")
+            |> Seq.exists (ClassAttributeContains "dark")
 
         { Name = name; Odds = odds; Deactivated = deactivated}
 

@@ -11,3 +11,10 @@ module Common =
         let m = Regex.Match(input, "\\d+") 
         if (m.Success) then Some (m.Groups.[0].Value |> int) else None
 
+    let TryParseWith tryParseFunc =
+        tryParseFunc >> function
+        | true, value -> Some value
+        | false, _ -> None
+    
+    let TryParseDouble = TryParseWith System.Double.TryParse
+
