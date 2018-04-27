@@ -9,7 +9,10 @@ open OddsScrapper.Repository.Models
 open ScrapingParts
 
 let BaseWebsite = "http://www.oddsportal.com"
-//let Sports = ["soccer"]
+let Football = ["soccer"]
+let Basketball = ["basketball"]
+let Volleyball = ["volleyball"]
+let Others = ["tennis"; "handball"; "hockey"; "baseball"; "american-football"; "rugby-league"; "rugby-union"; "water-polo"]
 let Sports = ["soccer"; "basketball"; "tennis"; "handball"; "hockey"; "baseball"; "american-football"; "rugby-league"; "rugby-union"; "water-polo"; "volleyball"]
 
 let PrependBaseWebsite href = System.String.Format("{0}{1}", BaseWebsite, href)
@@ -89,8 +92,17 @@ let main argv =
     System.Console.Write("Enter password: ")
     let password = System.Console.ReadLine()
     Login username password
+
+    System.Console.Write("Choose sport (1-football, 2-basketall, 3-voleyball, 4-others) :")
+    let sport = System.Convert.ToInt32(System.Console.ReadLine())
+    let sports =
+        match sport with
+        | 1 -> Football
+        | 2 -> Basketball
+        | 3 -> Volleyball
+        | _ -> Others
         
-    let sportLinks = Sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
+    let sportLinks = sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
     let repository = DbRepository(@"../ArchiveData.db");
     
     url (ResultsLinkForSport (Sports |> Seq.head))
