@@ -55,7 +55,8 @@ module ScrapingParts =
         gamesTable
         |> GetTableRows
         |> Seq.filter (ClassAttributeContains "deactivate")
-        |> Seq.map (fun n -> GetAllHrefFromElements(n) |> Seq.head)
+        |> Seq.map (fun n -> n |> GetAllHrefFromElements |> Seq.tryHead)
+        |> Seq.choose id
         |> Seq.distinct
         |> Seq.toArray
 
@@ -69,7 +70,7 @@ module ScrapingParts =
         match tds with
         | [||] -> None
         | _ ->
-            let name = (tds |> Seq.head |> (fun n -> n.Text)).Trim().Replace("\n", System.String.Empty)
+            let name = (tds |> Seq.head |> GetText |> (fun n -> n.Replace("\n", System.String.Empty)))
             let oddTds = 
                 tds 
                 |> Seq.filter (ClassAttributeContains "right odds")
@@ -91,13 +92,15 @@ module ScrapingParts =
                 Some { Name = name; Odds = odds; Deactivated = deactivated}
 
     let GetOddsFromGamePage tableNode = 
-        tableNode
-        |> (GetElements "tbody") |> Seq.head
-        |> GetTableRows
-        |> Seq.filter (ClassAttributeContains "lo")
-        |> Seq.map GetOddsFromRow
-        |> Seq.choose id
-        |> Seq.toArray
+        match tableNode |> (GetElements "tbody") |> Seq.toList with
+        | [] -> [||]
+        | head::_ ->
+            head
+            |> GetTableRows
+            |> Seq.filter (ClassAttributeContains "lo")
+            |> Seq.map GetOddsFromRow
+            |> Seq.choose id
+            |> Seq.toArray
 
     let ReadParticipantsNames participantElement = 
         participantElement
