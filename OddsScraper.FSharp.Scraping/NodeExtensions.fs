@@ -7,9 +7,6 @@ module NodeExtensions =
     let GetText (node:IWebElement) =
         node.Text.Trim()
 
-    let GetText (node:IWebElement) =
-        node.Text.Trim()
-
     let GetElements name (node:IWebElement) =
         node.FindElements(By.TagName(name))
 
