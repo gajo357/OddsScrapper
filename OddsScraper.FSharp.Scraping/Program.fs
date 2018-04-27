@@ -12,8 +12,8 @@ let BaseWebsite = "http://www.oddsportal.com"
 let Football = ["soccer"]
 let Basketball = ["basketball"]
 let Volleyball = ["volleyball"]
-let Others = ["tennis"; "handball"; "hockey"; "baseball"; "american-football"; "rugby-league"; "rugby-union"; "water-polo"]
-let Sports = ["soccer"; "basketball"; "tennis"; "handball"; "hockey"; "baseball"; "american-football"; "rugby-league"; "rugby-union"; "water-polo"; "volleyball"]
+let Others = ["handball"; "hockey"; "baseball"; "american-football"; "rugby-league"; "rugby-union"; "water-polo"]
+let Sports = ["soccer"; "basketball"; "handball"; "hockey"; "baseball"; "american-football"; "rugby-league"; "rugby-union"; "water-polo"; "volleyball"]
 
 let PrependBaseWebsite href = System.String.Format("{0}{1}", BaseWebsite, href)
 let ResultsLinkForSport (sport:string) = PrependBaseWebsite (System.String.Format("/results/#{0}", sport))

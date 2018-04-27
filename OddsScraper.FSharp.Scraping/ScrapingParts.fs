@@ -14,7 +14,7 @@ module ScrapingParts =
     open OpenQA.Selenium
 
     let GetLinkParts (gameLink:string) =
-        gameLink.Split([|'/'|], System.StringSplitOptions.RemoveEmptyEntries)
+        gameLink |> (SplitString "/")
 
     let GetLeaguesLinks sportLinks mainTable = 
         mainTable
@@ -27,7 +27,7 @@ module ScrapingParts =
         let filtered =
             allDivElements
             |> Seq.filter (ClassAttributeEquals "main-menu2 main-menu-gray")
-            |> List.ofSeq
+            |> Seq.toList
 
         match filtered with
         | [] -> [||]
@@ -42,7 +42,7 @@ module ScrapingParts =
         | Some el -> 
             let maxPage =
                 GetAllHrefFromElements el
-                |> Seq.map (fun n -> n.Replace(link, ""))
+                |> Seq.map (RemoveFromString link)
                 |> Seq.map IntegerInString
                 |> Seq.max
             match maxPage with
@@ -70,7 +70,7 @@ module ScrapingParts =
         match tds with
         | [||] -> None
         | _ ->
-            let name = (tds |> Seq.head |> GetText |> (fun n -> n.Replace("\n", System.String.Empty)))
+            let name = tds |> Seq.head |> GetText |> RemoveFromString "\n"
             let oddTds = 
                 tds 
                 |> Seq.filter (ClassAttributeContains "right odds")
@@ -92,9 +92,9 @@ module ScrapingParts =
                 Some { Name = name; Odds = odds; Deactivated = deactivated}
 
     let GetOddsFromGamePage tableNode = 
-        match tableNode |> (GetElements "tbody") |> Seq.toList with
-        | [] -> [||]
-        | head::_ ->
+        match tableNode |> (GetElements "tbody") |> Seq.tryHead with
+        | None -> [||]
+        | Some head -> 
             head
             |> GetTableRows
             |> Seq.filter (ClassAttributeContains "lo")
@@ -105,7 +105,7 @@ module ScrapingParts =
     let ReadParticipantsNames participantElement = 
         participantElement
         |> (GetElements "h1") |> Seq.head
-        |> fun n -> n.Text.Split([|" - "|], StringSplitOptions.RemoveEmptyEntries)
+        |> (GetText >> (SplitString " - "))
         |> fun parts -> (parts.[0], parts.[1])
 
     let ReadGameDate dateElement = 
@@ -121,7 +121,7 @@ module ScrapingParts =
         | n when n.Trim().StartsWith("Final result") ->
             let isOvertime = n.ToUpper().Contains("OT") || n.ToUpper().Contains("OVERTIME")
             let parts = 
-                n.Split(':').[0..1] 
+                (n |> (SplitString ":")).[0..1] 
                 |> Array.map IntegerInString 
                 
             match parts with
