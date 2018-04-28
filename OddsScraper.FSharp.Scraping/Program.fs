@@ -89,7 +89,7 @@ let GameExistsAsync (repository:DbRepository) homeTeam awayTeam gameDate =
         return! repository.GameExistsAsync(homeTeam, awayTeam, gameDate) |> Async.AwaitTask
     }
 
-let ReadGameAsync (repository:DbRepository) gameLink sport league season =
+let ReadGameAsync (repository:DbRepository) sport league season gameLink =
     let participantsAndDateElement = (element "#col-content")
     let (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement) |> Async.RunSynchronously
     let gameDate = ReadGameDate participantsAndDateElement
@@ -126,6 +126,14 @@ let NavigateToPage link =
     with
     | :? WebDriverException -> url link
 
+let NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink =
+    NavigateToPage gameLink
+
+    match currentReadGameAsync gameLink with
+    | Some game -> 
+        currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
+    | None _ -> ()
+
 [<EntryPoint>]
 let main argv = 
     //start an instance of chrome
@@ -160,20 +168,19 @@ let main argv =
         let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
         if lastLeague = 0 || lastLeague = league.Id then
             lastLeague <- 0
-
             NavigateToPage leagueLink
         
             for (seasonLink, season) in GetSeasonsLinks(elements "div") do
                 NavigateToPage seasonLink
+
+                let currentNavigateAndReadGame = NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync
                 for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
                     NavigateToPage pageLink
                     for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-                        NavigateToPage gameLink
-
-                        match currentReadGameAsync gameLink sport league season with
-                        | Some game -> 
-                            currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
-                        | None _ -> ()
+                        try 
+                            currentNavigateAndReadGame gameLink
+                        with
+                        | _ -> currentNavigateAndReadGame gameLink
 
     System.Console.WriteLine("Press any key to exit...")
     System.Console.Read() |> ignore
