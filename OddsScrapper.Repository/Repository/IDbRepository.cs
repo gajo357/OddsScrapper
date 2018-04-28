@@ -14,5 +14,7 @@ namespace OddsScrapper.Repository.Repository
         Task<int> InsertGameAsync(Game game);
         Task<Game> UpdateOrInsertGameAsync(Game game);
         Task<bool> GameExistsAsync(Team homeTeam, Team awayTeam, DateTime date);
+
+        int GetIdOfLastLeague();
     }
 }

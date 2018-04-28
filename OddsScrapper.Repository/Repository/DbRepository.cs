@@ -345,6 +345,21 @@ namespace OddsScrapper.Repository.Repository
             return 1;
         }
 
+        public int GetIdOfLastLeague()
+        {
+            using (var command = _sqlConnection.CreateCommand())
+            {
+                command.CommandText = $"SELECT (Id) FROM {LeaguesTable} ORDER BY Id DESC LIMIT 1;";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                        return reader.GetInt32(0);
+                }
+            }
+
+            return 0;
+        }
 
         ~DbRepository()
         {

@@ -7,6 +7,8 @@ open OddsScrapper.Repository.Repository
 open OddsScrapper.Repository.Models
 
 open ScrapingParts
+open OpenQA.Selenium
+open OddsScraper.FSharp.Scraping
 
 let BaseWebsite = "http://www.oddsportal.com"
 let Football = ["soccer"]
@@ -118,6 +120,12 @@ let InsertGameAsync (repository:DbRepository) game =
         (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
     }
 
+let NavigateToPage link =
+    try
+        url link
+    with
+    | :? WebDriverException -> url link
+
 [<EntryPoint>]
 let main argv = 
     //start an instance of chrome
@@ -139,28 +147,33 @@ let main argv =
         | _ -> Others
         
     let sportLinks = sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
-    let repository = DbRepository(@"../ArchiveData.db");
+    let repository = DbRepository(@"../ArchiveData.db")
+    let mutable lastLeague = repository.GetIdOfLastLeague()
+    printfn "Last league id: %d" lastLeague 
 
     let currentReadGameAsync = ReadGameAsync repository
     let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
     let currentInsertGameAsync = InsertGameAsync repository
 
-    url (ResultsLinkForSport (Sports |> Seq.head))
+    NavigateToPage (ResultsLinkForSport (Sports |> Seq.head))
     for leagueLink in GetLeaguesLinks sportLinks (element "table") do
-        url leagueLink
         let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
-        
-        for (seasonLink, season) in GetSeasonsLinks(elements "div") do
-            url seasonLink
-            for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
-                url pageLink
-                for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-                    url gameLink
+        if lastLeague = 0 || lastLeague = league.Id then
+            lastLeague <- 0
 
-                    match currentReadGameAsync gameLink sport league season with
-                    | Some game -> 
-                        currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
-                    | None _ -> ()
+            NavigateToPage leagueLink
+        
+            for (seasonLink, season) in GetSeasonsLinks(elements "div") do
+                NavigateToPage seasonLink
+                for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
+                    NavigateToPage pageLink
+                    for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
+                        NavigateToPage gameLink
+
+                        match currentReadGameAsync gameLink sport league season with
+                        | Some game -> 
+                            currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
+                        | None _ -> ()
 
     System.Console.WriteLine("Press any key to exit...")
     System.Console.Read() |> ignore
