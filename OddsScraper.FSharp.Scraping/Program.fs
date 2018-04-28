@@ -120,19 +120,17 @@ let InsertGameAsync (repository:DbRepository) game =
         (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
     }
 
-let NavigateToPage link =
-    try
-        url link
-    with
-    | :? WebDriverException -> url link
+let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink timesTried =
+    if timesTried < 5 then
+        try
+            url gameLink
 
-let NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink =
-    NavigateToPage gameLink
-
-    match currentReadGameAsync gameLink with
-    | Some game -> 
-        currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
-    | None _ -> ()
+            match currentReadGameAsync gameLink with
+            | Some game -> 
+                currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
+            | None _ -> ()
+        with
+        | _ -> NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink (timesTried + 1)
 
 [<EntryPoint>]
 let main argv = 
@@ -163,24 +161,21 @@ let main argv =
     let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
     let currentInsertGameAsync = InsertGameAsync repository
 
-    NavigateToPage (ResultsLinkForSport (Sports |> Seq.head))
+    url (ResultsLinkForSport (Sports |> Seq.head))
     for leagueLink in GetLeaguesLinks sportLinks (element "table") do
         let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
         if lastLeague = 0 || lastLeague = league.Id then
             lastLeague <- 0
-            NavigateToPage leagueLink
+            url leagueLink
         
             for (seasonLink, season) in GetSeasonsLinks(elements "div") do
-                NavigateToPage seasonLink
+                url seasonLink
 
                 let currentNavigateAndReadGame = NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync
                 for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
-                    NavigateToPage pageLink
+                    url pageLink
                     for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-                        try 
-                            currentNavigateAndReadGame gameLink
-                        with
-                        | _ -> currentNavigateAndReadGame gameLink
+                        currentNavigateAndReadGame gameLink 1
 
     System.Console.WriteLine("Press any key to exit...")
     System.Console.Read() |> ignore
