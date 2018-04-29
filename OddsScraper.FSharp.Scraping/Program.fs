@@ -132,11 +132,6 @@ let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink
         with
         | _ -> NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink (timesTried + 1)
 
-let SaveLeagueLinks (leagueLinks: string[]) =
-    use file = new System.IO.StreamWriter("..\leagues.txt")
-    leagueLinks
-    |> Seq.iter (fun l -> file.WriteLine(l))
-
 [<EntryPoint>]
 let main argv = 
     //start an instance of chrome
@@ -181,7 +176,7 @@ let main argv =
     System.Console.WriteLine("Press any key to exit...")
     System.Console.Read() |> ignore
     0 // return an integer exit code
-
+    
 //[<EntryPoint>]
 //let main argv = 
 //    //start an instance of chrome
@@ -189,12 +184,19 @@ let main argv =
 
 //    let pages = 
 //        System.IO.File.ReadLines("..\pages.txt")
-//        |> Seq.map (Common.SplitString "\t")
+//        |> Seq.map (Common.Split "\t")
 //        |> Seq.map (fun n -> (n.[0], n.[1]))
+    
+//    let join first second = System.String.Format("{0}\t{1}", first, second)
+//    let appendToFile lines = System.IO.File.AppendAllLines("..\games.txt", lines)
 
-//    use file = new System.IO.StreamWriter("..\games.txt")
 //    for (season, pageLink) in pages do
 //        url pageLink
-//        for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-//            file.WriteLine(System.String.Format("{0}\t{1}", season, gameLink))
-    //0 // return an integer exit code
+
+//        let joinSeason = join season
+
+//        GetGameLinksFromTable(element "#tournamentTable")
+//        |> Seq.map joinSeason
+//        |> appendToFile
+
+//    0 // return an integer exit code
