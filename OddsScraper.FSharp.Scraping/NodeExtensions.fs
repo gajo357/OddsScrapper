@@ -19,13 +19,13 @@ module NodeExtensions =
 
     let GetAllHrefElements node = GetElements "a" node
 
-    let GetAllHrefTextAndAttribute node =
+    let GetAllHrefAttributeAndText node =
         GetAllHrefElements node
         |> Seq.map (fun n -> (GetHref n, n.Text))
         |> Seq.filter (fst >> IsNonEmptyString)
 
     let GetAllHrefFromElements node =
-        GetAllHrefTextAndAttribute node
+        GetAllHrefAttributeAndText node
         |> Seq.map fst
 
     let GetClassAtttribute (node:IWebElement) =

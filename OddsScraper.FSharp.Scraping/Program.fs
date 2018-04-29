@@ -7,10 +7,10 @@ open OddsScrapper.Repository.Repository
 open OddsScrapper.Repository.Models
 
 open ScrapingParts
+open NodeExtensions
 open OpenQA.Selenium
 open OddsScraper.FSharp.Scraping
 
-let BaseWebsite = "http://www.oddsportal.com"
 let Football = ["soccer"]
 let Basketball = ["basketball"]
 let Volleyball = ["volleyball"]
@@ -132,6 +132,11 @@ let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink
         with
         | _ -> NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink (timesTried + 1)
 
+let SaveLeagueLinks (leagueLinks: string[]) =
+    use file = new System.IO.StreamWriter("..\leagues.txt")
+    leagueLinks
+    |> Seq.iter (fun l -> file.WriteLine(l))
+
 [<EntryPoint>]
 let main argv = 
     //start an instance of chrome
@@ -143,40 +148,53 @@ let main argv =
     let password = System.Console.ReadLine()
     Login username password
 
-    System.Console.Write("Choose sport (1-football, 2-basketall, 3-voleyball, 4-others) :")
-    let sport = System.Convert.ToInt32(System.Console.ReadLine())
-    let sports =
-        match sport with
-        | 1 -> Football
-        | 2 -> Basketball
-        | 3 -> Volleyball
-        | _ -> Others
+    //System.Console.Write("Choose sport (1-football, 2-basketall, 3-voleyball, 4-others) :")
+    //let sport = System.Convert.ToInt32(System.Console.ReadLine())
+    //let sports =
+    //    match sport with
+    //    | 1 -> Football
+    //    | 2 -> Basketball
+    //    | 3 -> Volleyball
+    //    | _ -> Others
         
-    let sportLinks = sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
+    let sportLinks = Sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
     let repository = DbRepository(@"../ArchiveData.db")
-    let mutable lastLeague = repository.GetIdOfLastLeague()
-    printfn "Last league id: %d" lastLeague 
 
     let currentReadGameAsync = ReadGameAsync repository
     let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
     let currentInsertGameAsync = InsertGameAsync repository
-
+    
     url (ResultsLinkForSport (Sports |> Seq.head))
     for leagueLink in GetLeaguesLinks sportLinks (element "table") do
         let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
-        if lastLeague = 0 || lastLeague = league.Id then
-            lastLeague <- 0
-            url leagueLink
+        url leagueLink
         
-            for (seasonLink, season) in GetSeasonsLinks(elements "div") do
-                url seasonLink
+        for (seasonLink, season) in GetSeasonsLinks(element "#col-content") do
+            url seasonLink
 
-                let currentNavigateAndReadGame = NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync
-                for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
-                    url pageLink
-                    for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-                        currentNavigateAndReadGame gameLink 1
+            let currentNavigateAndReadGame = NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync
+            for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
+                url pageLink
+                for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
+                    currentNavigateAndReadGame gameLink 1
 
     System.Console.WriteLine("Press any key to exit...")
     System.Console.Read() |> ignore
     0 // return an integer exit code
+
+//[<EntryPoint>]
+//let main argv = 
+//    //start an instance of chrome
+//    start chrome
+
+//    let pages = 
+//        System.IO.File.ReadLines("..\pages.txt")
+//        |> Seq.map (Common.SplitString "\t")
+//        |> Seq.map (fun n -> (n.[0], n.[1]))
+
+//    use file = new System.IO.StreamWriter("..\games.txt")
+//    for (season, pageLink) in pages do
+//        url pageLink
+//        for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
+//            file.WriteLine(System.String.Format("{0}\t{1}", season, gameLink))
+    //0 // return an integer exit code

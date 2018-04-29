@@ -10,47 +10,54 @@ type Odd =
 module ScrapingParts = 
     open OddsScraper.FSharp.Scraping.Common
     open OddsScraper.FSharp.Scraping.NodeExtensions
-    open System
     open OpenQA.Selenium
 
+    let BaseWebsite = "http://www.oddsportal.com"
+
     let GetLinkParts (gameLink:string) =
-        gameLink |> (SplitString "/")
+        gameLink |> (Split "/")
 
     let GetLeaguesLinks sportLinks mainTable = 
         mainTable
         |> GetAllHrefFromElements
         |> Seq.filter (fun a -> sportLinks |> Seq.exists (fun sl -> a.StartsWith(sl) && ((GetLinkParts(a.Replace(sl, ""))).Length >= 3)))
         //|> Seq.take 5
+        |> Seq.distinct
         |> Seq.toArray
 
-    let GetSeasonsLinks allDivElements = 
-        let filtered =
-            allDivElements
+    let GetSeasonsLinks colContent = 
+        let div = 
+            GetElements "div" colContent
             |> Seq.filter (ClassAttributeEquals "main-menu2 main-menu-gray")
-            |> Seq.toList
+            |> Seq.tryHead
 
-        match filtered with
-        | [] -> [||]
-        | head::_ -> 
-            head
-            |> GetAllHrefTextAndAttribute
+        match div with
+        | None -> [||]
+        | Some value -> 
+            value
+            |> GetAllHrefAttributeAndText
+            |> Seq.distinct
+            |> Seq.filter (fst >> (Contains BaseWebsite))
             |> Seq.toArray
 
     let GetResultsPagesLinks link paginationElement = 
-        (match paginationElement with
-        | None -> [link]
-        | Some el -> 
-            let maxPage =
-                GetAllHrefFromElements el
-                |> Seq.map (RemoveFromString link)
-                |> Seq.map IntegerInString
-                |> Seq.max
-            match maxPage with
-            | None -> [link]
-            | Some p ->
-                [1..p] |> List.map (fun n -> System.String.Format("{0}page/{1}/", link, n))
-            )
-
+        [link]
+        |> List.append (
+            match paginationElement with
+            | None -> []
+            | Some el -> 
+                let maxPage =
+                    GetAllHrefFromElements el
+                    |> Seq.filter (Contains link)
+                    |> Seq.map (Remove link)
+                    |> Seq.map IntegerInString
+                    |> Seq.max
+                match maxPage with
+                | None -> []
+                | Some p ->
+                    [2..p] 
+                    |> List.map (fun n -> System.String.Format("{0}#/page/{1}/", link, n)))
+            
     let GetGameLinksFromTable gamesTable = 
         gamesTable
         |> GetTableRows
@@ -70,7 +77,7 @@ module ScrapingParts =
         match tds with
         | [||] -> None
         | _ ->
-            let name = tds |> Seq.head |> GetText |> RemoveFromString "\n"
+            let name = tds |> Seq.head |> GetText |> Remove "\n"
             let oddTds = 
                 tds 
                 |> Seq.filter (ClassAttributeContains "right odds")
@@ -105,7 +112,7 @@ module ScrapingParts =
     let ReadParticipantsNames participantElement = 
         participantElement
         |> (GetElements "h1") |> Seq.head
-        |> (GetText >> (SplitString " - "))
+        |> (GetText >> (Split " - "))
         |> fun parts -> (parts.[0], parts.[1])
 
     let ReadGameDate dateElement = 
@@ -121,7 +128,7 @@ module ScrapingParts =
         | n when n.Trim().StartsWith("Final result") ->
             let isOvertime = n.ToUpper().Contains("OT") || n.ToUpper().Contains("OVERTIME")
             let parts = 
-                (n |> (SplitString ":")).[0..1] 
+                (n |> (Split ":")).[0..1] 
                 |> Array.map IntegerInString 
                 
             match parts with

@@ -7,11 +7,14 @@ module Common =
         let m = Regex.Match(input, "\\d+") 
         if (m.Success) then Some (m.Groups.[0].Value |> int) else None
 
-    let RemoveFromString whatToRemove (input:string) = 
-        input.Replace(whatToRemove, System.String.Empty)
+    let Remove oldValue (input:string) = 
+        input.Replace(oldValue, System.String.Empty)
         
-    let SplitString (split:string) (input:string) = 
-        input.Split([|split|], System.StringSplitOptions.RemoveEmptyEntries)
+    let Split (separator:string) (input:string) = 
+        input.Split([|separator|], System.StringSplitOptions.RemoveEmptyEntries)
+        
+    let Contains value (input:string) = 
+        input.Contains(value)
 
     let TryParseWith tryParseFunc =
         tryParseFunc >> function
