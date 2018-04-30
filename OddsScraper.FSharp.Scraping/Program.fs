@@ -35,6 +35,16 @@ let GetPageHtml link =
 let PrintLink link =
     printfn "%A" link
 
+let InvokeRepeatedIfFailed actionToRepeat link =
+    let rec repeatedAction timesTried actionToRepeat link =
+        if timesTried < 5 then
+            try
+                actionToRepeat link
+            with
+            | _ -> repeatedAction (timesTried + 1) actionToRepeat link
+
+    repeatedAction 0 actionToRepeat link
+
 let GetSportCountryAndLeagueAsync (repository:DbRepository) (leagueLink:string) =
     async {
         let (sportName, countryName, leagueName) = ExtractSportCountryAndLeagueFromLink (leagueLink.Replace(BaseWebsite, System.String.Empty))
@@ -121,16 +131,15 @@ let InsertGameAsync (repository:DbRepository) game =
     }
 
 let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink timesTried =
-    if timesTried < 5 then
-        try
-            url gameLink
+    let action link =
+        url link
 
-            match currentReadGameAsync gameLink with
-            | Some game -> 
-                currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
-            | None _ -> ()
-        with
-        | _ -> NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink (timesTried + 1)
+        match currentReadGameAsync link with
+        | Some game -> 
+            currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
+        | None _ -> ()
+
+    InvokeRepeatedIfFailed action gameLink
 
 //[<EntryPoint>]
 //let main argv = 
@@ -176,6 +185,7 @@ let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink
 //    System.Console.WriteLine("Press any key to exit...")
 //    System.Console.Read() |> ignore
 //    0 // return an integer exit code
+
     
 [<EntryPoint>]
 let main argv = 
@@ -186,17 +196,18 @@ let main argv =
         System.IO.File.ReadLines("..\pages.txt")
         |> Seq.map (Common.Split "\t")
         |> Seq.map (fun n -> (n.[0], n.[1]))
-    
+
     let join first second = System.String.Format("{0}\t{1}", first, second)
     let appendToFile lines = System.IO.File.AppendAllLines("..\games.txt", lines)
 
-    for (season, pageLink) in pages do
-        url pageLink
-
+    let action season link =
+        url link
         let joinSeason = join season
-
         GetGameLinksFromTable(element "#tournamentTable")
         |> Seq.map joinSeason
         |> appendToFile
+
+    for (season, pageLink) in pages do
+        InvokeRepeatedIfFailed (action season) pageLink
 
     0 // return an integer exit code
