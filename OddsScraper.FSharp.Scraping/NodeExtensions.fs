@@ -10,8 +10,14 @@ module NodeExtensions =
     let GetElements name (node:IWebElement) =
         node.FindElements(By.TagName(name))
 
-    let GetHref (node:IWebElement) =
-        node.GetAttribute("href")
+    let GetElementsByClassName name (node:IWebElement) =
+        node.FindElements(By.ClassName(name))
+
+    let GetAttribute attribute (node:IWebElement) = node.GetAttribute(attribute)
+
+    let GetHref node = GetAttribute "href" node
+
+    let GetClassAtttribute node = GetAttribute "class" node
 
     let GetTableRows node = GetElements "tr" node
 
@@ -21,19 +27,18 @@ module NodeExtensions =
 
     let GetAllHrefAttributeAndText node =
         GetAllHrefElements node
-        |> Seq.map (fun n -> (GetHref n, n.Text))
+        |> Seq.map (fun n -> (GetHref n, GetText n))
         |> Seq.filter (fst >> IsNonEmptyString)
+        |> Seq.toArray
 
     let GetAllHrefFromElements node =
         GetAllHrefAttributeAndText node
         |> Seq.map fst
-
-    let GetClassAtttribute (node:IWebElement) =
-        node.GetAttribute("class")
+        |> Seq.toArray
 
     let ClassAttributeEquals text node =
         GetClassAtttribute node = text
 
     let ClassAttributeContains text node =
-        (GetClassAtttribute node).Contains text
+        node|> GetClassAtttribute |> Contains text
 

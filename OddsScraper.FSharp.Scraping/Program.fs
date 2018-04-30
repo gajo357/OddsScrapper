@@ -132,71 +132,71 @@ let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink
         with
         | _ -> NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink (timesTried + 1)
 
-[<EntryPoint>]
-let main argv = 
-    //start an instance of chrome
-    start chrome
-
-    System.Console.Write("Enter username: ")
-    let username = System.Console.ReadLine()
-    System.Console.Write("Enter password: ")
-    let password = System.Console.ReadLine()
-    Login username password
-
-    //System.Console.Write("Choose sport (1-football, 2-basketall, 3-voleyball, 4-others) :")
-    //let sport = System.Convert.ToInt32(System.Console.ReadLine())
-    //let sports =
-    //    match sport with
-    //    | 1 -> Football
-    //    | 2 -> Basketball
-    //    | 3 -> Volleyball
-    //    | _ -> Others
-        
-    let sportLinks = Sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
-    let repository = DbRepository(@"../ArchiveData.db")
-
-    let currentReadGameAsync = ReadGameAsync repository
-    let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
-    let currentInsertGameAsync = InsertGameAsync repository
-    
-    url (ResultsLinkForSport (Sports |> Seq.head))
-    for leagueLink in GetLeaguesLinks sportLinks (element "table") do
-        let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
-        url leagueLink
-        
-        for (seasonLink, season) in GetSeasonsLinks(element "#col-content") do
-            url seasonLink
-
-            let currentNavigateAndReadGame = NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync
-            for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
-                url pageLink
-                for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-                    currentNavigateAndReadGame gameLink 1
-
-    System.Console.WriteLine("Press any key to exit...")
-    System.Console.Read() |> ignore
-    0 // return an integer exit code
-    
 //[<EntryPoint>]
 //let main argv = 
 //    //start an instance of chrome
 //    start chrome
 
-//    let pages = 
-//        System.IO.File.ReadLines("..\pages.txt")
-//        |> Seq.map (Common.Split "\t")
-//        |> Seq.map (fun n -> (n.[0], n.[1]))
+//    System.Console.Write("Enter username: ")
+//    let username = System.Console.ReadLine()
+//    System.Console.Write("Enter password: ")
+//    let password = System.Console.ReadLine()
+//    Login username password
+
+//    //System.Console.Write("Choose sport (1-football, 2-basketall, 3-voleyball, 4-others) :")
+//    //let sport = System.Convert.ToInt32(System.Console.ReadLine())
+//    //let sports =
+//    //    match sport with
+//    //    | 1 -> Football
+//    //    | 2 -> Basketball
+//    //    | 3 -> Volleyball
+//    //    | _ -> Others
+        
+//    let sportLinks = Sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
+//    let repository = DbRepository(@"../ArchiveData.db")
+
+//    let currentReadGameAsync = ReadGameAsync repository
+//    let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
+//    let currentInsertGameAsync = InsertGameAsync repository
     
-//    let join first second = System.String.Format("{0}\t{1}", first, second)
-//    let appendToFile lines = System.IO.File.AppendAllLines("..\games.txt", lines)
+//    url (ResultsLinkForSport (Sports |> Seq.head))
+//    for leagueLink in GetLeaguesLinks sportLinks (element "table") do
+//        let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
+//        url leagueLink
+        
+//        for (seasonLink, season) in GetSeasonsLinks(element "#col-content") do
+//            url seasonLink
 
-//    for (season, pageLink) in pages do
-//        url pageLink
+//            let currentNavigateAndReadGame = NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync
+//            for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
+//                url pageLink
+//                for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
+//                    currentNavigateAndReadGame gameLink 1
 
-//        let joinSeason = join season
-
-//        GetGameLinksFromTable(element "#tournamentTable")
-//        |> Seq.map joinSeason
-//        |> appendToFile
-
+//    System.Console.WriteLine("Press any key to exit...")
+//    System.Console.Read() |> ignore
 //    0 // return an integer exit code
+    
+[<EntryPoint>]
+let main argv = 
+    //start an instance of chrome
+    start chrome
+
+    let pages = 
+        System.IO.File.ReadLines("..\pages.txt")
+        |> Seq.map (Common.Split "\t")
+        |> Seq.map (fun n -> (n.[0], n.[1]))
+    
+    let join first second = System.String.Format("{0}\t{1}", first, second)
+    let appendToFile lines = System.IO.File.AppendAllLines("..\games.txt", lines)
+
+    for (season, pageLink) in pages do
+        url pageLink
+
+        let joinSeason = join season
+
+        GetGameLinksFromTable(element "#tournamentTable")
+        |> Seq.map joinSeason
+        |> appendToFile
+
+    0 // return an integer exit code

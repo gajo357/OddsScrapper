@@ -60,9 +60,8 @@ module ScrapingParts =
             
     let GetGameLinksFromTable gamesTable = 
         gamesTable
-        |> GetTableRows
-        |> Seq.filter (ClassAttributeContains "deactivate")
-        |> Seq.map (fun n -> n |> GetAllHrefFromElements |> Seq.tryHead)
+        |> GetElementsByClassName "deactivate"
+        |> Seq.map (GetAllHrefFromElements >> Seq.tryHead)
         |> Seq.choose id
         |> Seq.distinct
         |> Seq.toArray
