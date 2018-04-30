@@ -130,7 +130,7 @@ let InsertGameAsync (repository:DbRepository) game =
         (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
     }
 
-let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink timesTried =
+let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink =
     let action link =
         url link
 
@@ -180,7 +180,7 @@ let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink
 //            for pageLink in GetResultsPagesLinks seasonLink (someElement "#pagination") do
 //                url pageLink
 //                for gameLink in GetGameLinksFromTable(element "#tournamentTable") do
-//                    currentNavigateAndReadGame gameLink 1
+//                    currentNavigateAndReadGame gameLink
 
 //    System.Console.WriteLine("Press any key to exit...")
 //    System.Console.Read() |> ignore
