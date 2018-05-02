@@ -6,9 +6,13 @@ open OddsScraper.FSharp.Scraping
 open OddsScrapper.Repository.Repository
 open OddsScrapper.Repository.Models
 
+open Common
 open ScrapingParts
 open NodeExtensions
 open OpenQA.Selenium
+open OddsScraper.FSharp.Scraping
+open OddsScraper.FSharp.Scraping
+open OddsScraper.FSharp.Scraping
 open OddsScraper.FSharp.Scraping
 
 let Football = ["soccer"]
@@ -47,7 +51,7 @@ let InvokeRepeatedIfFailed actionToRepeat link =
 
 let GetSportCountryAndLeagueAsync (repository:DbRepository) (leagueLink:string) =
     async {
-        let (sportName, countryName, leagueName) = ExtractSportCountryAndLeagueFromLink (leagueLink.Replace(BaseWebsite, System.String.Empty))
+        let (sportName, countryName, leagueName) = leagueLink |> Remove BaseWebsite |> ExtractSportCountryAndLeagueFromLink
         
         let! sport = repository.GetOrCreateSportAsync(sportName) |> Async.AwaitTask
         let! country = repository.GetOrCreateCountryAsync(countryName) |> Async.AwaitTask
@@ -141,6 +145,11 @@ let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink
 
     InvokeRepeatedIfFailed action gameLink
 
+let FindMatchingLeagueLink leagues link =
+    leagues
+    |> Seq.filter (fun l -> Contains l link)
+    |> Seq.maxBy String.length
+        
 //[<EntryPoint>]
 //let main argv = 
 //    //start an instance of chrome
@@ -192,22 +201,32 @@ let main argv =
     //start an instance of chrome
     start chrome
 
-    let pages = 
-        System.IO.File.ReadLines("..\pages.txt")
-        |> Seq.map (Common.Split "\t")
-        |> Seq.map (fun n -> (n.[0], n.[1]))
+    let leagues = 
+        System.IO.File.ReadLines("..\leagues.txt")
+        |> Seq.map (Remove "/results/")
+        |> Seq.toArray
 
-    let join first second = System.String.Format("{0}\t{1}", first, second)
-    let appendToFile lines = System.IO.File.AppendAllLines("..\games.txt", lines)
+    use repository = new DbRepository(@"../ArchiveData.db")
+
+    let currentReadGameAsync = ReadGameAsync repository
+    let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
+    let currentInsertGameAsync = InsertGameAsync repository
 
     let action season link =
         url link
-        let joinSeason = join season
-        GetGameLinksFromTable(element "#tournamentTable")
-        |> Seq.map joinSeason
-        |> appendToFile
+        
+        let leagueLink = FindMatchingLeagueLink leagues link
 
-    for (season, pageLink) in pages do
-        InvokeRepeatedIfFailed (action season) pageLink
+        let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
+
+        NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync link
+
+    let games = 
+        System.IO.File.ReadLines("..\games.txt")
+        |> Seq.map (Split "\t")
+        |> Seq.map (fun n -> (n.[0], n.[1]))
+
+    for (season, gameLink) in games do
+        InvokeRepeatedIfFailed (action season) gameLink
 
     0 // return an integer exit code

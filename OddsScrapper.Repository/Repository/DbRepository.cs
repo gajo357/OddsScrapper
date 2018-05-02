@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OddsScrapper.Repository.Repository
 {
-    public class DbRepository : IDbRepository
+    public class DbRepository : IDbRepository, IDisposable
     {
         public const string CountriesTable = "Countries";
         public const string SportsTable = "Sports";
@@ -361,7 +361,7 @@ namespace OddsScrapper.Repository.Repository
             return 0;
         }
 
-        ~DbRepository()
+        public void Dispose()
         {
             Close();
         }
