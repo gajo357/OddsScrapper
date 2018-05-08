@@ -16,6 +16,9 @@ module Common =
     let Contains value (input:string) = 
         input.Contains(value)
 
+    let StartsWith value (input:string) = 
+        input.StartsWith(value)
+
     let TryParseWith tryParseFunc =
         tryParseFunc >> function
         | true, value -> Some value
@@ -25,4 +28,14 @@ module Common =
 
     let IsNonEmptyString input =
         System.String.IsNullOrEmpty(input) = false
+
+    let InvokeRepeatedIfFailed actionToRepeat =
+        let rec repeatedAction timesTried actionToRepeat =
+            if timesTried < 3 then
+                try
+                    actionToRepeat()
+                with
+                | _ -> repeatedAction (timesTried + 1) actionToRepeat
+
+        repeatedAction 0 actionToRepeat
 

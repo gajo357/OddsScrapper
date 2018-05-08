@@ -107,6 +107,7 @@
     <Compile Include="Common.fs" />
     <Compile Include="NodeExtensions.fs" />
     <Compile Include="ScrapingParts.fs" />
+    <Compile Include="RepositoryMethods.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />

@@ -300,6 +300,12 @@ namespace OddsScrapper.Repository.Repository
             return await GetGameIdAsync(homeTeam, awayTeam, date) > 0;
         }
 
+        public async Task<bool> GameExistsAsync(string gameLink)
+        {
+            return await _sqlConnection.GetIdAsync(GamesTable,
+                ColumnValuePair.Create(nameof(Game.GameLink), gameLink)) > 0;
+        }
+
         private async Task<int> GetGameIdAsync(Team homeTeam, Team awayTeam, DateTime? date)
         {
             return await _sqlConnection.GetIdAsync(GamesTable,

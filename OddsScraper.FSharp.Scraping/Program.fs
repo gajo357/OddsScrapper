@@ -4,16 +4,10 @@
 open canopy.classic
 open OddsScraper.FSharp.Scraping
 open OddsScrapper.Repository.Repository
-open OddsScrapper.Repository.Models
 
 open Common
 open ScrapingParts
-open NodeExtensions
-open OpenQA.Selenium
-open OddsScraper.FSharp.Scraping
-open OddsScraper.FSharp.Scraping
-open OddsScraper.FSharp.Scraping
-open OddsScraper.FSharp.Scraping
+open RepositoryMethods
 
 let Football = ["soccer"]
 let Basketball = ["basketball"]
@@ -32,6 +26,15 @@ let Login username password =
     
     click (last (text "Login"))
 
+let SelectSports() =
+    System.Console.Write("Choose sport (1-football, 2-basketall, 3-voleyball, 4-others) :")
+    let sport = System.Convert.ToInt32(System.Console.ReadLine())
+    match sport with
+    | 1 -> Football
+    | 2 -> Basketball
+    | 3 -> Volleyball
+    | _ -> Others
+
 let GetPageHtml link =
     url link
     (element "html").GetAttribute("innerHTML")
@@ -39,111 +42,16 @@ let GetPageHtml link =
 let PrintLink link =
     printfn "%A" link
 
-let InvokeRepeatedIfFailed actionToRepeat link =
-    let rec repeatedAction timesTried actionToRepeat link =
-        if timesTried < 5 then
-            try
-                actionToRepeat link
-            with
-            | _ -> repeatedAction (timesTried + 1) actionToRepeat link
+let NavigateAndReadGame readGame insertGame gameLink =
+    let action() =
+        url gameLink
 
-    repeatedAction 0 actionToRepeat link
-
-let GetSportCountryAndLeagueAsync (repository:DbRepository) (leagueLink:string) =
-    async {
-        let (sportName, countryName, leagueName) = leagueLink |> Remove BaseWebsite |> ExtractSportCountryAndLeagueFromLink
-        
-        let! sport = repository.GetOrCreateSportAsync(sportName) |> Async.AwaitTask
-        let! country = repository.GetOrCreateCountryAsync(countryName) |> Async.AwaitTask
-        let! league = repository.GetOrCreateLeagueAsync(leagueName, false, sport, country) |> Async.AwaitTask
-
-        return (sport, league)
-    }
-
-let GetParticipants (repository:DbRepository) sport participantsAndDateElement =
-    async {
-        let (homeTeamName, awayTeamName) = ReadParticipantsNames participantsAndDateElement
-
-        let! homeTeam = repository.GetOrCreateTeamAsync(homeTeamName, sport) |> Async.AwaitTask
-        let! awayTeam = repository.GetOrCreateTeamAsync(awayTeamName, sport) |> Async.AwaitTask
-
-        return (homeTeam, awayTeam)
-    }
-
-let ConvertToGameOddAsync (repository:DbRepository) (odd:Odd) =
-    async {
-        let gameOdd = GameOdds()
-        let (homeOdd, drawOdd, awayOdd) =
-            match odd.Odds with
-            | [home; away] -> (home, 0.0, away)
-            | [home; draw; away] -> (home, draw, away)
-            | _ -> (0.0, 0.0, 0.0)
-        let! booker = repository.GetOrCreateBookerAsync(odd.Name) |> Async.AwaitTask
-        
-        gameOdd.HomeOdd <- homeOdd
-        gameOdd.DrawOdd <- drawOdd
-        gameOdd.AwayOdd <- awayOdd
-        gameOdd.IsValid <- (not odd.Deactivated)
-        gameOdd.Bookkeeper <- booker
-
-        return gameOdd
-    }
-
-let CreateOddsAsync (repository:DbRepository) (odds:Odd[]) =
-    async {
-        return 
-            odds
-            |> Seq.map (ConvertToGameOddAsync repository)
-            |> Seq.map Async.RunSynchronously
-            |> Seq.toList
-    }
-
-let GameExistsAsync (repository:DbRepository) homeTeam awayTeam gameDate =
-    async {
-        return! repository.GameExistsAsync(homeTeam, awayTeam, gameDate) |> Async.AwaitTask
-    }
-
-let ReadGameAsync (repository:DbRepository) sport league season gameLink =
-    let participantsAndDateElement = (element "#col-content")
-    let (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement) |> Async.RunSynchronously
-    let gameDate = ReadGameDate participantsAndDateElement
-                    
-    if not ((GameExistsAsync repository homeTeam awayTeam gameDate) |> Async.RunSynchronously) then
-        let (homeScore, awayScore, isOvertime) = ReadGameScore (element "#event-status")
-        let odds = GetOddsFromGamePage (element "#odds-data-table")
-
-        let game = Game()
-        game.IsOvertime <- isOvertime
-        //game.IsPlayoffs <- isPlayoffs
-        game.HomeTeamScore <- homeScore
-        game.AwayTeamScore <- awayScore
-        game.HomeTeam <- homeTeam
-        game.AwayTeam <- awayTeam
-        game.League <- league
-        game.Season <- season
-        game.GameLink <- gameLink
-        game.Odds.AddRange((CreateOddsAsync repository odds) |> Async.RunSynchronously)
-        game.Date <- (gameDate |> System.Nullable<System.DateTime>)
-
-        Some game
-    else
-        None
-
-let InsertGameAsync (repository:DbRepository) game =
-    async {
-        (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
-    }
-
-let rec NavigateAndReadGame currentReadGameAsync currentInsertGameAsync gameLink =
-    let action link =
-        url link
-
-        match currentReadGameAsync link with
+        match readGame gameLink with
         | Some game -> 
-            currentInsertGameAsync(game) |> Async.RunSynchronously |> ignore
+            insertGame(game) |> ignore
         | None _ -> ()
 
-    InvokeRepeatedIfFailed action gameLink
+    InvokeRepeatedIfFailed action
 
 let FindMatchingLeagueLink leagues link =
     leagues
@@ -200,33 +108,44 @@ let FindMatchingLeagueLink leagues link =
 let main argv = 
     //start an instance of chrome
     start chrome
+    
+    use repository = new DbRepository(@"../ArchiveData.db")
+    let currentReadGameAsync = ReadGame repository
+    let currentGetSportCountryAndLeagueAsync = (GetSportCountryAndLeagueAsync repository >> Async.RunSynchronously)
+    let currentInsertGameAsync = (InsertGameAsync repository >> Async.RunSynchronously)
+    let currentGameExists = (GameLinkExistsAsync repository >> Async.RunSynchronously)
 
+    let sports = SelectSports()       
+    let sportLinks = sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
+
+    let gameStartsWithSportLink gameLink =
+        sportLinks |> Seq.exists (fun sl -> StartsWith sl gameLink)
+    let games = 
+        System.IO.File.ReadLines("..\games.txt")
+        |> Seq.filter gameStartsWithSportLink
+        |> Seq.filter currentGameExists
+        |> Seq.map (Split "\t")
+        |> Seq.map (fun n -> (n.[0], n.[1]))
+    
+    let leagueExistsInSports league = 
+        sports |> Seq.exists (fun sport -> Contains ("/" + sport + "/") league)
     let leagues = 
         System.IO.File.ReadLines("..\leagues.txt")
+        |> Seq.filter leagueExistsInSports
         |> Seq.map (Remove "/results/")
         |> Seq.toArray
 
-    use repository = new DbRepository(@"../ArchiveData.db")
-
-    let currentReadGameAsync = ReadGameAsync repository
-    let currentGetSportCountryAndLeagueAsync = GetSportCountryAndLeagueAsync repository
-    let currentInsertGameAsync = InsertGameAsync repository
-
-    let action season link =
+    let readGameForSeason(season, link) =
         url link
         
         let leagueLink = FindMatchingLeagueLink leagues link
 
-        let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync |> Async.RunSynchronously
+        let (sport, league) = leagueLink |> currentGetSportCountryAndLeagueAsync
 
         NavigateAndReadGame (currentReadGameAsync sport league season) currentInsertGameAsync link
-
-    let games = 
-        System.IO.File.ReadLines("..\games.txt")
-        |> Seq.map (Split "\t")
-        |> Seq.map (fun n -> (n.[0], n.[1]))
-
-    for (season, gameLink) in games do
-        InvokeRepeatedIfFailed (action season) gameLink
+    
+    games 
+    |> Seq.map (fun g -> fun() -> readGameForSeason g)
+    |> Seq.iter InvokeRepeatedIfFailed
 
     0 // return an integer exit code
