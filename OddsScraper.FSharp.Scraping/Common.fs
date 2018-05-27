@@ -2,6 +2,8 @@
 
 module Common =
     open System.Text.RegularExpressions
+    open System
+    open System.Numerics
 
     let IntegerInString input =
         let m = Regex.Match(input, "\\d+") 
@@ -12,6 +14,9 @@ module Common =
         
     let Split (separator:string) (input:string) = 
         input.Split([|separator|], System.StringSplitOptions.RemoveEmptyEntries)
+        
+    let Join (separator:string) (input:string[]) = 
+        System.String.Join(separator, input)
         
     let Contains value (input:string) = 
         input.Contains(value)
@@ -24,18 +29,25 @@ module Common =
         | true, value -> Some value
         | false, _ -> None
     
+    let TryParseDateTime = TryParseWith System.DateTime.TryParse
     let TryParseDouble = TryParseWith System.Double.TryParse
+
+    let ConvertOptionToNullable = function
+        | None -> new System.Nullable<_>()
+        | Some value -> new System.Nullable<_>(value)
 
     let IsNonEmptyString input =
         System.String.IsNullOrEmpty(input) = false
 
     let InvokeRepeatedIfFailed actionToRepeat =
         let rec repeatedAction timesTried actionToRepeat =
-            if timesTried < 3 then
+            if timesTried < 2 then
                 try
-                    actionToRepeat()
+                    Some (actionToRepeat())
                 with
                 | _ -> repeatedAction (timesTried + 1) actionToRepeat
+            else 
+                None
 
         repeatedAction 0 actionToRepeat
 

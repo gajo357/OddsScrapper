@@ -6,8 +6,9 @@ module RepositoryMethods =
     open OddsScraper.FSharp.Scraping
 
     open Common
+    open GamePageReading
+    open HtmlNodeExtensions
     open ScrapingParts
-    open canopy.classic
 
     let GetSportCountryAndLeagueAsync (repository:DbRepository) (leagueLink:string) =
         async {
@@ -69,31 +70,22 @@ module RepositoryMethods =
             return! repository.GameExistsAsync(gameLink) |> Async.AwaitTask
         }
 
-    let ReadGame (repository:DbRepository) sport league season gameLink =
-        let participantsAndDateElement = (element "#col-content")
+    let ReadGame (repository:DbRepository) (game: Game) sport gameHtml =
+        let participantsAndDateElement = GetElementById "#col-content" gameHtml
         let (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement) |> Async.RunSynchronously
         let gameDate = ReadGameDate participantsAndDateElement
                     
-        if not ((GameExistsAsync repository homeTeam awayTeam gameDate) |> Async.RunSynchronously) then
-            let (homeScore, awayScore, isOvertime) = ReadGameScore (element "#event-status")
-            let odds = GetOddsFromGamePage (element "#odds-data-table")
-
-            let game = Game()
-            game.IsOvertime <- isOvertime
-            //game.IsPlayoffs <- isPlayoffs
-            game.HomeTeamScore <- homeScore
-            game.AwayTeamScore <- awayScore
-            game.HomeTeam <- homeTeam
-            game.AwayTeam <- awayTeam
-            game.League <- league
-            game.Season <- season
-            game.GameLink <- gameLink
-            game.Odds.AddRange((CreateOddsAsync repository odds) |> Async.RunSynchronously)
-            game.Date <- (gameDate |> System.Nullable<System.DateTime>)
-
-            Some game
-        else
-            None
+        let (homeScore, awayScore, isOvertime) = ReadGameScore (GetElementById "#event-status" gameHtml)
+        let odds = GetOddsFromGamePage gameHtml
+            
+        game.IsOvertime <- isOvertime
+        //game.IsPlayoffs <- isPlayoffs
+        game.HomeTeamScore <- homeScore
+        game.AwayTeamScore <- awayScore
+        game.HomeTeam <- homeTeam
+        game.AwayTeam <- awayTeam
+        game.Odds.AddRange((CreateOddsAsync repository odds) |> Async.RunSynchronously)
+        game.Date <- ConvertOptionToNullable gameDate
 
     let InsertGameAsync (repository:DbRepository) game =
         async {
