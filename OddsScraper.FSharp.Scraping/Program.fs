@@ -41,11 +41,11 @@ let GetPageHtml link =
     js "return document.documentElement.outerHTML" |> string
     //(element "html").GetAttribute("innerHTML")
 
-let NavigateAndReadGameHtml ((game: Game), sport) =
-    match InvokeRepeatedIfFailed (fun () -> GetPageHtml game.GameLink) with
+let NavigateAndReadGameHtml(season, link) =
+    match InvokeRepeatedIfFailed (fun () -> GetPageHtml link) with
     | Some gameHtml ->
-        Some (game, sport, gameHtml |> GamePageReading.ParseGameHtml)
-    | None _ -> None
+        Some (season, link, gameHtml |> GamePageReading.ParseGameHtml)
+    | None -> None
 
 let FindMatchingLeagueLink leagues link =
     leagues
@@ -58,9 +58,6 @@ let main argv =
     start chrome
     
     use repository = new DbRepository(@"../ArchiveData.db")
-    let currentReadGame = ReadGame repository
-    let currentGetSportCountryAndLeagueAsync = (GetSportCountryAndLeagueAsync repository >> Async.RunSynchronously)
-    let currentInsertGame = (InsertGameAsync repository >> Async.RunSynchronously)
     let currentGameExists = (GameLinkExistsAsync repository >> Async.RunSynchronously)
 
     System.Console.Write("Enter username: ")
@@ -83,30 +80,32 @@ let main argv =
         |> Seq.map (Remove "/results/")
         |> Seq.toArray
     
-    let createGameAndSport(season, link) =
-        let (sport, league) = 
-            link 
-            |> (FindMatchingLeagueLink leagues) 
-            |> currentGetSportCountryAndLeagueAsync
+    let parseAndInsertGameAsync(season, link, gameHtml) =
+        async {
+            let! (sport, league) = 
+                link 
+                |> (FindMatchingLeagueLink leagues) 
+                |> (GetSportAndLeagueAsync repository)
         
-        let game = new Game()
-        game.League <- league
-        game.GameLink <- link
-        game.Season <- season
-        (game, sport)
+            let game = new Game()
+            game.League <- league
+            game.GameLink <- link
+            game.Season <- season
 
-    let populateAndInsertGame(game, sport, gameHtml) =
-        currentReadGame game sport gameHtml
-        currentInsertGame game
-    
+            do! ReadGameAsync repository game sport gameHtml
+            do! InsertGameAsync repository game
+        }
+
     System.IO.File.ReadLines("..\games.txt")
     |> Seq.map (Split "\t")
     |> Seq.map (fun n -> (n.[0], n.[1])) 
     |> Seq.filter (snd >> gameStartsWithSportLink)
     |> Seq.filter (snd >> currentGameExists >> not)
-    |> Seq.map createGameAndSport
     |> Seq.map NavigateAndReadGameHtml
     |> Seq.choose id
-    |> Seq.iter populateAndInsertGame
+    |> Seq.map parseAndInsertGameAsync
+    |> Async.Parallel
+    |> Async.RunSynchronously
+    |> ignore
 
     0 // return an integer exit code
