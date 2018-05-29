@@ -10,9 +10,9 @@ module RepositoryMethods =
     open HtmlNodeExtensions
     open ScrapingParts
 
-    let GetSportAndLeagueAsync (repository:DbRepository) (leagueLink:string) =
+    let GetSportAndLeagueAsync (repository:DbRepository) seasonLink leagueName =
         async {
-            let (sportName, countryName, leagueName) = leagueLink |> Remove BaseWebsite |> ExtractSportCountryAndLeagueFromLink
+            let (sportName, countryName, _) = seasonLink |> Remove BaseWebsite |> ExtractSportCountryAndLeagueFromLink
         
             let! sport = repository.GetOrCreateSportAsync(sportName) |> Async.AwaitTask
             let! country = repository.GetOrCreateCountryAsync(countryName) |> Async.AwaitTask

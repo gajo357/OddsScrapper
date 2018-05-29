@@ -49,8 +49,7 @@ let NavigateAndReadGameHtml(season, link) =
 
 let FindMatchingLeagueLink leagues link =
     leagues
-    |> Seq.filter (fun l -> Contains l link)
-    |> Seq.maxBy String.length
+    |> Seq.find (fun (_:string, l, _:string) -> StartsWith l link)
     
 [<EntryPoint>]
 let main argv = 
@@ -72,21 +71,23 @@ let main argv =
     let gameStartsWithSportLink gameLink =
         sportLinks |> Seq.exists (fun sl -> StartsWith sl gameLink)
     
-    let leagueExistsInSports league = 
+    let leagueExistsInSports(_, league, _) = 
         sports |> Seq.exists (fun sport -> Contains ("/" + sport + "/") league)
     let leagues = 
-        System.IO.File.ReadLines("..\leagues.txt")
+        System.IO.File.ReadLines("..\seasons.txt")
+        |> Seq.map (Split "\t")
+        |> Seq.map (fun n -> (n.[0], n.[1] |> Remove "results/", n.[2]))
         |> Seq.filter leagueExistsInSports
-        |> Seq.map (Remove "/results/")
         |> Seq.toArray
     
     let parseAndInsertGameAsync(season, link, gameHtml) =
         async {
-            try 
-                let! (sport, league) = 
-                    link 
-                    |> (FindMatchingLeagueLink leagues) 
-                    |> (GetSportAndLeagueAsync repository)
+            try
+                printfn "%A" link
+                let (_, seasonLink, leagueName) = 
+                    leagues
+                    |> Seq.find (fun (_:string, l, _:string) -> StartsWith l link)
+                let! (sport, league) = GetSportAndLeagueAsync repository seasonLink leagueName
             
                 let game = new Game()
                 game.League <- league
