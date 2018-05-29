@@ -82,18 +82,20 @@ let main argv =
     
     let parseAndInsertGameAsync(season, link, gameHtml) =
         async {
-            let! (sport, league) = 
-                link 
-                |> (FindMatchingLeagueLink leagues) 
-                |> (GetSportAndLeagueAsync repository)
-        
-            let game = new Game()
-            game.League <- league
-            game.GameLink <- link
-            game.Season <- season
+            try 
+                let! (sport, league) = 
+                    link 
+                    |> (FindMatchingLeagueLink leagues) 
+                    |> (GetSportAndLeagueAsync repository)
+            
+                let game = new Game()
+                game.League <- league
+                game.GameLink <- link
+                game.Season <- season
 
-            do! ReadGameAsync repository game sport gameHtml
-            do! InsertGameAsync repository game
+                do! ReadGameAsync repository game sport gameHtml
+                return! InsertGameAsync repository game
+            with _ -> ()
         }
 
     System.IO.File.ReadLines("..\games.txt")
@@ -103,9 +105,7 @@ let main argv =
     |> Seq.filter (snd >> currentGameExists >> not)
     |> Seq.map NavigateAndReadGameHtml
     |> Seq.choose id
-    |> Seq.map parseAndInsertGameAsync
-    |> Async.Parallel
-    |> Async.RunSynchronously
+    |> Seq.iter (parseAndInsertGameAsync >> Async.Start)
     |> ignore
 
     0 // return an integer exit code

@@ -39,6 +39,12 @@ module Common =
     let IsNonEmptyString input =
         System.String.IsNullOrEmpty(input) = false
 
+    let TryAndForget action =
+        try
+            action()
+        with
+        | _ -> ignore
+
     let InvokeRepeatedIfFailed actionToRepeat =
         let rec repeatedAction timesTried actionToRepeat =
             if timesTried < 2 then
