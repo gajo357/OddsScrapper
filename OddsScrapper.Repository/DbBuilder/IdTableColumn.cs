@@ -1,6 +1,6 @@
 ﻿namespace OddsScrapper.Repository.DbBuilder
 {
-    class IdTableColumn : SimpleTableColumn
+    public class IdTableColumn : SimpleTableColumn
     {
         public IdTableColumn() 
             : base("Id", "INTEGER")

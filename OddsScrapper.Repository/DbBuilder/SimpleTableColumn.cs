@@ -1,6 +1,6 @@
 ﻿namespace OddsScrapper.Repository.DbBuilder
 {
-    class SimpleTableColumn : ITableColumn
+    public class SimpleTableColumn : ITableColumn
     {
         public string ColumnName { get; }
         protected string ColumnType { get; }

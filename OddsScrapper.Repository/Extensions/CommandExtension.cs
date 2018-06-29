@@ -1,7 +1,9 @@
 ﻿using OddsScrapper.Repository.DbBuilder;
 using OddsScrapper.Repository.Helpers;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Linq;
 using System.Text;
 
 namespace OddsScrapper.Repository.Extensions
@@ -32,16 +34,6 @@ namespace OddsScrapper.Repository.Extensions
             }
 
             command.CommandText = $"INSERT INTO {tableName} ({columnNameList}) VALUES ({columnValueList});";
-
-            //var agg = columnValuePairs.Aggregate((Tuple<string, string>)null, (result, current) => {
-            //    if (result == null)
-            //    {
-            //        return Tuple.Create(current.Column, $"'{current.Value}'");
-            //    }
-
-            //    return Tuple.Create($"{result.Item1},{current.Column}", $"{result.Item2},'{current.Value}'");
-            //});
-            //return $"INSERT INTO {tableName} ({agg.Item1}) VALUES ({agg.Item2});";
         }
 
         public static void BuildUpdateCommand(this DbCommand command, string tableName, int id, params ColumnValuePair[] columnValuePairs)
@@ -70,21 +62,18 @@ namespace OddsScrapper.Repository.Extensions
             command.CommandText = $"UPDATE {tableName} SET {setValueList.ToString()} WHERE Id=?;";
         }
 
-        public static void BuildSelectIdCommand(this DbCommand command, string tableName, params ColumnValuePair[] columnValuePairs)
+        public static void BuildSelectIdCommand(this DbCommand command, string tableName, params ColumnValuePair[] whereColumns)
         {
-            var whereClause = command.BuildWhereClause(columnValuePairs);
+            var whereClause = command.BuildWhereClause(whereColumns);
 
             command.CommandText = $"SELECT Id FROM {tableName} WHERE {whereClause};";
+        }
 
-            //var agg = columnValuePairs.Aggregate((Tuple<string, string>)null, (result, current) => {
-            //    if (result == null)
-            //    {
-            //        return Tuple.Create(current.Column, $"'{current.Value}'");
-            //    }
+        public static void BuildSelectCommand(this DbCommand command, string tableName, ColumnValuePair[] whereColumns)
+        {
+            var whereClause = command.BuildWhereClause(whereColumns);
 
-            //    return Tuple.Create($"{result.Item1},{current.Column}", $"{result.Item2},'{current.Value}'");
-            //});
-            //return $"INSERT INTO {tableName} ({agg.Item1}) VALUES ({agg.Item2});";
+            command.CommandText = $"SELECT * FROM {tableName} WHERE {whereClause};";
         }
 
         public static void BuildDeleteCommand(this DbCommand command, string tableName, params ColumnValuePair[] columnValuePairs)

@@ -2,7 +2,7 @@
 
 namespace OddsScrapper.Repository.DbBuilder
 {
-    class ForegnKeyTableColumn : SimpleTableColumn
+    public class ForegnKeyTableColumn : SimpleTableColumn
     {
         private string ForeignTable { get; }
 

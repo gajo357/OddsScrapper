@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OddsScrapper.Repository.DbBuilder;
+using System;
 using System.Data;
 
 namespace OddsScrapper.Repository.Helpers
@@ -8,6 +9,11 @@ namespace OddsScrapper.Repository.Helpers
         public static ColumnValuePair CreateName(string name)
         {
             return Create("Name", name);
+        }
+
+        public static ColumnValuePair CreateId(int id)
+        {
+            return Create((new IdTableColumn()).ColumnName, id);
         }
 
         public static ColumnValuePair Create(string column, DateTime? date)

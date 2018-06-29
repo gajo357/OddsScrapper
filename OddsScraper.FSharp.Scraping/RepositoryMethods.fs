@@ -10,7 +10,7 @@ module RepositoryMethods =
     open HtmlNodeExtensions
     open ScrapingParts
 
-    let GetSportAndLeagueAsync (repository:DbRepository) seasonLink leagueName =
+    let GetSportAndLeagueAsync (repository:IDbRepository) seasonLink leagueName =
         async {
             let (sportName, countryName, _) = seasonLink |> Remove BaseWebsite |> ExtractSportCountryAndLeagueFromLink
         
@@ -21,7 +21,7 @@ module RepositoryMethods =
             return (sport, league)
         }
 
-    let GetParticipants (repository:DbRepository) sport participantsAndDateElement =
+    let GetParticipants (repository:IDbRepository) sport participantsAndDateElement =
         async {
             let (homeTeamName, awayTeamName) = ReadParticipantsNames participantsAndDateElement
 
@@ -31,7 +31,7 @@ module RepositoryMethods =
             return (homeTeam, awayTeam)
         }
 
-    let ConvertToGameOddAsync (repository:DbRepository) (odd:Odd) =
+    let ConvertToGameOddAsync (repository:IDbRepository) (odd:Odd) =
         async {
             let! booker = repository.GetOrCreateBookerAsync(odd.Name) |> Async.AwaitTask
         
@@ -51,7 +51,7 @@ module RepositoryMethods =
             return gameOdd
         }
 
-    let CreateOddsAsync (repository:DbRepository) (odds:Odd[]) =
+    let CreateOddsAsync (repository:IDbRepository) (odds:Odd[]) =
         async {
             return 
                 odds
@@ -60,17 +60,17 @@ module RepositoryMethods =
                 |> Seq.toList
         }
 
-    let GameExistsAsync (repository:DbRepository) homeTeam awayTeam gameDate =
+    let GameExistsAsync (repository:IDbRepository) homeTeam awayTeam gameDate =
         async {
             return! repository.GameExistsAsync(homeTeam, awayTeam, gameDate) |> Async.AwaitTask
         }
     
-    let GameLinkExistsAsync (repository:DbRepository) gameLink =
+    let GameLinkExistsAsync (repository:IDbRepository) gameLink =
         async {
             return! repository.GameExistsAsync(gameLink) |> Async.AwaitTask
         }
 
-    let ReadGameAsync (repository:DbRepository) (game: Game) sport gameHtml =
+    let ReadGameAsync (repository:IDbRepository) (game: Game) sport gameHtml =
         async {
             let participantsAndDateElement = GetElementById "#col-content" gameHtml
             let! (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement)
@@ -89,7 +89,7 @@ module RepositoryMethods =
             game.Date <- ConvertOptionToNullable gameDate
         }
 
-    let InsertGameAsync (repository:DbRepository) game =
+    let InsertGameAsync (repository:IDbRepository) game =
         async {
             (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
         }

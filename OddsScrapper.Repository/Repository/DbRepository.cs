@@ -4,6 +4,7 @@ using OddsScrapper.Repository.Helpers;
 using OddsScrapper.Repository.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
 using System.Threading.Tasks;
@@ -44,50 +45,13 @@ namespace OddsScrapper.Repository.Repository
 
         private void CreateTables()
         {
-            var sportsTable = new Table(SportsTable)
-                .AddIdColumn()
-                .AddNameColumn();
-
-            var countriesTable = new Table(CountriesTable)
-                .AddIdColumn()
-                .AddNameColumn();
-
-            var bookTable = new Table(BookersTable)
-                .AddIdColumn()
-                .AddNameColumn();
-
-            var leagueTable = new Table(LeaguesTable)
-                .AddIdColumn()
-                .AddNameColumn()
-                .AddBoolColumn("IsFirst")
-                .AddForeignKeyColumn(sportsTable)
-                .AddForeignKeyColumn(countriesTable);
-
-            var teamTable = new Table(TeamsTable)
-                .AddIdColumn()
-                .AddNameColumn()
-                .AddForeignKeyColumn(sportsTable);
-
-            var gameTable = new Table(GamesTable)
-                .AddIdColumn()
-                .AddDatetimeColumn("Date")
-                .AddIntegerColumn("HomeTeamScore")
-                .AddIntegerColumn("AwayTeamScore")
-                .AddBoolColumn("IsPlayoffs")
-                .AddBoolColumn("IsOvertime")
-                .AddTextColumn("Season")
-                .AddTextColumn("GameLink")
-                .AddForeignKeyColumn(leagueTable)
-                .AddForeignKeyColumn(teamTable, "HomeTeamId")
-                .AddForeignKeyColumn(teamTable, "AwayTeamId");
-
-            var gameOddsTable = new Table(GameOddsTable)
-                .AddForeignKeyColumn(gameTable)
-                .AddForeignKeyColumn(bookTable)
-                .AddDoubleColumn("HomeOdd")
-                .AddDoubleColumn("DrawOdd")
-                .AddDoubleColumn("AwayOdd")
-                .AddBoolColumn("IsValid");
+            var sportsTable = TableBuilder.CreateSportTable();
+            var countriesTable = TableBuilder.CreateCountriesTable();
+            var bookTable = TableBuilder.CreateBookerTable();
+            var leagueTable = TableBuilder.CreateLeagueTable();
+            var teamTable = TableBuilder.CreateTeamTable();
+            var gameTable = TableBuilder.CreateGameTable();
+            var gameOddsTable = TableBuilder.CreateGameOddsTable();
 
             _sqlConnection.Create(sportsTable, countriesTable, leagueTable, bookTable, teamTable, gameTable, gameOddsTable);
         }
@@ -99,7 +63,21 @@ namespace OddsScrapper.Repository.Repository
             _sqlConnection = null;
         }
 
-        private async Task<Sport> GetSportAsync(string name)
+        private async Task<Sport> GetSportAsync(int id)
+        {
+            return await _sqlConnection.GetByIdAsync(SportsTable, id, CreateSportAsync);
+        }
+        private Task<Sport> CreateSportAsync(DbDataReader reader)
+        {
+            return Task.FromResult(
+                new Sport
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                });
+        }
+
+        public async Task<Sport> GetSportAsync(string name)
         {
             var dbId = await _sqlConnection.GetIdAsync(SportsTable, ColumnValuePair.CreateName(name));
             if (dbId > 0)
@@ -126,8 +104,22 @@ namespace OddsScrapper.Repository.Repository
         {
             return await GetSportAsync(name) ?? await CreateSportAsync(name);
         }
+        
+        private async Task<Country> GetCountryAsync(int id)
+        {
+            return await _sqlConnection.GetByIdAsync(CountriesTable, id, CreateCountryAsync);
+        }
+        private Task<Country> CreateCountryAsync(DbDataReader reader)
+        {
+            return Task.FromResult(
+                new Country
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                });
+        }
 
-        private async Task<Country> GetCountryAsync(string name)
+        public async Task<Country> GetCountryAsync(string name)
         {
             var dbId = await _sqlConnection.GetIdAsync(CountriesTable, ColumnValuePair.CreateName(name));
             if (dbId > 0)
@@ -155,7 +147,22 @@ namespace OddsScrapper.Repository.Repository
             return await GetCountryAsync(name) ?? await CreateCountryAsync(name);
         }
 
-        private async Task<Team> GetTeamAsync(string name, Sport sport)
+        private async Task<Team> GetTeamAsync(int id)
+        {
+            return await _sqlConnection.GetByIdAsync(TeamsTable, id, CreateTeamAsync);
+        }
+        private async Task<Team> CreateTeamAsync(DbDataReader reader)
+        {
+            return 
+                new Team
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Sport = await GetSportAsync(reader.GetInt32(2))
+                };
+        }
+
+        public async Task<Team> GetTeamAsync(string name, Sport sport)
         {
             var dbId = await _sqlConnection.GetIdAsync(TeamsTable, 
                 ColumnValuePair.CreateName(name), 
@@ -190,10 +197,38 @@ namespace OddsScrapper.Repository.Repository
             return await GetTeamAsync(name, sport) ?? await CreateTeamAsync(name, sport);
         }
 
-        private async Task<League> GetLeagueAsync(string name, Sport sport, Country country)
+        private async Task<League> GetLeagueAsync(int id)
         {
-            var dbId = await _sqlConnection.GetIdAsync(LeaguesTable, 
-                ColumnValuePair.CreateName(name), 
+            return await _sqlConnection.GetByIdAsync(LeaguesTable, id, CreateLeagueAsync);
+        }
+        private async Task<League> CreateLeagueAsync(DbDataReader reader)
+        {
+            var i = 0;
+
+            return new League
+            {
+                Id = reader.GetInt32(i++),
+                Name = reader.GetString(i++),
+                IsFirst = reader.GetBoolean(i++),
+                Sport = await GetSportAsync(reader.GetInt32(i++)),
+                Country = await GetCountryAsync(reader.GetInt32(i++))
+            };
+        }
+
+        public async Task<IEnumerable<League>> GetLeaguesAsync(Sport sport, Country country)
+        {
+            return await _sqlConnection.GetAllAsync(LeaguesTable,
+                new[]
+                {
+                    ColumnValuePair.Create(new ForegnKeyTableColumn(LeaguesTable, SportsTable, "Id").ColumnName, sport.Id),
+                    ColumnValuePair.Create(new ForegnKeyTableColumn(LeaguesTable, CountriesTable, "Id").ColumnName, country.Id)
+                },
+                CreateLeagueAsync);
+        }
+        public async Task<League> GetLeagueAsync(string name, Sport sport, Country country)
+        {
+            var dbId = await _sqlConnection.GetIdAsync(LeaguesTable,
+                ColumnValuePair.CreateName(name),
                 ColumnValuePair.Create(new ForegnKeyTableColumn(LeaguesTable, SportsTable, "Id").ColumnName, sport.Id),
                 ColumnValuePair.Create(new ForegnKeyTableColumn(LeaguesTable, CountriesTable, "Id").ColumnName, country.Id));
 
@@ -230,6 +265,20 @@ namespace OddsScrapper.Repository.Repository
         public async Task<League> GetOrCreateLeagueAsync(string name, bool isFirst, Sport sport, Country country)
         {
             return await GetLeagueAsync(name, sport, country) ?? await CreateLeagueAsync(name, isFirst, sport, country);
+        }
+
+        private async Task<Bookkeeper> GetBookerAsync(int id)
+        {
+            return await _sqlConnection.GetByIdAsync(BookersTable, id, CreateBookerAsync);
+        }
+        private Task<Bookkeeper> CreateBookerAsync(DbDataReader reader)
+        {
+            return Task.FromResult(
+                new Bookkeeper
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                });
         }
 
         private async Task<Bookkeeper> GetBookerAsync(string name)
@@ -351,6 +400,27 @@ namespace OddsScrapper.Repository.Repository
             return 1;
         }
 
+        private async Task<IEnumerable<GameOdds>> GetGameOddsAsync(int gameId)
+        {
+            return await _sqlConnection.GetAllAsync(GameOddsTable,
+                new[] { ColumnValuePair.Create(new ForegnKeyTableColumn(GameOddsTable, GamesTable, "Id").ColumnName, gameId) },
+                CreateGameOddFromReaderAsync);
+        }
+
+        private async Task<GameOdds> CreateGameOddFromReaderAsync(DbDataReader reader)
+        {
+            var i = 1;
+
+            return new GameOdds
+            {
+                Bookkeeper = await GetBookerAsync(reader.GetInt32(i++)),
+                HomeOdd = reader.GetDouble(i++),
+                DrawOdd = reader.GetDouble(i++),
+                AwayOdd = reader.GetDouble(i++),
+                IsValid = reader.GetBoolean(i++),
+            };
+        }
+
         public int GetIdOfLastLeague()
         {
             using (var command = _sqlConnection.CreateCommand())
@@ -370,6 +440,36 @@ namespace OddsScrapper.Repository.Repository
         public void Dispose()
         {
             Close();
+        }
+
+        public async Task<IEnumerable<Game>> GetAllLeagueGamesAsync(League league)
+        {
+            return await _sqlConnection.GetAllAsync(GamesTable, 
+                new[] { ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, LeaguesTable, "Id").ColumnName, league.Id) },
+                CreateGameAsync);
+        }
+
+        private async Task<Game> CreateGameAsync(DbDataReader reader)
+        {
+            var i = 0;
+
+            var game = new Game
+            {
+                Id = reader.GetInt32(i++),
+                Date = reader.GetDateTime(i++),
+                HomeTeamScore = reader.GetInt32(i++),
+                AwayTeamScore = reader.GetInt32(i++),
+                IsPlayoffs = reader.GetBoolean(i++),
+                IsOvertime = reader.GetBoolean(i++),
+                Season = reader.GetString(i++),
+                GameLink = reader.GetString(i++),
+                League = await GetLeagueAsync(reader.GetInt32(i++)),
+                HomeTeam = await GetTeamAsync(reader.GetInt32(i++)),
+                AwayTeam = await GetTeamAsync(reader.GetInt32(i++)),
+            };
+            game.Odds.AddRange(await GetGameOddsAsync(game.Id));
+
+            return game;
         }
     }
 }

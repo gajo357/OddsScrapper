@@ -94,6 +94,7 @@
     <Compile Include="DbBuilder\ITableColumn.cs" />
     <Compile Include="DbBuilder\Table.cs" />
     <Compile Include="DbBuilder\SimpleTableColumn.cs" />
+    <Compile Include="DbBuilder\TableBuilder.cs" />
     <Compile Include="Dto\GameDto.cs" />
     <Compile Include="Extensions\ColumnValueExtensions.cs" />
     <Compile Include="Extensions\CommandExtension.cs" />

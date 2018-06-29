@@ -1,8 +1,10 @@
 ﻿using OddsScrapper.Repository.DbBuilder;
 using OddsScrapper.Repository.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SQLite;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OddsScrapper.Repository.Extensions
@@ -51,6 +53,36 @@ namespace OddsScrapper.Repository.Extensions
             }
 
             return id;
+        }
+
+        public static async Task<T> GetByIdAsync<T>(this DbConnection connection, string tableName, int id, Func<DbDataReader, Task<T>> dataCreator)
+        {
+            return await connection.GetSingleAsync(tableName, new[] { ColumnValuePair.CreateId(id) }, dataCreator);
+        }
+
+        public static async Task<T> GetSingleAsync<T>(this DbConnection connection, string tableName, ColumnValuePair[] whereColumns, Func<DbDataReader, Task<T>> dataCreator)
+        {
+            return (await connection.GetAllAsync(tableName, whereColumns, dataCreator)).FirstOrDefault();
+        }
+
+        public static async Task<IEnumerable<T>> GetAllAsync<T>(this DbConnection connection, string tableName, ColumnValuePair[] whereColumns, Func<DbDataReader, Task<T>> dataCreator)
+        {
+            var results = new List<T>();
+            using (var command = connection.CreateCommand())
+            {
+                command.BuildSelectCommand(tableName, whereColumns);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    // Always call Read before accessing data.
+                    while (await reader.ReadAsync())
+                    {
+                        results.Add(await dataCreator(reader));
+                    }
+                }
+            }
+
+            return results;
         }
 
         public static async Task<int> DeleteAsync(this DbConnection connection, string tableName, params ColumnValuePair[] columnValuePairs)
