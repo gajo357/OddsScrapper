@@ -22,6 +22,7 @@ namespace OddsScrapper.Repository.Repository
         Task<bool> GameExistsAsync(string gameLink);
 
         Task<IEnumerable<Game>> GetAllLeagueGamesAsync(League league);
+        IEnumerable<Game> GetAllLeagueGames(League league);
 
         int GetIdOfLastLeague();
     }

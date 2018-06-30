@@ -37,3 +37,6 @@ module RepositoryMethods =
             return! repository.GetAllLeagueGamesAsync(league) |> Async.AwaitTask
         }
 
+    let GetAllGames (repository:IDbRepository) league =
+        repository.GetAllLeagueGames(league)
+

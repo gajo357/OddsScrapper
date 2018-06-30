@@ -67,15 +67,7 @@ namespace OddsScrapper.Repository.Repository
         {
             return await _sqlConnection.GetByIdAsync(SportsTable, id, CreateSportAsync);
         }
-        private Task<Sport> CreateSportAsync(DbDataReader reader)
-        {
-            return Task.FromResult(
-                new Sport
-                {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1)
-                });
-        }
+        private Task<Sport> CreateSportAsync(DbDataReader reader) => Task.FromResult(CreateSport(reader));
 
         public async Task<Sport> GetSportAsync(string name)
         {
@@ -109,15 +101,7 @@ namespace OddsScrapper.Repository.Repository
         {
             return await _sqlConnection.GetByIdAsync(CountriesTable, id, CreateCountryAsync);
         }
-        private Task<Country> CreateCountryAsync(DbDataReader reader)
-        {
-            return Task.FromResult(
-                new Country
-                {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1)
-                });
-        }
+        private Task<Country> CreateCountryAsync(DbDataReader reader) => Task.FromResult(CreateCountry(reader));
 
         public async Task<Country> GetCountryAsync(string name)
         {
@@ -271,15 +255,7 @@ namespace OddsScrapper.Repository.Repository
         {
             return await _sqlConnection.GetByIdAsync(BookersTable, id, CreateBookerAsync);
         }
-        private Task<Bookkeeper> CreateBookerAsync(DbDataReader reader)
-        {
-            return Task.FromResult(
-                new Bookkeeper
-                {
-                    Id = reader.GetInt32(0),
-                    Name = reader.GetString(1)
-                });
-        }
+        private Task<Bookkeeper> CreateBookerAsync(DbDataReader reader) => Task.FromResult(CreateBooker(reader));
 
         private async Task<Bookkeeper> GetBookerAsync(string name)
         {
@@ -348,7 +324,6 @@ namespace OddsScrapper.Repository.Repository
         {
             return await GetGameIdAsync(homeTeam, awayTeam, date) > 0;
         }
-
         public async Task<bool> GameExistsAsync(string gameLink)
         {
             return await _sqlConnection.GetIdAsync(GamesTable,
@@ -406,7 +381,6 @@ namespace OddsScrapper.Repository.Repository
                 new[] { ColumnValuePair.Create(new ForegnKeyTableColumn(GameOddsTable, GamesTable, "Id").ColumnName, gameId) },
                 CreateGameOddFromReaderAsync);
         }
-
         private async Task<GameOdds> CreateGameOddFromReaderAsync(DbDataReader reader)
         {
             var i = 1;
@@ -448,7 +422,6 @@ namespace OddsScrapper.Repository.Repository
                 new[] { ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, LeaguesTable, "Id").ColumnName, league.Id) },
                 CreateGameAsync);
         }
-
         private async Task<Game> CreateGameAsync(DbDataReader reader)
         {
             var i = 0;
@@ -471,5 +444,133 @@ namespace OddsScrapper.Repository.Repository
 
             return game;
         }
+
+        #region Sync calls
+
+        private Sport GetSport(int id)
+        {
+            return _sqlConnection.GetById(SportsTable, id, CreateSport);
+        }
+        private Sport CreateSport(DbDataReader reader)
+        {
+            return 
+                new Sport
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                };
+        }
+
+        private Country GetCountry(int id)
+        {
+            return _sqlConnection.GetById(CountriesTable, id, CreateCountry);
+        }
+        private Country CreateCountry(DbDataReader reader)
+        {
+            return 
+                new Country
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                };
+        }
+
+        private League GetLeague(int id)
+        {
+            return _sqlConnection.GetById(LeaguesTable, id, CreateLeague);
+        }
+        private League CreateLeague(DbDataReader reader)
+        {
+            var i = 0;
+
+            return new League
+            {
+                Id = reader.GetInt32(i++),
+                Name = reader.GetString(i++),
+                IsFirst = reader.GetBoolean(i++),
+                Sport = GetSport(reader.GetInt32(i++)),
+                Country = GetCountry(reader.GetInt32(i++))
+            };
+        }
+
+        private Team GetTeam(int id)
+        {
+            return _sqlConnection.GetById(TeamsTable, id, CreateTeam);
+        }
+        private Team CreateTeam(DbDataReader reader)
+        {
+            return
+                new Team
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1),
+                    Sport = GetSport(reader.GetInt32(2))
+                };
+        }
+
+        public IEnumerable<Game> GetAllLeagueGames(League league)
+        {
+            return _sqlConnection.GetAll(GamesTable,
+                new[] { ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, LeaguesTable, "Id").ColumnName, league.Id) },
+                CreateGame);
+        }
+        private Game CreateGame(DbDataReader reader)
+        {
+            var i = 0;
+
+            var game = new Game
+            {
+                Id = reader.GetInt32(i++),
+                Date = reader.GetDateTime(i++),
+                HomeTeamScore = reader.GetInt32(i++),
+                AwayTeamScore = reader.GetInt32(i++),
+                IsPlayoffs = reader.GetBoolean(i++),
+                IsOvertime = reader.GetBoolean(i++),
+                Season = reader.GetString(i++),
+                GameLink = reader.GetString(i++),
+                League = GetLeague(reader.GetInt32(i++)),
+                HomeTeam = GetTeam(reader.GetInt32(i++)),
+                AwayTeam = GetTeam(reader.GetInt32(i++)),
+            };
+            game.Odds.AddRange(GetGameOdds(game.Id));
+
+            return game;
+        }
+
+        private IEnumerable<GameOdds> GetGameOdds(int gameId)
+        {
+            return _sqlConnection.GetAll(GameOddsTable,
+                new[] { ColumnValuePair.Create(new ForegnKeyTableColumn(GameOddsTable, GamesTable, "Id").ColumnName, gameId) },
+                CreateGameOddFromReader);
+        }
+        private GameOdds CreateGameOddFromReader(DbDataReader reader)
+        {
+            var i = 1;
+
+            return new GameOdds
+            {
+                Bookkeeper = GetBooker(reader.GetInt32(i++)),
+                HomeOdd = reader.GetDouble(i++),
+                DrawOdd = reader.GetDouble(i++),
+                AwayOdd = reader.GetDouble(i++),
+                IsValid = reader.GetBoolean(i++),
+            };
+        }
+
+        private Bookkeeper GetBooker(int id)
+        {
+            return _sqlConnection.GetById(BookersTable, id, CreateBooker);
+        }
+        private Bookkeeper CreateBooker(DbDataReader reader)
+        {
+            return 
+                new Bookkeeper
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                };
+        }
+
+        #endregion
     }
 }

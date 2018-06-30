@@ -143,5 +143,34 @@ namespace OddsScrapper.Repository.Extensions
                 transaction.Commit();
             }
         }
+
+        public static T GetById<T>(this DbConnection connection, string tableName, int id, Func<DbDataReader, T> dataCreator)
+        {
+            return connection.GetSingle(tableName, new[] { ColumnValuePair.CreateId(id) }, dataCreator);
+        }
+
+        public static T GetSingle<T>(this DbConnection connection, string tableName, ColumnValuePair[] whereColumns, Func<DbDataReader, T> dataCreator)
+        {
+            return (connection.GetAll(tableName, whereColumns, dataCreator)).FirstOrDefault();
+        }
+
+        public static IEnumerable<T> GetAll<T>(this DbConnection connection, string tableName, ColumnValuePair[] whereColumns, Func<DbDataReader, T> dataCreator)
+        {
+            using (var command = connection.CreateCommand())
+            {
+                command.BuildSelectCommand(tableName, whereColumns);
+
+                using (var reader = command.ExecuteReader())
+                {
+                    // Always call Read before accessing data.
+                    while (reader.Read())
+                    {
+                        yield return dataCreator(reader);
+                    }
+                }
+            }
+        }
+
+
     }
 }

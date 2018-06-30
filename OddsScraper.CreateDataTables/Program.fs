@@ -14,15 +14,13 @@ let Separator = ","
 let JoinValues = Join Separator
 
 let Header = 
-    JoinValues ["Sport"; "Country"; "League";
-                "HomeTeam"; "AwayTeam"; "HomeTeamScore"; "AwayTeamScore";
-                "Date"; "Season"; "GameLink"; "IsPlayoffs"; "IsOvertime";
+    JoinValues ["HomeTeam"; "AwayTeam"; "HomeTeamScore"; "AwayTeamScore";
+                "Date"; "Season"; "IsPlayoffs"; "IsOvertime";
                 "Bookmaker"; "HomeOdd"; "DrawOdd"; "AwayOdd"; "IsValid"]
 
-let FormatGame (sport:Sport) (country:Country) (league:League) ((game:Game), (gameOdd:GameOdds)) =
-    JoinValues [sport.Name; country.Name; league.Name;
-                game.HomeTeam.Name; game.AwayTeam.Name; game.HomeTeamScore; game.AwayTeamScore;
-                game.Date; game.Season; game.GameLink; game.IsPlayoffs; game.IsOvertime;
+let FormatGame (game:Game) (gameOdd:GameOdds) =
+    JoinValues [game.HomeTeam.Name; game.AwayTeam.Name; game.HomeTeamScore; game.AwayTeamScore;
+                game.Date; game.Season; game.IsPlayoffs; game.IsOvertime;
                 gameOdd.Bookkeeper.Name; gameOdd.HomeOdd; gameOdd.DrawOdd; gameOdd.AwayOdd; gameOdd.IsValid]
 
 let GetUserInput (message:String) =
@@ -58,16 +56,13 @@ let main argv =
         let! league = SelectLeague ((GetLeaguesAsync sport country repository) |> Async.RunSynchronously |> Seq.toList)
         //let! league = GetUserInput "Choose league: " |> GetFromRepository repository (GetLeagueAsync sport country)
 
-        let formatGame = FormatGame sport country league
         let fileName = String.Format("..\{0}_{1}_{2}.csv", sport.Name, country.Name, league.Name)
         
         System.IO.File.WriteAllLines(fileName, [Header])
         let writeToFile lines = System.IO.File.AppendAllLines(fileName, lines)
 
-        (GetAllGamesAsync repository league) 
-        |> Async.RunSynchronously
-        |> Seq.collect (fun game -> game.Odds |> Seq.map (fun go -> (game, go)))
-        |> Seq.map formatGame
+        (GetAllGames repository league) 
+        |> Seq.collect (fun game -> game.Odds |> Seq.map (fun go -> FormatGame game go))
         |> writeToFile
 
         return league
