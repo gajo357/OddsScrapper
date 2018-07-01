@@ -110,6 +110,8 @@
     <Compile Include="ScrapingParts.fs" />
     <Compile Include="GamePageReading.fs" />
     <Compile Include="RepositoryMethods.fs" />
+    <Compile Include="DatabaseFix.fs" />
+    <Compile Include="DownloadGames.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
