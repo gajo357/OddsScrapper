@@ -4,6 +4,7 @@ using OddsScrapper.Repository.Helpers;
 using OddsScrapper.Repository.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.IO;
@@ -293,14 +294,10 @@ namespace OddsScrapper.Repository.Repository
             return gameId;
         }
 
-        private async Task<int> UpdateGameAsync(int gameId, Game game)
+        public async Task UpdateGameAsync(Game game)
         {
-            game.Id = gameId;
-
-            await _sqlConnection.UpdateAsync(GamesTable, gameId, game.CreateColumnValuePairs());
-            await InsertGameOddsAsync(gameId, game.Odds);
-
-            return gameId;
+            await _sqlConnection.UpdateAsync(GamesTable, game.Id, game.CreateColumnValuePairs());
+            //await InsertGameOddsAsync(gameId, game.Odds);
         }
 
         public async Task<Game> UpdateOrInsertGameAsync(Game game)
@@ -310,7 +307,8 @@ namespace OddsScrapper.Repository.Repository
             if (gameId > 0)
             {
                 await DeleteGameOddsAsync(gameId);
-                await UpdateGameAsync(gameId, game);
+                game.Id = gameId;
+                await UpdateGameAsync(game);
             }
             else
             {
@@ -508,6 +506,10 @@ namespace OddsScrapper.Repository.Repository
                 };
         }
 
+        public IEnumerable<Game> GetAllGames()
+        {
+            return _sqlConnection.GetAll(GamesTable, new ColumnValuePair[] { } , CreateGame);
+        }
         public IEnumerable<Game> GetAllLeagueGames(League league)
         {
             return _sqlConnection.GetAll(GamesTable,
@@ -572,5 +574,33 @@ namespace OddsScrapper.Repository.Repository
         }
 
         #endregion
+
+        public IEnumerable<Game> GetCustomGames()
+        {
+            using (var command = _sqlConnection.CreateCommand())
+            {
+                command.CommandText = "SELECT Id, GameLink, FK_Games_Leagues_Id FROM Games WHERE FK_Games_Leagues_Id>=2027 AND FK_Games_Leagues_Id<=2121";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    // Always call Read before accessing data.
+                    while (reader.Read())
+                    {
+                        var game = new Game();
+                        game.Id = reader.GetInt32(0);
+                        game.GameLink = reader.GetString(1);
+                        game.League = GetLeague(reader.GetInt32(2));
+                        yield return game;
+                    }
+                }
+            }
+        }
+
+        public async Task UpdateGameLeagueAsync(Game game)
+        {
+            await _sqlConnection.UpdateAsync(GamesTable, game.Id,
+                ColumnValuePair.Create(new ForegnKeyTableColumn(GamesTable, LeaguesTable, "Id").ColumnName, game.League.Id)
+                );
+        }
     }
 }

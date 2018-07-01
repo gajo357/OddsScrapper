@@ -63,7 +63,7 @@ namespace OddsScrapper.Repository.DbBuilder
         public static Table CreateGameOddsTable()
         {
             return new Table(DbRepository.GameOddsTable)
-                .AddForeignKeyColumn(CreateGameTable())
+                .AddForeignKeyColumn(CreateGameTable(), onDeleteCascade: true)
                 .AddForeignKeyColumn(CreateBookerTable())
                 .AddDoubleColumn("HomeOdd")
                 .AddDoubleColumn("DrawOdd")

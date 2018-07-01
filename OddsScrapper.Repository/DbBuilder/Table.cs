@@ -20,9 +20,9 @@ namespace OddsScrapper.Repository.DbBuilder
             return this;
         }
 
-        public Table AddForeignKeyColumn(Table foreignTable, string columnName = "Id")
+        public Table AddForeignKeyColumn(Table foreignTable, string columnName = "Id", bool onDeleteCascade = false)
         {
-            _columns.Add(new ForegnKeyTableColumn(TableName, foreignTable.TableName, columnName));
+            _columns.Add(new ForegnKeyTableColumn(TableName, foreignTable.TableName, columnName, onDeleteCascade));
 
             return this;
         }

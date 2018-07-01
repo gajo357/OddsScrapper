@@ -66,27 +66,32 @@ namespace OddsScrapper.Repository.Extensions
         {
             var whereClause = command.BuildWhereClause(whereColumns);
 
-            command.CommandText = $"SELECT Id FROM {tableName} WHERE {whereClause};";
+            command.CommandText = $"SELECT Id FROM {tableName}{whereClause};";
         }
 
         public static void BuildSelectCommand(this DbCommand command, string tableName, ColumnValuePair[] whereColumns)
         {
             var whereClause = command.BuildWhereClause(whereColumns);
 
-            command.CommandText = $"SELECT * FROM {tableName} WHERE {whereClause};";
+            command.CommandText = $"SELECT * FROM {tableName}{whereClause};";
         }
 
         public static void BuildDeleteCommand(this DbCommand command, string tableName, params ColumnValuePair[] columnValuePairs)
         {
             var whereClause = command.BuildWhereClause(columnValuePairs);
 
-            command.CommandText = $"DELETE FROM {tableName} WHERE {whereClause};";
+            command.CommandText = $"DELETE FROM {tableName}{whereClause};";
         }
 
         private static string BuildWhereClause(this DbCommand command, params ColumnValuePair[] columnValuePairs)
         {
+            if (!columnValuePairs.Any())
+                return string.Empty;
+
             var first = true;
             var whereClause = new StringBuilder();
+            whereClause.Append(" WHERE ");
+
             foreach (var columnValue in columnValuePairs)
             {
                 if (first)

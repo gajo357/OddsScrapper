@@ -3,14 +3,16 @@
 module Common =
     open System.Text.RegularExpressions
     open System
-    open System.Numerics
 
     let IntegerInString input =
         let m = Regex.Match(input, "\\d+") 
         if (m.Success) then Some (m.Groups.[0].Value |> int) else None
-
+    
     let Remove oldValue (input:string) = 
         input.Replace(oldValue, System.String.Empty)
+
+    let RemoveSeq input valuesToRemove =
+        valuesToRemove |> Seq.fold (fun acc year -> Remove year acc) input
         
     let Split (separator:string) (input:string) = 
         input.Split([|separator|], System.StringSplitOptions.RemoveEmptyEntries)

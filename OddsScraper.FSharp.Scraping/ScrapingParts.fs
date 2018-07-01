@@ -8,10 +8,23 @@ type Odd =
     }
 
 module ScrapingParts = 
+    open System.Text.RegularExpressions
     open OddsScraper.FSharp.Scraping.Common
     open OddsScraper.FSharp.Scraping.NodeExtensions
 
     let BaseWebsite = "http://www.oddsportal.com"
+    
+    let YearPattern = "-\\d{4}"
+    let FindYearInLink input = 
+        seq { 
+            for m in Regex.Matches(input, YearPattern) -> m.Value 
+        }
+
+    let HasYearInLink input =
+        Regex.IsMatch(input, YearPattern)
+
+    let RemoveYearsFromLink input =
+        FindYearInLink input |> RemoveSeq input
 
     let GetLinkParts (gameLink:string) =
         gameLink |> (Split "/")
@@ -66,7 +79,7 @@ module ScrapingParts =
         |> Seq.toArray
 
     let ExtractSportCountryAndLeagueFromLink gameLink =
-        let parts = GetLinkParts gameLink
+        let parts = GetLinkParts (gameLink |> Remove BaseWebsite)
         (parts.[0], parts.[1], parts.[2])
 
 

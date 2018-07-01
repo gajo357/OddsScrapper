@@ -9,6 +9,7 @@ open Common
 open ScrapingParts
 open RepositoryMethods
 open OddsScrapper.Repository.Models
+open System
 
 let Football = ["soccer"]
 let Basketball = ["basketball"]
@@ -50,9 +51,8 @@ let NavigateAndReadGameHtml(season, link) =
 let FindMatchingLeagueLink leagues link =
     leagues
     |> Seq.find (fun (_:string, l, _:string) -> StartsWith l link)
-    
-[<EntryPoint>]
-let main argv = 
+
+let download() =
     //start an instance of chrome
     start chrome
     
@@ -65,6 +65,7 @@ let main argv =
     let password = System.Console.ReadLine()
     Login username password
 
+    
     let sports = SelectSports()       
     let sportLinks = sports |> Seq.map (fun s -> PrependBaseWebsite ("/" + s + "/")) |> Seq.toArray
 
@@ -76,14 +77,13 @@ let main argv =
     let leagues = 
         System.IO.File.ReadLines("..\seasons.txt")
         |> Seq.map (Split "\t")
-        |> Seq.map (fun n -> (n.[0], n.[1] |> Remove "results/", n.[2]))
+        |> Seq.map (fun n -> (n.[0], n.[1], n.[2]))
         |> Seq.filter leagueExistsInSports
-        |> Seq.toArray
-    
+        |> Seq.toArray            
+
     let parseAndInsertGameAsync(season, link, gameHtml) =
         async {
             try
-                printfn "%A" link
                 let (_, seasonLink, leagueName) = 
                     leagues
                     |> Seq.find (fun (_:string, l, _:string) -> StartsWith l link)
@@ -109,4 +109,43 @@ let main argv =
     |> Seq.iter (parseAndInsertGameAsync >> Async.Start)
     |> ignore
 
+let fixDatabase() =
+    use repository = new DbRepository(@"../ArchiveData.db")
+    let leagues = 
+        System.IO.File.ReadLines("..\seasons.txt")
+        |> Seq.map (Split "\t")
+        |> Seq.map (
+            fun n -> 
+                n.[1] |> ExtractSportCountryAndLeagueFromLink |> (fun (s, c, _) -> (s, c)), n.[1], n.[2])
+        |> Seq.groupBy (fun (p, _, _) -> p)
+        |> dict
+
+    let updateGameLeagueAsync game =
+        async {
+            (repository.UpdateGameLeagueAsync game) |> Async.AwaitTask |> ignore
+        }
+
+    let updateGameLeague (game:Game) =
+        async {
+            let (_, _, leagueName) = 
+                leagues.[(game.League.Sport.Name, game.League.Country.Name)]
+                |> Seq.find (fun (_, link, _) -> StartsWith link game.GameLink)
+            
+            Console.WriteLine(game.League.Name + " __ " + leagueName)
+            let! league = repository.GetOrCreateLeagueAsync(leagueName, false, game.League.Sport, game.League.Country) |> Async.AwaitTask
+            game.League <- league
+
+            do! updateGameLeagueAsync game
+        }
+
+    repository.GetCustomGames()
+    |> Seq.map updateGameLeague
+    |> Async.Parallel
+    |> Async.RunSynchronously
+    |> Seq.iter (fun _ -> ())
+
+[<EntryPoint>]
+let main argv = 
+    //download()
+    fixDatabase()
     0 // return an integer exit code

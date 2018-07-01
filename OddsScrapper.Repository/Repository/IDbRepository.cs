@@ -17,10 +17,12 @@ namespace OddsScrapper.Repository.Repository
         Task<League> GetOrCreateLeagueAsync(string name, bool isFirst, Sport sport, Country country);
         Task<Bookkeeper> GetOrCreateBookerAsync(string bookersName);
         Task<int> InsertGameAsync(Game game);
+        Task UpdateGameAsync(Game game);
         Task<Game> UpdateOrInsertGameAsync(Game game);
         Task<bool> GameExistsAsync(Team homeTeam, Team awayTeam, DateTime date);
         Task<bool> GameExistsAsync(string gameLink);
 
+        IEnumerable<Game> GetAllGames();
         Task<IEnumerable<Game>> GetAllLeagueGamesAsync(League league);
         IEnumerable<Game> GetAllLeagueGames(League league);
 

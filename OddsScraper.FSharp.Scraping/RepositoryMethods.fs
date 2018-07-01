@@ -12,7 +12,7 @@ module RepositoryMethods =
 
     let GetSportAndLeagueAsync (repository:IDbRepository) seasonLink leagueName =
         async {
-            let (sportName, countryName, _) = seasonLink |> Remove BaseWebsite |> ExtractSportCountryAndLeagueFromLink
+            let (sportName, countryName, _) = seasonLink |> ExtractSportCountryAndLeagueFromLink
         
             let! sport = repository.GetOrCreateSportAsync(sportName) |> Async.AwaitTask
             let! country = repository.GetOrCreateCountryAsync(countryName) |> Async.AwaitTask
@@ -92,5 +92,10 @@ module RepositoryMethods =
     let InsertGameAsync (repository:IDbRepository) game =
         async {
             (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
+        }
+
+    let UpdateGameAsync (repository:IDbRepository) game =
+        async {
+            (repository.UpdateGameAsync game) |> Async.AwaitTask |> ignore
         }
 

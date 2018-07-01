@@ -2,6 +2,7 @@
 using OddsScrapper.Repository.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Data.SQLite;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace OddsScrapper.Repository.Extensions
         public static async Task<int> InsertAsync(this SQLiteConnection connection, string tableName, params ColumnValuePair[] columnValuePairs)
         {
             var id = -1;
-            using (var transaction = connection.BeginTransaction())
+            using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 using (var command = connection.CreateCommand())
                 {
@@ -88,7 +89,7 @@ namespace OddsScrapper.Repository.Extensions
         public static async Task<int> DeleteAsync(this DbConnection connection, string tableName, params ColumnValuePair[] columnValuePairs)
         {
             int id = -1;
-            using (var transaction = connection.BeginTransaction())
+            using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 using (var command = connection.CreateCommand())
                 {
@@ -107,7 +108,7 @@ namespace OddsScrapper.Repository.Extensions
 
         public static async Task<int> UpdateAsync(this DbConnection connection, string tableName, int id, params ColumnValuePair[] columnValuePairs)
         {
-            using (var transaction = connection.BeginTransaction())
+            using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 using (var command = connection.CreateCommand())
                 {
@@ -126,7 +127,7 @@ namespace OddsScrapper.Repository.Extensions
 
         public static void Create(this DbConnection connection, params Table[] tables)
         {
-            using (var transaction = connection.BeginTransaction())
+            using (var transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
             {
                 foreach (var table in tables)
                 {
