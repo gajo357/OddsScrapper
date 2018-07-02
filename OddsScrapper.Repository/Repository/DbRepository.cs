@@ -579,7 +579,7 @@ namespace OddsScrapper.Repository.Repository
         {
             using (var command = _sqlConnection.CreateCommand())
             {
-                command.CommandText = "SELECT Id, GameLink, FK_Games_Leagues_Id FROM Games WHERE FK_Games_Leagues_Id>=2027 AND FK_Games_Leagues_Id<=2121";
+                command.CommandText = "SELECT Id, GameLink, FK_Games_Leagues_Id FROM Games WHERE FK_Games_Leagues_Id>=95 AND FK_Games_Leagues_Id<=99";
 
                 using (var reader = command.ExecuteReader())
                 {

@@ -20,9 +20,9 @@ module DatabaseFix =
             |> Seq.groupBy (fun (p, _, _) -> p)
             |> dict
 
-        let updateGameLeagueAsync game =
+        let updateGameLeagueInDbAsync game =
             async {
-                (repository.UpdateGameLeagueAsync game) |> Async.AwaitTask |> ignore
+                return! (repository.UpdateGameLeagueAsync game) |> Async.AwaitTask
             }
 
         let fixGameLeagueAsync (game:Game) =
@@ -38,7 +38,7 @@ module DatabaseFix =
             async {
                 let! league = fixGameLeagueAsync game
                 game.League <- league
-                do! updateGameLeagueAsync game
+                do! updateGameLeagueInDbAsync game
                 do! Console.Out.WriteLineAsync(game.League.Name) |> Async.AwaitTask
                 return 0
             }

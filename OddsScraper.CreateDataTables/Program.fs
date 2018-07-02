@@ -62,8 +62,8 @@ let main argv =
         let writeToFile lines = System.IO.File.AppendAllLines(fileName, lines)
 
         (GetAllGames repository league) 
-        |> Seq.collect (fun game -> game.Odds |> Seq.map (fun go -> FormatGame game go))
-        |> writeToFile
+        |> Seq.map (fun game -> game.Odds |> Seq.map (fun go -> FormatGame game go))
+        |> Seq.iter writeToFile
 
         return league
     } |> ignore
