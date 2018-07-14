@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.CreateDataTables
 
 module Common =
     open System

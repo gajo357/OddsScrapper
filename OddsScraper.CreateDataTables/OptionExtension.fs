@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.CreateDataTables
 
 // Basically like the classic `maybe` monad
 //  but with added support for nullable types

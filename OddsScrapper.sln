@@ -13,6 +13,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OddsScraper.FSharp.Scraping
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OddsScraper.CreateDataTables", "OddsScraper.CreateDataTables\OddsScraper.CreateDataTables.fsproj", "{195E2BAD-6537-48C5-BCCA-524965FD06F3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OddsScraper.Repository", "OddsScraper.Repository\OddsScraper.Repository.fsproj", "{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,18 @@ Global
 		{195E2BAD-6537-48C5-BCCA-524965FD06F3}.Release|x64.Build.0 = Release|Any CPU
 		{195E2BAD-6537-48C5-BCCA-524965FD06F3}.Release|x86.ActiveCfg = Release|Any CPU
 		{195E2BAD-6537-48C5-BCCA-524965FD06F3}.Release|x86.Build.0 = Release|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Debug|x64.Build.0 = Debug|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Debug|x86.Build.0 = Debug|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Release|x64.ActiveCfg = Release|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Release|x64.Build.0 = Release|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Release|x86.ActiveCfg = Release|Any CPU
+		{C78EF105-66CE-48C1-96ED-F8BA2B93F9AB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

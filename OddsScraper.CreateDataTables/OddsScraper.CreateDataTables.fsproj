@@ -60,12 +60,15 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Common.fs" />
     <Compile Include="OptionExtension.fs" />
-    <Compile Include="RepositoryMethods.fs" />
+    <Compile Include="Printing.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="FSharp.Data.SqlProvider">
+      <HintPath>..\packages\SQLProvider.1.1.45\lib\net451\FSharp.Data.SqlProvider.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
       <Name>FSharp.Core</Name>
@@ -84,9 +87,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OddsScrapper.Repository\OddsScrapper.Repository.csproj">
-      <Name>OddsScrapper.Repository</Name>
-      <Project>{4812a722-babb-4644-b424-448d3364f841}</Project>
+    <ProjectReference Include="..\OddsScraper.Repository\OddsScraper.Repository.fsproj">
+      <Name>OddsScraper.Repository</Name>
+      <Project>{c78ef105-66ce-48c1-96ed-f8ba2b93f9ab}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
