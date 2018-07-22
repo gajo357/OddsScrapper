@@ -280,17 +280,29 @@ module Repository =
         member __.submitAsync = ctx.SubmitUpdatesAsync
 
         member this.fixGames getLeagueName =
-            let getCustomGames() =
+            let leaguesToDelete =
+                query {
+                    for item in leagues do
+                    where (item.Id <> int64 44 && item.Name = "aff-championship-u18")
+                }
+            let leaguesIds = leaguesToDelete |> Seq.map (fun l -> l.Id) |> Seq.toArray
+            let gamesToChange =
                 query {
                     for item in games do
-                    where (item.FkGamesLeaguesId >= int64 2122 && item.FkGamesLeaguesId <= int64 2126)
+                    where (item.FkGamesLeaguesId |=| leaguesIds)
                 }
-            getCustomGames()
+            gamesToChange
             |> Seq.iter (fun item ->
                 let (sport, country) = this.getLeaguesSportAndCountry item.FkGamesLeaguesId
                 let leagueName = getLeagueName sport.Name country.Name item.GameLink
                 let league = this.getLeague sport.Id country.Id  leagueName
                 item.FkGamesLeaguesId <- league.IdName.Id)
+
+            leaguesToDelete
+            |> Seq.``delete all items from single table``
+            |> Async.RunSynchronously
+            |> ignore
+            
             ctx.SubmitUpdates()
         
 

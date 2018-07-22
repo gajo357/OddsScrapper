@@ -72,7 +72,7 @@ winProbability <- function(dataset) {
   noWins/noGames
 }
 
-winProbability(subset(bet365, HomeOdd >= .6 & HomeOdd <= .7 & (Season %in% c("2017/2018"))))
+winProbability(subset(bet365, HomeOdd >= .7 & HomeOdd <= .8 & (Season %in% c("2017/2018"))))
 
 
 # analysis by Game
@@ -165,7 +165,7 @@ calculate.balance <- function(isWin, odd, kelly, balance){
   balance <- balance + bet * win
   balance
 }
-brute.force.balance <- function(data, balance) {
+brute.force.balance <- function(good, balance) {
   for(i in 1:nrow(good)) {
     row <- good[i,]
     balance <- calculate.balance(row$HomeTeamScore > row$AwayTeamScore, row$HomeOdd, row$Kelly, balance)
@@ -173,6 +173,6 @@ brute.force.balance <- function(data, balance) {
   balance
 }
 
-good <- subset(bet365, Season == "2017/2018" & HomeOdd > 0.55) %>% arrange(Date)
+good <- subset(bet365, Season == "2015/2016" & HomeOdd >= .7 & HomeOdd <= .8) %>% arrange(Date)
 good$Kelly <- (1/0.98 - 1)/(1/good$HomeOdd - 1)
-brute.force.balance(good, 100)x
+brute.force.balance(good, 100)
