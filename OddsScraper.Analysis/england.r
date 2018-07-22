@@ -4,6 +4,7 @@ library(dplyr)
 setwd("C:/Users/Gajo/Documents/Visual Studio 2017/Projects/OddsScrapper/OddsScraper.Analysis")
 
 data <- read.csv("soccer_england_premier-league.csv")
+data <- read.csv("soccer_germany_bundesliga.csv")
 
 data$HomeOdd <- 1/data$HomeOdd
 data$DrawOdd <- 1/data$DrawOdd
@@ -60,8 +61,6 @@ ggplot(data,
 ggplot(bet365, 
        aes(DrawCut)) +
   geom_histogram(stat = 'count')
-
-with(data, cor.test(HomeOdd, AwayOdd))
 
 bet365 <- subset(data, Bookmaker == "bet365")
 sum(bet365$HomeOdd >= .5 & bet365$Season == "2017/2018")
@@ -137,7 +136,7 @@ dataByCut <- dataByGame %>%
             AwayTeamScore = mean(AwayTeamScore))
   
 ggplot(dataByCut,
-       aes(HomeWinPct, HomeOddDiff)) +
+       aes(HomeWinPct, HomeOdd)) +
   geom_point(alpha = 1/3) + 
   geom_smooth(method = 'lm', color = 'pink') +
   geom_abline(slope = 1, intercept = 0 , color = 'red') +

@@ -9,7 +9,6 @@ open Printing
 let main argv = 
     let repository = Project(@"../ArchiveData.db")
     
-    let opt = OptionBuilder()
     opt {
         
         let! sport = GetUserInput "Choose sport: " |> repository.getSport

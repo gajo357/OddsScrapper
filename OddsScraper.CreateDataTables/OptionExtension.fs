@@ -14,28 +14,25 @@ module OptionExtension =
     let inline Bind (ot : Option<'T>) (fu : 'T -> Option<'U>) : Option<'U> =
         match ot with
         | None -> None
-        | Some vt -> 
-          let ou = fu vt
-          ou
+        | Some vt -> fu vt
 
     let inline Bind_Nullable (vt : 'T) (fu : 'T -> Option<'U>) : Option<'U> =
-        match vt with
-        | null -> None
-        | _ -> 
-          let ou = fu vt
-          ou
+        Bind (ReturnFrom_Nullable vt) fu
 
     let Delay ft : Option<'T> = ft ()
 
     type OptionBuilder() =
-        member inline x.Return v       = Return v
-        member inline x.ReturnFrom v   = ReturnFrom v
-        member inline x.ReturnFrom v   = ReturnFrom_Nullable v
-        member inline x.Bind (t, fu)   = Bind t fu
-        member inline x.Bind (t, fu)   = Bind_Nullable t fu
-        member inline x.Delay ft       = Delay ft
+        member inline __.Return v       = Return v
+        member inline __.ReturnFrom v   = ReturnFrom v
+        member inline __.ReturnFrom v   = ReturnFrom_Nullable v
+        member inline __.Bind (t, fu)   = Bind t fu
+        member inline __.Bind (t, fu)   = Bind_Nullable t fu
+        member inline __.Delay ft       = Delay ft
 
     let inline ofObj o =
         match o with
         | null -> None
         | _ -> Some o
+
+    let opt = OptionBuilder()
+    
