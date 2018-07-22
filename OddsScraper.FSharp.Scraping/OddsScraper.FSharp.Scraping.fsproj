@@ -105,6 +105,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Common.fs" />
+    <Compile Include="OptionExtension.fs" />
     <Compile Include="NodeExtensions.fs" />
     <Compile Include="HtmlNodeExtensions.fs" />
     <Compile Include="ScrapingParts.fs" />
@@ -140,13 +141,13 @@
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebDriver">
-      <HintPath>..\packages\Selenium.WebDriver.3.13.0\lib\net45\WebDriver.dll</HintPath>
+      <HintPath>..\packages\Selenium.WebDriver.3.13.1\lib\net45\WebDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OddsScrapper.Repository\OddsScrapper.Repository.csproj">
-      <Name>OddsScrapper.Repository</Name>
-      <Project>{4812a722-babb-4644-b424-448d3364f841}</Project>
+    <ProjectReference Include="..\OddsScraper.Repository\OddsScraper.Repository.fsproj">
+      <Name>OddsScraper.Repository</Name>
+      <Project>{c78ef105-66ce-48c1-96ed-f8ba2b93f9ab}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>

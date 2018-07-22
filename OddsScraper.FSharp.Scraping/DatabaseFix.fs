@@ -2,15 +2,13 @@
 
 module DatabaseFix =
     open OddsScraper.FSharp.Scraping
-    open OddsScrapper.Repository.Repository
+    open OddsScraper.Repository.Repository
 
     open Common
     open ScrapingParts
-    open OddsScrapper.Repository.Models
-    open System
     
     let fixDatabase() =
-        use repository = new DbRepository(@"../ArchiveData.db")
+        let repository = new Project(@"../ArchiveData.db")
         let leagues = 
             System.IO.File.ReadLines("..\seasons.txt")
             |> Seq.map (Split "\t")
@@ -20,31 +18,11 @@ module DatabaseFix =
             |> Seq.groupBy (fun (p, _, _) -> p)
             |> dict
 
-        let updateGameLeagueInDbAsync game =
-            async {
-                return! (repository.UpdateGameLeagueAsync game) |> Async.AwaitTask
-            }
+        let getLeagueName sport country gameLink =
+            let (_, _, leagueName) = 
+                leagues.[(sport, country)]
+                |> Seq.find (fun (_, link, _) -> StartsWith link gameLink)
+            leagueName
 
-        let fixGameLeagueAsync (game:Game) =
-            async {
-                let (_, _, leagueName) = 
-                    leagues.[(game.League.Sport.Name, game.League.Country.Name)]
-                    |> Seq.find (fun (_, link, _) -> StartsWith link game.GameLink)
-            
-                return! repository.GetOrCreateLeagueAsync(leagueName, false, game.League.Sport, game.League.Country) |> Async.AwaitTask
-            }
-
-        let updateGameLeagueAsync (game:Game) =
-            async {
-                let! league = fixGameLeagueAsync game
-                game.League <- league
-                do! updateGameLeagueInDbAsync game
-                do! Console.Out.WriteLineAsync(game.League.Name) |> Async.AwaitTask
-                return 0
-            }
-
-        repository.GetCustomGames()
-        |> Seq.map updateGameLeagueAsync
-        |> Seq.map Async.RunSynchronously
-        |> Seq.fold (fun s c -> s + 1) 0
+        repository.fixGames getLeagueName
 

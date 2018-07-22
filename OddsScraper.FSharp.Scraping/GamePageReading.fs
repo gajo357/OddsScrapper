@@ -25,9 +25,14 @@ module GamePageReading =
         |> (fun n -> n.[1..2])
         |> (Join ", ")
         |> TryParseDateTime
+
+    let GetDateOrDefault gameDate =
+        match gameDate with
+        | Some d -> d
+        | None -> System.DateTime.MinValue
         
     let ReadGameScore resultElement = 
-        let defaultScore = (-1, -1, false)
+        let defaultScore = (int64 -1, int64 -1, false)
         match resultElement |> GetText with
         | n when n.ToUpper().Contains("CANCELED") -> defaultScore
         | n when n.StartsWith("Final result") ->
@@ -37,7 +42,7 @@ module GamePageReading =
                 |> Array.map IntegerInString 
                 
             match parts with
-            | [|Some home; Some away|] -> (home, away, isOvertime)
+            | [|Some home; Some away|] -> (int64 home, int64 away, isOvertime)
             | _ -> defaultScore
         | _ -> defaultScore
 

@@ -3,12 +3,12 @@
 module DownloadGames =
     open canopy.classic
     open OddsScraper.FSharp.Scraping
-    open OddsScrapper.Repository.Repository
+    open OddsScraper.Repository.Repository
 
     open Common
     open ScrapingParts
     open RepositoryMethods
-    open OddsScrapper.Repository.Models
+    open GamePageReading
 
     let Football = ["soccer"]
     let Basketball = ["basketball"]
@@ -55,7 +55,7 @@ module DownloadGames =
         //start an instance of chrome
         start chrome
     
-        use repository = new DbRepository(@"../ArchiveData.db")
+        let repository = new Project(@"../ArchiveData.db")
         let currentGameExists = (GameLinkExistsAsync repository >> Async.RunSynchronously)
 
         System.Console.Write("Enter username: ")
@@ -88,13 +88,10 @@ module DownloadGames =
                         |> Seq.find (fun (_:string, l, _:string) -> StartsWith l link)
                     let! (sport, league) = GetSportAndLeagueAsync repository seasonLink leagueName
             
-                    let game = new Game()
-                    game.League <- league
-                    game.GameLink <- link
-                    game.Season <- season
-
-                    do! ReadGameAsync repository game sport gameHtml
-                    return! InsertGameAsync repository game
+                    let! game = ReadGameAsync repository link season sport.Value.Id gameHtml
+                    let! gameId = InsertGameAsync repository game league.IdName.Id
+                    let! odds = CreateOddsAsync repository gameId (GetOddsFromGamePage gameHtml)
+                    do! InsertGameOddsAsync repository odds
                 with _ -> ()
             }
 

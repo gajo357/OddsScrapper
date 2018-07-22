@@ -1,39 +1,57 @@
 ﻿namespace OddsScraper.FSharp.Scraping
 
 module RepositoryMethods =
-    open OddsScrapper.Repository.Repository
-    open OddsScrapper.Repository.Models
+    open OddsScraper.Repository.Repository
+    open OddsScraper.Repository.Models
     open OddsScraper.FSharp.Scraping
 
-    open Common
     open GamePageReading
     open HtmlNodeExtensions
     open ScrapingParts
 
-    let GetSportAndLeagueAsync (repository:IDbRepository) seasonLink leagueName =
+    let GetSportAndLeagueAsync (repository:Project) seasonLink leagueName =
         async {
             let (sportName, countryName, _) = seasonLink |> ExtractSportCountryAndLeagueFromLink
         
-            let! sport = repository.GetOrCreateSportAsync(sportName) |> Async.AwaitTask
-            let! country = repository.GetOrCreateCountryAsync(countryName) |> Async.AwaitTask
-            let! league = repository.GetOrCreateLeagueAsync(leagueName, false, sport, country) |> Async.AwaitTask
+            let! sport = repository.getSportAsync sportName |> Async.AwaitTask
+            let! country = repository.getCountryAsync countryName  |> Async.AwaitTask
+            let! league = repository.getLeagueAsync sport.Value.Id country.Value.Id leagueName |> Async.AwaitTask
 
             return (sport, league)
         }
 
-    let GetParticipants (repository:IDbRepository) sport participantsAndDateElement =
+    let GetOrCreateTeamAsync (repository:Project) sport name = 
+        async {
+            let! team = (repository.getTeamAsync name sport) |> Async.AwaitTask
+            
+            match team with
+            | Some b -> return b
+            | None -> return repository.createTeam name sport
+        }
+
+    let GetParticipants (repository:Project) sport participantsAndDateElement =
         async {
             let (homeTeamName, awayTeamName) = ReadParticipantsNames participantsAndDateElement
 
-            let! homeTeam = repository.GetOrCreateTeamAsync(homeTeamName, sport) |> Async.AwaitTask
-            let! awayTeam = repository.GetOrCreateTeamAsync(awayTeamName, sport) |> Async.AwaitTask
+            let getOrCreateTeam = GetOrCreateTeamAsync repository sport
+            let! homeTeam = getOrCreateTeam homeTeamName
+            let! awayTeam = getOrCreateTeam awayTeamName
 
             return (homeTeam, awayTeam)
         }
 
-    let ConvertToGameOddAsync (repository:IDbRepository) (odd:Odd) =
+    let rec GetOrCreateBookkeeperAsync (repository:Project) name =
         async {
-            let! booker = repository.GetOrCreateBookerAsync(odd.Name) |> Async.AwaitTask
+            let! bookerOpt = repository.getBookkeeperAsync name |> Async.AwaitTask
+         
+            match bookerOpt with
+            | Some b -> return b
+            | None -> return repository.createBookkeeper name
+        }
+
+    let ConvertToGameOddAsync (repository:Project) gameId (odd:Odd) =
+        async {
+            let! booker = GetOrCreateBookkeeperAsync repository odd.Name
         
             let (homeOdd, drawOdd, awayOdd) =
                 match odd.Odds with
@@ -41,61 +59,60 @@ module RepositoryMethods =
                 | [home; draw; away] -> (home, draw, away)
                 | _ -> (0.0, 0.0, 0.0)
         
-            let gameOdd = GameOdds()
-            gameOdd.HomeOdd <- homeOdd
-            gameOdd.DrawOdd <- drawOdd
-            gameOdd.AwayOdd <- awayOdd
-            gameOdd.IsValid <- (not odd.Deactivated)
-            gameOdd.Bookkeeper <- booker
-
+            let gameOdd = {
+                Game = gameId
+                HomeOdd = homeOdd
+                DrawOdd = drawOdd
+                AwayOdd = awayOdd
+                IsValid = (not odd.Deactivated)
+                Bookkeeper = booker
+            }
             return gameOdd
         }
 
-    let CreateOddsAsync (repository:IDbRepository) (odds:Odd[]) =
+    let CreateOddsAsync (repository:Project) gameId (odds:Odd[]) =
         async {
             return 
                 odds
-                |> Seq.map (ConvertToGameOddAsync repository)
+                |> Seq.map (ConvertToGameOddAsync repository gameId)
                 |> Seq.map Async.RunSynchronously
                 |> Seq.toList
         }
 
-    let GameExistsAsync (repository:IDbRepository) homeTeam awayTeam gameDate =
+    let GameExistsAsync (repository:Project) homeTeam awayTeam gameDate =
         async {
-            return! repository.GameExistsAsync(homeTeam, awayTeam, gameDate) |> Async.AwaitTask
+            return! repository.gameExistsAsync homeTeam awayTeam gameDate |> Async.AwaitTask
         }
     
-    let GameLinkExistsAsync (repository:IDbRepository) gameLink =
+    let GameLinkExistsAsync (repository:Project) gameLink =
         async {
-            return! repository.GameExistsAsync(gameLink) |> Async.AwaitTask
+            return! repository.gameLinkExistsAsync gameLink |> Async.AwaitTask
         }
 
-    let ReadGameAsync (repository:IDbRepository) (game: Game) sport gameHtml =
+    let ReadGameAsync (repository:Project) link season sport gameHtml =
         async {
             let participantsAndDateElement = GetElementById "#col-content" gameHtml
             let! (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement)
-            let gameDate = ReadGameDate participantsAndDateElement
+            let gameDate = participantsAndDateElement |> (ReadGameDate >> GetDateOrDefault)
                     
             let (homeScore, awayScore, isOvertime) = ReadGameScore (GetElementById "#event-status" gameHtml)
-            let! odds = CreateOddsAsync repository (GetOddsFromGamePage gameHtml)
             
-            game.IsOvertime <- isOvertime
-            //game.IsPlayoffs <- isPlayoffs
-            game.HomeTeamScore <- homeScore
-            game.AwayTeamScore <- awayScore
-            game.HomeTeam <- homeTeam
-            game.AwayTeam <- awayTeam
-            game.Odds.AddRange(odds)
-            game.Date <- ConvertOptionToNullable gameDate
+            return {
+                    GameLink = link; Season = season
+                    IsOvertime = isOvertime; IsPlayoffs = false //isPlayoffs
+                    HomeScore = homeScore; AwayScore = awayScore
+                    HomeTeam = homeTeam; AwayTeam = awayTeam
+                    Date = gameDate
+                }
         }
 
-    let InsertGameAsync (repository:IDbRepository) game =
+    let InsertGameAsync (repository:Project) game league =
         async {
-            (repository.InsertGameAsync game) |> Async.AwaitTask |> ignore
+            return! (repository.insertGameAsync game league) |> Async.AwaitTask
         }
-
-    let UpdateGameAsync (repository:IDbRepository) game =
+    
+    let InsertGameOddsAsync (repository:Project) (odds: GameOdd list) =
         async {
-            (repository.UpdateGameAsync game) |> Async.AwaitTask |> ignore
+            do! (repository.insertGameOddsAsync odds) |> Async.AwaitTask
         }
 

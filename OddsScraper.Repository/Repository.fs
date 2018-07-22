@@ -34,6 +34,30 @@ module Repository =
         let teams = ctx.Main.Teams
         let games = ctx.Main.Games
         let gameOdds = ctx.Main.GameOdds
+
+        let createGame (game: Game) (league: Id) = 
+            let item = games.Create()
+            item.FkGamesTeamsHomeTeamId <- game.HomeTeam.Id
+            item.FkGamesTeamsAwayTeamId <- game.AwayTeam.Id
+            item.FkGamesLeaguesId <- league
+            item.HomeTeamScore <- game.HomeScore
+            item.AwayTeamScore <- game.AwayScore
+            item.Date <- game.Date 
+            item.Season <- game.Season
+            item.IsOvertime <- game.IsOvertime
+            item.IsPlayoffs <- game.IsPlayoffs
+            item.GameLink <- game.GameLink
+            item
+        
+        let createGameOdd (gameOdd: GameOdd) =
+            let item = gameOdds.Create()
+            item.FkGameOddsGamesId <- gameOdd.Game
+            item.FkGameOddsBookkeepersId <- gameOdd.Bookkeeper.Id
+            item.HomeOdd <- gameOdd.HomeOdd
+            item.DrawOdd <- gameOdd.DrawOdd
+            item.AwayOdd <- gameOdd.AwayOdd
+            item.IsValid <- gameOdd.IsValid
+            item
         
         member __.getSport name =
             query {
@@ -86,19 +110,48 @@ module Repository =
             query {
                 for item in leagues do
                 where (item.FkLeaguesSportsId = sport && item.FkLeaguesCountriesId = country && item.Name = name)
-                select (Some {IdName = {Id = item.Id; Name = item.Name}; Sport = sport; Country = country })
-                exactlyOneOrDefault
+                select ({IdName = {Id = item.Id; Name = item.Name}; Sport = sport; Country = country })
+                exactlyOne
             }
         member this.getLeagueAsync sport country name =
             async {
                 return this.getLeague sport country name
             } |> Async.StartAsTask
-            
+
+        member __.getTeam name sport =
+            query {
+                for item in teams do
+                where (item.Name = name && item.FkTeamsSportsId = sport)
+                select (Some {Id = item.Id; Name = item.Name})
+                exactlyOneOrDefault
+            }
+        member this.getTeamAsync name sport =
+            async {
+                return this.getTeam name sport
+            } |> Async.StartAsTask
+        
+        member __.getSportById id =
+            query {
+                for item in sports do
+                where (item.Id = id)
+                select ({ Id = id; Name = item.Name })
+                exactlyOne
+            }
+        member __.getCountryById id =
+            query {
+                for item in countries do
+                where (item.Id = id)
+                select ({ Id = id; Name = item.Name })
+                exactlyOne
+            }  
         member __.getLeagueById id =
             query {
                 for item in leagues do
                 where (item.Id = id)
-                select ({ Id = id; Name = item.Name })
+                select ( 
+                    { IdName = { Id = id; Name = item.Name };
+                    Sport = item.FkLeaguesSportsId;
+                    Country = item.FkLeaguesCountriesId})
                 exactlyOne
             }
         member __.getBookkeeperById id =
@@ -168,6 +221,7 @@ module Repository =
                         HomeScore = game.HomeTeamScore; AwayScore = game.AwayTeamScore
                         Date = game.Date; Season = game.Season
                         IsOvertime = game.IsOvertime; IsPlayoffs = game.IsPlayoffs
+                        GameLink = game.GameLink
                     }, 
                     this.getGameOddsById game.Id)
             }
@@ -175,16 +229,69 @@ module Repository =
             async {
                 return! this.getAllLeagueGames league |> Seq.executeQueryAsync
             } |> Async.StartAsTask
+        member this.getLeaguesSportAndCountry leagueId =
+            let league = this.getLeagueById leagueId
+            let sport = this.getSportById league.Sport
+            let country = this.getCountryById league.Country
+            (sport, country)
+        member this.getLeaguesSportAndCountryAsync leagueId =
+            async {
+                return (this.getLeaguesSportAndCountry leagueId)
+            } |> Async.StartAsTask
 
         member __.createSport name = sports.Create([("Name", name)]) |> ignore
         member __.createCountry name = countries.Create([("Name", name)]) |> ignore
-        member __.createBookkeeper name = bookkeepers.Create([("Name", name)]) |> ignore
-        member __.createLeague (league: League) = leagues.Create() |> ignore
-        member __.createGame (game: Game) = games.Create() |> ignore
-        member __.createGameOdd (gameOdd: GameOdd) = gameOdds.Create() |> ignore
+
+        member this.createBookkeeper name = 
+            let item = bookkeepers.Create([("Name", name)]) 
+            this.submit()
+            item |> (fun item -> { Id = item.Id; Name = item.Name })
         
+        member __.createLeague (league: League) = leagues.Create() |> ignore
+
+        member this.insertGameAsync game league = 
+            async {
+                let item = createGame game league
+                do! this.submitAsync()
+                return (item.GetColumn("Id") : Id)
+            } |> Async.StartAsTask
+
+        member this.insertGameOddsAsync (gameOdds: GameOdd list) = 
+            async {
+                gameOdds |> List.map createGameOdd |> ignore
+                do! this.submitAsync()
+            } |> Async.StartAsTask
+        
+        member this.createTeam name sport = 
+            let item = teams.Create([("Name", name); ("FkTeamsSportsId", sport)]) 
+            this.submit()
+            item |> (fun item -> { Id = item.Id; Name = item.Name })
+        
+        member __.updateGameLeague game league =
+            let dbGame = 
+                query {
+                    for item in games do
+                    where (item.Id = game)
+                    exactlyOne
+                }
+            dbGame.FkGamesLeaguesId <- league
+
         member __.submit = ctx.SubmitUpdates
         member __.submitAsync = ctx.SubmitUpdatesAsync
+
+        member this.fixGames getLeagueName =
+            let getCustomGames() =
+                query {
+                    for item in games do
+                    where (item.FkGamesLeaguesId >= int64 2122 && item.FkGamesLeaguesId <= int64 2126)
+                }
+            getCustomGames()
+            |> Seq.iter (fun item ->
+                let (sport, country) = this.getLeaguesSportAndCountry item.FkGamesLeaguesId
+                let leagueName = getLeagueName sport.Name country.Name item.GameLink
+                let league = this.getLeague sport.Id country.Id  leagueName
+                item.FkGamesLeaguesId <- league.IdName.Id)
+            ctx.SubmitUpdates()
         
 
         

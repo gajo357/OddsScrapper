@@ -12,6 +12,7 @@ module Models =
         HomeScore: Score; AwayScore: Score
         Date: DateTime; Season: string
         IsPlayoffs: bool; IsOvertime: bool
+        GameLink: string
         }
     type GameOdd = { 
         Game: Id; Bookkeeper: SimpleModel
