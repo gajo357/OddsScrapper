@@ -9,7 +9,7 @@ open Printing
 let main argv = 
     let repository = Project(@"../ArchiveData.db")
     
-    opt {
+    option {
         
         let! sport = GetUserInput "Choose sport: " |> repository.getSport
         let! country = GetUserInput "Choose country: " |> repository.getCountry
