@@ -2,7 +2,7 @@
 
 module HtmlNodeExtensions =
     open FSharp.Data
-    open Common
+    open OddsScraper.FSharp.Common.Common
     
     let GetText (node:HtmlNode) =
         node.InnerText().Trim()

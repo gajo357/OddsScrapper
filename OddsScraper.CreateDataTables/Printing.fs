@@ -2,11 +2,11 @@
 
 module Printing =
     open System
-    open Common
+    open OddsScraper.FSharp.Common.Common
     open OddsScraper.Repository.Models
 
     let private Separator = ","
-    let private JoinValues = Join Separator
+    let private JoinValues = JoinList Separator
 
     let Header = 
         JoinValues ["HomeTeam"; "AwayTeam"; "HomeTeamScore"; "AwayTeamScore";

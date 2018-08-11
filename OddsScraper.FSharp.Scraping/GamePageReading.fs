@@ -3,7 +3,7 @@
 module GamePageReading =
     open FSharp.Data
     open HtmlNodeExtensions
-    open Common
+    open OddsScraper.FSharp.Common.Common
 
     type GameProvider = HtmlProvider<"http://www.oddsportal.com/soccer/england/premier-league-2016-2017/arsenal-everton-SGPa5fvr/">
 

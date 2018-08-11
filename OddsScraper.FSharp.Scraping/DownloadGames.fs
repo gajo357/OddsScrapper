@@ -5,7 +5,7 @@ module DownloadGames =
     open OddsScraper.FSharp.Scraping
     open OddsScraper.Repository.Repository
 
-    open Common
+    open OddsScraper.FSharp.Common.Common
     open ScrapingParts
     open RepositoryMethods
     open GamePageReading

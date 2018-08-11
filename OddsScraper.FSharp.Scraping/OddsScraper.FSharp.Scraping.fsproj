@@ -104,8 +104,6 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Common.fs" />
-    <Compile Include="OptionExtension.fs" />
     <Compile Include="NodeExtensions.fs" />
     <Compile Include="HtmlNodeExtensions.fs" />
     <Compile Include="ScrapingParts.fs" />
@@ -121,10 +119,6 @@
   <ItemGroup>
     <Reference Include="canopy">
       <HintPath>..\packages\canopy.2.0.1\lib\canopy.dll</HintPath>
-    </Reference>
-    <Reference Include="FSharp.Core">
-      <HintPath>..\packages\FSharp.Core.4.5.2\lib\net45\FSharp.Core.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="FSharp.Core" />
     <Reference Include="FSharp.Data">
@@ -150,6 +144,11 @@
     <Reference Include="WebDriver" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OddsScraper.FSharp.Common\OddsScraper.FSharp.Common.fsproj">
+      <Name>OddsScraper.FSharp.Common</Name>
+      <Project>{08c01758-16d9-4f04-8eb0-1692daa84e52}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\OddsScraper.Repository\OddsScraper.Repository.fsproj">
       <Name>OddsScraper.Repository</Name>
       <Project>{c78ef105-66ce-48c1-96ed-f8ba2b93f9ab}</Project>

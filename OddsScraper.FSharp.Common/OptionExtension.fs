@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.CreateDataTables
+﻿namespace OddsScraper.FSharp.Common
 
 module OptionExtension =
 

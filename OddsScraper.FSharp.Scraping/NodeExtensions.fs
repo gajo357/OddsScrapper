@@ -2,7 +2,7 @@
 
 module NodeExtensions =
     open OpenQA.Selenium
-    open OddsScraper.FSharp.Scraping.Common
+    open OddsScraper.FSharp.Common.Common
     
     let GetText (node:IWebElement) =
         node.Text.Trim()

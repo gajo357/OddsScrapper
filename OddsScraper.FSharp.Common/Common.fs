@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.FSharp.Common
 
 module Common =
     open System.Text.RegularExpressions
@@ -17,8 +17,14 @@ module Common =
     let Split (separator:string) (input:string) = 
         input.Split([|separator|], System.StringSplitOptions.RemoveEmptyEntries)
         
-    let Join (separator:string) (input:string[]) = 
+    let Join separator (input:string[]) = 
         System.String.Join(separator, input)
+    
+    let JoinList separator (array: Object list) = 
+        String.Join(separator, array)
+
+    let WriteToConsole (input:String) = 
+        Console.WriteLine(input)
         
     let Contains value (input:string) = 
         input.Contains(value)

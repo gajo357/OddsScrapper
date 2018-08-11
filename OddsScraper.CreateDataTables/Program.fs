@@ -2,7 +2,7 @@
 open OddsScraper.Repository.Repository
 open System
 
-open OptionExtension
+open OddsScraper.FSharp.Common.OptionExtension
 open Printing
 
 [<EntryPoint>]
