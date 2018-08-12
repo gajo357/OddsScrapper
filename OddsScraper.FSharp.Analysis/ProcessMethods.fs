@@ -9,8 +9,8 @@ module ProcessLeagues =
 
     let private getGames (repository: Project) l = 
         l.IdName.Id 
-        |> repository.getAllLeagueGamesGroupedBySeason myBookies 
-        |> Seq.map (fun g -> (g.Key, g |> Seq.map (fun s -> (fst s, s |> snd |> Seq.toList)) |> Seq.toList))    // execute Queries
+        |> repository.getAllLeagueGamesGroupedBySeason
+        |> Seq.map (fun g -> (g.Key, g |> Seq.map (fun s -> (fst s, s |> snd |> Seq.filter (fun b -> Seq.contains b.Bookkeeper.Name meanBookies) |> Seq.toList)) |> Seq.toList))    // execute Queries
         |> Seq.toList
 
     let processAll (repository: Project) =

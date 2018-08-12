@@ -6,7 +6,7 @@ module LeagueProcessing =
     open OddsScraper.FSharp.Analysis.Calculations
 
     let myBookies = [|"bet365"; "888sport"; "bwin"; "Unibet"|]
-    let meanBookies = ["bet365"; "bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
+    let meanBookies = [|"bet365"; "bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"|]
 
     let Separator = ","
     let JoinValues = Join Separator
@@ -32,13 +32,13 @@ module LeagueProcessing =
 
     let formatSeasonResultsForBookie (bookie, results) =
         let values = results |> Seq.map (sprintf "%f") |> Seq.toArray
-        [|bookie|] |> (Array.append values) |> JoinValues
+        values |> (Array.append [|bookie|]) |> JoinValues
 
     let processLeague sport country league seasons =
         let fileName = System.String.Format("..\{0}_{1}_{2}_bookies.csv", sport.Name, country.Name, league.IdName.Name)
         let write lines = System.IO.File.AppendAllLines(fileName, lines)
     
-        let header seasons = [|"Bookkeeper/Season";|] |> (Array.append seasons) |> JoinValues
+        let header seasons = seasons |> (Array.append [|"Bookkeeper/Season";|]) |> JoinValues
         [header (seasons |> Seq.map fst |> Seq.toArray)] |> write
     
         myBookies 

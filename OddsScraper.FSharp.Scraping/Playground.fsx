@@ -40,6 +40,7 @@ type games(path:string, year:int) =
 
 let engGames = games("..\OddsScraper.Analysis\soccer_england_premier-league.csv", 2010).getGames() |> Seq.toList
 let gerGames = games("..\OddsScraper.Analysis\soccer_germany_bundesliga.csv", 2010).getGames() |> Seq.toList
+let espGames = games("..\OddsScraper.Analysis\soccer_spain_laliga.csv", 2010).getGames() |> Seq.toList
 
 let kelly myOdd bookerOdd = 
     if (myOdd = 0.) then
@@ -82,4 +83,31 @@ let rec betAll amount games =
     | head :: tail -> betAll (betGroupedGame amount head) tail
     | [] -> amount
 
-gerGames |> (Seq.append engGames) |> Seq.filter (fun s -> s.Game.Date.Year = 2018) |> Seq.sortBy (fun s -> s.Game.Date) |> Seq.toList |> betAll 500.
+let amountToBet win myOdd bookerOdd (amount, winAmount, alreadyRun) =
+    let k = kelly myOdd bookerOdd
+    if (not alreadyRun && k * amount > 2. && k < 0.06) then
+        if (win) then
+            (k*amount, (bookerOdd - 1.)*k*amount, true)
+        else 
+            (k*amount, -k*amount, true)
+    else
+        (amount, winAmount, alreadyRun)
+let getAmountToBet g meanOdds gameOdds amount =
+    (amount, 0., false)
+    |> amountToBet (g.HomeScore > g.AwayScore) meanOdds.HomeOdd gameOdds.HomeOdd
+    |> amountToBet (g.HomeScore = g.AwayScore) meanOdds.DrawOdd gameOdds.DrawOdd
+    |> amountToBet (g.HomeScore < g.AwayScore) meanOdds.AwayOdd gameOdds.AwayOdd
+    |> (fun (a, b, _) -> (a, b))
+let rec betAllDayGames amount (dayGames: groupedGame list) = 
+    dayGames
+    |> Seq.fold (fun (totalAmount, amountLeftToBet) gg ->
+        let amountToBet, winAmount = getAmountToBet gg.Game gg.Mean (gg.Odds |> Seq.find (fun f -> bookies |> Seq.contains f.Name)) amountLeftToBet
+        (totalAmount + winAmount, amountLeftToBet - amountToBet)
+        ) (amount, amount)
+    |> fst
+let rec betAllByDay amount gamesByDay =
+    match gamesByDay with
+    | (_, head) :: tail -> betAllByDay (betAllDayGames amount (head |> Seq.toList)) tail
+    | [] -> amount
+
+espGames |> Seq.filter (fun s -> s.Game.Date.Year = 2011) |> Seq.sortBy (fun s -> s.Game.Date) |> Seq.groupBy (fun s -> (s.Game.Date.Year, s.Game.Date.Month, s.Game.Date.Day)) |> Seq.toList |> betAllByDay 1000.
