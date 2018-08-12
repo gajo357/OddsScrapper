@@ -25,7 +25,13 @@ module Common =
 
     let WriteToConsole (input:String) = 
         Console.WriteLine(input)
+
+    let GetUserInput (message:String) =
+        WriteToConsole message
+        Console.ReadLine()
+    let GetUserInputAsInt = GetUserInput >> IntegerInString
         
+
     let Contains value (input:string) = 
         input.Contains(value)
 

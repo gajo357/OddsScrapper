@@ -3,7 +3,8 @@
 module Repository =
     open FSharp.Data.Sql
     open Models
-
+    open System.Linq
+    
     [<Literal>]
     let resolutionPath = 
         __SOURCE_DIRECTORY__ + @"\..\packages\System.Data.SQLite.Core.1.0.108.0\lib\net46\"
@@ -179,6 +180,19 @@ module Repository =
                         IsValid = odd.IsValid
                     })
             }
+        member this.getGameOddsByIdAndBookiesName (bookies: string seq) id  =
+            query {
+                for odd in gameOdds do
+                where (odd.FkGameOddsGamesId = id)
+                let bookie = this.getBookkeeperById odd.FkGameOddsBookkeepersId
+                where (bookies.Contains(bookie.Name))
+                select (
+                    { 
+                        Game = id; Bookkeeper = bookie
+                        HomeOdd = odd.HomeOdd; DrawOdd = odd.DrawOdd; AwayOdd = odd.AwayOdd
+                        IsValid = odd.IsValid
+                    })
+            }
 
         member __.gameLinkExists gameLink =
             query {
@@ -209,10 +223,11 @@ module Repository =
                 return res |> (Seq.isEmpty >> not)
             } |> Async.StartAsTask
 
-        member this.getAllLeagueGames league =
+        member this.getAllLeagueGamesAndOdds getOdds league =
             query {
                 for game in games do
                 where (game.FkGamesLeaguesId = league)
+                sortBy game.Date
                 let homeTeam = this.getTeamById game.FkGamesTeamsHomeTeamId
                 let awayTeam = this.getTeamById game.FkGamesTeamsAwayTeamId
                 select (
@@ -223,12 +238,19 @@ module Repository =
                         IsOvertime = game.IsOvertime; IsPlayoffs = game.IsPlayoffs
                         GameLink = game.GameLink
                     }, 
-                    this.getGameOddsById game.Id)
+                    getOdds game.Id)
             }
+        member this.getAllLeagueGames league =
+            this.getAllLeagueGamesAndOdds this.getGameOddsById league
         member this.getAllLeagueGamesAsync league =
             async {
                 return! this.getAllLeagueGames league |> Seq.executeQueryAsync
             } |> Async.StartAsTask
+        member this.getAllLeagueGamesGroupedBySeason bookies league =
+            query {
+                for g in this.getAllLeagueGamesAndOdds (this.getGameOddsByIdAndBookiesName bookies) league do
+                groupBy ((g |> fst).Season)
+            }
         member this.getLeaguesSportAndCountry leagueId =
             let league = this.getLeagueById leagueId
             let sport = this.getSportById league.Sport
@@ -238,6 +260,12 @@ module Repository =
             async {
                 return (this.getLeaguesSportAndCountry leagueId)
             } |> Async.StartAsTask
+        
+        member this.getAllLeagues() =
+            query {
+                for league in leagues do
+                select (this.getLeagueById league.Id)
+            }
 
         member __.createSport name = sports.Create([("Name", name)]) |> ignore
         member __.createCountry name = countries.Create([("Name", name)]) |> ignore

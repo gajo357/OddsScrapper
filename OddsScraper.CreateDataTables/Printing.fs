@@ -3,7 +3,9 @@
 module Printing =
     open System
     open OddsScraper.FSharp.Common.Common
+    open OddsScraper.FSharp.Common.OptionExtension
     open OddsScraper.Repository.Models
+    open OddsScraper.Repository.Repository
 
     let private Separator = ","
     let private JoinValues = JoinList Separator
@@ -17,10 +19,6 @@ module Printing =
         JoinValues [game.HomeTeam.Name; game.AwayTeam.Name; game.HomeScore; game.AwayScore;
                     game.Date; game.Season; game.IsPlayoffs; game.IsOvertime;
                     gameOdd.Bookkeeper.Name; gameOdd.HomeOdd; gameOdd.DrawOdd; gameOdd.AwayOdd; gameOdd.IsValid]
-
-    let GetUserInput (message:String) =
-        WriteToConsole message
-        Console.ReadLine()
 
     let PrintLeagues (leagues: League list) =
         WriteToConsole "Possible leagues"
@@ -38,3 +36,14 @@ module Printing =
             else 
                 Some leagues.[i]
         | _ -> None
+
+    let chooseLeague (repository: Project) =
+        option {
+        
+            let! sport = GetUserInput "Choose sport: " |> repository.getSport
+            let! country = GetUserInput "Choose country: " |> repository.getCountry
+        
+            let! league = SelectLeague ((repository.getLeagues sport.Id country.Id) |> Seq.toList)
+            
+            return (sport, country, league)
+        }

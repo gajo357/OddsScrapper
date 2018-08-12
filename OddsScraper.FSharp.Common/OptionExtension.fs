@@ -26,6 +26,7 @@ module OptionExtension =
         member __.Bind (t, fu)   = Bind t fu
         member __.Bind (t, fu)   = Bind_Nullable t fu
         member __.Delay ft       = Delay ft
+        member __.Zero()         = None
 
     let option = OptionBuilder()
     
