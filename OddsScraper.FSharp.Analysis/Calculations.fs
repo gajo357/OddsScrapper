@@ -3,7 +3,11 @@
 module Calculations =
     open OddsScraper.Repository.Models
     
-    let mean (values: float seq) = values |> Seq.average
+    let mean (values: float seq) = 
+        if values |> Seq.isEmpty then
+            1.
+        else
+            values |> Seq.average
     let meanFromFunc propFunc = (Seq.map propFunc) >> mean
 
     let kelly myOdd bookerOdd = 
