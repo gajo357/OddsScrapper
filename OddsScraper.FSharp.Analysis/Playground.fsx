@@ -158,6 +158,6 @@ let plotAnalysis g =
     ).WithLegend()
     
         
-plotAnalysis espGames
+plotAnalysis gerGames
 
 printAnalysis serGames
