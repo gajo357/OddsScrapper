@@ -1,17 +1,24 @@
 ﻿System.Environment.CurrentDirectory <- @"C:\Users\Gajo\Documents\Visual Studio 2017\Projects\OddsScrapper\OddsScraper.Analysis\"
 
 #r "../packages/FSharp.Data.2.4.6/lib/net45/FSharp.Data.dll"
+#r "../packages/FSharp.Charting.2.1.0/lib/net45/FSharp.Charting.dll"
+#load "../packages/FSharp.Charting.2.1.0/FSharp.Charting.fsx"
 open FSharp.Data
+open FSharp.Charting
 open System
 
-type GamesCsv = CsvProvider<"..\OddsScraper.Analysis\soccer_england_premier-league.csv">
+type GamesCsv = CsvProvider<"../OddsScraper.Analysis/soccer_england_premier-league.csv">
 type game = { HomeTeam: string; AwayTeam: string; Date: System.DateTime; HomeScore: int; AwayScore: int; Season: string }
 type gameOdd = { HomeOdd: float; DrawOdd: float; AwayOdd: float; Name: string }
 type groupedGame = { Game: game; Odds: gameOdd list; Mean: gameOdd } 
 
 let meanBookies = ["bet365"; "bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
 
-let mean (values: float seq) = values |> Seq.average
+let mean (values: float seq) = 
+    if (values |> Seq.isEmpty) then
+        1.
+    else 
+        values |> Seq.average
 let meanFromFunc propFunc = (Seq.map propFunc) >> mean
 let meanFromSecond propFunc = snd >> meanFromFunc propFunc
 let getMeanOdds odds =
@@ -44,6 +51,7 @@ let fraGames = games("..\OddsScraper.Analysis\soccer_france_ligue-1.csv", 2010).
 let itGames = games("..\OddsScraper.Analysis\soccer_italy_serie-a.csv", 2010).getGames() |> Seq.toList
 let holGames = games("..\OddsScraper.Analysis\soccer_netherlands_eredivisie.csv", 2010).getGames() |> Seq.toList
 let porGames = games("..\OddsScraper.Analysis\soccer_portugal_primeira-liga.csv", 2010).getGames() |> Seq.toList
+let serGames = games("..\OddsScraper.Analysis\soccer_serbia_super-liga.csv", 2010).getGames() |> Seq.toList
 let espGames = games("..\OddsScraper.Analysis\soccer_spain_laliga.csv", 2010).getGames() |> Seq.toList
 
 let kelly myOdd bookerOdd = 
@@ -127,6 +135,7 @@ let bet games bookie =
 let betBySeason g bookie = 
     g 
     |> Seq.groupBy (fun s -> s.Game.Season)
+    |> Seq.sortBy fst
     |> Seq.map (fun (s, games) -> (s, bet games bookie))
 let betByBookie g =
     bookies
@@ -141,4 +150,14 @@ let printAnalysis g =
         |> Seq.iter (fun (season, result) -> printfn "%A - %f" season result)
         )
 
-printAnalysis gerGames
+let plotAnalysis g = 
+    Chart.Combine(
+        betByBookie g 
+        |> Seq.map (fun (bookie, seasons) -> Chart.Line(seasons, Name = bookie))
+        |> Seq.toList
+    ).WithLegend()
+    
+        
+plotAnalysis espGames
+
+printAnalysis serGames
