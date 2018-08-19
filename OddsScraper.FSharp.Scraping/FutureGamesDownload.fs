@@ -137,19 +137,28 @@ module FutureGamesDownload =
     let downloadFutureGames date sports timeSpan = sports |> Seq.collect (downloadGamesForSport date timeSpan)
 
     let getLeagues() =
-        [
-            { Sport = "soccer"; 
-                Leagues = [
-                    { Country = "england"; League = "premier-league" }
-                    { Country = "germany"; League = "bundesliga" }
-                    { Country = "serbia"; League = "super-liga"}
-                    { Country = "spain"; League = "laliga"}
-                    { Country = "greece"; League = "super-league"}
-                    { Country = "portugal"; League = "primeira-liga"}
-                    { Country = "turkey"; League = "super-lig"}
-                    { Country = "europe"; League = "champions-league"}
-                    ] }
-        ]
+        //[
+        //    { Sport = "soccer"; 
+        //        Leagues = [
+        //            { Country = "england"; League = "premier-league" }
+        //            { Country = "germany"; League = "bundesliga" }
+        //            { Country = "serbia"; League = "super-liga"}
+        //            { Country = "spain"; League = "laliga"}
+        //            { Country = "greece"; League = "super-league"}
+        //            { Country = "portugal"; League = "primeira-liga"}
+        //            { Country = "turkey"; League = "super-lig"}
+        //            { Country = "europe"; League = "champions-league"}
+        //            ] }
+        //]
+        System.IO.File.ReadLines("goodLeagues.csv")
+        |> Seq.map (Common.Split ",")
+        |> Seq.map (fun parts -> (parts.[0], parts.[1], parts.[2]))
+        |> Seq.groupBy (fun (s,_,_) -> s)
+        |> Seq.map (fun (sport, leagues) ->
+            { 
+                Sport = sport;
+                Leagues = leagues |> Seq.map (fun (_, c, l) -> { Country = c; League = l}) |> Seq.toList
+            })
     
     let downloadGames daysFromToday timeSpan = 
         downloadFutureGames (System.DateTime.Now.AddDays(daysFromToday)) (getLeagues()) timeSpan
