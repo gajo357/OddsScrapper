@@ -160,13 +160,14 @@ module FutureGamesDownload =
                 Leagues = leagues |> Seq.map (fun (_, c, l) -> { Country = c; League = l}) |> Seq.toList
             })
     
-    let downloadGames daysFromToday timeSpan = 
-        downloadFutureGames (System.DateTime.Now.AddDays(daysFromToday)) (getLeagues()) timeSpan
+    let downloadGames date timeSpan = 
+        downloadFutureGames date (getLeagues()) timeSpan
         |> Seq.sortBy (fun g -> g.Date)
         |> Seq.toList
 
-    let downloadTomorrowsGames timeSpan = downloadGames 1. timeSpan
-    let downloadTodaysGames timeSpan = downloadGames 0. timeSpan
+    let dateFromToday daysFromToday = System.DateTime.Now.AddDays(daysFromToday)
+    let downloadTomorrowsGames timeSpan = downloadGames (dateFromToday 1.) timeSpan
+    let downloadTodaysGames timeSpan = downloadGames (dateFromToday 0.) timeSpan
 
 
     let getGamesToBet timeSpan =

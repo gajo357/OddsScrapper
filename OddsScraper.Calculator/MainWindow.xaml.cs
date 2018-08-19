@@ -16,22 +16,29 @@ namespace OddsScraper.Calculator
         {
             InitializeComponent();
 
+            SetCurrentDate();
+
             GamesControl.ItemsSource = Games;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
+            SetCurrentDate();
             FSharp.Scraping.CanopyExtensions.loginToOddsPortalWithData(Username.Text, Password.Text);
         }
 
         private void RefreashData_Click(object sender, RoutedEventArgs e)
         {
+            SetCurrentDate();
+
             Games.Clear();
 
             foreach (var game in FSharp.Scraping.FutureGamesDownload
-                .downloadTodaysGames(Convert.ToDouble(Minutes.Text))
+                .downloadGames(DateTime.Now, Convert.ToDouble(Minutes.Text))
                 .Select(GameViewModel.Create))
                 Games.Add(game);
         }
+
+        private void SetCurrentDate() => Dispatcher.Invoke(() => CurrentDate.Text = DateTime.Now.ToString("g"));
     }
 }

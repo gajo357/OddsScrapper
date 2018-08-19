@@ -89,6 +89,7 @@
         </Grid>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
+            <TextBlock x:Name="CurrentDate" Width="100" Margin="10,5" Text="30.0"/>
             <TextBox x:Name="Minutes" Width="100" Margin="10,5" Text="30.0"/>
             <Button HorizontalAlignment="Right" Width="150" x:Name="RefreashData" Click="RefreashData_Click" Content="Fetch Data"/>
         </StackPanel>
