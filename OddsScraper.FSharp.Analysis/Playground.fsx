@@ -182,6 +182,6 @@ let plotAnalysis g =
         |> Seq.toList
     ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(MajorGrid = ChartTypes.Grid(Interval = 1.))
     
-plotAnalysis porGames
+plotAnalysis clGames
 
 printAnalysis serGames

@@ -9,8 +9,6 @@ module FutureGamesDownload =
     open BettingCalculations
     open OddsScraper.FSharp.Scraping.ScrapingParts
     open FSharp.Core
-    open OddsScraper.FSharp.Common
-    open OddsScraper.FSharp.Common
 
     type Bet = Home | Draw | Away
     type LeagueInfo = { Country: string; League: string }
@@ -149,6 +147,7 @@ module FutureGamesDownload =
                     { Country = "greece"; League = "super-league"}
                     { Country = "portugal"; League = "primeira-liga"}
                     { Country = "turkey"; League = "super-lig"}
+                    { Country = "europe"; League = "champions-league"}
                     ] }
         ]
     
@@ -163,7 +162,6 @@ module FutureGamesDownload =
 
     let getGamesToBet timeSpan =
         loginToOddsPortal()
-
         downloadTodaysGames timeSpan
 
     let gameToString g =

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="OddsScraper.Calculator.GameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="50" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Text="{Binding Sport}" Grid.Column="0"/>
+        <TextBlock Text="{Binding Country}" Grid.Column="1"/>
+        <TextBlock Text="{Binding League}" Grid.Column="2"/>
+        
+        <TextBlock Text="{Binding HomeTeam}" Grid.Column="3"/>
+        <TextBlock Text="{Binding AwayTeam}" Grid.Column="4"/>
+
+        <TextBlock Text="{Binding Date, StringFormat={}{0:HH:mm}}" Grid.Column="5"/>
+
+        <TextBlock Text="{Binding HomeMeanOdd, StringFormat=N2}" Grid.Column="6"/>
+        <TextBlock Text="{Binding DrawMeanOdd, StringFormat=N2}" Grid.Column="7"/>
+        <TextBlock Text="{Binding AwayMeanOdd, StringFormat=N2}" Grid.Column="8"/>
+        
+        <TextBox Text="{Binding HomeOdd}" Grid.Column="9"/>
+        <TextBox Text="{Binding DrawOdd}" Grid.Column="10"/>
+        <TextBox Text="{Binding AwayOdd}" Grid.Column="11"/>
+
+        <TextBox Text="{Binding Balance, StringFormat=N2}" Grid.Column="12"/>
+
+        <TextBlock Text="{Binding HomeAmount, StringFormat=N2}" Grid.Column="13"/>
+        <TextBlock Text="{Binding DrawAmount, StringFormat=N2}" Grid.Column="14"/>
+        <TextBlock Text="{Binding AwayAmount, StringFormat=N2}" Grid.Column="15"/>
+        
+    </Grid>
+</UserControl>
