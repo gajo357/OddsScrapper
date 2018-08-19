@@ -66,6 +66,7 @@ let espGames = getGames "soccer_spain_laliga"
 let turGames = getGames "soccer_turkey_super-lig"
 let usaGames = getGames "soccer_usa_mls"
 let clGames = getGames "soccer_europe_champions-league"
+let elGames = getGames "soccer_europe_europa-league"
 
 let round (n: float) = System.Math.Round(n, 2)
 let kelly myOdd bookerOdd = 
@@ -187,6 +188,7 @@ let plotAnalysis margins (league, games) =
 
 [engGames; eng2Games; denGames; gerGames; greGames; fraGames; itGames; holGames; porGames; serGames; espGames; turGames; usaGames; clGames]
 [argGames; braGames]
+[elGames]
 |> Seq.map (plotAnalysis [0.01..0.01..0.1])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
