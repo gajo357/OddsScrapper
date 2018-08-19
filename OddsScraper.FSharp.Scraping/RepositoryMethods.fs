@@ -31,7 +31,7 @@ module RepositoryMethods =
 
     let GetParticipants (repository:Project) sport participantsAndDateElement =
         async {
-            let (homeTeamName, awayTeamName) = ReadParticipantsNames participantsAndDateElement
+            let (homeTeamName, awayTeamName) = readParticipantsNames participantsAndDateElement
 
             let getOrCreateTeam = GetOrCreateTeamAsync repository sport
             let! homeTeam = getOrCreateTeam homeTeamName
@@ -53,11 +53,7 @@ module RepositoryMethods =
         async {
             let! booker = GetOrCreateBookkeeperAsync repository odd.Name
         
-            let (homeOdd, drawOdd, awayOdd) =
-                match odd.Odds with
-                | [home; away] -> (home, 0.0, away)
-                | [home; draw; away] -> (home, draw, away)
-                | _ -> (0.0, 0.0, 0.0)
+            let (homeOdd, drawOdd, awayOdd) = convertOddsListTo1x2 odd
         
             let gameOdd = {
                 Game = gameId
@@ -91,11 +87,11 @@ module RepositoryMethods =
 
     let ReadGameAsync (repository:Project) link season sport gameHtml =
         async {
-            let participantsAndDateElement = GetElementById "#col-content" gameHtml
+            let participantsAndDateElement = getElementById "#col-content" gameHtml
             let! (homeTeam, awayTeam) = (GetParticipants repository sport participantsAndDateElement)
-            let gameDate = participantsAndDateElement |> (ReadGameDate >> GetDateOrDefault)
+            let gameDate = participantsAndDateElement |> (readGameDate >> getDateOrDefault)
                     
-            let (homeScore, awayScore, isOvertime) = ReadGameScore (GetElementById "#event-status" gameHtml)
+            let (homeScore, awayScore, isOvertime) = readGameScore (getElementById "#event-status" gameHtml)
             
             return {
                     GameLink = link; Season = season

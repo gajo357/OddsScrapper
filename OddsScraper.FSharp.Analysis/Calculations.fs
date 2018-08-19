@@ -2,21 +2,7 @@
 
 module Calculations =
     open OddsScraper.Repository.Models
-    
-    let mean (values: float seq) = 
-        if values |> Seq.isEmpty then
-            1.
-        else
-            values |> Seq.average
-    let meanFromFunc propFunc = (Seq.map propFunc) >> mean
-
-    let kelly myOdd bookerOdd = 
-        if (myOdd = 0.) then
-            0.
-        else if (bookerOdd = 1.) then
-            0.
-        else    
-            (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
+    open OddsScraper.FSharp.Common.BettingCalculations
 
     let makeBet win myOdd bookerOdd (amount, alreadyRun) =
         let k = kelly myOdd bookerOdd

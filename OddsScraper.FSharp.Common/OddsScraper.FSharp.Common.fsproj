@@ -55,6 +55,7 @@
     <Compile Include="Common.fs" />
     <Compile Include="OptionExtension.fs" />
     <Content Include="packages.config" />
+    <Compile Include="BettingCalculations.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

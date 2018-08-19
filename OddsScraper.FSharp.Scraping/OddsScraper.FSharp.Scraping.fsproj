@@ -110,7 +110,10 @@
     <Compile Include="GamePageReading.fs" />
     <Compile Include="RepositoryMethods.fs" />
     <Compile Include="DatabaseFix.fs" />
+    <Compile Include="CanopyExtensions.fs" />
     <Compile Include="DownloadGames.fs" />
+    <Compile Include="FutureGamesDownload.fs" />
+    <Compile Include="BetOnBet365.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />

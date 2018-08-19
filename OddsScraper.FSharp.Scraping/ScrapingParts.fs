@@ -14,6 +14,8 @@ module ScrapingParts =
 
     let BaseWebsite = "http://www.oddsportal.com"
     
+    let prependBaseWebsite href = System.String.Format("{0}{1}", BaseWebsite, href)
+
     let YearPattern = "-\\d{4}"
     let FindYearInLink input = 
         seq { 

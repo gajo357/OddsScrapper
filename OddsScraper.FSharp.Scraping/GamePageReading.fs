@@ -7,33 +7,36 @@ module GamePageReading =
 
     type GameProvider = HtmlProvider<"http://www.oddsportal.com/soccer/england/premier-league-2016-2017/arsenal-everton-SGPa5fvr/">
 
-    let ParseGameHtml gameHtml =
+    let parseGameHtml gameHtml =
         (GameProvider.Parse gameHtml).Html
 
-    let ReadParticipantsNames participantElement = 
+    let readParticipantsNames participantElement = 
         participantElement
-        |> (GetFirstElement "h1")
-        |> GetText 
+        |> (getFirstElement "h1")
+        |> getText 
         |> (Split " - ")
         |> fun parts -> (parts.[0], parts.[1])
 
-    let ReadGameDate dateElement = 
+    let getParticipantsAndDateElement = getElementById "#col-content" 
+    let getGameScoreElement = getElementById "#event-status"
+
+    let readGameDate dateElement = 
         dateElement
-        |> (GetFirstElement "p")
-        |> GetText 
+        |> (getFirstElement "p")
+        |> getText 
         |> (Split ",")
         |> (fun n -> n.[1..2])
         |> (Join ", ")
         |> TryParseDateTime
 
-    let GetDateOrDefault gameDate =
+    let getDateOrDefault gameDate =
         match gameDate with
         | Some d -> d
         | None -> System.DateTime.MinValue
         
-    let ReadGameScore resultElement = 
+    let readGameScore resultElement = 
         let defaultScore = (int64 -1, int64 -1, false)
-        match resultElement |> GetText with
+        match resultElement |> getText with
         | n when n.ToUpper().Contains("CANCELED") -> defaultScore
         | n when n.StartsWith("Final result") ->
             let isOvertime = n.ToUpper().Contains("OT") || n.ToUpper().Contains("OVERTIME")
@@ -46,20 +49,20 @@ module GamePageReading =
             | _ -> defaultScore
         | _ -> defaultScore
 
-    let ConvertStringToOdd input =
+    let convertStringToOdd input =
         match TryParseDouble input with
         | Some value -> value
         | None -> 1.0
 
-    let GetOddsFromRow node =
-        let tds = GetTdsFromRow node |> Seq.toArray
+    let getOddsFromRow node =
+        let tds = getTdsFromRow node |> Seq.toArray
         match tds with
         | [||] -> None
         | _ ->
-            let name = tds |> Seq.head |> GetText |> Remove "\n"
+            let name = tds |> Seq.head |> getText |> Remove "\n"
             let oddTds = 
                 tds 
-                |> Seq.filter (ClassAttributeContains "right odds")
+                |> Seq.filter (classAttributeContains "right odds")
                 |> Seq.toArray
 
             match oddTds with
@@ -67,26 +70,32 @@ module GamePageReading =
             | _ ->
                 let odds = 
                     oddTds
-                    |> Seq.map GetText
-                    |> Seq.map ConvertStringToOdd
+                    |> Seq.map getText
+                    |> Seq.map convertStringToOdd
                     |> Seq.toList
 
                 let deactivated = 
                     oddTds
-                    |> Seq.exists (ClassAttributeContains "dark")
+                    |> Seq.exists (classAttributeContains "dark")
 
                 Some { Name = name; Odds = odds; Deactivated = deactivated}
 
-    let GetOddsFromGamePage gameHtml = 
-        match gameHtml |> (GetElementById "#odds-data-table") |> (GetElements "tbody") |> Seq.tryHead with
+    let getOddsFromGamePage gameHtml = 
+        match gameHtml |> (getElementById "#odds-data-table") |> (getElements "tbody") |> Seq.tryHead with
         | None -> [||]
         | Some head -> 
             head
-            |> GetTableRows
-            |> Seq.filter (ClassAttributeContains "lo")
-            |> Seq.map GetOddsFromRow
+            |> getTableRows
+            |> Seq.filter (classAttributeContains "lo")
+            |> Seq.map getOddsFromRow
             |> Seq.choose id
             |> Seq.toArray
+
+    let convertOddsListTo1x2 odd = 
+        match odd.Odds with
+        | [home; away] -> (home, double 0.0, away)
+        | [home; draw; away] -> (home, draw, away)
+        | _ -> (0.0, 0.0, 0.0)
 
     
         

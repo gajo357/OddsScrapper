@@ -12,7 +12,7 @@ type game = { HomeTeam: string; AwayTeam: string; Date: System.DateTime; HomeSco
 type gameOdd = { HomeOdd: float; DrawOdd: float; AwayOdd: float; Name: string }
 type groupedGame = { Game: game; Odds: gameOdd list; Mean: gameOdd } 
 
-let meanBookies = ["bet365"; "bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
+let meanBookies = ["bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
 
 let mean (values: float seq) = 
     if (values |> Seq.isEmpty) then
@@ -45,15 +45,28 @@ type games(path:string, year:int) =
                     { HomeOdd = b |> meanFromFunc (fun g -> (float)g.HomeOdd); DrawOdd = b |> meanFromFunc (fun g -> (float)g.DrawOdd); AwayOdd = b |> meanFromFunc (fun g -> (float)g.AwayOdd); Name = "" }
             })
 
-let engGames = games("..\OddsScraper.Analysis\soccer_england_premier-league.csv", 2010).getGames() |> Seq.toList
-let gerGames = games("..\OddsScraper.Analysis\soccer_germany_bundesliga.csv", 2010).getGames() |> Seq.toList
-let fraGames = games("..\OddsScraper.Analysis\soccer_france_ligue-1.csv", 2010).getGames() |> Seq.toList
-let itGames = games("..\OddsScraper.Analysis\soccer_italy_serie-a.csv", 2010).getGames() |> Seq.toList
-let holGames = games("..\OddsScraper.Analysis\soccer_netherlands_eredivisie.csv", 2010).getGames() |> Seq.toList
-let porGames = games("..\OddsScraper.Analysis\soccer_portugal_primeira-liga.csv", 2010).getGames() |> Seq.toList
-let serGames = games("..\OddsScraper.Analysis\soccer_serbia_super-liga.csv", 2010).getGames() |> Seq.toList
-let espGames = games("..\OddsScraper.Analysis\soccer_spain_laliga.csv", 2010).getGames() |> Seq.toList
+let getGames league =
+    games(@"..\OddsScraper.Analysis\" + league + ".csv", 2010).getGames() 
+    |> Seq.toList
 
+let argGames = getGames "soccer_argentina_superliga"
+let braGames = getGames "soccer_brazil_serie-a"
+let eng2Games = getGames "soccer_england_championship"
+let engGames = getGames "soccer_england_premier-league"
+let denGames = getGames "soccer_denmark_superliga"
+let gerGames = getGames "soccer_germany_bundesliga"
+let greGames = getGames "soccer_greece_super-league"
+let fraGames = getGames "soccer_france_ligue-1"
+let itGames = getGames "soccer_italy_serie-a"
+let holGames = getGames "soccer_netherlands_eredivisie"
+let porGames = getGames "soccer_portugal_primeira-liga"
+let serGames = getGames "soccer_serbia_super-liga"
+let espGames = getGames "soccer_spain_laliga"
+let turGames = getGames "soccer_turkey_super-lig"
+let usaGames = getGames "soccer_usa_mls"
+let clGames = getGames "soccer_europe_champions-league"
+
+let round (n: float) = System.Math.Round(n, 2)
 let kelly myOdd bookerOdd = 
     if (myOdd = 0.) then
         0.
@@ -62,20 +75,21 @@ let kelly myOdd bookerOdd =
     else    
         (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
 
-let makeBet win myOdd bookerOdd (amount, alreadyRun) =
-    let k = kelly myOdd bookerOdd
-    if (not alreadyRun && k * amount > 2. && k < 0.1) then
-        if (win) then
-            (amount + (bookerOdd - 1.)*k*amount, true)
-        else 
-            (amount*(1. - k), true)
-    else
-        (amount, alreadyRun)
-
+let betAmount = 500.
 let bookies = ["bwin"; "bet365"; "Betfair"; "888sport"; "Unibet"]
 
+let makeBet win myOdd bookerOdd (amount, alreadyRun) =
+    let k = kelly myOdd bookerOdd
+    if (not alreadyRun && k * amount > 2. && k < 0.03) then
+        let moneyToBet = k*amount |> round
+        if (win) then
+            (amount - moneyToBet + (bookerOdd*moneyToBet |> round), true)
+        else 
+            (amount - moneyToBet, true)
+    else
+        (amount, alreadyRun)
 let betGame (g: game) (meanOdds: gameOdd) (gameOdds: gameOdd) (amount: float) =
-    if (bookies |> Seq.contains gameOdds.Name |> not) then
+    if (gameOdds.Name <> "bet365") then
         amount
     else
         (amount, false)
@@ -92,11 +106,24 @@ let rec betAll amount games =
     match games with
     | head :: tail -> betAll (betGroupedGame amount head) tail
     | [] -> amount
+let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date < DateTime(season + 1, 8, 1)
 
-let round (n: float) = System.Math.Round(n, 2)
+[2011..2018]
+|> Seq.map (fun s ->
+    (s, 
+        gerGames |> (Seq.append engGames) |> (Seq.append serGames) |> (Seq.append espGames) |> (Seq.append greGames)
+        |> (Seq.append porGames) |> (Seq.append turGames) 
+        //|> Seq.filter (fun s -> s.Game.Date.Year > 2016)
+        |> Seq.filter (getSeason s)
+        |> Seq.sortBy (fun s -> s.Game.Date) 
+        |> Seq.toList 
+        |> betAll betAmount 
+        |> (fun b -> b/betAmount)))
+|> Seq.toArray
+
 let amountToBet win myOdd bookerOdd (amount, winAmount, alreadyRun) =
     let k = kelly myOdd bookerOdd
-    if (not alreadyRun && k * amount > 2. && k < 0.06) then
+    if (not alreadyRun && k * amount > 2. && k < 0.03) then
         let moneyToBet = k*amount |> round
         if (win) then
             (moneyToBet, (bookerOdd - 1.)*moneyToBet |> round, true)
@@ -124,8 +151,6 @@ let rec betAllByDay amount bookie gamesByDay =
     match gamesByDay with
     | (_, head) :: tail -> betAllByDay (betAllDayGames amount (head |> Seq.sortBy (fun s -> s.Game.Date) |> Seq.toList) bookie) bookie tail 
     | [] -> amount
-
-let betAmount = 1000.
 let bet games bookie = 
     games
     |> Seq.groupBy (fun s -> (s.Game.Date.Year, s.Game.Date.Month, s.Game.Date.Day)) 
@@ -155,9 +180,8 @@ let plotAnalysis g =
         betByBookie g 
         |> Seq.map (fun (bookie, seasons) -> Chart.Line(seasons, Name = bookie))
         |> Seq.toList
-    ).WithLegend()
+    ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(MajorGrid = ChartTypes.Grid(Interval = 1.))
     
-        
-plotAnalysis gerGames
+plotAnalysis porGames
 
 printAnalysis serGames

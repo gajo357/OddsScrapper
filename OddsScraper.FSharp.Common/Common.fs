@@ -23,6 +23,8 @@ module Common =
     let JoinList separator (array: Object list) = 
         String.Join(separator, array)
 
+    let joinCsv = Join ","
+
     let WriteToConsole (input:String) = 
         Console.WriteLine(input)
 
@@ -62,12 +64,24 @@ module Common =
     let InvokeRepeatedIfFailed actionToRepeat =
         let rec repeatedAction timesTried actionToRepeat =
             if timesTried < 2 then
+                use timer = new System.Timers.Timer()
+                timer.Interval <- 5000.
                 try
-                    Some (actionToRepeat())
+                    timer.Elapsed.Add(fun _ -> raise(Exception("")))
+                    timer.Start()
+                    let result = actionToRepeat()
+                    timer.Stop()
+
+                    Some result
                 with
-                | _ -> repeatedAction (timesTried + 1) actionToRepeat
+                | _ ->
+                    timer.Stop()
+                    repeatedAction (timesTried + 1) actionToRepeat
             else 
                 None
 
         repeatedAction 0 actionToRepeat
+        
+    let getUsernameAndPassword() =
+        (GetUserInput("Enter username: "), GetUserInput("Enter password: "))
 

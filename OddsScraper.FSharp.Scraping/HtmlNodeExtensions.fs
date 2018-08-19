@@ -4,48 +4,46 @@ module HtmlNodeExtensions =
     open FSharp.Data
     open OddsScraper.FSharp.Common.Common
     
-    let GetText (node:HtmlNode) =
+    let getText (node:HtmlNode) =
         node.InnerText().Trim()
 
-    let GetElementById (name: string) (node:HtmlDocument) =
+    let getElementById (name: string) (node:HtmlDocument) =
         node.CssSelect(name).Head
 
-    let GetElements (name: string) (node:HtmlNode) =
+    let getElements (name: string) (node:HtmlNode) =
         node.Descendants(name)
         
-    let GetFirstElement (name: string) (node:HtmlNode) =
-        GetElements name node
+    let getFirstElement (name: string) (node:HtmlNode) =
+        getElements name node
         |> Seq.head
 
-    let GetAttribute attribute (node:HtmlNode) = node.AttributeValue(attribute)
+    let getAttribute attribute (node:HtmlNode) = node.AttributeValue(attribute)
 
-    let GetHref node = GetAttribute "href" node
+    let getHref node = getAttribute "href" node
 
-    let GetClassAttribute node = GetAttribute "class" node
+    let getClassAttribute node = getAttribute "class" node
 
-    let GetElementsByClassName name (node:HtmlNode) =
-        node.Descendants(fun n -> (n |> GetClassAttribute) = name)
+    let getElementsByClassName name (node:HtmlNode) =
+        node.Descendants(fun n -> (n |> getClassAttribute) = name)
 
-    let GetTableRows node = GetElements "tr" node
+    let getTableRows node = getElements "tr" node
 
-    let GetTdsFromRow node = GetElements "td" node
+    let getTdsFromRow node = getElements "td" node
 
-    let GetAllHrefElements node = GetElements "a" node
+    let getAllHrefElements node = getElements "a" node
 
-    let GetAllHrefAttributeAndText node =
-        GetAllHrefElements node
-        |> Seq.map (fun n -> (GetHref n, GetText n))
+    let getAllHrefAttributeAndText node =
+        getAllHrefElements node
+        |> Seq.map (fun n -> (getHref n, getText n))
         |> Seq.filter (fst >> IsNonEmptyString)
-        |> Seq.toArray
 
-    let GetAllHrefFromElements node =
-        GetAllHrefAttributeAndText node
+    let getAllHrefFromElement node =
+        getAllHrefAttributeAndText node
         |> Seq.map fst
-        |> Seq.toArray
 
-    let ClassAttributeEquals text node =
-        GetClassAttribute node = text
+    let classAttributeEquals text node =
+        getClassAttribute node = text
 
-    let ClassAttributeContains text node =
-        node|> GetClassAttribute |> Contains text
+    let classAttributeContains text node =
+        node|> getClassAttribute |> Contains text
 

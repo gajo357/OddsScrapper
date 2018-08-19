@@ -5,9 +5,14 @@ open OddsScraper.FSharp.Scraping
 
 open DownloadGames
 open DatabaseFix
+open FutureGamesDownload
 
 [<EntryPoint>]
 let main argv = 
     //download()
-    System.Console.WriteLine(fixDatabase())
+    
+    FutureGamesDownload.printGamesToBet()
+    //BetOnBet365.testRun()
+
+    //System.Console.WriteLine(fixDatabase())
     0 // return an integer exit code
