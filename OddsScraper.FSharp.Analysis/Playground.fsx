@@ -8,9 +8,9 @@ open FSharp.Charting
 open System
 
 type GamesCsv = CsvProvider<"../OddsScraper.Analysis/soccer_england_premier-league.csv">
-type game = { HomeTeam: string; AwayTeam: string; Date: System.DateTime; HomeScore: int; AwayScore: int; Season: string }
-type gameOdd = { HomeOdd: float; DrawOdd: float; AwayOdd: float; Name: string }
-type groupedGame = { Game: game; Odds: gameOdd list; Mean: gameOdd } 
+type Game = { HomeTeam: string; AwayTeam: string; Date: System.DateTime; HomeScore: int; AwayScore: int; Season: string }
+type GameOdd = { HomeOdd: float; DrawOdd: float; AwayOdd: float; Name: string }
+type GroupedGame = { Game: Game; Odds: GameOdd list; Mean: GameOdd } 
 
 let meanBookies = ["bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
 
@@ -30,10 +30,10 @@ let getMeanOdds odds =
     }
 let gameFromData (home, away, date, hScore, aScore, season) = { HomeTeam = home; AwayTeam = away; Date = date; HomeScore = hScore; AwayScore = aScore; Season = season }
 
-type games(path:string, year:int) =
+type Games(path:string, year:int) =
     let gamesCsv = GamesCsv.Load(path)
 
-    member __.getGames() =
+    member __.GetGames() =
         gamesCsv.Rows
         |> Seq.groupBy (fun r -> (r.HomeTeam, r.AwayTeam, r.Date, r.HomeTeamScore, r.HomeTeamScore, r.Season))
         |> Seq.map (fun r -> 
@@ -47,22 +47,31 @@ type games(path:string, year:int) =
 
 let getGames league =
     (league,
-        games(@"..\OddsScraper.Analysis\" + league + ".csv", 2010).getGames() 
+        Games(@"..\OddsScraper.Analysis\" + league + ".csv", 2010).GetGames() 
         |> Seq.toList)
 
 let argGames = getGames "soccer_argentina_superliga"
 let braGames = getGames "soccer_brazil_serie-a"
+let chiGames = getGames "soccer_china_super-league"
 let eng2Games = getGames "soccer_england_championship"
 let engGames = getGames "soccer_england_premier-league"
+let finGames = getGames "soccer_finland_veikkausliiga"
+let fraGames = getGames "soccer_france_ligue-1"
 let denGames = getGames "soccer_denmark_superliga"
 let gerGames = getGames "soccer_germany_bundesliga"
 let greGames = getGames "soccer_greece_super-league"
-let fraGames = getGames "soccer_france_ligue-1"
 let itGames = getGames "soccer_italy_serie-a"
+let japGames = getGames "soccer_japan_j-league"
+let japCupGames = getGames "soccer_japan_emperors-cup"
 let holGames = getGames "soccer_netherlands_eredivisie"
 let porGames = getGames "soccer_portugal_primeira-liga"
 let serGames = getGames "soccer_serbia_super-liga"
 let espGames = getGames "soccer_spain_laliga"
+let rusGames = getGames "soccer_russia_premier-league"
+let rusCupGames = getGames "soccer_russia_russian-cup"
+let scoGames = getGames "soccer_scotland_premiership"
+let sokGames = getGames "soccer_south-korea_k-league-1"
+let sweGames = getGames "soccer_sweden_allsvenskan"
 let turGames = getGames "soccer_turkey_super-lig"
 let usaGames = getGames "soccer_usa_mls"
 let clGames = getGames "soccer_europe_champions-league"
@@ -90,7 +99,7 @@ let makeBet win myOdd bookerOdd (amount, alreadyRun) =
             (amount - moneyToBet, true)
     else
         (amount, alreadyRun)
-let betGame (g: game) (meanOdds: gameOdd) (gameOdds: gameOdd) (amount: float) =
+let betGame (g: Game) (meanOdds: GameOdd) (gameOdds: GameOdd) (amount: float) =
     if (gameOdds.Name <> "bet365") then
         amount
     else
@@ -103,7 +112,7 @@ let rec betGames g meanOdds odds amount =
     match odds with
     | head :: tail -> betGames g meanOdds tail (betGame g meanOdds head amount)
     | [] -> amount
-let betGroupedGame amount (gg: groupedGame) = betGames gg.Game gg.Mean gg.Odds amount
+let betGroupedGame amount (gg: GroupedGame) = betGames gg.Game gg.Mean gg.Odds amount
 let rec betAll amount games =
     match games with
     | head :: tail -> betAll (betGroupedGame amount head) tail
@@ -113,10 +122,10 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
 [2011..2018]
 |> Seq.map (fun s ->
     (s, 
-        gerGames |> snd |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
-        |> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
-        |> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd)) 
-        //|> Seq.filter (fun s -> s.Game.Date.Year > 2016)
+        //gerGames |> snd |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
+        //|> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
+        //|> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
+        scoGames |> snd
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
@@ -143,7 +152,7 @@ let getAmountToBet margin g meanOdds gameOdds amount =
         |> amountToBet margin (g.HomeScore < g.AwayScore) meanOdds.AwayOdd go.AwayOdd
         |> (fun (a, b, _) -> (a, b))
     | None -> (amount, 0.)
-let rec betAllDayGames margin amount (dayGames: groupedGame list) bookie = 
+let rec betAllDayGames margin amount (dayGames: GroupedGame list) bookie = 
     dayGames
     |> Seq.fold (fun (totalAmount, amountLeftToBet) gg ->
         let amountToBet, winAmount = getAmountToBet margin gg.Game gg.Mean (gg.Odds |> Seq.tryFind (fun f -> bookie = f.Name)) amountLeftToBet
@@ -169,7 +178,6 @@ let betByBookie margin g =
     bookies
     |> Seq.map (fun b -> (b, betBySeason margin g b))
 
-let joinTab (s: Object seq) = System.String.Join("\t", s)
 let printAnalysis margin g = 
     betByBookie margin g 
     |> Seq.iter (fun (bookie, seasons) -> 
@@ -184,12 +192,14 @@ let plotAnalysis margins (league, games) =
         |> Seq.map (fun m -> (m, betBySeason m games "bet365"))
         |> Seq.map (fun (m, seasons) -> Chart.Line(seasons, Name = m.ToString()))
         |> Seq.toList
-    ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
+    ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(Max = 10., MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
 
-[engGames; eng2Games; denGames; gerGames; greGames; fraGames; itGames; holGames; porGames; serGames; espGames; turGames; usaGames; clGames]
-[argGames; braGames]
-[elGames]
-|> Seq.map (plotAnalysis [0.01..0.01..0.1])
+[engGames; eng2Games; denGames; gerGames; greGames; fraGames; itGames; holGames; porGames; serGames; espGames; turGames; usaGames; clGames;
+    argGames; braGames;
+    elGames;
+    rusGames;
+    rusCupGames; finGames; scoGames]
+|> Seq.map (plotAnalysis [0.02;0.025;0.03])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
-printAnalysis 0.03 (serGames |> snd)
+printAnalysis 0.03 (scoGames |> snd)
