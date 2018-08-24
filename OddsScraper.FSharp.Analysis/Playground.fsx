@@ -1,4 +1,5 @@
 ﻿System.Environment.CurrentDirectory <- @"C:\Users\Gajo\Documents\Visual Studio 2017\Projects\OddsScrapper\OddsScraper.Analysis\"
+System.Environment.CurrentDirectory <- @"C:\Users\gm.DK\Documents\GitHub\OddsScrapper\OddsScraper.Analysis\"
 
 #r "../packages/FSharp.Data.2.4.6/lib/net45/FSharp.Data.dll"
 #r "../packages/FSharp.Charting.2.1.0/lib/net45/FSharp.Charting.dll"
@@ -77,6 +78,12 @@ let usaGames = getGames "soccer_usa_mls"
 let clGames = getGames "soccer_europe_champions-league"
 let elGames = getGames "soccer_europe_europa-league"
 
+let bAbaGames = getGames "basketball_europe_aba-league"
+let bChiGames = getGames "basketball_china_cba"
+let bElGames = getGames "basketball_europe_euroleague"
+let bSokGames = getGames "basketball_south-korea_kbl"
+let bJapGames = getGames "basketball_japan_b-league"
+
 let round (n: float) = System.Math.Round(n, 2)
 let kelly myOdd bookerOdd = 
     if (myOdd = 0.) then
@@ -125,7 +132,7 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
         //gerGames |> snd |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
         //|> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
         //|> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
-        scoGames |> snd
+        chiGames |> snd
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
@@ -177,6 +184,8 @@ let betBySeason margin g bookie =
 let betByBookie margin g =
     bookies
     |> Seq.map (fun b -> (b, betBySeason margin g b))
+let betByMargin bookie games margin =
+    (margin, betBySeason margin games bookie)
 
 let printAnalysis margin g = 
     betByBookie margin g 
@@ -189,8 +198,7 @@ let printAnalysis margin g =
 let plotAnalysis margins (league, games) = 
     Chart.Combine(
         margins
-        |> Seq.map (fun m -> (m, betBySeason m games "bet365"))
-        |> Seq.map (fun (m, seasons) -> Chart.Line(seasons, Name = m.ToString()))
+        |> Seq.map ((betByMargin "bet365" games) >> (fun (m, seasons) -> Chart.Line(seasons, Name = m.ToString())))
         |> Seq.toList
     ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(Max = 10., MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
 
@@ -199,7 +207,8 @@ let plotAnalysis margins (league, games) =
     elGames;
     rusGames;
     rusCupGames; finGames; scoGames]
-|> Seq.map (plotAnalysis [0.02;0.025;0.03])
+[chiGames]
+|> Seq.map (plotAnalysis [0.01..0.01..0.1])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
-printAnalysis 0.03 (scoGames |> snd)
+printAnalysis 0.03 (bAbaGames |> snd)

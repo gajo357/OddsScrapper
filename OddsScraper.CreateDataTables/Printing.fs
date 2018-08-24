@@ -37,10 +37,10 @@ module Printing =
                 Some leagues.[i]
         | _ -> None
 
-    let chooseLeague (repository: Project) =
+    let chooseLeague (repository: Project) sportName =
         option {
         
-            let! sport = GetUserInput "Choose sport: " |> repository.getSport
+            let! sport = sportName |> repository.getSport
             let! country = GetUserInput "Choose country: " |> repository.getCountry
         
             let! league = SelectLeague ((repository.getLeagues sport.Id country.Id) |> Seq.toList)

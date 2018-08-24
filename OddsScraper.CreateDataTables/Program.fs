@@ -1,19 +1,21 @@
 ﻿open OddsScraper.CreateDataTables
 open OddsScraper.Repository.Repository
 open System
-
-open OddsScraper.FSharp.Common.OptionExtension
+open OddsScraper.FSharp.Common
+open Common
+open OptionExtension
 open Printing
 
 [<EntryPoint>]
 let main argv = 
-    let repository = Project(@"../ArchiveData.db")
-    
+   
     option {
+        let sportName = GetUserInput "Choose sport: "
+        let repository = Project(@"..\ArchiveData_" + sportName + ".db")
         
-        let! (sport, country, league) = chooseLeague repository
+        let! (sport, country, league) = chooseLeague repository sportName
         
-        let fileName = String.Format("..\{0}_{1}_{2}.csv", sport.Name, country.Name, league.IdName.Name)
+        let fileName = String.Format(@"..\{0}_{1}_{2}.csv", sport.Name, country.Name, league.IdName.Name)
         
         System.IO.File.WriteAllLines(fileName, [Header])
         let writeToFile lines = System.IO.File.AppendAllLines(fileName, lines)
