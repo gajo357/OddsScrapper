@@ -59,18 +59,19 @@ let engGames = getGames "soccer_england_premier-league"
 let finGames = getGames "soccer_finland_veikkausliiga"
 let fraGames = getGames "soccer_france_ligue-1"
 let denGames = getGames "soccer_denmark_superliga"
+let espGames = getGames "soccer_spain_laliga"
 let gerGames = getGames "soccer_germany_bundesliga"
 let greGames = getGames "soccer_greece_super-league"
+let holGames = getGames "soccer_netherlands_eredivisie"
 let itGames = getGames "soccer_italy_serie-a"
 let japGames = getGames "soccer_japan_j-league"
 let japCupGames = getGames "soccer_japan_emperors-cup"
-let holGames = getGames "soccer_netherlands_eredivisie"
 let porGames = getGames "soccer_portugal_primeira-liga"
-let serGames = getGames "soccer_serbia_super-liga"
-let espGames = getGames "soccer_spain_laliga"
+let polGames = getGames "soccer_poland_ekstraklasa"
 let rusGames = getGames "soccer_russia_premier-league"
 let rusCupGames = getGames "soccer_russia_russian-cup"
 let scoGames = getGames "soccer_scotland_premiership"
+let serGames = getGames "soccer_serbia_super-liga"
 let sokGames = getGames "soccer_south-korea_k-league-1"
 let sweGames = getGames "soccer_sweden_allsvenskan"
 let turGames = getGames "soccer_turkey_super-lig"
@@ -83,6 +84,7 @@ let bChiGames = getGames "basketball_china_cba"
 let bElGames = getGames "basketball_europe_euroleague"
 let bSokGames = getGames "basketball_south-korea_kbl"
 let bJapGames = getGames "basketball_japan_b-league"
+let bNbaGames = getGames "basketball_usa_nba"
 
 let round (n: float) = System.Math.Round(n, 2)
 let kelly myOdd bookerOdd = 
@@ -126,13 +128,13 @@ let rec betAll amount games =
     | [] -> amount
 let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date < DateTime(season + 1, 8, 1)
 
-[2011..2018]
+[2005..2018]
 |> Seq.map (fun s ->
     (s, 
         //gerGames |> snd |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
         //|> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
         //|> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
-        chiGames |> snd
+        bNbaGames |> snd
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
@@ -207,7 +209,7 @@ let plotAnalysis margins (league, games) =
     elGames;
     rusGames;
     rusCupGames; finGames; scoGames]
-[chiGames]
+[polGames; bNbaGames]
 |> Seq.map (plotAnalysis [0.01..0.01..0.1])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 

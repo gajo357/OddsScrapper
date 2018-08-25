@@ -21,6 +21,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OddsScraper.FSharp.Analysis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScraper.Calculator", "OddsScraper.Calculator\OddsScraper.Calculator.csproj", "{77B26BE8-6DE4-4062-AE94-2E7ABD4DDA30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScraper.WebApi", "OddsScraper.WebApi\OddsScraper.WebApi.csproj", "{139CD21F-5D03-43A7-BAF4-99812176FC25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,18 @@ Global
 		{77B26BE8-6DE4-4062-AE94-2E7ABD4DDA30}.Release|x64.Build.0 = Release|Any CPU
 		{77B26BE8-6DE4-4062-AE94-2E7ABD4DDA30}.Release|x86.ActiveCfg = Release|Any CPU
 		{77B26BE8-6DE4-4062-AE94-2E7ABD4DDA30}.Release|x86.Build.0 = Release|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Debug|x64.Build.0 = Debug|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Debug|x86.Build.0 = Debug|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x64.ActiveCfg = Release|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x64.Build.0 = Release|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x86.ActiveCfg = Release|Any CPU
+		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
