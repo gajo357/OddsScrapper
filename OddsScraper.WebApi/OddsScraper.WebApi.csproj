@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
+    <UserSecretsId>69ef4f2d-6ab0-47c8-8d7a-4ac31e8ccf01</UserSecretsId>
+	<RuntimeIdentifiers>win10-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>

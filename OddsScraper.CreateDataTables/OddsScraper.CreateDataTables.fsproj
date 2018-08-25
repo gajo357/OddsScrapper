@@ -65,9 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FSharp.Data.SqlProvider">
-      <HintPath>..\packages\SQLProvider.1.1.48\lib\net451\FSharp.Data.SqlProvider.dll</HintPath>
+      <HintPath>..\packages\SQLProvider.1.1.49\lib\net451\FSharp.Data.SqlProvider.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Data.SqlProvider" />
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core">
       <Name>FSharp.Core</Name>

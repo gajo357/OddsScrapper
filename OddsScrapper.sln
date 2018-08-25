@@ -21,7 +21,7 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OddsScraper.FSharp.Analysis
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScraper.Calculator", "OddsScraper.Calculator\OddsScraper.Calculator.csproj", "{77B26BE8-6DE4-4062-AE94-2E7ABD4DDA30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScraper.WebApi", "OddsScraper.WebApi\OddsScraper.WebApi.csproj", "{139CD21F-5D03-43A7-BAF4-99812176FC25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OddsScraper.WebApi", "OddsScraper.WebApi\OddsScraper.WebApi.csproj", "{139CD21F-5D03-43A7-BAF4-99812176FC25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

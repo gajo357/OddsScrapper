@@ -63,6 +63,7 @@ let espGames = getGames "soccer_spain_laliga"
 let gerGames = getGames "soccer_germany_bundesliga"
 let greGames = getGames "soccer_greece_super-league"
 let holGames = getGames "soccer_netherlands_eredivisie"
+let norGames = getGames "soccer_norway_eliteserien"
 let itGames = getGames "soccer_italy_serie-a"
 let japGames = getGames "soccer_japan_j-league"
 let japCupGames = getGames "soccer_japan_emperors-cup"
@@ -134,7 +135,7 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
         //gerGames |> snd |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
         //|> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
         //|> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
-        bNbaGames |> snd
+        norGames |> snd
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
@@ -205,11 +206,9 @@ let plotAnalysis margins (league, games) =
     ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(Max = 10., MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
 
 [engGames; eng2Games; denGames; gerGames; greGames; fraGames; itGames; holGames; porGames; serGames; espGames; turGames; usaGames; clGames;
-    argGames; braGames;
-    elGames;
-    rusGames;
-    rusCupGames; finGames; scoGames]
-[polGames; bNbaGames]
+    argGames; braGames; polGames;
+    elGames; rusGames; rusCupGames; finGames; scoGames]
+[norGames]
 |> Seq.map (plotAnalysis [0.01..0.01..0.1])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
