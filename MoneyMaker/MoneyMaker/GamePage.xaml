@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MoneyMaker.GamePage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Frame>
+                <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding Sport}"/>
+                        <Label Text="{Binding Country}"/>
+                    </StackLayout>
+                    <Label Text="{Binding League}"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="{Binding HomeTeam}"/>
+                        <Label Text="{Binding AwayTeam}"/>
+                    </StackLayout>
+                    <Label Text="{Binding Date}"/>
+                </StackLayout>
+            </Frame>
+            <Frame>
+                <StackLayout>
+                    <Label Text="Mean Odds" FontSize="Large"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Home"/>
+                        <Label Text="{Binding HomeMeanOdd}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Draw"/>
+                        <Label Text="{Binding DrawMeanOdd}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Away"/>
+                        <Label Text="{Binding AwayMeanOdd}"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Frame>
+                <StackLayout>
+                    <Label Text="Booker Odds" FontSize="Large"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Home"/>
+                        <Entry Text="{Binding HomeOdd}" Keyboard="Numeric"/>
+                    </StackLayout>
+                    <Entry Text="{Binding DrawOdd}" Keyboard="Numeric"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Draw"/>
+                        <Entry Text="{Binding DrawOdd}" Keyboard="Numeric"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Away"/>
+                        <Entry Text="{Binding AwayOdd}" Keyboard="Numeric"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Frame>
+                <StackLayout>
+                    <Label Text="Amount To Bet" FontSize="Large"/>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Home"/>
+                        <Label Text="{Binding HomeAmount}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Draw"/>
+                        <Label Text="{Binding DrawAmount}"/>
+                    </StackLayout>
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="Away"/>
+                        <Label Text="{Binding AwayAmount}"/>
+                    </StackLayout>
+                </StackLayout>
+            </Frame>
+            <Button HorizontalOptions="Center" Text="Done!" Clicked="Button_Clicked"></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

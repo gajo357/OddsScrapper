@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MoneyMaker"
+             x:Class="MoneyMaker.MainPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.RowSpan="2" IsVisible="{Binding IsNotLoggedIn}">
+            <Label>Username</Label>
+            <Entry Keyboard="Text" Text="{Binding Username}"/>
+            <Label>password</Label>
+            <Entry Keyboard="Password" Text="{Binding Password}"/>
+            <Button Text="Log in" Clicked="LoginButton_Clicked"></Button>
+        </StackLayout>
+
+        <Grid IsVisible="{Binding IsLoggedIn}" VerticalOptions="FillAndExpand">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                <Label Text="Balance"/>
+                <Entry x:Name="Balance" Keyboard="Numeric"/>
+            </StackLayout>
+
+            <ListView ItemsSource="{Binding Games}" SelectionMode="Single" ItemSelected="ListView_ItemSelected">
+                
+            </ListView>
+        </Grid>
+    </Grid>
+
+</ContentPage>

@@ -18,5 +18,12 @@ module BettingCalculations =
             0.
         else    
             (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
+
+    
+    let getAmountToBet maxPercent amount myOdd bookerOdd =
+        let k = kelly myOdd bookerOdd 
+        if (k > 0. && k <= maxPercent) then
+            k*amount
+        else 0.
     
 

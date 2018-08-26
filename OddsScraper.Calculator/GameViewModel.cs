@@ -78,8 +78,14 @@ namespace OddsScraper.Calculator
         private void CalculateDrawAmount() => DrawAmount = CalculateAmount(DrawMeanOdd, DrawOdd);
         private void CalculateAwayAmount() => AwayAmount = CalculateAmount(AwayMeanOdd, AwayOdd);
 
+        private double _margin = 0.02;
+        public void SetMargin(double margin)
+        {
+            _margin = 0.02;
+            CalculateAmounts();
+        }
         private double CalculateAmount(double meanOdd, double bookerOdd) 
-            => FSharp.Scraping.FutureGamesDownload.getAmountToBet(Balance, meanOdd, bookerOdd);
+            => FSharp.Common.BettingCalculations.getAmountToBet(_margin, Balance, meanOdd, bookerOdd);
 
         public static GameViewModel Create(FSharp.Scraping.FutureGamesDownload.Game model)
         {

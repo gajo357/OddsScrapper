@@ -87,7 +87,16 @@ let bSokGames = getGames "basketball_south-korea_kbl"
 let bJapGames = getGames "basketball_japan_b-league"
 let bNbaGames = getGames "basketball_usa_nba"
 
-let round (n: float) = System.Math.Round(n, 2)
+let goodLeagues = 
+    gerGames |> snd 
+    |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
+    |> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
+    |> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
+    |> (Seq.append (polGames|> snd)) |> (Seq.append (sokGames|> snd))
+        
+
+let round (digits: int) (n: float) = System.Math.Round(n, digits)
+let roundF2 = round 2
 let kelly myOdd bookerOdd = 
     if (myOdd = 0.) then
         0.
@@ -95,29 +104,39 @@ let kelly myOdd bookerOdd =
         0.
     else    
         (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
+let shuffleG xs = xs |> Seq.sortBy (fun _ -> Guid.NewGuid())
+let takePercent percent xs =
+    let nElem = System.Convert.ToInt32(float (xs |> Seq.length) * percent)
+    xs |> shuffleG |> Seq.take nElem
 
 let betAmount = 500.
 let bookies = ["bwin"; "bet365"; "Betfair"; "888sport"; "Unibet"]
-
-let makeBet win myOdd bookerOdd (amount, alreadyRun) =
+let amountToBet margin win myOdd bookerOdd (amount, amountBet, winAmount, alreadyRun) =
     let k = kelly myOdd bookerOdd
-    if (not alreadyRun && k * amount > 2. && k < 0.03) then
-        let moneyToBet = k*amount |> round
+    if (not alreadyRun && k * amount > 2. && k < margin) then
+        let moneyToBet = k*amount |> roundF2
         if (win) then
-            (amount - moneyToBet + (bookerOdd*moneyToBet |> round), true)
+            (amount, moneyToBet, (bookerOdd - 1.)*moneyToBet |> roundF2, true)
         else 
-            (amount - moneyToBet, true)
+            (amount, moneyToBet, -moneyToBet, true)
     else
-        (amount, alreadyRun)
+        (amount, amountBet, winAmount, alreadyRun)
+let getAmountToBet margin g meanOdds gameOdds amount =
+    match gameOdds with
+    | Some go ->
+        (amount, 0., 0., false)
+        |> amountToBet margin (g.HomeScore > g.AwayScore) meanOdds.HomeOdd go.HomeOdd
+        |> amountToBet margin (g.HomeScore = g.AwayScore) meanOdds.DrawOdd go.DrawOdd
+        |> amountToBet margin (g.HomeScore < g.AwayScore) meanOdds.AwayOdd go.AwayOdd
+        |> (fun (_, amountToBet, winAmount, _) -> (amountToBet, winAmount))
+    | None -> (0., 0.)
+
 let betGame (g: Game) (meanOdds: GameOdd) (gameOdds: GameOdd) (amount: float) =
     if (gameOdds.Name <> "bet365") then
         amount
     else
-        (amount, false)
-        |> makeBet (g.HomeScore > g.AwayScore) meanOdds.HomeOdd gameOdds.HomeOdd
-        |> makeBet (g.HomeScore = g.AwayScore) meanOdds.DrawOdd gameOdds.DrawOdd
-        |> makeBet (g.HomeScore < g.AwayScore) meanOdds.AwayOdd gameOdds.AwayOdd
-        |> fst
+        let _, winAmount = getAmountToBet 0.02 g meanOdds (Some gameOdds) amount
+        amount + winAmount
 let rec betGames g meanOdds odds amount =
     match odds with
     | head :: tail -> betGames g meanOdds tail (betGame g meanOdds head amount)
@@ -132,10 +151,8 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
 [2005..2018]
 |> Seq.map (fun s ->
     (s, 
-        //gerGames |> snd |> (Seq.append (engGames |> snd)) |> (Seq.append (serGames |> snd)) 
-        //|> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
-        //|> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
-        norGames |> snd
+        goodLeagues
+        |> takePercent 0.3
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
@@ -143,25 +160,6 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
         |> (fun b -> b/betAmount)))
 |> Seq.toArray
 
-let amountToBet margin win myOdd bookerOdd (amount, winAmount, alreadyRun) =
-    let k = kelly myOdd bookerOdd
-    if (not alreadyRun && k * amount > 2. && k < margin) then
-        let moneyToBet = k*amount |> round
-        if (win) then
-            (moneyToBet, (bookerOdd - 1.)*moneyToBet |> round, true)
-        else 
-            (moneyToBet, -moneyToBet, true)
-    else
-        (amount, winAmount, alreadyRun)
-let getAmountToBet margin g meanOdds gameOdds amount =
-    match gameOdds with
-    | Some go ->
-        (amount, 0., false)
-        |> amountToBet margin (g.HomeScore > g.AwayScore) meanOdds.HomeOdd go.HomeOdd
-        |> amountToBet margin (g.HomeScore = g.AwayScore) meanOdds.DrawOdd go.DrawOdd
-        |> amountToBet margin (g.HomeScore < g.AwayScore) meanOdds.AwayOdd go.AwayOdd
-        |> (fun (a, b, _) -> (a, b))
-    | None -> (amount, 0.)
 let rec betAllDayGames margin amount (dayGames: GroupedGame list) bookie = 
     dayGames
     |> Seq.fold (fun (totalAmount, amountLeftToBet) gg ->
@@ -175,6 +173,7 @@ let rec betAllByDay margin amount bookie gamesByDay =
     | [] -> amount
 let bet margin games bookie = 
     games
+    |> takePercent 0.6
     |> Seq.groupBy (fun s -> (s.Game.Date.Year, s.Game.Date.Month, s.Game.Date.Day)) 
     |> Seq.toList 
     |> betAllByDay margin betAmount bookie
@@ -184,11 +183,18 @@ let betBySeason margin g bookie =
     |> Seq.groupBy (fun s -> s.Game.Season)
     |> Seq.sortBy fst
     |> Seq.map (fun (s, games) -> (s, bet margin games bookie))
+let betByMonth margin g bookie = 
+    g 
+    |> Seq.sortBy (fun s -> s.Game.Date)
+    |> Seq.groupBy (fun s -> (s.Game.Date.Year, s.Game.Date.Month))
+    |> Seq.map (fun ((y,m), games) -> (System.String.Format("{0},{1}", m, y), bet margin games bookie))
 let betByBookie margin g =
     bookies
     |> Seq.map (fun b -> (b, betBySeason margin g b))
-let betByMargin bookie games margin =
+let betBySeasonMargin bookie games margin =
     (margin, betBySeason margin games bookie)
+let betByMonthMargin bookie games margin =
+    (margin, betByMonth margin games bookie)
 
 let printAnalysis margin g = 
     betByBookie margin g 
@@ -197,19 +203,31 @@ let printAnalysis margin g =
         seasons 
         |> Seq.iter (fun (season, result) -> printfn "%A - %f" season result)
         )
+let printMonthAnalysis margin g = 
+    betByMonthMargin "bet365" g margin
+    |> snd
+    |> Seq.iter (fun (month, seasons) -> printfn "%A - %f" month seasons)
 
-let plotAnalysis margins (league, games) = 
+let plotSeasonAnalysis margins (league, games) = 
     Chart.Combine(
         margins
-        |> Seq.map ((betByMargin "bet365" games) >> (fun (m, seasons) -> Chart.Line(seasons, Name = m.ToString())))
+        |> Seq.map ((betBySeasonMargin "bet365" games) >> (fun (m, seasons) -> Chart.Line(data = seasons, Name = m.ToString())))
         |> Seq.toList
     ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(Max = 10., MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
+let plotMonthAnalysis margins (league, games) = 
+    Chart.Combine(
+        margins
+        |> Seq.map ((betByMonthMargin "bet365" games) >> (fun (m, seasons) -> Chart.Line(data = seasons, Name = m.ToString())))
+        |> Seq.toList
+    ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(Max = 3., MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
 
-[engGames; eng2Games; denGames; gerGames; greGames; fraGames; itGames; holGames; porGames; serGames; espGames; turGames; usaGames; clGames;
-    argGames; braGames; polGames;
-    elGames; rusGames; rusCupGames; finGames; scoGames]
-[norGames]
-|> Seq.map (plotAnalysis [0.01..0.01..0.1])
+
+[engGames; gerGames; greGames;
+    polGames; porGames; serGames; espGames; turGames; usaGames;
+    clGames; elGames; rusGames; rusCupGames; scoGames; sokGames;
+    chiGames]
+|> Seq.map (plotMonthAnalysis [0.02;0.025;0.03])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
-printAnalysis 0.03 (bAbaGames |> snd)
+printAnalysis 0.02 (engGames |> snd)
+printMonthAnalysis 0.02 (goodLeagues)

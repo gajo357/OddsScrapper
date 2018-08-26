@@ -36,9 +36,19 @@ namespace OddsScraper.Calculator
             foreach (var game in FSharp.Scraping.FutureGamesDownload
                 .downloadGames(DateTime.Now, Convert.ToDouble(Minutes.Text))
                 .Select(GameViewModel.Create))
+            {
+                SetGameMargin(game);
                 Games.Add(game);
+            }
         }
 
         private void SetCurrentDate() => Dispatcher.Invoke(() => CurrentDate.Text = DateTime.Now.ToString("g"));
+
+        private void Margin_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            foreach (var game in Games) SetGameMargin(game);
+        }
+
+        private void SetGameMargin(GameViewModel game) => game.SetMargin(Convert.ToDouble(KellyMargin.Text));
     }
 }

@@ -119,6 +119,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OddsScraper.FSharp.Common\OddsScraper.FSharp.Common.fsproj">
+      <Project>{08c01758-16d9-4f04-8eb0-1692daa84e52}</Project>
+      <Name>OddsScraper.FSharp.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OddsScraper.FSharp.Scraping\OddsScraper.FSharp.Scraping.fsproj">
       <Project>{bf73ecd0-c967-481e-9a48-f8606bfab56c}</Project>
       <Name>OddsScraper.FSharp.Scraping</Name>

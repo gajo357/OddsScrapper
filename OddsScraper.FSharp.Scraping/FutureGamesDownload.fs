@@ -52,12 +52,6 @@ module FutureGamesDownload =
             odds |> meanFromFunc (fun (_,d,_) -> d),
             odds |> meanFromFunc (fun (_,_,a) -> a))
 
-    let getAmountToBet amount myOdd bookerOdd =
-        let k = kelly myOdd bookerOdd 
-        if (k > 0. && k < 0.03) then
-            k*amount
-        else 0.
-
     let makeBet myOdd bookerOdd bet =
         let k = kelly myOdd bookerOdd 
         if (k > 0. && k < 0.03) then

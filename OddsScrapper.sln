@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScraper.Calculator", "O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OddsScraper.WebApi", "OddsScraper.WebApi\OddsScraper.WebApi.csproj", "{139CD21F-5D03-43A7-BAF4-99812176FC25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMaker.Android", "MoneyMaker\MoneyMaker.Android\MoneyMaker.Android.csproj", "{A85C995C-22FC-42ED-B860-0A17B8E4862C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneyMaker", "MoneyMaker\MoneyMaker\MoneyMaker.csproj", "{C03D8364-77DB-47BF-856A-CD6F6489011D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +153,36 @@ Global
 		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x64.Build.0 = Release|Any CPU
 		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x86.ActiveCfg = Release|Any CPU
 		{139CD21F-5D03-43A7-BAF4-99812176FC25}.Release|x86.Build.0 = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|x64.Build.0 = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|x64.Deploy.0 = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|x86.Build.0 = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Debug|x86.Deploy.0 = Debug|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|x64.ActiveCfg = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|x64.Build.0 = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|x64.Deploy.0 = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|x86.ActiveCfg = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|x86.Build.0 = Release|Any CPU
+		{A85C995C-22FC-42ED-B860-0A17B8E4862C}.Release|x86.Deploy.0 = Release|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Debug|x64.Build.0 = Debug|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Debug|x86.Build.0 = Debug|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Release|x64.ActiveCfg = Release|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Release|x64.Build.0 = Release|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Release|x86.ActiveCfg = Release|Any CPU
+		{C03D8364-77DB-47BF-856A-CD6F6489011D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
