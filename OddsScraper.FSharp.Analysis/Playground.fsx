@@ -1,4 +1,5 @@
 ﻿System.Environment.CurrentDirectory <- @"C:\Users\Gajo\Documents\Visual Studio 2017\Projects\OddsScrapper\OddsScraper.Analysis\"
+open System.Windows.Forms.VisualStyles.VisualStyleElement.Window
 System.Environment.CurrentDirectory <- @"C:\Users\gm.DK\Documents\GitHub\OddsScrapper\OddsScraper.Analysis\"
 
 #r "../packages/FSharp.Data.2.4.6/lib/net45/FSharp.Data.dll"
@@ -52,6 +53,8 @@ let getGames league =
         |> Seq.toList)
 
 let argGames = getGames "soccer_argentina_superliga"
+let azGames = getGames "soccer_azerbaijan_premier-league"
+let belGames = getGames "soccer_belgium_jupiler-league"
 let braGames = getGames "soccer_brazil_serie-a"
 let chiGames = getGames "soccer_china_super-league"
 let eng2Games = getGames "soccer_england_championship"
@@ -64,9 +67,14 @@ let gerGames = getGames "soccer_germany_bundesliga"
 let greGames = getGames "soccer_greece_super-league"
 let holGames = getGames "soccer_netherlands_eredivisie"
 let norGames = getGames "soccer_norway_eliteserien"
+let indGames = getGames "soccer_indonesia_liga-1"
+let irGames = getGames "soccer_iran_persian-gulf-pro-league"
+let isrGames = getGames "soccer_israel_ligat-ha-al"
 let itGames = getGames "soccer_italy_serie-a"
 let japGames = getGames "soccer_japan_j-league"
 let japCupGames = getGames "soccer_japan_emperors-cup"
+let kazGames = getGames "soccer_kazakhstan_premier-league"
+let malGames = getGames "soccer_malaysia_super-league"
 let porGames = getGames "soccer_portugal_primeira-liga"
 let polGames = getGames "soccer_poland_ekstraklasa"
 let rusGames = getGames "soccer_russia_premier-league"
@@ -93,7 +101,9 @@ let goodLeagues =
     |> (Seq.append (espGames |> snd)) |> (Seq.append (greGames |> snd))
     |> (Seq.append (porGames |> snd)) |> (Seq.append (turGames|> snd))
     |> (Seq.append (polGames|> snd)) |> (Seq.append (sokGames|> snd))
-        
+    |> (Seq.append (chiGames|> snd)) |> (Seq.append (indGames|> snd))
+    |> (Seq.append (isrGames|> snd)) |> (Seq.append (kazGames|> snd))
+    |> (Seq.append (azGames|> snd)) |> (Seq.append (eng2Games|> snd))
 
 let round (digits: int) (n: float) = System.Math.Round(n, digits)
 let roundF2 = round 2
@@ -151,8 +161,8 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
 [2005..2018]
 |> Seq.map (fun s ->
     (s, 
-        goodLeagues
-        |> takePercent 0.3
+        goodLeagues |> (Seq.append (kazGames|> snd))
+        |> takePercent 1.
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
@@ -173,7 +183,7 @@ let rec betAllByDay margin amount bookie gamesByDay =
     | [] -> amount
 let bet margin games bookie = 
     games
-    |> takePercent 0.6
+    |> takePercent 1.
     |> Seq.groupBy (fun s -> (s.Game.Date.Year, s.Game.Date.Month, s.Game.Date.Day)) 
     |> Seq.toList 
     |> betAllByDay margin betAmount bookie
@@ -220,14 +230,30 @@ let plotMonthAnalysis margins (league, games) =
         |> Seq.map ((betByMonthMargin "bet365" games) >> (fun (m, seasons) -> Chart.Line(data = seasons, Name = m.ToString())))
         |> Seq.toList
     ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left).WithYAxis(Max = 3., MajorGrid = ChartTypes.Grid(Interval = 1.)).WithTitle(Text = league)
-
+let plotMonthlyAgainst margin gs =
+    Chart.Combine(
+        gs 
+        |> Seq.map (fun g -> betByMonthMargin "bet365" g margin) 
+        |> Seq.map snd
+        |> Seq.map (fun g -> Chart.Line(g))
+        |> Seq.toList
+    ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left)
 
 [engGames; gerGames; greGames;
     polGames; porGames; serGames; espGames; turGames; usaGames;
     clGames; elGames; rusGames; rusCupGames; scoGames; sokGames;
     chiGames]
+[azGames; belGames; irGames; indGames; isrGames; kazGames]
+[eng2Games; fraGames]
 |> Seq.map (plotMonthAnalysis [0.02;0.025;0.03])
+|> Seq.iter (fun p -> p.ShowChart() |> ignore)
+
+[azGames; belGames; irGames; indGames; isrGames; kazGames]
+[eng2Games; fraGames]
+|> Seq.map (plotSeasonAnalysis [0.02;0.025;0.03])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
 printAnalysis 0.02 (engGames |> snd)
 printMonthAnalysis 0.02 (goodLeagues)
+
+plotMonthlyAgainst 0.02 [goodLeagues; goodLeagues |> (Seq.append (eng2Games|> snd))]
