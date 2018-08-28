@@ -43,6 +43,8 @@ namespace OddsScraper.WebApi.Models
                 HomeOdd = model.HomeOdd,
                 DrawOdd = model.DrawOdd,
                 AwayOdd = model.AwayOdd,
+
+                GameLink = model.GameLink
             };
         }
     }

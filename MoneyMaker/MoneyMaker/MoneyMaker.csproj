@@ -4,9 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
 	<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
 	<DisableImplicitAssetTargetFallback>true</DisableImplicitAssetTargetFallback>
+	<Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>

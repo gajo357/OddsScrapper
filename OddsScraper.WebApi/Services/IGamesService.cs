@@ -5,6 +5,8 @@ namespace OddsScraper.WebApi.Services
 {
     public interface IGamesService
     {
+        GameDto GetGame(string gameLink);
         IEnumerable<GameDto> GetGames(double timeSpan);
+        IEnumerable<GameDto> GetDaysGamesInfo();
     }
 }

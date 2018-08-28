@@ -5,21 +5,27 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using System;
 
 namespace MoneyMaker
 {
     public class MainViewModel : NotifyPropertyChanged
     {
-        private HttpClient Client { get; } = new HttpClient() {
-            BaseAddress = new System.Uri("https://oddsscraperapi.northeurope.cloudapp.azure.com/api/") };
+        private const string BaseWebsite = "https://oddsscraperapi.northeurope.cloudapp.azure.com/api/";
+        private Uri BaseUri { get; } = new Uri(BaseWebsite);
+        private HttpClient CreateClient()
+        {
+            var client = new HttpClient()
+            {
+                BaseAddress = BaseUri
+            };
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            return client;
+        }
 
         public MainViewModel()
         {
-            Client = new HttpClient()
-            {
-                BaseAddress = new System.Uri("https://oddsscraperapi.northeurope.cloudapp.azure.com/api/")
-            };
-            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
         private string _username;
@@ -47,17 +53,19 @@ namespace MoneyMaker
             try
             {
                 StartProcess("Downloading");
-
-                var response = await Client.GetAsync($"Games/{Minutes}");
-                if (response.IsSuccessStatusCode)
+                using (var client = CreateClient())
                 {
-                    var models = await response.Content.ReadAsAsync<List<GameModel>>();
-                    foreach (var game in models.Select(GameViewModel.Create))
-                        Games.Add(game);
-                }
-                else
-                {
-                    await ReportErrorAsync();
+                    var response = await client.GetAsync($"Games/{Minutes}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var models = await response.Content.ReadAsAsync<List<GameModel>>();
+                        foreach (var game in models.Select(GameViewModel.Create))
+                            Games.Add(game);
+                    }
+                    else
+                    {
+                        await ReportErrorAsync();
+                    }
                 }
             }
             finally
@@ -71,10 +79,12 @@ namespace MoneyMaker
             try
             {
                 StartProcess("Logging in");
+                using (var client = CreateClient())
+                {
+                    var response = await client.PostAsJsonAsync($"Login", new { Username, Password });
 
-                var response = await Client.PostAsJsonAsync($"Login", new { Username, Password });
-
-                IsLoggedIn = response.IsSuccessStatusCode;
+                    IsLoggedIn = response.IsSuccessStatusCode;
+                }
             }
             finally
             {

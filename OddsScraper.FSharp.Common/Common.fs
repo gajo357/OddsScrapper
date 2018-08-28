@@ -36,6 +36,8 @@ module Common =
 
     let Contains value (input:string) = 
         input.Contains(value)
+    
+    let NotEmpty input = System.String.IsNullOrEmpty(input) |> not
 
     let StartsWith value (input:string) = 
         input.StartsWith(value)

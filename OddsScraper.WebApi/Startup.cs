@@ -20,6 +20,8 @@ namespace OddsScraper.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors();
+
             services.AddScoped<IGamesService, GamesService>();
             services.AddScoped<IUserLoginService, UserLoginService>();
         }
@@ -37,7 +39,10 @@ namespace OddsScraper.WebApi
             }
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(route => route.MapRoute(
+                        name: "default",
+                        template: "{controller}/{action}/{id?}",
+                        defaults: new { controller = "LogIn", action = "" }));
         }
     }
 }

@@ -15,10 +15,8 @@
         </Grid.RowDefinitions>
         
         <StackLayout Orientation="Vertical" VerticalOptions="Center" Grid.RowSpan="2" IsVisible="{Binding IsNotLoggedIn}">
-            <Label>Username</Label>
-            <Entry Keyboard="Text" Text="{Binding Username}"/>
-            <Label>password</Label>
-            <Entry Keyboard="Password" Text="{Binding Password}"/>
+            <Entry Keyboard="Text" Placeholder="Username" Text="{Binding Username}"/>
+            <Entry IsPassword="true" Placeholder="Password" Text="{Binding Password}"/>
             <Button Text="Log in" Clicked="LoginButton_Clicked"></Button>
         </StackLayout>
 
