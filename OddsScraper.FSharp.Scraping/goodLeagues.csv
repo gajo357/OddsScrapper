@@ -1,5 +1,6 @@
 soccer,azerbaijan,premier-league
 soccer,china,super-league
+soccer,czech-republic,1-liga
 soccer,england,premier-league
 soccer,england,championship
 soccer,europe,champions-league
@@ -11,6 +12,7 @@ soccer,israel,ligat-ha-al
 soccer,kazakhstan,premier-league
 soccer,poland,ekstraklasa
 soccer,portugal,primeira-liga
+soccer,romania,liga-1
 soccer,russia,premier-league
 soccer,russia,russian-cup
 soccer,scotland,premiership
@@ -18,3 +20,4 @@ soccer,serbia,super-liga
 soccer,south-korea,k-league-1
 soccer,spain,laliga
 soccer,turkey,super-lig
+soccer,wales,premier-league

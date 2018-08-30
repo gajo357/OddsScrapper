@@ -1,5 +1,4 @@
 ﻿System.Environment.CurrentDirectory <- @"C:\Users\Gajo\Documents\Visual Studio 2017\Projects\OddsScrapper\OddsScraper.Analysis\"
-open System.Windows.Forms.VisualStyles.VisualStyleElement.Window
 System.Environment.CurrentDirectory <- @"C:\Users\gm.DK\Documents\GitHub\OddsScrapper\OddsScraper.Analysis\"
 
 #r "../packages/FSharp.Data.2.4.6/lib/net45/FSharp.Data.dll"
@@ -57,6 +56,7 @@ let azGames = getGames "soccer_azerbaijan_premier-league"
 let belGames = getGames "soccer_belgium_jupiler-league"
 let braGames = getGames "soccer_brazil_serie-a"
 let chiGames = getGames "soccer_china_super-league"
+let czGames = getGames "soccer_czech-republic_1-liga"
 let eng2Games = getGames "soccer_england_championship"
 let engGames = getGames "soccer_england_premier-league"
 let finGames = getGames "soccer_finland_veikkausliiga"
@@ -77,14 +77,18 @@ let kazGames = getGames "soccer_kazakhstan_premier-league"
 let malGames = getGames "soccer_malaysia_super-league"
 let porGames = getGames "soccer_portugal_primeira-liga"
 let polGames = getGames "soccer_poland_ekstraklasa"
+let romGames = getGames "soccer_romania_liga-1"
 let rusGames = getGames "soccer_russia_premier-league"
 let rusCupGames = getGames "soccer_russia_russian-cup"
 let scoGames = getGames "soccer_scotland_premiership"
 let serGames = getGames "soccer_serbia_super-liga"
+let sloGames = getGames "soccer_slovakia_fortuna-liga"
 let sokGames = getGames "soccer_south-korea_k-league-1"
 let sweGames = getGames "soccer_sweden_allsvenskan"
+let swiGames = getGames "soccer_switzerland_super-league"
 let turGames = getGames "soccer_turkey_super-lig"
 let usaGames = getGames "soccer_usa_mls"
+let welsGames = getGames "soccer_wales_premier-league"
 let clGames = getGames "soccer_europe_champions-league"
 let elGames = getGames "soccer_europe_europa-league"
 
@@ -161,7 +165,7 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
 [2005..2018]
 |> Seq.map (fun s ->
     (s, 
-        goodLeagues |> (Seq.append (kazGames|> snd))
+        romGames |> snd
         |> takePercent 1.
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
@@ -245,6 +249,7 @@ let plotMonthlyAgainst margin gs =
     chiGames]
 [azGames; belGames; irGames; indGames; isrGames; kazGames]
 [eng2Games; fraGames]
+[romGames; czGames; welsGames; swiGames; sloGames]
 |> Seq.map (plotMonthAnalysis [0.02;0.025;0.03])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
