@@ -10,6 +10,15 @@ namespace MoneyMaker.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            System.Net.ServicePointManager.ServerCertificateValidationCallback +=
+            (sender, cert, chain, sslPolicyErrors) =>
+            {
+                if (cert != null)
+                    System.Diagnostics.Debug.WriteLine(cert);
+
+                return true;
+            };
+
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 

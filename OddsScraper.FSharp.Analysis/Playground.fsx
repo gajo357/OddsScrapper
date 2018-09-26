@@ -125,10 +125,14 @@ let takePercent percent xs =
 
 let betAmount = 500.
 let bookies = ["bwin"; "bet365"; "Betfair"; "888sport"; "Unibet"]
+let moneyToBet kelly amount =
+    let m = kelly * amount
+    if m < 2.0 then 2.0
+    else m |> roundF2
 let amountToBet margin win myOdd bookerOdd (amount, amountBet, winAmount, alreadyRun) =
     let k = kelly myOdd bookerOdd
-    if (not alreadyRun && k * amount > 2. && k < margin) then
-        let moneyToBet = k*amount |> roundF2
+    if (not alreadyRun && k > 0.0 && k < margin) then
+        let moneyToBet = moneyToBet k amount
         if (win) then
             (amount, moneyToBet, (bookerOdd - 1.)*moneyToBet |> roundF2, true)
         else 
@@ -165,7 +169,7 @@ let getSeason season gg = gg.Game.Date > DateTime(season, 8, 1) && gg.Game.Date 
 [2005..2018]
 |> Seq.map (fun s ->
     (s, 
-        romGames |> snd
+        goodLeagues
         |> takePercent 1.
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
