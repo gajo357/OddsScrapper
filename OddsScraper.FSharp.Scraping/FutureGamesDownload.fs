@@ -91,9 +91,12 @@ module FutureGamesDownload =
     let readGame(gameLink, gameHtml) =
         option {
             let odds = gameHtml |> getOddsFromGamePage
-            let! bet365Odd = odds |> Array.filter (fun o -> not o.Deactivated) |>  Seq.tryFind (fun o -> o.Name = "bet365")
+            let bet365Odd = odds |>  Seq.tryFind (fun o -> o.Name = "bet365")
             let (homeMeanOdd, drawMeanOdd, awayMeanOdd) = odds |> readMeanOdds
-            let (homeOdd, drawOdd, awayOdd) = bet365Odd |> convertOddsListTo1x2
+            let (homeOdd, drawOdd, awayOdd) = 
+                match bet365Odd with 
+                | Some b -> b |> convertOddsListTo1x2
+                | None -> (1.0, 1.0, 1.0)
 
             let participantsAndDateElement = getParticipantsAndDateElement gameHtml
             let (homeTeam, awayTeam) = readParticipantsNames participantsAndDateElement
@@ -141,13 +144,11 @@ module FutureGamesDownload =
 
     let downloadGamesForSport date timeSpan (sportInfo: SportInfo) =
         downloadGameInfosForSport date timeSpan sportInfo
-        |> Seq.map (fun g -> 
+        |> Seq.choose (fun g -> 
             match navigateAndReadGameHtml g.GameLink with
             | Some p -> Some (g.GameLink, p)
             | None -> None)
-        |> Seq.choose id
-        |> Seq.map readGame
-        |> Seq.choose id
+        |> Seq.choose readGame
     
     let downloadFutureGamesWithTrans getFunc date sports timeSpan = sports |> Seq.collect (getFunc date timeSpan)
     let downloadFutureGames = downloadFutureGamesWithTrans downloadGamesForSport
@@ -167,7 +168,6 @@ module FutureGamesDownload =
     let downloadGames date timeSpan = 
         downloadFutureGames date (getLeagues()) timeSpan
         |> Seq.sortBy (fun g -> g.Date)
-        |> Seq.toList
 
     let downloadGameInfos date = downloadFutureGameInfos date (getLeagues()) (24.*60.)
 
