@@ -22,7 +22,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="25"/>
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="{Binding Sport}" Grid.Column="0"/>
@@ -42,11 +42,11 @@
         <TextBox Text="{Binding DrawOdd}" Grid.Column="10"/>
         <TextBox Text="{Binding AwayOdd}" Grid.Column="11"/>
 
-        <TextBox Text="{Binding Balance, StringFormat=N2}" Grid.Column="12"/>
+        <TextBlock Text="{Binding HomeAmount, StringFormat=N2}" Grid.Column="12"/>
+        <TextBlock Text="{Binding DrawAmount, StringFormat=N2}" Grid.Column="13"/>
+        <TextBlock Text="{Binding AwayAmount, StringFormat=N2}" Grid.Column="14"/>
 
-        <TextBlock Text="{Binding HomeAmount, StringFormat=N2}" Grid.Column="13"/>
-        <TextBlock Text="{Binding DrawAmount, StringFormat=N2}" Grid.Column="14"/>
-        <TextBlock Text="{Binding AwayAmount, StringFormat=N2}" Grid.Column="15"/>
+        <Button Click="Button_Click" Grid.Column="15">R</Button>
         
     </Grid>
 </UserControl>

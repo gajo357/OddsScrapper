@@ -8,5 +8,6 @@ namespace OddsScraper.WebApi.Services
         GameDto GetGame(string gameLink);
         IEnumerable<GameDto> GetGames(double timeSpan);
         IEnumerable<GameDto> GetDaysGamesInfo();
+        IEnumerable<GameDto> GetGameInfos(double timeSpan);
     }
 }

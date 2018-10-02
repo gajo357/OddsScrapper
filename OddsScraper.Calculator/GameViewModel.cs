@@ -42,8 +42,7 @@ namespace OddsScraper.Calculator
         public double _awayAmount;
         public double AwayAmount { get => _awayAmount; set { Set(ref _awayAmount, value); } }
 
-        public double _balance;
-        public double Balance { get => _balance; set { Set(ref _balance, value); } }
+        public string GameLink { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void Set<T>(ref T field, T value, [CallerMemberName]string propertyName = null)
@@ -64,8 +63,6 @@ namespace OddsScraper.Calculator
                 CalculateDrawAmount();
             else if (propertyName == nameof(AwayOdd))
                 CalculateAwayAmount();
-            else if (propertyName == nameof(Balance))
-                CalculateAmounts();
         }
 
         private void CalculateAmounts()
@@ -78,14 +75,21 @@ namespace OddsScraper.Calculator
         private void CalculateDrawAmount() => DrawAmount = CalculateAmount(DrawMeanOdd, DrawOdd);
         private void CalculateAwayAmount() => AwayAmount = CalculateAmount(AwayMeanOdd, AwayOdd);
 
-        private double _margin = 0.02;
+        public double _balance;
+        public void SetBalance(double balance)
+        {
+            _balance = balance;
+            CalculateAmounts();
+        }
+
+        private double _margin;
         public void SetMargin(double margin)
         {
-            _margin = 0.02;
+            _margin = margin;
             CalculateAmounts();
         }
         private double CalculateAmount(double meanOdd, double bookerOdd) 
-            => FSharp.Common.BettingCalculations.getAmountToBet(_margin, Balance, meanOdd, bookerOdd);
+            => DownloadHelper.CalculateAmount(_margin, _balance, meanOdd, bookerOdd);
 
         public static GameViewModel Create(FSharp.Scraping.FutureGamesDownload.Game model)
         {
@@ -108,7 +112,7 @@ namespace OddsScraper.Calculator
                 DrawOdd = model.DrawOdd,
                 AwayOdd = model.AwayOdd,
 
-                Balance = 500
+                GameLink = model.GameLink
             };
         }
     }

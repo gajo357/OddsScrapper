@@ -47,14 +47,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="25"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Game Info" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6"/>
             <TextBlock Text="Mean Odds" Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="3"/>
             <TextBlock Text="Bet 365 Odds" Grid.Column="9" Grid.Row="0" Grid.ColumnSpan="3"/>
-            <TextBlock Text="Balance" Grid.Column="12" Grid.Row="0"/>
-            <TextBlock Text="Amounts To Bet" Grid.Column="13" Grid.Row="0" Grid.ColumnSpan="3"/>
+            <TextBlock Text="Amounts To Bet" Grid.Column="12" Grid.Row="0" Grid.ColumnSpan="3"/>
 
             <TextBlock Text="Sport" Grid.Column="0" Grid.Row="1"/>
             <TextBlock Text="Country" Grid.Column="1" Grid.Row="1"/>
@@ -73,13 +72,13 @@
             <TextBlock Text="Draw" Grid.Column="10" Grid.Row="1"/>
             <TextBlock Text="Away" Grid.Column="11" Grid.Row="1"/>
 
-            <TextBlock Text="Balance" Grid.Column="12" Grid.Row="1"/>
+            <TextBlock Text="Home" Grid.Column="12" Grid.Row="1"/>
+            <TextBlock Text="Draw" Grid.Column="13" Grid.Row="1"/>
+            <TextBlock Text="Away" Grid.Column="14" Grid.Row="1"/>
+            
+            <TextBlock Text="Refreash" Grid.Column="15" Grid.Row="1"/>
 
-            <TextBlock Text="Home" Grid.Column="13" Grid.Row="1"/>
-            <TextBlock Text="Draw" Grid.Column="14" Grid.Row="1"/>
-            <TextBlock Text="Away" Grid.Column="15" Grid.Row="1"/>
-
-            <ItemsControl x:Name="GamesControl" Grid.Row="2" Grid.ColumnSpan="16">
+            <ItemsControl x:Name="GamesControl" Grid.Row="2" Grid.ColumnSpan="15">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <local:GameView/>
@@ -90,8 +89,13 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="2">
             <TextBlock x:Name="CurrentDate" Width="120" Margin="10,5" Text="30.0"/>
+            
+            <TextBlock Width="100" Margin="10,5" Text="Balance"/>
+            <TextBox x:Name="Amount" Width="100" Margin="10,5" Text="500" TextChanged="Amount_TextChanged"/>
+            
             <TextBlock Width="100" Margin="10,5" Text="Margin"/>
             <TextBox x:Name="KellyMargin" Width="100" Margin="10,5" Text="0.02" TextChanged="Margin_TextChanged"/>
+            
             <TextBlock Width="100" Margin="10,5" Text="Minutes"/>
             <TextBox x:Name="Minutes" Width="100" Margin="10,5" Text="30.0"/>
             <Button HorizontalAlignment="Right" Width="150" x:Name="RefreashData" Click="RefreashData_Click" Content="Fetch Data"/>

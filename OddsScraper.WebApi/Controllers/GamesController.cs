@@ -17,15 +17,17 @@ namespace OddsScraper.WebApi.Controllers
             GamesService = gamesService;
         }
 
-        // GET api/games/5.0
+        // GET api/games/games/5.0
         [HttpGet("{timeSpan}", Name = "games")]
         [ActionName("games")]
-        public ActionResult<List<GameDto>> GamesInSpan(double timeSpan) => GamesService.GetGames(timeSpan).ToList();
+        public ActionResult<List<GameDto>> GamesInSpan(double timeSpan) => GamesService.GetGameInfos(timeSpan).ToList();
 
+        // GET api/games/dayGames
         [HttpGet("", Name = "dayGames")]
         [ActionName("dayGames")]
         public ActionResult<List<GameDto>> DayGames() => GamesService.GetDaysGamesInfo().ToList();
 
+        // POST api/games/singleGame
         [HttpPost("", Name = "singleGame")]
         [ActionName("singleGame")]
         public ActionResult<GameDto> SingleGame(GameLink gameLink) => GamesService.GetGame(gameLink.Link);

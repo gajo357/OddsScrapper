@@ -33,4 +33,10 @@
     <ProjectReference Include="..\OddsScraper.FSharp.Scraping\OddsScraper.FSharp.Scraping.fsproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="goodLeagues.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

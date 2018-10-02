@@ -169,7 +169,8 @@ module FutureGamesDownload =
         downloadFutureGames date (getLeagues()) timeSpan
         |> Seq.sortBy (fun g -> g.Date)
 
-    let downloadGameInfos date = downloadFutureGameInfos date (getLeagues()) (24.*60.)
+    let downloadGameInfos date timeSpan = downloadFutureGameInfos date (getLeagues()) timeSpan
+    let downloadAllDayGameInfos date = downloadGameInfos date (24.*60.)
 
     let readGameFromLink gameLink = 
         option {

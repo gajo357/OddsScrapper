@@ -11,5 +11,10 @@ namespace OddsScraper.Calculator
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            DownloadHelper.RefreashData((GameViewModel)DataContext);
+        }
     }
 }

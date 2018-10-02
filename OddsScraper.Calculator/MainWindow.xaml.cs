@@ -24,7 +24,7 @@ namespace OddsScraper.Calculator
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             SetCurrentDate();
-            FSharp.Scraping.CanopyExtensions.loginToOddsPortalWithData(Username.Text, Password.Text);
+            DownloadHelper.LogIn(Username.Text, Password.Text);
         }
 
         private void RefreashData_Click(object sender, RoutedEventArgs e)
@@ -33,11 +33,10 @@ namespace OddsScraper.Calculator
 
             Games.Clear();
 
-            foreach (var game in FSharp.Scraping.FutureGamesDownload
-                .downloadGames(DateTime.Now, Convert.ToDouble(Minutes.Text))
-                .Select(GameViewModel.Create))
+            foreach (var game in DownloadHelper.GetGames(Convert.ToDouble(Minutes.Text)))
             {
                 SetGameMargin(game);
+                SetGameAmount(game);
                 Games.Add(game);
             }
         }
@@ -49,6 +48,17 @@ namespace OddsScraper.Calculator
             foreach (var game in Games) SetGameMargin(game);
         }
 
-        private void SetGameMargin(GameViewModel game) => game.SetMargin(Convert.ToDouble(KellyMargin.Text));
+        private void SetGameMargin(GameViewModel game) => game.SetMargin(GetMargin());
+
+        private double GetMargin() => Convert.ToDouble(KellyMargin.Text);
+
+        private void Amount_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            foreach (var game in Games) SetGameAmount(game);
+        }
+
+        private void SetGameAmount(GameViewModel game) => game.SetBalance(GetAmount());
+
+        private double GetAmount() => Convert.ToDouble(Amount.Text);
     }
 }
