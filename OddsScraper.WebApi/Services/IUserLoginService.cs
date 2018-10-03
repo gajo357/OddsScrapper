@@ -1,8 +1,8 @@
 ﻿namespace OddsScraper.WebApi.Services
 {
-    public interface IUserLoginService
+    public interface IUserLoginService : IHashService
     {
         bool IsUserLoggedIn(string username);
-        void LogIn(string username, string password);
+        string LogIn(string username, string password);
     }
 }

@@ -9,7 +9,6 @@ module FutureGamesDownload =
     open BettingCalculations
     open OddsScraper.FSharp.Scraping.ScrapingParts
     open FSharp.Core
-    open OddsScraper.FSharp.Common
 
     type Bet = Home | Draw | Away
     type LeagueInfo = { Country: string; League: string }

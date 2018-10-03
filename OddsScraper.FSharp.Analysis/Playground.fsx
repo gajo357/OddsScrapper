@@ -1,4 +1,4 @@
-﻿System.Environment.CurrentDirectory <- @"C:\Users\Gajo\Documents\Visual Studio 2017\Projects\OddsScrapper\OddsScraper.Analysis\"
+﻿System.Environment.CurrentDirectory <- @"D:\Projects\OddsScrapper\OddsScraper.Analysis\"
 System.Environment.CurrentDirectory <- @"C:\Users\gm.DK\Documents\GitHub\OddsScrapper\OddsScraper.Analysis\"
 
 #r "../packages/FSharp.Data.2.4.6/lib/net45/FSharp.Data.dll"
@@ -254,6 +254,7 @@ let plotMonthlyAgainst margin gs =
 [azGames; belGames; irGames; indGames; isrGames; kazGames]
 [eng2Games; fraGames]
 [romGames; czGames; welsGames; swiGames; sloGames]
+[finGames]
 |> Seq.map (plotMonthAnalysis [0.02;0.025;0.03])
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 

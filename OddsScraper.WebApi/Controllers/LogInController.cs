@@ -19,6 +19,6 @@ namespace OddsScraper.WebApi.Controllers
         public ActionResult<bool> Get(string user) => LoginService.IsUserLoggedIn(user);
 
         [HttpPost]
-        public void Post([FromBody] UserDto user) => LoginService.LogIn(user.Username, user.Password);
+        public ActionResult<string> Post([FromBody] UserDto user) => LoginService.LogIn(user.Username, user.Password);
     }
 }

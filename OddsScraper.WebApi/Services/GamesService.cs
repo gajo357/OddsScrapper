@@ -7,15 +7,44 @@ namespace OddsScraper.WebApi.Services
 {
     public class GamesService : IGamesService
     {
-        public IEnumerable<GameDto> GetDaysGamesInfo()
-            => FSharp.Scraping.FutureGamesDownload.downloadAllDayGameInfos(DateTime.Now).Select(GameDto.Create);
+        private IHashService UserLoginService { get; }
+        private static GameDto[] EmptyGames { get; } = new GameDto[0];
 
-        public IEnumerable<GameDto> GetGameInfos(double timeSpan)
-            => FSharp.Scraping.FutureGamesDownload.downloadGameInfos(DateTime.Now, timeSpan).Select(GameDto.Create);
+        public GamesService(IUserLoginService userLoginService) 
+        {
+            UserLoginService = userLoginService;
+        }
 
-        public IEnumerable<GameDto> GetGames(double timeSpan) 
-            => FSharp.Scraping.FutureGamesDownload.downloadGames(DateTime.Now, timeSpan).Select(GameDto.Create);
+        public IEnumerable<GameDto> GetDaysGamesInfo(string user)
+        {
+            if (!UserLoginService.IsHashPresent(user))
+                return EmptyGames;
 
-        public GameDto GetGame(string gameLink) => GameDto.Create(FSharp.Scraping.FutureGamesDownload.readGameFromLink(gameLink));
+            return FSharp.Scraping.FutureGamesDownload.downloadAllDayGameInfos(DateTime.Now).Select(GameDto.Create);
+        }
+
+        public IEnumerable<GameDto> GetGameInfos(double timeSpan, string user)
+        {
+            if (!UserLoginService.IsHashPresent(user))
+                return EmptyGames;
+
+            return FSharp.Scraping.FutureGamesDownload.downloadGameInfos(DateTime.Now, timeSpan).Select(GameDto.Create);
+        }
+
+        public IEnumerable<GameDto> GetGames(double timeSpan, string user)
+        {
+            if (!UserLoginService.IsHashPresent(user))
+                return EmptyGames;
+
+            return FSharp.Scraping.FutureGamesDownload.downloadGames(DateTime.Now, timeSpan).Select(GameDto.Create);
+        }
+
+        public GameDto GetGame(string gameLink, string user)
+        {
+            if (!UserLoginService.IsHashPresent(user))
+                return null;
+
+            return GameDto.Create(FSharp.Scraping.FutureGamesDownload.readGameFromLink(gameLink));
+        }
     }
 }

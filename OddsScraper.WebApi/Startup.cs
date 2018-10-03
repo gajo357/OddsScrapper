@@ -22,8 +22,8 @@ namespace OddsScraper.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
 
+            services.AddSingleton<IUserLoginService, UserLoginService>();
             services.AddScoped<IGamesService, GamesService>();
-            services.AddScoped<IUserLoginService, UserLoginService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
