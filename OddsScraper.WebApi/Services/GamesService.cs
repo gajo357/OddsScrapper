@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using OddsScraper.WebApi.Models;
@@ -16,22 +17,30 @@ namespace OddsScraper.WebApi.Services
             Downloader = downloader;
         }
 
-        public async Task<GameDto[]> GetDaysGamesInfoAsync(string user)
+        public async Task<GameDto[]> GetGameInfosAsync(int? gamesCount, string user)
         {
             if (!UserLoginService.IsHashPresent(user))
                 return null;
 
-            var games = await Downloader.DownloadAllDayGameInfos(DateTime.Now);
+            var games = await GetGameInfoModelsAsync(gamesCount);
             return games.Select(GameDto.Create).ToArray();
         }
 
-        public async Task<GameDto[]> GetGameInfosAsync(double timeSpan, string user)
+        private async Task<IEnumerable<FSharp.CommonScraping.FutureGamesDownload.Game>> GetGameInfoModelsAsync(int? gamesCount)
         {
-            if (!UserLoginService.IsHashPresent(user))
-                return null;
+            if (!gamesCount.HasValue || gamesCount <= 0)
+            {
+                return await Downloader.DownloadGameInfos(DateTime.Now);
+            }
 
-            var games = await Downloader.DownloadGameInfos(DateTime.Now, timeSpan);
-            return games.Select(GameDto.Create).ToArray();
+            if (gamesCount > 100)
+            {
+                var games = await Downloader.DownloadGameInfos(DateTime.Now);
+                return games.Take(gamesCount.Value);
+            }
+
+            var widgetGames = await Downloader.DownloadFromWidget();
+            return widgetGames.Take(gamesCount.Value);
         }
 
         public GameDto[] GetGames(double timeSpan, string user)
@@ -39,7 +48,7 @@ namespace OddsScraper.WebApi.Services
             if (!UserLoginService.IsHashPresent(user))
                 return null;
 
-            return FSharp.CommonScraping.FutureGamesDownload.downloadGames(DateTime.Now, timeSpan).Select(GameDto.Create).ToArray();
+            return FSharp.CommonScraping.FutureGamesDownload.downloadGames(DateTime.Now).Select(GameDto.Create).ToArray();
         }
 
         public async Task<GameDto> GetGameAsync(string gameLink, string user)

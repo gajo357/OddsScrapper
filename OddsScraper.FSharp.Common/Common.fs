@@ -34,13 +34,11 @@ module Common =
     let GetUserInputAsInt = GetUserInput >> IntegerInString
         
 
-    let Contains value (input:string) = 
-        input.Contains(value)
+    let Contains value (input:string) = input.Contains(value)
     
     let NotEmpty input = System.String.IsNullOrEmpty(input) |> not
 
-    let StartsWith value (input:string) = 
-        input.StartsWith(value)
+    let StartsWith value (input:string) = input.StartsWith(value)
 
     let TryParseWith tryParseFunc =
         tryParseFunc >> function

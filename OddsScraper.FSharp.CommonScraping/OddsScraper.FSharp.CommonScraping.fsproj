@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Playground.fsx" />
     <None Include="goodLeagues.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -14,6 +15,7 @@
     <Compile Include="GamePageReading.fs" />
     <Compile Include="CanopyExtensions.fs" />
     <Compile Include="FutureGamesDownload.fs" />
+    <Compile Include="WidgetScraping.fs" />
     <Compile Include="CanopyAgent.fs" />
     <Compile Include="Downloader.fs" />
   </ItemGroup>

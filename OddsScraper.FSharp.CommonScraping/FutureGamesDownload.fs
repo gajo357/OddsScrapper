@@ -6,6 +6,7 @@ module FutureGamesDownload =
     open GamePageReading
     open ScrapingParts
     open OddsScraper.FSharp.Common
+    open Common
     open OptionExtension
     open BettingCalculations
     open FSharp.Core
@@ -37,14 +38,14 @@ module FutureGamesDownload =
             let tds = row |> getTdsFromRow
 
             let! timeTd = tds |> Seq.tryHead
-            let! time = timeTd |> getText |> Common.TryParseDateTime
+            let! time = timeTd |> getText |> TryParseDateTime
 
             let! hrefElem = 
                 tds 
                 |> Seq.collect getAllHrefElements
-                |> Seq.tryFind (fun a -> a |> getText |> (Common.Contains "-"))
+                |> Seq.tryFind (fun a -> a |> getText |> (Contains "-"))
             let link = hrefElem |> getHref
-            let (homeTeam, awayTeam) = hrefElem |> getText |> ((Common.Split "-") >> (fun p -> (p.[0], p.[1])))
+            let (homeTeam, awayTeam) = hrefElem |> getText |> ((Split "-") >> (fun p -> (p.[0], p.[1])))
             let (sport, country, league) = ExtractSportCountryAndLeagueFromLink link
 
             return { emptyGame with 
@@ -54,11 +55,10 @@ module FutureGamesDownload =
                         }
         }
     
-    let getGameLinksFromTable gamesTable = 
+    let getGameInfosFromTable gamesTable = 
         gamesTable
         |> getTableRows
-        |> Seq.map getGameInfoFromRow
-        |> Seq.choose id
+        |> Seq.choose getGameInfoFromRow
     
     let readMeanOdds unfiltered =
         let odds =
@@ -134,27 +134,33 @@ module FutureGamesDownload =
         sportDateUrl date sport
         |> navigateAndReadGameHtml
     
-    let gamesFromGameTablePage date timeSpan sportInfo gamesHtml = 
-        gamesHtml
-        |> getElementById "#table-matches"
-        |> getGameLinksFromTable
-        |> Seq.filter (fun g -> isGameWithinTimeFrame date timeSpan g.Date)
+    let gamesFromGameTable sportInfo gamesTable = 
+        gamesTable
+        |> getGameInfosFromTable
         |> Seq.filter (fun g -> isGameLinkFromAnyLeague sportInfo g.GameLink)
+    
+    let gamesFromGameTablePage tableId sportInfo gamesHtml = 
+        gamesHtml
+        |> getElementById tableId
+        |> gamesFromGameTable sportInfo
+    
+    let gamesFromRegularPage sportInfo gamesHtml = 
+        gamesFromGameTablePage "#table-matches" sportInfo gamesHtml
 
-    let downloadGameInfosForSport date timeSpan (sportInfo: SportInfo) =
+    let downloadGameInfosForSport date (sportInfo: SportInfo) =
         match getGamesTableHtml date sportInfo.Sport with
-        | Some gamesHtml -> gamesFromGameTablePage date timeSpan sportInfo gamesHtml
+        | Some gamesHtml -> gamesFromRegularPage sportInfo gamesHtml
         | None -> Seq.empty
 
-    let downloadGamesForSport date timeSpan (sportInfo: SportInfo) =
-        downloadGameInfosForSport date timeSpan sportInfo
+    let downloadGamesForSport date (sportInfo: SportInfo) =
+        downloadGameInfosForSport date sportInfo
         |> Seq.choose (fun g -> 
             match navigateAndReadGameHtml g.GameLink with
             | Some p -> Some (g.GameLink, p)
             | None -> None)
         |> Seq.choose readGame
     
-    let downloadFutureGamesWithTrans getFunc date sports timeSpan = sports |> Seq.collect (getFunc date timeSpan)
+    let downloadFutureGamesWithTrans getFunc date sports = sports |> Seq.collect (getFunc date)
     let downloadFutureGames = downloadFutureGamesWithTrans downloadGamesForSport
     let downloadFutureGameInfos = downloadFutureGamesWithTrans downloadGameInfosForSport
 
@@ -169,12 +175,11 @@ module FutureGamesDownload =
                 Leagues = leagues |> Seq.map (fun (_, c, l) -> { Country = c; League = l}) |> Seq.toList
             })
     
-    let downloadGames date timeSpan = 
-        downloadFutureGames date (getLeagues()) timeSpan
+    let downloadGames date = 
+        downloadFutureGames date (getLeagues())
         |> Seq.sortBy (fun g -> g.Date)
 
-    let downloadGameInfos date timeSpan = downloadFutureGameInfos date (getLeagues()) timeSpan
-    let downloadAllDayGameInfos date = downloadGameInfos date (24.*60.)
+    let downloadGameInfos date = downloadFutureGameInfos date (getLeagues())
 
     let readGameFromLink gameLink = 
         option {
@@ -188,12 +193,12 @@ module FutureGamesDownload =
 
 
     let dateFromToday daysFromToday = System.DateTime.Now.AddDays(daysFromToday)
-    let downloadTomorrowsGames timeSpan = downloadGames (dateFromToday 1.) timeSpan
-    let downloadTodaysGames timeSpan = downloadGames (dateFromToday 0.) timeSpan
+    let downloadTomorrowsGames()= downloadGames (dateFromToday 1.)
+    let downloadTodaysGames()= downloadGames (dateFromToday 0.)
     
-    let getGamesToBet timeSpan =
+    let getGamesToBet() =
         loginToOddsPortal()
-        downloadTodaysGames timeSpan
+        downloadTodaysGames()
 
     let gameToString g =
         Common.joinCsv [|g.Sport; g.Country; g.League; 
@@ -204,7 +209,7 @@ module FutureGamesDownload =
     let printGamesToBet() =
         initialize()
 
-        getGamesToBet 30.
+        getGamesToBet()
         |> Seq.map gameToString
         |> (fun l -> System.IO.File.WriteAllLines("../gamesToBet.txt", l))
         

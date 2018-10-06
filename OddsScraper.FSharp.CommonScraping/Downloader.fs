@@ -3,12 +3,13 @@ module Downloader =
     open OddsScraper.FSharp.CommonScraping
     open CanopyAgent
     open FutureGamesDownload
+    open WidgetScraping
     open System
     open System.Threading.Tasks
 
     type IDownloader =
-        abstract member DownloadGameInfos: DateTime -> float -> Task<Game seq>
-        abstract member DownloadAllDayGameInfos: DateTime -> Task<Game seq>
+        abstract member DownloadFromWidget: unit -> Task<Game seq>
+        abstract member DownloadGameInfos: DateTime -> Task<Game seq>
         abstract member ReadGameFromLink: string -> Task<Game>
         abstract member LogIn: string -> string -> Task<bool>
 
@@ -18,23 +19,30 @@ module Downloader =
             let! gameHtmlString = agent.GetPageHtml link
             return GamePageReading.parseGameHtml gameHtmlString 
         }
+
         interface IDownloader with 
-            member __.DownloadGameInfos date timeSpan =
+            member __.DownloadFromWidget() =
+                async {
+                    let! games = widgetGamesAsync "https://widgets.oddsportal.com/7812aab9e9b2e3d/s/"
+                    let games = games |> Seq.toArray
+                    return
+                        getLeagues()
+                        |> Seq.collect (fun s -> 
+                            games |> Seq.filter (fun g -> isGameLinkFromAnyLeague s g.GameLink))
+                } |> Async.StartAsTask
+
+            member __.DownloadGameInfos date =
                 async {
                     let! gamesHtmls = 
                         getLeagues()
                         |> Seq.map (fun s -> async {
                             let! document = navigateAndGetHtml(sportDateUrl date s.Sport)
-                            return (s, document)
-                        })
+                            return (s, document)})
                         |> Async.Parallel
                     return 
                         gamesHtmls
-                        |> Seq.map(fun (s, document) -> gamesFromGameTablePage date timeSpan s document)
-                        |> Seq.collect(fun games -> games)
+                        |> Seq.collect(fun (s, document) -> gamesFromRegularPage s document)
                 } |> Async.StartAsTask
-
-            member x.DownloadAllDayGameInfos date = (x :> IDownloader).DownloadGameInfos date (24.*60.)
 
             member __.ReadGameFromLink gameLink = 
                 async {

@@ -2,22 +2,21 @@
 
 module OptionExtension =
 
-    let private WrapInOption v = Some v
-    let private ReturnFrom t : Option<'T> = t
+    let WrapInOption v = Some v
+    let ReturnFrom t : Option<'T> = t
     let NullableToOption ot : Option<'T> =
         match ot with
         | null -> None
         | _ -> Some ot
 
-    let private Bind ot fu =
+    let Bind ot fu =
         match ot with
         | None -> None
         | Some vt -> fu vt
 
-    let private Bind_Nullable vt fu =
-        Bind (NullableToOption vt) fu
+    let Bind_Nullable vt fu = Bind (NullableToOption vt) fu
 
-    let private Delay ft : Option<'T> = ft ()
+    let Delay ft : Option<'T> = ft ()
 
     type OptionBuilder() =
         member __.Return v       = WrapInOption v

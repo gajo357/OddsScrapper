@@ -18,16 +18,12 @@ namespace OddsScraper.WebApi.Controllers
             GamesService = gamesService;
         }
 
-        // GET api/games/games?timeSpan=30
+        // GET api/games/games?gamesCount=30
         [HttpGet]
-        public async Task<ActionResult<List<GameDto>>> Games([FromQuery]double? timeSpan, [FromHeader]string authorization)
+        public async Task<ActionResult<List<GameDto>>> Games([FromQuery]int? gamesCount, [FromHeader]string authorization)
         {
-            var resultTask = timeSpan.HasValue && timeSpan > 0 ?
-                GamesService.GetGameInfosAsync(timeSpan.Value, authorization) :
-                GamesService.GetDaysGamesInfoAsync(authorization);
+            var result = await GamesService.GetGameInfosAsync(gamesCount, authorization);
 
-            var result = await resultTask;
-            
             if (result != null)
                 return Ok(result);
 

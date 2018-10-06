@@ -7,7 +7,6 @@ namespace OddsScraper.WebApi.Services
     {
         Task<GameDto> GetGameAsync(string gameLink, string user);
         GameDto[] GetGames(double timeSpan, string user);
-        Task<GameDto[]> GetDaysGamesInfoAsync(string user);
-        Task<GameDto[]> GetGameInfosAsync(double timeSpan, string user);
+        Task<GameDto[]> GetGameInfosAsync(int? gamesCount, string user);
     }
 }

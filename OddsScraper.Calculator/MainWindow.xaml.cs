@@ -41,7 +41,7 @@ namespace OddsScraper.Calculator
             }
         }
 
-        private double? GetTimeSpan() => double.TryParse(Minutes.Text, out double span) ? span : (double?)null;
+        private int? GetTimeSpan() => int.TryParse(GamesCount.Text, out int count) ? count : (int?)null;
 
         private void SetCurrentDate() => Dispatcher.Invoke(() => CurrentDate.Text = DateTime.Now.ToString("g"));
 

@@ -96,8 +96,8 @@
             <TextBlock Width="100" Margin="10,5" Text="Margin"/>
             <TextBox x:Name="KellyMargin" Width="100" Margin="10,5" Text="0.02" TextChanged="Margin_TextChanged"/>
             
-            <TextBlock Width="100" Margin="10,5" Text="Minutes"/>
-            <TextBox x:Name="Minutes" Width="100" Margin="10,5" Text="30.0"/>
+            <TextBlock Width="100" Margin="10,5" Text="Games Count"/>
+            <TextBox x:Name="GamesCount" Width="100" Margin="10,5" Text="30"/>
             <Button HorizontalAlignment="Right" Width="150" x:Name="RefreashData" Click="RefreashData_Click" Content="Fetch Data"/>
         </StackPanel>
     </Grid>

@@ -13,8 +13,13 @@ module ScrapingParts =
     open NodeExtensions
 
     let BaseWebsite = "http://www.oddsportal.com"
+    let BaseSafeWebsite = "https://www.oddsportal.com"
     
-    let prependBaseWebsite href = System.String.Format("{0}{1}", BaseWebsite, href)
+    let prependBaseWebsite href = 
+        if (href |> Contains BaseWebsite || href |> Contains BaseSafeWebsite) then
+            href
+        else
+            System.String.Format("{0}{1}", BaseWebsite, href)
 
     let YearPattern = "-\\d{4}"
     let FindYearInLink input = 
@@ -81,7 +86,5 @@ module ScrapingParts =
         |> Seq.toArray
 
     let ExtractSportCountryAndLeagueFromLink gameLink =
-        let parts = GetLinkParts (gameLink |> Remove BaseWebsite)
+        let parts = GetLinkParts (gameLink |> Remove BaseWebsite |> Remove BaseSafeWebsite)
         (parts.[0], parts.[1], parts.[2])
-
-

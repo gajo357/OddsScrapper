@@ -13,13 +13,14 @@ namespace OddsScraper.Calculator
         public static async Task<bool> LogIn(string username, string password) 
             => await Downloader.LogIn(username, password);
 
-        public async static Task<IEnumerable<GameViewModel>> GetGames(double? timeSpan)
+        public async static Task<IEnumerable<GameViewModel>> GetGames(int? gameCount)
         {
-            var gamesTask = timeSpan.HasValue ? 
-                Downloader.DownloadGameInfos(DateTime.Now, timeSpan.Value) :
-                Downloader.DownloadAllDayGameInfos(DateTime.Now);
+            //var games = await Downloader.DownloadGameInfos(DateTime.Now);
+            var games = await Downloader.DownloadFromWidget();
 
-            var games = await gamesTask;
+            if (gameCount.HasValue)
+                games = games.Take(gameCount.Value);
+
             return games.Select(GameViewModel.Create);
         }
 

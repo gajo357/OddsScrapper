@@ -1,7 +1,7 @@
 ﻿System.Environment.CurrentDirectory <- @"D:\Projects\OddsScrapper\OddsScraper.Analysis\"
 System.Environment.CurrentDirectory <- @"C:\Users\gm.DK\Documents\GitHub\OddsScrapper\OddsScraper.Analysis\"
 
-#r "../packages/FSharp.Data.2.4.6/lib/net45/FSharp.Data.dll"
+#r "../packages/FSharp.Data.3.0.0-beta/lib/net45/FSharp.Data.dll"
 #r "../packages/FSharp.Charting.2.1.0/lib/net45/FSharp.Charting.dll"
 #load "../packages/FSharp.Charting.2.1.0/FSharp.Charting.fsx"
 open FSharp.Data
