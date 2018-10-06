@@ -13,7 +13,7 @@ type Game = { HomeTeam: string; AwayTeam: string; Date: System.DateTime; HomeSco
 type GameOdd = { HomeOdd: float; DrawOdd: float; AwayOdd: float; Name: string }
 type GroupedGame = { Game: Game; Odds: GameOdd list; Mean: GameOdd } 
 
-let meanBookies = ["bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
+let meanBookies = ["bwin"; "Pinnacle"; "William Hill"]
 
 let mean (values: float seq) = 
     if (values |> Seq.isEmpty) then
@@ -254,9 +254,7 @@ let plotMonthlyAgainst margin gs =
 [azGames; belGames; irGames; indGames; isrGames; kazGames]
 [eng2Games; fraGames]
 [romGames; czGames; welsGames; swiGames; sloGames]
-[finGames]
-|> Seq.map (plotMonthAnalysis [0.02;0.025;0.03])
-|> Seq.iter (fun p -> p.ShowChart() |> ignore)
+|> Seq.map (plotMonthAnalysis [0.02;0.025;0.03]) |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
 [azGames; belGames; irGames; indGames; isrGames; kazGames]
 [eng2Games; fraGames]

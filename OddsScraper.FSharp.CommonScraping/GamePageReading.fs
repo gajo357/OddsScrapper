@@ -87,15 +87,17 @@ module GamePageReading =
             head
             |> getTableRows
             |> Seq.filter (classAttributeContains "lo")
-            |> Seq.map getOddsFromRow
-            |> Seq.choose id
+            |> Seq.choose getOddsFromRow
             |> Seq.toArray
-
-    let convertOddsListTo1x2 odd = 
-        match odd.Odds with
+            
+    let convertOddsListTo1x2 odds = 
+        match odds with
         | [home; away] -> (home, double 0.0, away)
         | [home; draw; away] -> (home, draw, away)
+        | [home; draw; away; _] -> (home, draw, away)
         | _ -> (0.0, 0.0, 0.0)
+
+    let convertOddsTo1x2 odd = convertOddsListTo1x2 odd.Odds
 
     
         

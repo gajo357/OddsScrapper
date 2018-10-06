@@ -23,7 +23,7 @@ module Downloader =
         interface IDownloader with 
             member __.DownloadFromWidget() =
                 async {
-                    let! games = widgetGamesAsync "https://widgets.oddsportal.com/7812aab9e9b2e3d/s/"
+                    let! games = widgetMeanGamesAsync()
                     let games = games |> Seq.toArray
                     return
                         getLeagues()

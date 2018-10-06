@@ -33,9 +33,16 @@ module FutureGamesDownload =
 
     let getDateAsString (date: System.DateTime) = System.String.Format("{0:yyyyMMdd}", date)
 
+    let rowOdds tds =
+        tds 
+        |> Array.map getText 
+        |> Array.choose TryParseDouble
+        |> List.ofArray
+        |> convertOddsListTo1x2
+
     let getGameInfoFromRow row =
         option {
-            let tds = row |> getTdsFromRow
+            let tds = row |> getTdsFromRow |> Seq.toArray
 
             let! timeTd = tds |> Seq.tryHead
             let! time = timeTd |> getText |> TryParseDateTime
@@ -47,24 +54,23 @@ module FutureGamesDownload =
             let link = hrefElem |> getHref
             let (homeTeam, awayTeam) = hrefElem |> getText |> ((Split "-") >> (fun p -> (p.[0], p.[1])))
             let (sport, country, league) = ExtractSportCountryAndLeagueFromLink link
+            let (home, draw, away) = rowOdds tds
 
             return { emptyGame with 
                         Date = time; HomeTeam = homeTeam; AwayTeam = awayTeam;
                         GameLink =  prependBaseWebsite link;
-                        Sport = sport; Country = country; League = league 
+                        Sport = sport; Country = country; League = league;
+                        HomeOdd = home; DrawOdd = draw; AwayOdd = away
                         }
         }
     
-    let getGameInfosFromTable gamesTable = 
-        gamesTable
-        |> getTableRows
-        |> Seq.choose getGameInfoFromRow
+    let getGameInfosFromTable = getTableRows >> Seq.choose getGameInfoFromRow
     
     let readMeanOdds unfiltered =
         let odds =
             unfiltered 
             |> Array.filter (fun o -> meanBookies |> Seq.contains o.Name)
-            |> Array.map convertOddsListTo1x2
+            |> Array.map convertOddsTo1x2
         
         (odds |> meanFromFunc (fun (h,_,_) -> h),
             odds |> meanFromFunc (fun (_,d,_) -> d),
@@ -93,8 +99,8 @@ module FutureGamesDownload =
             let bet365Odd = odds |>  Seq.tryFind (fun o -> o.Name = "bet365")
             let (homeMeanOdd, drawMeanOdd, awayMeanOdd) = odds |> readMeanOdds
             let (homeOdd, drawOdd, awayOdd) = 
-                match bet365Odd with 
-                | Some b -> b |> convertOddsListTo1x2
+                match bet365Odd with
+                | Some b -> b |> convertOddsTo1x2
                 | None -> (1.0, 1.0, 1.0)
 
             let participantsAndDateElement = getParticipantsAndDateElement gameHtml
