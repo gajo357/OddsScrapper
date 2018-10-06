@@ -3,6 +3,7 @@
 module DownloadGames =
     open canopy.classic
     open OddsScraper.FSharp.Scraping
+    open OddsScraper.FSharp.CommonScraping
     open OddsScraper.Repository.Repository
 
     open OddsScraper.FSharp.Common.Common

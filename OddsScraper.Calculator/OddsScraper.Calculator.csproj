@@ -46,8 +46,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
+    <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Drawing.Common.4.5.1\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -120,13 +120,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OddsScraper.FSharp.CommonScraping\OddsScraper.FSharp.CommonScraping.fsproj">
+      <Project>{993b56fa-fb5c-49a5-9943-2c9abf6c3319}</Project>
+      <Name>OddsScraper.FSharp.CommonScraping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OddsScraper.FSharp.Common\OddsScraper.FSharp.Common.fsproj">
       <Project>{08c01758-16d9-4f04-8eb0-1692daa84e52}</Project>
       <Name>OddsScraper.FSharp.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OddsScraper.FSharp.Scraping\OddsScraper.FSharp.Scraping.fsproj">
-      <Project>{bf73ecd0-c967-481e-9a48-f8606bfab56c}</Project>
-      <Name>OddsScraper.FSharp.Scraping</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -21,25 +21,27 @@ namespace OddsScraper.Calculator
             GamesControl.ItemsSource = Games;
         }
 
-        private void Login_Click(object sender, RoutedEventArgs e)
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
             SetCurrentDate();
-            DownloadHelper.LogIn(Username.Text, Password.Text);
+            await DownloadHelper.LogIn(Username.Text, Password.Text);
         }
 
-        private void RefreashData_Click(object sender, RoutedEventArgs e)
+        private async void RefreashData_Click(object sender, RoutedEventArgs e)
         {
             SetCurrentDate();
 
             Games.Clear();
-
-            foreach (var game in DownloadHelper.GetGames(Convert.ToDouble(Minutes.Text)))
+            
+            foreach (var game in await DownloadHelper.GetGames(GetTimeSpan()))
             {
                 SetGameMargin(game);
                 SetGameAmount(game);
                 Games.Add(game);
             }
         }
+
+        private double? GetTimeSpan() => double.TryParse(Minutes.Text, out double span) ? span : (double?)null;
 
         private void SetCurrentDate() => Dispatcher.Invoke(() => CurrentDate.Text = DateTime.Now.ToString("g"));
 

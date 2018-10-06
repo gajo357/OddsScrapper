@@ -1,18 +1,27 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OddsScraper.WebApi.Services
 {
     public class UserLoginService : IUserLoginService
     {
-        private IDictionary<string, string> Users { get; } = new Dictionary<string, string>();
+        public UserLoginService(FSharp.CommonScraping.Downloader.IDownloader downloader)
+        {
+            Downloader = downloader;
+        }
+
+
+        private IDictionary<string, string> Users { get; } = new ConcurrentDictionary<string, string>();
+        private FSharp.CommonScraping.Downloader.IDownloader Downloader { get; }
 
         public bool IsUserLoggedIn(string username) => Users.ContainsKey(username);
 
-        public string LogIn(string username, string password)
+        public async Task<string> LogInAsync(string username, string password)
         {
             if (username.Contains("@"))
                 return string.Empty;
@@ -22,7 +31,8 @@ namespace OddsScraper.WebApi.Services
 
             try
             {
-                FSharp.Scraping.CanopyExtensions.loginToOddsPortalWithData(username, password);
+                if (!await Downloader.LogIn(username, password))
+                    return string.Empty;
 
                 var userCode = GetHashCode(username, password);
                 if (string.IsNullOrEmpty(userCode))

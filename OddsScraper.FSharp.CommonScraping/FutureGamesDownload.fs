@@ -1,13 +1,13 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.FSharp.CommonScraping
 
 module FutureGamesDownload =
     open CanopyExtensions
     open HtmlNodeExtensions
     open GamePageReading
+    open ScrapingParts
     open OddsScraper.FSharp.Common
     open OptionExtension
     open BettingCalculations
-    open OddsScraper.FSharp.Scraping.ScrapingParts
     open FSharp.Core
 
     type Bet = Home | Draw | Away
@@ -126,19 +126,24 @@ module FutureGamesDownload =
     let isGameWithinTimeFrame (dateNow:System.DateTime) timeSpan gameDate =
         gameDate > dateNow && gameDate < dateNow.AddMinutes(timeSpan)
 
-    let getGamesTableHtml date sport =
+    let sportDateUrl date sport = 
         "/matches/" + sport + "/" + getDateAsString date + "/"
         |> prependBaseWebsite
+
+    let getGamesTableHtml date sport =
+        sportDateUrl date sport
         |> navigateAndReadGameHtml
+    
+    let gamesFromGameTablePage date timeSpan sportInfo gamesHtml = 
+        gamesHtml
+        |> getElementById "#table-matches"
+        |> getGameLinksFromTable
+        |> Seq.filter (fun g -> isGameWithinTimeFrame date timeSpan g.Date)
+        |> Seq.filter (fun g -> isGameLinkFromAnyLeague sportInfo g.GameLink)
 
     let downloadGameInfosForSport date timeSpan (sportInfo: SportInfo) =
         match getGamesTableHtml date sportInfo.Sport with
-        | Some gamesHtml -> 
-            gamesHtml
-            |> getElementById "#table-matches"
-            |> getGameLinksFromTable
-            |> Seq.filter (fun g -> isGameWithinTimeFrame date timeSpan g.Date)
-            |> Seq.filter (fun g -> isGameLinkFromAnyLeague sportInfo g.GameLink)
+        | Some gamesHtml -> gamesFromGameTablePage date timeSpan sportInfo gamesHtml
         | None -> Seq.empty
 
     let downloadGamesForSport date timeSpan (sportInfo: SportInfo) =

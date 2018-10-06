@@ -104,22 +104,13 @@
   <Import Project="$(FSharpTargetsPath)" />
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="NodeExtensions.fs" />
-    <Compile Include="HtmlNodeExtensions.fs" />
-    <Compile Include="ScrapingParts.fs" />
-    <Compile Include="GamePageReading.fs" />
     <Compile Include="RepositoryMethods.fs" />
     <Compile Include="DatabaseFix.fs" />
-    <Compile Include="CanopyExtensions.fs" />
     <Compile Include="DownloadGames.fs" />
-    <Compile Include="FutureGamesDownload.fs" />
     <Compile Include="BetOnBet365.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
     <Content Include="packages.config" />
-    <None Include="goodLeagues.csv">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="canopy">
@@ -127,7 +118,7 @@
     </Reference>
     <Reference Include="FSharp.Core" />
     <Reference Include="FSharp.Data">
-      <HintPath>..\packages\FSharp.Data.2.4.6\lib\net45\FSharp.Data.dll</HintPath>
+      <HintPath>..\packages\FSharp.Data.3.0.0-beta\lib\net45\FSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -139,7 +130,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Drawing.Common">
-      <HintPath>..\packages\System.Drawing.Common.4.5.0\lib\net461\System.Drawing.Common.dll</HintPath>
+      <HintPath>..\packages\System.Drawing.Common.4.5.1\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
@@ -149,6 +140,11 @@
     <Reference Include="WebDriver" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OddsScraper.FSharp.CommonScraping\OddsScraper.FSharp.CommonScraping.fsproj">
+      <Name>OddsScraper.FSharp.CommonScraping</Name>
+      <Project>{993b56fa-fb5c-49a5-9943-2c9abf6c3319}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\OddsScraper.FSharp.Common\OddsScraper.FSharp.Common.fsproj">
       <Name>OddsScraper.FSharp.Common</Name>
       <Project>{08c01758-16d9-4f04-8eb0-1692daa84e52}</Project>

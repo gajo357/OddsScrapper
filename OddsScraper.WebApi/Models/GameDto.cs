@@ -23,7 +23,7 @@ namespace OddsScraper.WebApi.Models
         public double DrawOdd { get; set; }
         public double AwayOdd { get; set; }
 
-        internal static GameDto Create(FSharp.Scraping.FutureGamesDownload.Game model)
+        internal static GameDto Create(FSharp.CommonScraping.FutureGamesDownload.Game model)
         {
             return new GameDto
             {

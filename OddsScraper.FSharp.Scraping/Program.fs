@@ -5,13 +5,13 @@ open OddsScraper.FSharp.Scraping
 
 open DownloadGames
 open DatabaseFix
-open FutureGamesDownload
+open OddsScraper.FSharp.CommonScraping.FutureGamesDownload
 
 [<EntryPoint>]
 let main argv = 
     //download()
     
-    FutureGamesDownload.printGamesToBet()
+    printGamesToBet()
     //BetOnBet365.testRun()
 
     //System.Console.WriteLine(fixDatabase())

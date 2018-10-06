@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.FSharp.CommonScraping
 
 module HtmlNodeExtensions =
     open FSharp.Data

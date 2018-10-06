@@ -1,8 +1,10 @@
-﻿namespace OddsScraper.WebApi.Services
+﻿using System.Threading.Tasks;
+
+namespace OddsScraper.WebApi.Services
 {
     public interface IUserLoginService : IHashService
     {
         bool IsUserLoggedIn(string username);
-        string LogIn(string username, string password);
+        Task<string> LogInAsync(string username, string password);
     }
 }

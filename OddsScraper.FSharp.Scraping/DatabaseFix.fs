@@ -1,7 +1,7 @@
 ﻿namespace OddsScraper.FSharp.Scraping
 
 module DatabaseFix =
-    open OddsScraper.FSharp.Scraping
+    open OddsScraper.FSharp.CommonScraping
     open OddsScraper.Repository.Repository
 
     open OddsScraper.FSharp.Common.Common

@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.FSharp.CommonScraping
 
 module CanopyExtensions =
     open canopy
@@ -30,3 +30,5 @@ module CanopyExtensions =
             let! gameHtml = InvokeRepeatedIfFailed (fun () -> getPageHtml link)
             return gameHtml |> GamePageReading.parseGameHtml
         }
+
+    let getCurrentUrl = currentUrl

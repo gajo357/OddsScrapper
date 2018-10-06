@@ -3,7 +3,7 @@
 module RepositoryMethods =
     open OddsScraper.Repository.Repository
     open OddsScraper.Repository.Models
-    open OddsScraper.FSharp.Scraping
+    open OddsScraper.FSharp.CommonScraping
 
     open GamePageReading
     open HtmlNodeExtensions

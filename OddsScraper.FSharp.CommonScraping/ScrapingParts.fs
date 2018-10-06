@@ -1,4 +1,4 @@
-﻿namespace OddsScraper.FSharp.Scraping
+﻿namespace OddsScraper.FSharp.CommonScraping
 
 type Odd = 
     {
@@ -10,7 +10,7 @@ type Odd =
 module ScrapingParts = 
     open System.Text.RegularExpressions
     open OddsScraper.FSharp.Common.Common
-    open OddsScraper.FSharp.Scraping.NodeExtensions
+    open NodeExtensions
 
     let BaseWebsite = "http://www.oddsportal.com"
     

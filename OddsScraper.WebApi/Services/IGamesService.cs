@@ -1,13 +1,13 @@
 ﻿using OddsScraper.WebApi.Models;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OddsScraper.WebApi.Services
 {
     public interface IGamesService
     {
-        GameDto GetGame(string gameLink, string user);
-        IEnumerable<GameDto> GetGames(double timeSpan, string user);
-        IEnumerable<GameDto> GetDaysGamesInfo(string user);
-        IEnumerable<GameDto> GetGameInfos(double timeSpan, string user);
+        Task<GameDto> GetGameAsync(string gameLink, string user);
+        GameDto[] GetGames(double timeSpan, string user);
+        Task<GameDto[]> GetDaysGamesInfoAsync(string user);
+        Task<GameDto[]> GetGameInfosAsync(double timeSpan, string user);
     }
 }

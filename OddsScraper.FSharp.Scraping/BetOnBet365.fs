@@ -4,6 +4,7 @@ module BetOnBet365 =
     open canopy
     open canopy.classic
     open OddsScraper.FSharp.Common
+    open OddsScraper.FSharp.CommonScraping
     open Common
     open OptionExtension
     open CanopyExtensions

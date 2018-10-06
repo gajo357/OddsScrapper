@@ -91,7 +91,7 @@ namespace OddsScraper.Calculator
         private double CalculateAmount(double meanOdd, double bookerOdd) 
             => DownloadHelper.CalculateAmount(_margin, _balance, meanOdd, bookerOdd);
 
-        public static GameViewModel Create(FSharp.Scraping.FutureGamesDownload.Game model)
+        public static GameViewModel Create(FSharp.CommonScraping.FutureGamesDownload.Game model)
         {
             return new GameViewModel
             {

@@ -11,7 +11,7 @@ namespace OddsScraper.Calculator
         {
             base.OnStartup(e);
 
-            FSharp.Scraping.CanopyExtensions.initialize();
+            FSharp.CommonScraping.CanopyExtensions.initialize();
         }
     }
 }

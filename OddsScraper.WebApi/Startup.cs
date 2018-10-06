@@ -22,6 +22,7 @@ namespace OddsScraper.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
 
+            services.AddSingleton<FSharp.CommonScraping.Downloader.IDownloader, FSharp.CommonScraping.Downloader.Downloader>();
             services.AddSingleton<IUserLoginService, UserLoginService>();
             services.AddScoped<IGamesService, GamesService>();
         }

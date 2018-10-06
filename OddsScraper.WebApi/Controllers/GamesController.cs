@@ -3,7 +3,7 @@ using OddsScraper.WebApi.Models;
 using OddsScraper.WebApi.Services;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.Threading.Tasks;
 
 namespace OddsScraper.WebApi.Controllers
 {
@@ -18,15 +18,17 @@ namespace OddsScraper.WebApi.Controllers
             GamesService = gamesService;
         }
 
-        // GET api/games/games
+        // GET api/games/games?timeSpan=30
         [HttpGet]
-        public ActionResult<List<GameDto>> Games([FromQuery]double? timeSpan, [FromQuery]string user)
+        public async Task<ActionResult<List<GameDto>>> Games([FromQuery]double? timeSpan, [FromHeader]string authorization)
         {
-            var result = (timeSpan.HasValue ?
-                GamesService.GetGameInfos(timeSpan.Value, user) :
-                GamesService.GetDaysGamesInfo(user)).ToArray();
+            var resultTask = timeSpan.HasValue && timeSpan > 0 ?
+                GamesService.GetGameInfosAsync(timeSpan.Value, authorization) :
+                GamesService.GetDaysGamesInfoAsync(authorization);
+
+            var result = await resultTask;
             
-            if (result.Any())
+            if (result != null)
                 return Ok(result);
 
             return BadRequest();
@@ -34,9 +36,9 @@ namespace OddsScraper.WebApi.Controllers
 
         // POST api/games/singleGame
         [HttpPost(Name = "singleGame")]
-        public ActionResult<GameDto> SingleGame([FromBody]GameLink gameLink)
+        public async Task<ActionResult<GameDto>> SingleGame([FromBody]GameLink gameLink, [FromHeader]string authorization)
         {
-            var result = GamesService.GetGame(gameLink.Link, gameLink.User);
+            var result = await GamesService.GetGameAsync(gameLink.Link, authorization);
             if (result != null)
                 return Ok(result);
 
@@ -47,8 +49,6 @@ namespace OddsScraper.WebApi.Controllers
         {
             [Required]
             public string Link { get; set; }
-            [Required]
-            public string User { get; set; }
         }
     }
 }

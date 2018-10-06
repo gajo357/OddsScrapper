@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OddsScraper.WebApi.Models;
 using OddsScraper.WebApi.Services;
+using System.Threading.Tasks;
 
 namespace OddsScraper.WebApi.Controllers
 {
@@ -19,6 +20,7 @@ namespace OddsScraper.WebApi.Controllers
         public ActionResult<bool> Get(string user) => LoginService.IsUserLoggedIn(user);
 
         [HttpPost]
-        public ActionResult<string> Post([FromBody] UserDto user) => LoginService.LogIn(user.Username, user.Password);
+        public async Task<ActionResult<string>> Post([FromBody] UserDto user) 
+            => await LoginService.LogInAsync(user.Username, user.Password);
     }
 }

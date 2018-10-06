@@ -9,7 +9,7 @@ namespace OddsScraper.WebApi
     {
         public static void Main(string[] args)
         {
-            FSharp.Scraping.CanopyExtensions.initialize();
+            FSharp.CommonScraping.CanopyExtensions.initialize();
 
             CreateWebHostBuilder(args).Build().Run();
         }

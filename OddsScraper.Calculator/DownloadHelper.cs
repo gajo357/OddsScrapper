@@ -1,28 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using OddsScraper.FSharp.CommonScraping;
 
 namespace OddsScraper.Calculator
 {
     public static class DownloadHelper
     {
-        public static void LogIn(string username, string password) 
-            => FSharp.Scraping.CanopyExtensions.loginToOddsPortalWithData(username, password);
+        private static Downloader.IDownloader Downloader { get; } = new Downloader.Downloader();
 
-        public static IEnumerable<GameViewModel> GetGames(double timeSpan)
-            => FSharp.Scraping.FutureGamesDownload
-                .downloadGames(DateTime.Now, timeSpan)
-                .Select(GameViewModel.Create);
+        public static async Task<bool> LogIn(string username, string password) 
+            => await Downloader.LogIn(username, password);
+
+        public async static Task<IEnumerable<GameViewModel>> GetGames(double? timeSpan)
+        {
+            var gamesTask = timeSpan.HasValue ? 
+                Downloader.DownloadGameInfos(DateTime.Now, timeSpan.Value) :
+                Downloader.DownloadAllDayGameInfos(DateTime.Now);
+
+            var games = await gamesTask;
+            return games.Select(GameViewModel.Create);
+        }
 
         public static double CalculateAmount(double margin, double balance, double meanOdd, double bookerOdd)
             => FSharp.Common.BettingCalculations.getAmountToBet(margin, balance, meanOdd, bookerOdd);
 
-        public static FSharp.Scraping.FutureGamesDownload.Game GetGame(string link)
-            => FSharp.Scraping.FutureGamesDownload.readGameFromLink(link);
+        public static async Task<FutureGamesDownload.Game> GetGame(string link)
+            => await Downloader.ReadGameFromLink(link);
 
-        public static void RefreashData(GameViewModel viewModel)
+        public static async Task RefreashData(GameViewModel viewModel)
         {
-            var model = GetGame(viewModel.GameLink);
+            var model = await GetGame(viewModel.GameLink);
 
             viewModel.HomeMeanOdd = model.HomeMeanOdd;
             viewModel.DrawMeanOdd = model.DrawMeanOdd;
