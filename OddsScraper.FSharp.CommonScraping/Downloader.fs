@@ -7,6 +7,16 @@ module Downloader =
     open System
     open System.Threading.Tasks
 
+    let DownloadFromWidget path =
+        async {
+            let! games = widgetMeanGamesAsync()
+            let games = games |> Seq.toArray
+            return
+                getLeaguesFromPath path
+                |> Seq.collect (fun s -> 
+                    games |> Seq.filter (fun g -> isGameLinkFromAnyLeague s g.GameLink))
+        } |> Async.StartAsTask
+
     type IDownloader =
         abstract member DownloadFromWidget: unit -> Task<Game seq>
         abstract member DownloadGameInfos: DateTime -> Task<Game seq>
@@ -21,15 +31,7 @@ module Downloader =
         }
 
         interface IDownloader with 
-            member __.DownloadFromWidget() =
-                async {
-                    let! games = widgetMeanGamesAsync()
-                    let games = games |> Seq.toArray
-                    return
-                        getLeagues()
-                        |> Seq.collect (fun s -> 
-                            games |> Seq.filter (fun g -> isGameLinkFromAnyLeague s g.GameLink))
-                } |> Async.StartAsTask
+            member __.DownloadFromWidget() = DownloadFromWidget ""
 
             member __.DownloadGameInfos date =
                 async {

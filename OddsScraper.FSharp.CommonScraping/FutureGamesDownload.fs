@@ -170,8 +170,8 @@ module FutureGamesDownload =
     let downloadFutureGames = downloadFutureGamesWithTrans downloadGamesForSport
     let downloadFutureGameInfos = downloadFutureGamesWithTrans downloadGameInfosForSport
 
-    let getLeagues() =
-        System.IO.File.ReadLines("goodLeagues.csv")
+    let getLeaguesFromPath path =
+        System.IO.File.ReadLines(path + "goodLeagues.csv")
         |> Seq.map (Common.Split ",")
         |> Seq.map (fun parts -> (parts.[0], parts.[1], parts.[2]))
         |> Seq.groupBy (fun (s,_,_) -> s)
@@ -180,6 +180,8 @@ module FutureGamesDownload =
                 Sport = sport;
                 Leagues = leagues |> Seq.map (fun (_, c, l) -> { Country = c; League = l}) |> Seq.toList
             })
+
+    let getLeagues() = getLeaguesFromPath("")
     
     let downloadGames date = 
         downloadFutureGames date (getLeagues())

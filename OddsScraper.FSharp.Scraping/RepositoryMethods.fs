@@ -53,7 +53,7 @@ module RepositoryMethods =
         async {
             let! booker = GetOrCreateBookkeeperAsync repository odd.Name
         
-            let (homeOdd, drawOdd, awayOdd) = convertOddsListTo1x2 odd
+            let (homeOdd, drawOdd, awayOdd) = convertOddsTo1x2 odd
         
             let gameOdd = {
                 Game = gameId

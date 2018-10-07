@@ -19,7 +19,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OddsScraper.Calculator", "O
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OddsScraper.WebApi", "OddsScraper.WebApi\OddsScraper.WebApi.csproj", "{139CD21F-5D03-43A7-BAF4-99812176FC25}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OddsScraper.FSharp.CommonScraping", "OddsScraper.FSharp.CommonScraping\OddsScraper.FSharp.CommonScraping.fsproj", "{993B56FA-FB5C-49A5-9943-2C9ABF6C3319}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "OddsScraper.FSharp.CommonScraping", "OddsScraper.FSharp.CommonScraping\OddsScraper.FSharp.CommonScraping.fsproj", "{993B56FA-FB5C-49A5-9943-2C9ABF6C3319}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AzureFunctionsApi", "AzureFunctionsApi\AzureFunctionsApi.csproj", "{E9D61559-B6F6-4F00-80F0-8150CB19F14F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,18 @@ Global
 		{993B56FA-FB5C-49A5-9943-2C9ABF6C3319}.Release|x64.Build.0 = Release|Any CPU
 		{993B56FA-FB5C-49A5-9943-2C9ABF6C3319}.Release|x86.ActiveCfg = Release|Any CPU
 		{993B56FA-FB5C-49A5-9943-2C9ABF6C3319}.Release|x86.Build.0 = Release|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Debug|x64.Build.0 = Debug|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Debug|x86.Build.0 = Debug|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Release|x64.ActiveCfg = Release|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Release|x64.Build.0 = Release|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Release|x86.ActiveCfg = Release|Any CPU
+		{E9D61559-B6F6-4F00-80F0-8150CB19F14F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
