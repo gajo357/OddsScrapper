@@ -118,7 +118,7 @@
     </Reference>
     <Reference Include="FSharp.Core" />
     <Reference Include="FSharp.Data">
-      <HintPath>..\packages\FSharp.Data.3.0.0-beta\lib\net45\FSharp.Data.dll</HintPath>
+      <HintPath>..\packages\FSharp.Data.3.0.0\lib\net45\FSharp.Data.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />

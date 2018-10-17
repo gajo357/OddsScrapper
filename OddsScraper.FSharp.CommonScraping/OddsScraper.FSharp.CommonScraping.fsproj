@@ -22,11 +22,15 @@
 
   <ItemGroup>
     <PackageReference Include="canopy" Version="2.1.0" />
-    <PackageReference Include="FSharp.Data" Version="3.0.0-beta" />
+    <PackageReference Include="FSharp.Data" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\OddsScraper.FSharp.Common\OddsScraper.FSharp.Common.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
 </Project>
