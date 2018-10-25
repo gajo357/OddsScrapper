@@ -14,7 +14,7 @@ let simpleMonteCarlo simulate nRuns nSamples data =
 let shuffleMonteCarlo simulate nRuns nSamples data = 
     monteCarlo shuffleSample simulate nRuns nSamples data
 
-let seqiToFloat input = input |> Seq.map(fun i -> (i, float i))
+// let seqiToFloat input = input |> Seq.map(fun i -> (i, float i))
 
-simpleMonteCarlo seqiToFloat 5 10 [1..1000] |> Seq.toList
-shuffleMonteCarlo seqiToFloat 5 10 [1..1000] |> Seq.toList
+// simpleMonteCarlo seqiToFloat 5 10 [1..1000] |> Seq.toList
+// shuffleMonteCarlo seqiToFloat 5 10 [1..1000] |> Seq.toList
