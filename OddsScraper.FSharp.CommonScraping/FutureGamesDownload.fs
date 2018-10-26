@@ -75,23 +75,6 @@ module FutureGamesDownload =
         (odds |> meanFromFunc (fun (h,_,_) -> h),
             odds |> meanFromFunc (fun (_,d,_) -> d),
             odds |> meanFromFunc (fun (_,_,a) -> a))
-
-    let makeBet myOdd bookerOdd bet =
-        let k = kelly myOdd bookerOdd 
-        if (k > 0. && k < 0.03) then
-            Some (bet, k, bookerOdd)
-        else
-            None
-
-    let betBind myOdd bookerOdd bet result =
-        match result with
-        | Some _ -> result
-        | _ -> makeBet myOdd bookerOdd bet
-
-    let getBet (homeOdd, drawOdd, awayOdd) (homeMeanOdd, drawMeanOdd, awayMeanOdd) =
-        makeBet homeMeanOdd homeOdd Home
-        |> betBind drawMeanOdd drawOdd Draw
-        |> betBind awayMeanOdd awayOdd Away
     
     let readGame(gameLink, gameHtml) =
         option {
@@ -201,8 +184,8 @@ module FutureGamesDownload =
 
 
     let dateFromToday daysFromToday = System.DateTime.Now.AddDays(daysFromToday)
-    let downloadTomorrowsGames()= downloadGames (dateFromToday 1.)
-    let downloadTodaysGames()= downloadGames (dateFromToday 0.)
+    let downloadTomorrowsGames() = downloadGames (dateFromToday 1.)
+    let downloadTodaysGames() = downloadGames (dateFromToday 0.)
     
     let getGamesToBet() =
         loginToOddsPortal()
@@ -220,4 +203,3 @@ module FutureGamesDownload =
         getGamesToBet()
         |> Seq.map gameToString
         |> (fun l -> System.IO.File.WriteAllLines("../gamesToBet.txt", l))
-        

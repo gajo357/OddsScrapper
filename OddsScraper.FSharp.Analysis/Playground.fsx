@@ -11,7 +11,11 @@ open Playground.Engine
 open Playground.MonteCarlo
 open System
 
-let betAmount = 500.
+let betAmount = 500.<dkk>
+let bestMargin = simpleMargin 0.02<pct>
+let margins = 
+        [0.02; 0.25; 0.03]
+        |> List.map (toPct >> simpleMargin)
 let bookies = ["bwin"; "bet365"; "Betfair"; "888sport"; "Unibet"]
 
 [2005..2018]
@@ -21,7 +25,7 @@ let bookies = ["bwin"; "bet365"; "Betfair"; "888sport"; "Unibet"]
         |> Seq.filter (getSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
-        |> betAll 0.02 betAmount 
+        |> betAll bestMargin betAmount 
         |> (fun b -> b/betAmount)))
 |> Seq.toArray
 
@@ -37,7 +41,7 @@ let printAnalysis margin g =
         |> Seq.iter (fun (season, result) -> printfn "%A - %f" season result)
         )
 let printMonthAnalysis margin g = 
-    betByMonthMargin "bet365" g margin betAmount
+    betByMonthMargin "bet365" g betAmount margin 
     |> snd
     |> Seq.iter (fun (month, seasons) -> printfn "%A - %f" month seasons)
 
@@ -63,18 +67,16 @@ let plotMonthlyAgainst margin gs =
     ).WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left)
 
 [romGames; czGames; welsGames]
-|> Seq.map (plotMonthAnalysis [0.02;0.025;0.03]) |> Seq.iter (fun p -> p.ShowChart() |> ignore)
+|> Seq.map (plotMonthAnalysis margins) |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
 [eng2Games]
-|> Seq.map (plotSeasonAnalysis [0.02;0.025;0.03])
+|> Seq.map (plotSeasonAnalysis margins)
 |> Seq.iter (fun p -> p.ShowChart() |> ignore)
 
-printAnalysis 0.02 (engGames |> snd)
-printMonthAnalysis 0.02 (goodLeagues)
+printAnalysis bestMargin (engGames |> snd)
+printMonthAnalysis bestMargin (goodLeagues)
 
-plotMonthlyAgainst 0.02 [goodLeagues; goodLeagues |> (List.append (eng2Games|> snd))]
-
-let dailySim g = daily 0.02 "bet365" betAmount g |> Seq.ofList
+plotMonthlyAgainst bestMargin [goodLeagues; goodLeagues |> (List.append (eng2Games|> snd))]
 
 let execGroup groups = 
     groups
@@ -85,30 +87,39 @@ let groupBySeason = groupByYear >> execGroup
 
 let groupedBySeason = goodLeagues |> groupBySeason
 
-let plotBySeason noSamples (season, games) =
+let dailySim margin g = 
+        daily margin "bet365" betAmount g |> Seq.ofList
+        |> Seq.map (fun (r, m) -> (r, float m))
+let plotBySeason margin noSamples (season, games) =
     Chart.Combine(
             games
-            |> simpleMonteCarlo dailySim 5 noSamples
+            |> simpleMonteCarlo (dailySim margin) 10 noSamples
             |> Seq.map (fun g -> Chart.Line(g))
             |> Seq.toList)
         .WithLegend(Alignment = Drawing.StringAlignment.Near, Docking = ChartTypes.Docking.Left)
         .WithTitle(Text = sprintf "%A" season)
         .ShowChart() |> ignore
 
-let plotSeason season =
-    groupedBySeason 
-    |> List.find(fun (s, _) -> s = season)
-    |> plotBySeason (6*30*5)
+let plotSeason margin noSamples season =
+    List.find(fun (s, _) -> s = season)
+    >> plotBySeason margin noSamples
 
-let simSingle noSamples games =
+let simSingle margin noSamples games =
     games
     |> snd
     |> groupBySeason
-    |> List.iter (plotBySeason noSamples)
+    |> List.iter (plotBySeason margin noSamples)
 
-simSingle 50 elGames
+let complexMargin k odd = 
+    if (odd < 3.<euOdd>) then simpleMargin 0.0<pct> k odd
+    else if (odd < 10.<euOdd>) then simpleMargin 0.04<pct> k odd
+    else simpleMargin 0.05<pct> k odd
 
-groupedBySeason |> List.iter (plotBySeason (6*30*5))
+simSingle complexMargin 200 serGames
 
-System.Threading.Tasks.Parallel.ForEach(groupedBySeason, plotBySeason (6*30*5))
+groupedBySeason |> List.iter (plotBySeason complexMargin (6*30*5))
+groupedBySeason |> plotSeason bestMargin (6*30*5) 2017
+groupedBySeason |> plotSeason complexMargin (6*30*5) 2017
 
+System.Threading.Tasks.Parallel.ForEach(groupedBySeason, 
+        plotBySeason complexMargin (6*30*5))

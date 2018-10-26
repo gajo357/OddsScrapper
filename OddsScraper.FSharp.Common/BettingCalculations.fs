@@ -19,11 +19,24 @@ module BettingCalculations =
         else    
             (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
 
+    let complexMargin k odd = 
+        if (odd < 3.) then false
+        else if (odd < 10.) then k <= 0.04
+        else k <= 0.05
+
     let moneyToBet kelly amount =
         let m = kelly * amount
         if m < 2.0 then 2.0
         else m
+    
+    let invert = (/) 1.
 
+    let normalizePct h d a =
+        let whole = h + d + a
+        (h/whole, d/whole, a/whole)
+    let normalizeOdds h d a =
+        let (h, d, a) = normalizePct (invert h) (invert d) (invert a)
+        ((invert h), (invert d), (invert a))
     
     let getAmountToBet maxPercent amount myOdd bookerOdd =
         let k = kelly myOdd bookerOdd 

@@ -9,23 +9,20 @@ type GamesCsv = CsvProvider<"../OddsScraper.Analysis/soccer_england_premier-leag
 
 let meanBookies = ["bwin"; "Pinnacle"; "William Hill"]
 
-let mean (values: float seq) = 
-    if (values |> Seq.isEmpty) then
-        1.
-    else 
-        values |> Seq.average
-let meanFromFunc propFunc = (Seq.map propFunc) >> mean
-let meanFromSecond propFunc = snd >> meanFromFunc propFunc
 let getMeanOdds odds =
     {
-        HomeOdd = odds |> meanFromFunc (fun a -> a.HomeOdd)
-        DrawOdd = odds |> meanFromFunc (fun a -> a.DrawOdd) 
-        AwayOdd = odds |> meanFromFunc (fun a -> a.AwayOdd)
+        HomeOdd = odds |> meanFromFunc (fun a -> float a.HomeOdd) |> toEuOdd
+        DrawOdd = odds |> meanFromFunc (fun a -> float a.DrawOdd) |> toEuOdd
+        AwayOdd = odds |> meanFromFunc (fun a -> float a.AwayOdd) |> toEuOdd
         Name = ""
     }
-let gameFromData (home, away, date, hScore, aScore, season) = { HomeTeam = home; AwayTeam = away; Date = date; HomeScore = hScore; AwayScore = aScore; Season = season }
+let gameFromData (home, away, date, hScore, aScore, season) = 
+    { HomeTeam = home; AwayTeam = away; 
+        Date = date; Season = season;
+        HomeScore = hScore; AwayScore = aScore; 
+        }
 
-type Games(path:string, year:int) =
+type Games(path:string) =
     let gamesCsv = GamesCsv.Load(path)
 
     member __.GetGames() =
@@ -34,15 +31,26 @@ type Games(path:string, year:int) =
         |> Seq.map (fun (gameData, games) -> 
             {
                 Game = gameData |> gameFromData
-                Odds = games |> Seq.map (fun g -> { HomeOdd = float g.HomeOdd; DrawOdd = float g.DrawOdd; AwayOdd = float g.AwayOdd; Name = g.Bookmaker }) |> Seq.toList
+                Odds = games |> Seq.map (fun g -> 
+                    { 
+                        HomeOdd = g.HomeOdd |> float |> toEuOdd;
+                        DrawOdd = g.DrawOdd |> float |> toEuOdd; 
+                        AwayOdd = g.AwayOdd |> float |> toEuOdd; 
+                        Name = g.Bookmaker }
+                    |> normalizeGameOdds
+                        ) |> Seq.toList
                 Mean = 
                     let b = games |> Seq.filter (fun o -> meanBookies |> Seq.contains o.Bookmaker)
-                    { HomeOdd = b |> meanFromFunc (fun g -> float g.HomeOdd); DrawOdd = b |> meanFromFunc (fun g -> float g.DrawOdd); AwayOdd = b |> meanFromFunc (fun g -> float g.AwayOdd); Name = "" }
+                    { HomeOdd = b |> meanFromFunc (fun g -> float g.HomeOdd) |> toEuOdd; 
+                        DrawOdd = b |> meanFromFunc (fun g -> float g.DrawOdd) |> toEuOdd; 
+                        AwayOdd = b |> meanFromFunc (fun g -> float g.AwayOdd) |> toEuOdd; 
+                        Name = "" }
+                    |> normalizeGameOdds
             })
 
 let getGames league =
     (league,
-        Games(@"..\OddsScraper.Analysis\" + league + ".csv", 2010).GetGames() 
+        Games(@"..\OddsScraper.Analysis\" + league + ".csv").GetGames() 
         |> Seq.toList)
 
 // let argGames = getGames "soccer_argentina_superliga"

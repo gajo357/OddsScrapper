@@ -1,24 +1,59 @@
 module Playground.Engine
 
+[<Measure>] type dkk
+[<Measure>] type pct
+[<Measure>] type euOdd
+
 type Game = { HomeTeam: string; AwayTeam: string; Date: System.DateTime; HomeScore: int; AwayScore: int; Season: string }
-type GameOdd = { HomeOdd: float; DrawOdd: float; AwayOdd: float; Name: string }
+type GameOdd = { HomeOdd: float<euOdd>; DrawOdd: float<euOdd>; AwayOdd: float<euOdd>; Name: string }
 type GroupedGame = { Game: Game; Odds: GameOdd list; Mean: GameOdd }
+
+let mean (values: float seq) = 
+    if (values |> Seq.isEmpty) then
+        1.
+    else 
+        values |> Seq.average
+let meanFromFunc propFunc = (Seq.map propFunc) >> mean
+let meanFromSecond propFunc = snd >> meanFromFunc propFunc
+
+let invert = (/) 1.
+let toEuOdd = ((*) 1.<euOdd>)
+let toPct = ((*) 1.<pct>)
+let euOddToPct = float >> invert >> toPct
+let pctToEuOdd = float >> invert >> toEuOdd
+
+let normalizePct h d a =
+    let whole = h + d + a
+    (h/whole, d/whole, a/whole)
+let normalizeOdds h d a =
+    let (h, d, a) = normalizePct (euOddToPct h) (euOddToPct d) (euOddToPct a)
+    ((pctToEuOdd h), (pctToEuOdd d), (pctToEuOdd a))
+let normalizeGameOdds odds =
+    let (h, d, o) = normalizeOdds odds.HomeOdd odds.DrawOdd odds.AwayOdd
+    { odds with
+        HomeOdd = h
+        DrawOdd = d
+        AwayOdd = o
+    }
 
 let round (digits: int) (n: float) = System.Math.Round(n, digits)
 let roundF2 = round 2
+let roundMoney m = m |> float |> roundF2 |> (*) 1.<dkk>
 
 let kelly myOdd bookerOdd = 
-    if (myOdd <= 0.) then 0.
-    else if (bookerOdd = 1.) then 0.
-    else (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
+    if (myOdd <= 0.<euOdd>) then 0.<pct>
+    else if (bookerOdd = 1.<euOdd>) then 0.<pct>
+    else (bookerOdd/myOdd - 1.) / (bookerOdd - 1.<euOdd>)*1.<pct*euOdd>
 
+let simpleMargin (margin: float<pct>) k (odd: float<euOdd>) = 
+    k <= margin
 let moneyToBet margin myOdd bookerOdd amount =
     let k = kelly myOdd bookerOdd
-    if (k <= 0.0 || k > margin) then None
-    else 
-        let m = k * amount
-        if m < 2.0 then Some 2.0
-        else Some (m |> roundF2)
+    if (k > 0.0<pct> && margin k myOdd) then
+        let m = k * amount * 1.</pct>
+        if m < 2.0<dkk> then Some 2.0<dkk>
+        else Some (m |> roundMoney)
+    else None
 
 let balanceChange margin win myOdd bookerOdd amount input =
     match input with
@@ -27,7 +62,7 @@ let balanceChange margin win myOdd bookerOdd amount input =
         match moneyToBet margin myOdd bookerOdd amount with
         | Some money -> 
             if (win) then
-                ((bookerOdd - 1.)*money |> roundF2, money, true)
+                ((float bookerOdd - 1.)*money |> roundMoney, money, true)
             else 
                 (-money, money, true)
         | None -> 
@@ -41,14 +76,14 @@ let awayWin = winner (<)
 let getAmountToBet margin g meanOdds gameOdds amount =
     match gameOdds with
     | Some go ->
-        (0., 0., false)
+        (0.<dkk>, 0.<dkk>, false)
         |> balanceChange margin (homeWin g) meanOdds.HomeOdd go.HomeOdd amount
         |> balanceChange margin (draw g) meanOdds.DrawOdd go.DrawOdd amount
         |> balanceChange margin (awayWin g) meanOdds.AwayOdd go.AwayOdd amount
         |> (fun (winAmount, moneyBet, _) -> (winAmount, moneyBet))
-    | None -> (0., 0.)
+    | None -> (0.<dkk>, 0.<dkk>)
 
-let betGame margin (g: Game) (meanOdds: GameOdd) (gameOdds: GameOdd) (amount: float) =
+let betGame margin g meanOdds gameOdds amount =
     if (gameOdds.Name <> "bet365") then
         amount
     else
