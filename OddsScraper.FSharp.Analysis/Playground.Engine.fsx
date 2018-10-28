@@ -36,9 +36,16 @@ let normalizeGameOdds odds =
         AwayOdd = o
     }
 
+let inline median input = 
+    let sorted = input |> Seq.toArray |> Array.sort
+    let m1, m2 = 
+        let len = sorted.Length-1 |> float
+        len/2. |> floor |> int, len/2. |> ceil |> int 
+    (sorted.[m1] + sorted.[m2] |> float)/2.
+
 let round (digits: int) (n: float) = System.Math.Round(n, digits)
 let roundF2 = round 2
-let roundMoney m = m |> float |> roundF2 |> (*) 1.<dkk>
+let roundMoney m = m |> float |> round 0 |> (*) 1.<dkk>
 
 let kelly myOdd bookerOdd = 
     if (myOdd <= 0.<euOdd>) then 0.<pct>

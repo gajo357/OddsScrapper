@@ -110,16 +110,51 @@ let simSingle margin noSamples games =
     |> groupBySeason
     |> List.iter (plotBySeason margin noSamples)
 
-let complexMargin k odd = 
-    if (odd < 3.<euOdd>) then simpleMargin 0.0<pct> k odd
-    else if (odd < 10.<euOdd>) then simpleMargin 0.04<pct> k odd
-    else simpleMargin 0.05<pct> k odd
 
-simSingle complexMargin 200 serGames
+let complexMargin lower upper l m u k odd = 
+    if (odd < lower) then simpleMargin l k odd
+    else if (odd < upper) then simpleMargin m k odd
+    else simpleMargin u k odd
 
-groupedBySeason |> List.iter (plotBySeason complexMargin (6*30*5))
+let complexMargin' = complexMargin 3.<euOdd> 10.<euOdd> 0.<pct> 0.04<pct> 0.05<pct>
+
+let finalMedian games noSamples margin = 
+    games
+    |> simpleMonteCarlo (dailySim margin) 10 noSamples
+    |> Seq.map (Seq.last >> snd)
+    |> median
+
+type marginSetup = {
+        LowerOdd: float; UpperOdd: float; 
+        LowerMargin: float; MiddleMargin: float; UpperMargin: float;
+}
+let comMargins noSamples games = seq {
+    for lower in [1. .. 0.5 .. 11.] do
+        for upper in [lower + 0.5 .. 0.5 .. 11.] do
+             for l in [0. .. 0.01 .. 0.06] do
+                for m in [0.01 .. 0.01 .. 0.1] do
+                    for u in [0. .. 0.01 .. 0.06] do
+                        let margin = complexMargin (toEuOdd lower) (toEuOdd upper) (toPct l) (toPct m) (toPct u)
+                        let fm = finalMedian games noSamples margin
+                        yield fm, { LowerOdd = lower; UpperOdd = upper;
+                                LowerMargin = l; MiddleMargin = m; UpperMargin = u}
+        }
+
+let optimizeSeason season g =
+        g
+        |> List.find(fun (s, _) -> s = season)
+        |> snd
+        |> comMargins (6*30*5)
+        |> Seq.maxBy fst
+        |> snd
+
+groupedBySeason |> optimizeSeason 2017
+
+groupedBySeason |> List.iter (plotBySeason complexMargin' (6*30*5))
 groupedBySeason |> plotSeason bestMargin (6*30*5) 2017
-groupedBySeason |> plotSeason complexMargin (6*30*5) 2017
+groupedBySeason |> plotSeason complexMargin' (6*30*5) 2017
+
+simSingle complexMargin' 200 serGames
 
 System.Threading.Tasks.Parallel.ForEach(groupedBySeason, 
-        plotBySeason complexMargin (6*30*5))
+        plotBySeason complexMargin' (6*30*5))

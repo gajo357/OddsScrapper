@@ -25,6 +25,8 @@ let gameFromData (home, away, date, hScore, aScore, season) =
 type Games(path:string) =
     let gamesCsv = GamesCsv.Load(path)
 
+    let decToEuOdds = float >> toEuOdd
+
     member __.GetGames() =
         gamesCsv.Rows
         |> Seq.groupBy (fun r -> (r.HomeTeam, r.AwayTeam, r.Date, r.HomeTeamScore, r.HomeTeamScore, r.Season))
@@ -40,10 +42,15 @@ type Games(path:string) =
                     |> normalizeGameOdds
                         ) |> Seq.toList
                 Mean = 
-                    let b = games |> Seq.filter (fun o -> meanBookies |> Seq.contains o.Bookmaker)
-                    { HomeOdd = b |> meanFromFunc (fun g -> float g.HomeOdd) |> toEuOdd; 
-                        DrawOdd = b |> meanFromFunc (fun g -> float g.DrawOdd) |> toEuOdd; 
-                        AwayOdd = b |> meanFromFunc (fun g -> float g.AwayOdd) |> toEuOdd; 
+                    let odds = 
+                        games 
+                        |> Seq.filter (fun o -> meanBookies |> Seq.contains o.Bookmaker)
+                        |> Seq.map (fun o -> 
+                            normalizeOdds (decToEuOdds o.HomeOdd) (decToEuOdds  o.DrawOdd) (decToEuOdds o.AwayOdd))
+                        |> Array.ofSeq
+                    { HomeOdd = odds |> meanFromFunc (fun (h, _, _) -> float h) |> toEuOdd; 
+                        DrawOdd = odds |> meanFromFunc (fun (_, d, _) -> float d) |> toEuOdd; 
+                        AwayOdd = odds |> meanFromFunc (fun (_, _, a) -> float a) |> toEuOdd; 
                         Name = "" }
                     |> normalizeGameOdds
             })

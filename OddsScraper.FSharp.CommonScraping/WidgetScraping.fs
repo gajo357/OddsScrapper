@@ -5,7 +5,7 @@ open OddsScraper.FSharp.CommonScraping.HtmlNodeExtensions
 open OddsScraper.FSharp.CommonScraping.FutureGamesDownload
 open OddsScraper.FSharp.Common.BettingCalculations
 
-type GameProvider = HtmlProvider<"https://widgets.oddsportal.com/7812aab9e9b2e3d/s/">
+type GameProvider = HtmlProvider<"https://widgets.oddsportal.com/db03999b5cfdac1/s/">
 
 let widgetHtmlAsync link = async {
         let! page = GameProvider.AsyncLoad(link)
@@ -22,10 +22,10 @@ let widgetGamesAsync link = async {
         return getGameInfosFromTable table
     }
 
-let widgetBet365() = widgetGamesAsync "https://widgets.oddsportal.com/483cccf42fd1cbc/s/"
-let widgetBWin() = widgetGamesAsync "https://widgets.oddsportal.com/26b59f816f920d1/s/"
-let widgetPinnacle() = widgetGamesAsync "https://widgets.oddsportal.com/6f7a86682258d9f/s/"
-let widgetWilliamHill() = widgetGamesAsync "https://widgets.oddsportal.com/07b7f648e1ca55d/s/"
+let widgetBet365() = widgetGamesAsync "https://widgets.oddsportal.com/e2eb0fe27b471bb/s/"
+let widgetBWin() = widgetGamesAsync "https://widgets.oddsportal.com/5f5c1365462bfec/s/"
+let widgetPinnacle() = widgetGamesAsync "https://widgets.oddsportal.com/098c02809003dcd/s/"
+let widgetWilliamHill() = widgetGamesAsync "https://widgets.oddsportal.com/db03999b5cfdac1/s/"
 
 let calculateMeans games = 
     (games |> meanFromFunc (fun g-> g.HomeOdd),
