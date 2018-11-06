@@ -1,8 +1,11 @@
 ﻿module OddsScraper.FSharp.CommonScraping.WidgetScraping
 
 open FSharp.Data
-open OddsScraper.FSharp.CommonScraping.HtmlNodeExtensions
-open OddsScraper.FSharp.CommonScraping.FutureGamesDownload
+open OddsScraper.FSharp.CommonScraping
+open HtmlNodeExtensions
+open FutureGamesDownload
+open Models
+open OddsManipulation
 open OddsScraper.FSharp.Common.BettingCalculations
 
 type GameProvider = HtmlProvider<"https://widgets.oddsportal.com/db03999b5cfdac1/s/">
@@ -27,18 +30,17 @@ let widgetBWin() = widgetGamesAsync "https://widgets.oddsportal.com/5f5c1365462b
 let widgetPinnacle() = widgetGamesAsync "https://widgets.oddsportal.com/098c02809003dcd/s/"
 let widgetWilliamHill() = widgetGamesAsync "https://widgets.oddsportal.com/db03999b5cfdac1/s/"
 
-let calculateMeans games = 
-    (games |> meanFromFunc (fun g-> g.HomeOdd),
-        games |> meanFromFunc (fun g-> g.DrawOdd),
-        games |> meanFromFunc (fun g-> g.AwayOdd))
+let calculateMeans odds = 
+    { Home = odds |> meanFromFunc (fun g-> g.Home);
+      Draw = odds |> meanFromFunc (fun g-> g.Draw);
+      Away = odds |> meanFromFunc (fun g-> g.Away) }
 
 let groupGamesWithMean games =
     games
     |> Seq.groupBy (fun g -> g.GameLink)
     |> Seq.map (fun (_, gs) -> 
-        let gs = gs |> Seq.toArray
-        let (home, draw, away) = calculateMeans gs
-        { (gs |> Seq.head) with HomeMeanOdd = home; DrawMeanOdd = draw; AwayMeanOdd = away}
+        let means = gs |> Seq.map (oddsFromGame >> normalizeGameOdds) |> Seq.toArray |> calculateMeans
+        { (gs |> Seq.head) with HomeMeanOdd = means.Home; DrawMeanOdd = means.Draw; AwayMeanOdd = means.Away}
         )
 
 let widgetMeanGamesAsync() = async {
@@ -55,7 +57,7 @@ let widgetMeanGamesAsync() = async {
         |> Seq.map (fun meanGame -> 
             let bg = bet365Games |> Seq.tryFind(fun g -> g.GameLink = meanGame.GameLink)
             match bg with
-            | None -> meanGame
+            | None -> { meanGame with HomeOdd = 0.; DrawOdd = 0.; AwayOdd = 0. }    // can't find bet365 odds for this game
             | Some g -> { meanGame with HomeOdd = g.HomeOdd; DrawOdd = g.DrawOdd; AwayOdd = g.AwayOdd }
         )
 }

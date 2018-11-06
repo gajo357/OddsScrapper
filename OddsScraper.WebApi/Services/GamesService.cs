@@ -26,7 +26,7 @@ namespace OddsScraper.WebApi.Services
             return games.Select(GameDto.Create).ToArray();
         }
 
-        private async Task<IEnumerable<FSharp.CommonScraping.FutureGamesDownload.Game>> GetGameInfoModelsAsync(int? gamesCount)
+        private async Task<IEnumerable<FSharp.CommonScraping.Models.Game>> GetGameInfoModelsAsync(int? gamesCount)
         {
             if (!gamesCount.HasValue || gamesCount <= 0)
             {

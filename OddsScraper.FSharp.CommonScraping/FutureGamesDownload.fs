@@ -10,18 +10,8 @@ module FutureGamesDownload =
     open OptionExtension
     open BettingCalculations
     open FSharp.Core
+    open Models
 
-    type Bet = Home | Draw | Away
-    type LeagueInfo = { Country: string; League: string }
-    type SportInfo = { Sport: string; Leagues: LeagueInfo list }
-    type Game = 
-        { 
-            HomeTeam: string; AwayTeam: string; 
-            Date: System.DateTime; GameLink: string 
-            Sport: string; Country: string; League: string 
-            HomeMeanOdd: float; DrawMeanOdd: float; AwayMeanOdd: float
-            HomeOdd: float; DrawOdd: float; AwayOdd: float
-        }
     let emptyGame = {
         HomeTeam = ""; AwayTeam = ""; Date = System.DateTime.MinValue;
         GameLink = ""; Sport = ""; Country = ""; League = "";

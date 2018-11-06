@@ -14,6 +14,7 @@
     <Compile Include="ScrapingParts.fs" />
     <Compile Include="GamePageReading.fs" />
     <Compile Include="CanopyExtensions.fs" />
+    <Compile Include="Models.fs" />
     <Compile Include="OddsManipulation.fs" />
     <Compile Include="FutureGamesDownload.fs" />
     <Compile Include="WidgetScraping.fs" />

@@ -121,19 +121,19 @@ let complexMargin' = complexMargin 3.<euOdd> 10.<euOdd> 0.<pct> 0.04<pct> 0.05<p
 let finalMedian games noSamples margin = 
     games
     |> simpleMonteCarlo (dailySim margin) 10 noSamples
-    |> Seq.map (Seq.last >> snd)
+    |> Seq.map ((Seq.sortBy fst) >> Seq.last >> snd)
     |> median
 
 type marginSetup = {
         LowerOdd: float; UpperOdd: float; 
         LowerMargin: float; MiddleMargin: float; UpperMargin: float;
 }
-let comMargins noSamples games = seq {
-    for lower in [1. .. 0.5 .. 11.] do
-        for upper in [lower + 0.5 .. 0.5 .. 11.] do
-             for l in [0. .. 0.01 .. 0.06] do
-                for m in [0.01 .. 0.01 .. 0.1] do
-                    for u in [0. .. 0.01 .. 0.06] do
+let optimize noSamples games = seq {
+    for lower in [1. .. 1. .. 11.] do
+        for upper in [lower + 1. .. 1. .. 11.] do
+             for l in [0. .. 0.02 .. 0.06] do
+                for m in [0.0 .. 0.02 .. 0.1] do
+                    for u in [0. .. 0.02 .. 0.06] do
                         let margin = complexMargin (toEuOdd lower) (toEuOdd upper) (toPct l) (toPct m) (toPct u)
                         let fm = finalMedian games noSamples margin
                         yield fm, { LowerOdd = lower; UpperOdd = upper;
@@ -144,7 +144,7 @@ let optimizeSeason season g =
         g
         |> List.find(fun (s, _) -> s = season)
         |> snd
-        |> comMargins (6*30*5)
+        |> optimize (6*30*5)
         |> Seq.maxBy fst
         |> snd
 
@@ -153,6 +153,7 @@ groupedBySeason |> optimizeSeason 2017
 groupedBySeason |> List.iter (plotBySeason complexMargin' (6*30*5))
 groupedBySeason |> plotSeason bestMargin (6*30*5) 2017
 groupedBySeason |> plotSeason complexMargin' (6*30*5) 2017
+groupedBySeason |> plotSeason (complexMargin 1.5<euOdd> 2.<euOdd> 0.02<pct> 0.03<pct> 0.06<pct>) (6*30*5) 2017
 
 simSingle complexMargin' 200 serGames
 

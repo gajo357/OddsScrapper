@@ -27,7 +27,7 @@ namespace OddsScraper.Calculator
         public static double CalculateAmount(double margin, double balance, double meanOdd, double bookerOdd)
             => FSharp.Common.BettingCalculations.getAmountToBet(margin, balance, meanOdd, bookerOdd);
 
-        public static async Task<FutureGamesDownload.Game> GetGame(string link)
+        public static async Task<Models.Game> GetGame(string link)
             => await Downloader.ReadGameFromLink(link);
 
         public static async Task RefreashData(GameViewModel viewModel)

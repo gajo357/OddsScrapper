@@ -1,6 +1,7 @@
 ﻿namespace OddsScraper.FSharp.CommonScraping
 module Downloader =
     open OddsScraper.FSharp.CommonScraping
+    open Models
     open CanopyAgent
     open FutureGamesDownload
     open WidgetScraping

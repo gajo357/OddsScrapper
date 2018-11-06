@@ -64,7 +64,7 @@ namespace AzureFunctionsApi
             public double Away { get; set; }
         }
 
-        private static OddsScraper.FSharp.CommonScraping.OddsManipulation.Odds OddsToOdds(Odds odds) 
-            => new OddsScraper.FSharp.CommonScraping.OddsManipulation.Odds(odds.Home, odds.Draw, odds.Away);
+        private static OddsScraper.FSharp.CommonScraping.Models.Odds OddsToOdds(Odds odds) 
+            => new OddsScraper.FSharp.CommonScraping.Models.Odds(odds.Home, odds.Draw, odds.Away);
     }
 }

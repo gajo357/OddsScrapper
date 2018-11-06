@@ -1,8 +1,7 @@
 ﻿module OddsScraper.FSharp.CommonScraping.OddsManipulation
 
 open OddsScraper.FSharp.Common.BettingCalculations
-
-type Odds = { Home: float; Draw: float; Away: float }
+open OddsScraper.FSharp.CommonScraping.Models
 
 let complexMargin k odd = 
     if (odd < 3.) then false
