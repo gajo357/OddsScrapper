@@ -11,8 +11,8 @@ type Game =
         HomeTeam: string; AwayTeam: string; 
         Date: System.DateTime; GameLink: string 
         Sport: string; Country: string; League: string 
-        HomeMeanOdd: float; DrawMeanOdd: float; AwayMeanOdd: float
-        HomeOdd: float; DrawOdd: float; AwayOdd: float
+        MeanOdds: Odds
+        Odds: Odds
     }
 
-let oddsFromGame g = { Home = g.HomeOdd; Draw = g.DrawOdd; Away = g.AwayOdd }
+let oddsFromGame g = g.Odds

@@ -16,7 +16,7 @@ let normalizeGameOdds odds =
         Away = o
     }
 
-let moneyToBet margin myOdd bookerOdd amount =
+let moneyToBet kelly margin myOdd bookerOdd amount =
     let k = kelly myOdd bookerOdd
     if (k > 0.0 && margin k myOdd) then
         let m = k * amount * 1.
@@ -24,7 +24,7 @@ let moneyToBet margin myOdd bookerOdd amount =
         else System.Math.Round(m, 2)
     else 0.0
 
-let moneyWithComplex = moneyToBet complexMargin
+let moneyWithComplex = moneyToBet kelly complexMargin
 
 let amountsToBet myOdds bookerOdds amount = 
     let myOdds = normalizeGameOdds myOdds

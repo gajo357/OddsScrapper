@@ -104,13 +104,13 @@ namespace OddsScraper.Calculator
 
                 Date = model.Date,
 
-                HomeMeanOdd = model.HomeMeanOdd,
-                DrawMeanOdd = model.DrawMeanOdd,
-                AwayMeanOdd = model.AwayMeanOdd,
+                HomeMeanOdd = model.MeanOdds.Home,
+                DrawMeanOdd = model.MeanOdds.Draw,
+                AwayMeanOdd = model.MeanOdds.Away,
 
-                HomeOdd = model.HomeOdd,
-                DrawOdd = model.DrawOdd,
-                AwayOdd = model.AwayOdd,
+                HomeOdd = model.Odds.Home,
+                DrawOdd = model.Odds.Draw,
+                AwayOdd = model.Odds.Away,
 
                 GameLink = model.GameLink
             };

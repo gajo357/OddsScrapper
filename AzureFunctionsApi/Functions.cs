@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace AzureFunctionsApi
 {
-    public static class GetGamesFunction
+    public static class Functions
     {
         [FunctionName("GetGames")]
         public static async Task<IActionResult> Run(

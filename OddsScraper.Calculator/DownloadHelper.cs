@@ -34,13 +34,13 @@ namespace OddsScraper.Calculator
         {
             var model = await GetGame(viewModel.GameLink);
 
-            viewModel.HomeMeanOdd = model.HomeMeanOdd;
-            viewModel.DrawMeanOdd = model.DrawMeanOdd;
-            viewModel.AwayMeanOdd = model.AwayMeanOdd;
+            viewModel.HomeMeanOdd = model.MeanOdds.Home;
+            viewModel.DrawMeanOdd = model.MeanOdds.Draw;
+            viewModel.AwayMeanOdd = model.MeanOdds.Away;
 
-            viewModel.HomeOdd = model.HomeOdd;
-            viewModel.DrawOdd = model.DrawOdd;
-            viewModel.AwayOdd = model.AwayOdd;
+            viewModel.HomeOdd = model.Odds.Home;
+            viewModel.DrawOdd = model.Odds.Draw;
+            viewModel.AwayOdd = model.Odds.Away;
         }
     }
 }

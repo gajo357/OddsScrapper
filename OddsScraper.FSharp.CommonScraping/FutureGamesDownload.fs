@@ -12,11 +12,12 @@ module FutureGamesDownload =
     open FSharp.Core
     open Models
 
+    let emptyOdd = { Home = 1.; Draw = 1.; Away = 1.}
     let emptyGame = {
         HomeTeam = ""; AwayTeam = ""; Date = System.DateTime.MinValue;
         GameLink = ""; Sport = ""; Country = ""; League = "";
-        HomeMeanOdd = 1.0; DrawMeanOdd = 1.; AwayMeanOdd = 1.;
-        HomeOdd = 1.; DrawOdd = 1.; AwayOdd = 1.
+        Odds = emptyOdd
+        MeanOdds = emptyOdd
     }
 
     let meanBookies = ["bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
@@ -50,7 +51,9 @@ module FutureGamesDownload =
                         Date = time; HomeTeam = homeTeam; AwayTeam = awayTeam;
                         GameLink =  prependBaseWebsite link;
                         Sport = sport; Country = country; League = league;
-                        HomeOdd = home; DrawOdd = draw; AwayOdd = away
+                        Odds = {
+                            Home = home; Draw = draw; Away = away
+                        }
                         }
         }
     
@@ -85,8 +88,8 @@ module FutureGamesDownload =
                 HomeTeam = homeTeam; AwayTeam = awayTeam
                 Date = gameDate; GameLink = gameLink
                 Sport = sport; Country = country; League = league
-                HomeMeanOdd = homeMeanOdd; DrawMeanOdd = drawMeanOdd; AwayMeanOdd = awayMeanOdd
-                HomeOdd = homeOdd; DrawOdd = drawOdd; AwayOdd = awayOdd
+                Odds = { Home = homeOdd; Draw = drawOdd; Away = awayOdd }
+                MeanOdds = { Home = homeMeanOdd; Draw = drawMeanOdd; Away = awayMeanOdd }
             }
         }
 
@@ -185,7 +188,7 @@ module FutureGamesDownload =
         Common.joinCsv [|g.Sport; g.Country; g.League; 
             g.HomeTeam; g.AwayTeam; 
             g.Date.ToString();
-            g.HomeOdd.ToString(); g.DrawOdd.ToString(); g.AwayOdd.ToString(); |]
+            g.Odds.Home.ToString(); g.Odds.Draw.ToString(); g.Odds.Away.ToString(); |]
         
     let printGamesToBet() =
         initialize()

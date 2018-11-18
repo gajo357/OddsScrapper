@@ -98,7 +98,7 @@ module BetOnBet365 =
                 Sport = "soccer"; Country = "england"; League = "premier-league"
                 HomeTeam = "Chelsea"; AwayTeam = "Arsenal";
                 Date = System.DateTime.Today; GameLink = "http://www.oddsportal.com/soccer/england/premier-league/chelsea-arsenal-zZ6f59Ue/"
-                HomeMeanOdd = 1.75; DrawMeanOdd = 3.93 ; AwayMeanOdd = 4.47
-                HomeOdd = 1.8; DrawOdd = 3.96 ; AwayOdd = 4.5
+                Odds = { Home = 1.8; Draw = 3.96 ; Away = 4.5 }
+                MeanOdds = { Home = 1.75; Draw = 3.93 ; Away = 4.47 }
             }]
         |> betOnGames
