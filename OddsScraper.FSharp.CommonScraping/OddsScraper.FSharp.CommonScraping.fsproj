@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="canopy" Version="2.1.0" />
-    <PackageReference Include="FSharp.Data" Version="3.0.0" />
+    <PackageReference Include="canopy" Version="2.1.1" />
+    <PackageReference Include="FSharp.Data" Version="3.3.2" />
   </ItemGroup>
 
   <ItemGroup>

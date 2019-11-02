@@ -1,7 +1,7 @@
 module Playground.Data
 
 #load "Playground.Engine.fsx"
-#r "../packages/FSharp.Data.3.0.0/lib/net45/FSharp.Data.dll"
+#r "../packages/FSharp.Data.3.3.2/lib/net45/FSharp.Data.dll"
 open FSharp.Data
 open Playground.Engine
 

@@ -11,8 +11,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="SQLProvider" Version="1.1.52" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.109.2" />
+    <PackageReference Include="SQLProvider" Version="1.1.71" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
   
