@@ -2,27 +2,53 @@ module Playground.Data
 
 #load "Playground.Engine.fsx"
 #r "../packages/FSharp.Data.3.3.2/lib/net45/FSharp.Data.dll"
+
 open FSharp.Data
 open Playground.Engine
 
 type GamesCsv = CsvProvider<"../OddsScraper.Analysis/soccer_england_premier-league.csv">
 
-let meanBookies = ["bwin"; "Pinnacle"; "William Hill"]
+let meanBookies = [ "bwin"; "Pinnacle"; "William Hill"; "bet365" ]
 
 let getMeanOdds odds =
-    {
-        HomeOdd = odds |> meanFromFunc (fun a -> float a.HomeOdd) |> toEuOdd
-        DrawOdd = odds |> meanFromFunc (fun a -> float a.DrawOdd) |> toEuOdd
-        AwayOdd = odds |> meanFromFunc (fun a -> float a.AwayOdd) |> toEuOdd
-        Name = ""
-    }
-let gameFromData (home, away, date, hScore, aScore, season) = 
-    { HomeTeam = home; AwayTeam = away; 
-        Date = date; Season = season;
-        HomeScore = hScore; AwayScore = aScore; 
-        }
+    { HomeOdd =
+          odds
+          |> meanFromFunc (fun a -> float a.HomeOdd)
+          |> toEuOdd
+      DrawOdd =
+          odds
+          |> meanFromFunc (fun a -> float a.DrawOdd)
+          |> toEuOdd
+      AwayOdd =
+          odds
+          |> meanFromFunc (fun a -> float a.AwayOdd)
+          |> toEuOdd
+      Name = "" }
 
-type Games(path:string) =
+let psychFunc v = 0.013254 - v * 0.6155 + v * v * 7.5524 - v * v * v * 9.351 + v * v * v * v * 3.3977
+let psychFunc' v = 1.3794 * v * v * v * v - 0.1194 * v * v * v - 1.959 * v * v + 1.6147 * v + 0.0344
+
+let gameToPsychOdd odd =
+    let psychFunc =
+        euOddToPct
+        >> float
+        >> psychFunc'
+        >> toPct
+        >> pctToEuOdd
+    { HomeOdd = odd.HomeOdd |> psychFunc
+      DrawOdd = odd.DrawOdd |> psychFunc
+      AwayOdd = odd.AwayOdd |> psychFunc
+      Name = odd.Name }
+
+let gameFromData (home, away, date, hScore, aScore, season) =
+    { HomeTeam = home
+      AwayTeam = away
+      Date = date
+      Season = season
+      HomeScore = hScore
+      AwayScore = aScore }
+
+type Games(path: string) =
     let gamesCsv = GamesCsv.Load(path)
 
     let decToEuOdds = float >> toEuOdd
@@ -30,35 +56,52 @@ type Games(path:string) =
     member __.GetGames() =
         gamesCsv.Rows
         |> Seq.groupBy (fun r -> (r.HomeTeam, r.AwayTeam, r.Date, r.HomeTeamScore, r.HomeTeamScore, r.Season))
-        |> Seq.map (fun (gameData, games) -> 
-            {
-                Game = gameData |> gameFromData
-                Odds = games |> Seq.map (fun g -> 
-                    { 
-                        HomeOdd = g.HomeOdd |> float |> toEuOdd;
-                        DrawOdd = g.DrawOdd |> float |> toEuOdd; 
-                        AwayOdd = g.AwayOdd |> float |> toEuOdd; 
+        |> Seq.map (fun (gameData, games) ->
+            { Game = gameData |> gameFromData
+              Odds =
+                  games
+                  |> Seq.map (fun g ->
+                      { HomeOdd =
+                            g.HomeOdd
+                            |> float
+                            |> toEuOdd
+                        DrawOdd =
+                            g.DrawOdd
+                            |> float
+                            |> toEuOdd
+                        AwayOdd =
+                            g.AwayOdd
+                            |> float
+                            |> toEuOdd
                         Name = g.Bookmaker }
-                    |> normalizeGameOdds
-                        ) |> Seq.toList
-                Mean = 
-                    let odds = 
-                        games 
-                        |> Seq.filter (fun o -> meanBookies |> Seq.contains o.Bookmaker)
-                        |> Seq.map (fun o -> 
-                            normalizeOdds (decToEuOdds o.HomeOdd) (decToEuOdds  o.DrawOdd) (decToEuOdds o.AwayOdd))
-                        |> Array.ofSeq
-                    { HomeOdd = odds |> meanFromFunc (fun (h, _, _) -> float h) |> toEuOdd; 
-                        DrawOdd = odds |> meanFromFunc (fun (_, d, _) -> float d) |> toEuOdd; 
-                        AwayOdd = odds |> meanFromFunc (fun (_, _, a) -> float a) |> toEuOdd; 
-                        Name = "" }
-                    |> normalizeGameOdds
-            })
+                      // |> normalizeGameOdds
+                      )
+                  |> Seq.toList
+              Mean =
+                  let odds =
+                      games
+                      |> Seq.filter (fun o -> meanBookies |> Seq.contains o.Bookmaker)
+                      |> Seq.map
+                          (fun o ->
+                          normalizeOdds (decToEuOdds o.HomeOdd) (decToEuOdds o.DrawOdd) (decToEuOdds o.AwayOdd))
+                      |> Array.ofSeq
+                  { HomeOdd =
+                        odds
+                        |> meanFromFunc (fun (h, _, _) -> float h)
+                        |> toEuOdd
+                    DrawOdd =
+                        odds
+                        |> meanFromFunc (fun (_, d, _) -> float d)
+                        |> toEuOdd
+                    AwayOdd =
+                        odds
+                        |> meanFromFunc (fun (_, _, a) -> float a)
+                        |> toEuOdd
+                    Name = "" }
+                  |> gameToPsychOdd
+                  |> normalizeGameOdds })
 
-let getGames league =
-    (league,
-        Games(@"..\OddsScraper.Analysis\" + league + ".csv").GetGames() 
-        |> Seq.toList)
+let getGames league = (league, Games(@"..\OddsScraper.Analysis\" + league + ".csv").GetGames() |> Seq.toList)
 
 // let argGames = getGames "soccer_argentina_superliga"
 let azGames = getGames "soccer_azerbaijan_premier-league"
@@ -108,9 +151,27 @@ let elGames = getGames "soccer_europe_europa-league"
 // let bJapGames = getGames "basketball_japan_b-league"
 // let bNbaGames = getGames "basketball_usa_nba"
 
-let goodLeagues = 
-    [gerGames; engGames; serGames; espGames; greGames;
-        porGames; turGames; polGames; sokGames; chiGames; indGames;
-        isrGames; kazGames; azGames; eng2Games; czGames; japCupGames;
-        elGames; clGames; welsGames; romGames; rusGames; scoGames]
-    |> List.collect snd
+let goodLeagues =
+    [ gerGames
+      engGames
+      serGames
+      espGames
+      greGames
+      porGames
+      turGames
+      polGames
+      sokGames
+      chiGames
+      indGames
+      isrGames
+      kazGames
+      azGames
+      eng2Games
+      czGames
+      japCupGames
+      elGames
+      clGames
+      welsGames
+      romGames
+      rusGames
+      scoGames ] |> List.collect snd

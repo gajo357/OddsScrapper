@@ -3,7 +3,6 @@ System.Environment.CurrentDirectory <- @"C:\Users\gm.DK\Documents\GitHub\OddsScr
 
 #load "Playground.Data.fsx"
 #load "Playground.MonteCarlo.fsx"
-#r "paket: nuget FSharp.Charting"
 #r "../packages/FSharp.Charting.2.1.0/lib/net45/FSharp.Charting.dll"
 #load "../packages/FSharp.Charting.2.1.0/FSharp.Charting.fsx"
 open FSharp.Charting
@@ -23,7 +22,7 @@ let bookies = ["bwin"; "bet365"; "Betfair"; "888sport"; "Unibet"]
 |> Seq.map (fun s ->
     (s, 
         goodLeagues
-        |> Seq.filter (getSeason s)
+        |> Seq.filter (isFromSeason s)
         |> Seq.sortBy (fun s -> s.Game.Date) 
         |> Seq.toList 
         |> betAll bestMargin betAmount 

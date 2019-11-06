@@ -5,7 +5,7 @@ open Playground.Sampling
 
 let monteCarlo 
     (sample: int -> 'a seq -> 'a seq) 
-    (simulate: 'a seq -> seq<'b*float>) nRuns nSamples data =
+    (simulate: 'a seq -> 'b) nRuns nSamples data =
     Seq.init nRuns (fun _ -> sample nSamples data)
     |> Seq.map simulate
 

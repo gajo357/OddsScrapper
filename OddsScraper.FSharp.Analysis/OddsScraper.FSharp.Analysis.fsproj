@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcore2.2;net47</TargetFrameworks>
+    <TargetFrameworks>net47</TargetFrameworks>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   
@@ -17,6 +17,7 @@
     <None Include="Playground.Sampling.fsx" />
     <None Include="Playground.Engine.fsx" />
     <None Include="Playground.fsx" />
+    <None Include="Playground.Psych.fsx" />
   </ItemGroup>
   
   <ItemGroup>
@@ -25,7 +26,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="FSharp.Charting.Gtk" Version="2.1.0" />
+    <PackageReference Include="FSharp.Charting" Version="2.1.0" />
     <PackageReference Include="FSharp.Core" Version="4.7.0" />
     <PackageReference Include="SqlProvider" Version="1.1.71" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
