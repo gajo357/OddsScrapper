@@ -13,12 +13,16 @@
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="2*"/>
+            
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -31,22 +35,22 @@
         
         <TextBlock Text="{Binding HomeTeam}" Grid.Column="3"/>
         <TextBlock Text="{Binding AwayTeam}" Grid.Column="4"/>
-
         <TextBlock Text="{Binding Date, StringFormat={}{0:HH:mm}}" Grid.Column="5"/>
 
         <TextBlock Text="{Binding HomeMeanOdd, StringFormat=N2}" Grid.Column="6"/>
         <TextBlock Text="{Binding DrawMeanOdd, StringFormat=N2}" Grid.Column="7"/>
         <TextBlock Text="{Binding AwayMeanOdd, StringFormat=N2}" Grid.Column="8"/>
+        <TextBlock Text="{Binding NoMeanOdds}" Grid.Column="9"/>
         
-        <TextBox Text="{Binding HomeOdd}" Grid.Column="9"/>
-        <TextBox Text="{Binding DrawOdd}" Grid.Column="10"/>
-        <TextBox Text="{Binding AwayOdd}" Grid.Column="11"/>
+        <TextBox Text="{Binding HomeOdd}" Grid.Column="10"/>
+        <TextBox Text="{Binding DrawOdd}" Grid.Column="11"/>
+        <TextBox Text="{Binding AwayOdd}" Grid.Column="12"/>
 
-        <TextBlock Text="{Binding HomeAmount, StringFormat=N2}" Grid.Column="12"/>
-        <TextBlock Text="{Binding DrawAmount, StringFormat=N2}" Grid.Column="13"/>
-        <TextBlock Text="{Binding AwayAmount, StringFormat=N2}" Grid.Column="14"/>
+        <TextBlock Text="{Binding HomeAmount, StringFormat=N2}" Grid.Column="13"/>
+        <TextBlock Text="{Binding DrawAmount, StringFormat=N2}" Grid.Column="14"/>
+        <TextBlock Text="{Binding AwayAmount, StringFormat=N2}" Grid.Column="15"/>
 
-        <Button Click="Button_Click" Grid.Column="15">R</Button>
+        <Button Click="Button_Click" Grid.Column="16">R</Button>
         
     </Grid>
 </UserControl>

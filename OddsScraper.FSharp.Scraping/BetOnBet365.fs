@@ -100,5 +100,6 @@ module BetOnBet365 =
                 Date = System.DateTime.Today; GameLink = "http://www.oddsportal.com/soccer/england/premier-league/chelsea-arsenal-zZ6f59Ue/"
                 Odds = { Home = 1.8; Draw = 3.96 ; Away = 4.5 }
                 MeanOdds = { Home = 1.75; Draw = 3.93 ; Away = 4.47 }
+                NoMean = 1
             }]
         |> betOnGames

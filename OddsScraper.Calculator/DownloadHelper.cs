@@ -24,8 +24,8 @@ namespace OddsScraper.Calculator
             return games.Select(GameViewModel.Create);
         }
 
-        public static double CalculateAmount(double margin, double balance, double meanOdd, double bookerOdd)
-            => FSharp.Common.BettingCalculations.getAmountToBet(margin, balance, meanOdd, bookerOdd);
+        public static double CalculateAmount(double balance, double meanOdd, double bookerOdd)
+            => FSharp.Common.BettingCalculations.getAmountToBet(balance, meanOdd, bookerOdd);
 
         public static async Task<Models.Game> GetGame(string link)
             => await Downloader.ReadGameFromLink(link);

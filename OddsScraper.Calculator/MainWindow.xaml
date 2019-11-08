@@ -38,47 +38,49 @@
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="2*"/>
+                
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="25"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Text="Game Info" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="6"/>
-            <TextBlock Text="Mean Odds" Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="3"/>
+            <TextBlock Text="Mean Odds" Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="4"/>
             <TextBlock Text="Bet 365 Odds" Grid.Column="9" Grid.Row="0" Grid.ColumnSpan="3"/>
             <TextBlock Text="Amounts To Bet" Grid.Column="12" Grid.Row="0" Grid.ColumnSpan="3"/>
 
             <TextBlock Text="Sport" Grid.Column="0" Grid.Row="1"/>
             <TextBlock Text="Country" Grid.Column="1" Grid.Row="1"/>
             <TextBlock Text="League" Grid.Column="2" Grid.Row="1"/>
-
             <TextBlock Text="Home Team" Grid.Column="3" Grid.Row="1"/>
             <TextBlock Text="Away Team" Grid.Column="4" Grid.Row="1"/>
-
             <TextBlock Text="Game Time" Grid.Column="5" Grid.Row="1"/>
 
             <TextBlock Text="Home" Grid.Column="6" Grid.Row="1"/>
             <TextBlock Text="Draw" Grid.Column="7" Grid.Row="1"/>
             <TextBlock Text="Away" Grid.Column="8" Grid.Row="1"/>
+            <TextBlock Text="No" Grid.Column="9" Grid.Row="1"/>
 
-            <TextBlock Text="Home" Grid.Column="9" Grid.Row="1"/>
-            <TextBlock Text="Draw" Grid.Column="10" Grid.Row="1"/>
-            <TextBlock Text="Away" Grid.Column="11" Grid.Row="1"/>
+            <TextBlock Text="Home" Grid.Column="10" Grid.Row="1"/>
+            <TextBlock Text="Draw" Grid.Column="11" Grid.Row="1"/>
+            <TextBlock Text="Away" Grid.Column="12" Grid.Row="1"/>
 
-            <TextBlock Text="Home" Grid.Column="12" Grid.Row="1"/>
-            <TextBlock Text="Draw" Grid.Column="13" Grid.Row="1"/>
-            <TextBlock Text="Away" Grid.Column="14" Grid.Row="1"/>
+            <TextBlock Text="Home" Grid.Column="13" Grid.Row="1"/>
+            <TextBlock Text="Draw" Grid.Column="14" Grid.Row="1"/>
+            <TextBlock Text="Away" Grid.Column="15" Grid.Row="1"/>
             
-            <TextBlock Text="Refreash" Grid.Column="15" Grid.Row="1"/>
+            <TextBlock Text="Refreash" Grid.Column="16" Grid.Row="1"/>
 
-            <ItemsControl x:Name="GamesControl" Grid.Row="2" Grid.ColumnSpan="15">
+            <ItemsControl x:Name="GamesControl" Grid.Row="2" Grid.ColumnSpan="16">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <local:GameView/>

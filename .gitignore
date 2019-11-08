@@ -260,4 +260,7 @@ paket-files/
 __pycache__/
 *.pyc
 
+.ionide/
+symbolCache.db
+
 ArchiveData_soccer.db

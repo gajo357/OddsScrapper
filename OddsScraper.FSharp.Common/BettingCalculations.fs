@@ -38,10 +38,14 @@ module BettingCalculations =
         let (h, d, a) = normalizePct (invert h) (invert d) (invert a)
         ((invert h), (invert d), (invert a))
     
-    let getAmountToBet maxPercent amount myOdd bookerOdd =
-        let k = kelly myOdd bookerOdd 
-        if (k > 0. && k <= maxPercent) then
-            moneyToBet k amount
-        else 0.
+    let psychFunc v = 1.3794 * v * v * v * v - 0.1194 * v * v * v - 1.959 * v * v + 1.6147 * v + 0.0344
+    
+    let getAmountToBet amount myOdd bookerOdd =
+        let myOdd = myOdd |> invert |> psychFunc |> invert
+        if myOdd <= 3.05 || myOdd >= 3.15 then 0.
+        else
+            let k = kelly myOdd bookerOdd
+            if k > 0. then moneyToBet k amount
+            else 0.
     
 

@@ -39,21 +39,20 @@ let groupGamesWithMean games =
     games
     |> Seq.groupBy (fun g -> g.GameLink)
     |> Seq.map (fun (_, gs) -> 
+        let gs = gs |> Seq.toArray
         let means = 
             gs 
-            |> Seq.map (oddsFromGame >> normalizeGameOdds) 
-            |> Seq.toArray |> calculateMeans
+            |> Array.map (oddsFromGame >> normalizeGameOdds) 
+            |> calculateMeans
         { (gs |> Seq.head) with 
-            MeanOdds = means })
+            MeanOdds = means
+            NoMean = gs.Length})
 
 let widgetMeanGamesAsync() = async {
-    let! bet365Games = widgetBet365() |> Async.StartChild
+    let! meanGames = [widgetBet365(); widgetBWin(); widgetPinnacle(); widgetWilliamHill()] |> Async.Parallel
 
-    let! meanGames = [widgetBWin(); widgetPinnacle(); widgetWilliamHill()] |> Async.Parallel
+    let bet365Games = meanGames |> Array.head |> Seq.toArray
     let meanGames = meanGames |> Seq.collect id |> groupGamesWithMean
-
-    let! bet365Games = bet365Games
-    let bet365Games = bet365Games |> Seq.toArray
 
     return 
         meanGames 
@@ -64,6 +63,9 @@ let widgetMeanGamesAsync() = async {
                 meanGame with 
                     Odds = {
                         Home = 0.; Draw = 0.; Away = 0. }}    // can't find bet365 odds for this game
-            | Some g -> g
+            | Some g -> { g with 
+                            MeanOdds = meanGame.MeanOdds
+                            NoMean = meanGame.NoMean
+                        }
         )
 }

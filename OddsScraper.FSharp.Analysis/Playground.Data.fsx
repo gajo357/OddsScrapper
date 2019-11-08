@@ -25,7 +25,7 @@ let getMeanOdds odds =
           |> toEuOdd
       Name = "" }
 
-let psychFunc v = 0.013254 - v * 0.6155 + v * v * 7.5524 - v * v * v * 9.351 + v * v * v * v * 3.3977
+// let psychFunc v = 0.013254 - v * 0.6155 + v * v * 7.5524 - v * v * v * 9.351 + v * v * v * v * 3.3977
 let psychFunc' v = 1.3794 * v * v * v * v - 0.1194 * v * v * v - 1.959 * v * v + 1.6147 * v + 0.0344
 
 let gameToPsychOdd odd =
@@ -174,4 +174,22 @@ let goodLeagues =
       welsGames
       romGames
       rusGames
-      scoGames ] |> List.collect snd
+      scoGames ]
+
+let leagues312 = 
+    [
+      azGames
+      chiGames
+      czGames
+      engGames
+      eng2Games
+      elGames
+      clGames
+      gerGames
+      isrGames
+      kazGames
+      polGames
+      espGames
+    ]
+
+let goodGames = goodLeagues |> List.collect snd

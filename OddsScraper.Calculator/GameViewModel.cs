@@ -41,6 +41,8 @@ namespace OddsScraper.Calculator
         public double DrawAmount { get => _drawAmount; set { Set(ref _drawAmount, value); } }
         public double _awayAmount;
         public double AwayAmount { get => _awayAmount; set { Set(ref _awayAmount, value); } }
+        public int _noMeanOdds;
+        public int NoMeanOdds { get => _noMeanOdds; set { Set(ref _noMeanOdds, value); } }
 
         public string GameLink { get; private set; }
 
@@ -89,7 +91,7 @@ namespace OddsScraper.Calculator
             CalculateAmounts();
         }
         private double CalculateAmount(double meanOdd, double bookerOdd) 
-            => DownloadHelper.CalculateAmount(_margin, _balance, meanOdd, bookerOdd);
+            => DownloadHelper.CalculateAmount(_balance, meanOdd, bookerOdd);
 
         public static GameViewModel Create(FSharp.CommonScraping.Models.Game model)
         {
@@ -107,6 +109,8 @@ namespace OddsScraper.Calculator
                 HomeMeanOdd = model.MeanOdds.Home,
                 DrawMeanOdd = model.MeanOdds.Draw,
                 AwayMeanOdd = model.MeanOdds.Away,
+
+                NoMeanOdds = model.NoMean,
 
                 HomeOdd = model.Odds.Home,
                 DrawOdd = model.Odds.Draw,

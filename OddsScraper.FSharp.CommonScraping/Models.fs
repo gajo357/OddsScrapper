@@ -13,6 +13,7 @@ type Game =
         Sport: string; Country: string; League: string 
         MeanOdds: Odds
         Odds: Odds
+        NoMean: int
     }
 
 let oddsFromGame g = g.Odds

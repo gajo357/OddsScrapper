@@ -18,6 +18,7 @@ module FutureGamesDownload =
         GameLink = ""; Sport = ""; Country = ""; League = "";
         Odds = emptyOdd
         MeanOdds = emptyOdd
+        NoMean = 0
     }
 
     let meanBookies = ["bwin"; "Pinnacle"; "888sport"; "Unibet"; "William Hill"]
@@ -59,21 +60,22 @@ module FutureGamesDownload =
     
     let getGameInfosFromTable = getTableRows >> Seq.choose getGameInfoFromRow
     
-    let readMeanOdds unfiltered =
+    let readMeanOdds odds =
         let odds =
-            unfiltered 
+            odds 
             |> Array.filter (fun o -> meanBookies |> Seq.contains o.Name)
             |> Array.map convertOddsTo1x2
         
         (odds |> meanFromFunc (fun (h,_,_) -> h),
             odds |> meanFromFunc (fun (_,d,_) -> d),
-            odds |> meanFromFunc (fun (_,_,a) -> a))
+            odds |> meanFromFunc (fun (_,_,a) -> a),
+            odds.Length)
     
     let readGame(gameLink, gameHtml) =
         option {
             let odds = gameHtml |> getOddsFromGamePage
             let bet365Odd = odds |>  Seq.tryFind (fun o -> o.Name = "bet365")
-            let (homeMeanOdd, drawMeanOdd, awayMeanOdd) = odds |> readMeanOdds
+            let (homeMeanOdd, drawMeanOdd, awayMeanOdd, noOdds) = odds |> readMeanOdds
             let (homeOdd, drawOdd, awayOdd) = 
                 match bet365Odd with
                 | Some b -> b |> convertOddsTo1x2
@@ -90,6 +92,7 @@ module FutureGamesDownload =
                 Sport = sport; Country = country; League = league
                 Odds = { Home = homeOdd; Draw = drawOdd; Away = awayOdd }
                 MeanOdds = { Home = homeMeanOdd; Draw = drawMeanOdd; Away = awayMeanOdd }
+                NoMean = noOdds
             }
         }
 
