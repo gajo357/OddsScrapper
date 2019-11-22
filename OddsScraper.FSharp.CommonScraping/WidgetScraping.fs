@@ -7,6 +7,7 @@ open FutureGamesDownload
 open Models
 open OddsManipulation
 open OddsScraper.FSharp.Common.BettingCalculations
+open OddsScraper.FSharp.Common.OptionExtension
 
 type GameProvider = HtmlProvider<"https://widgets.oddsportal.com/db03999b5cfdac1/s/">
 
@@ -30,23 +31,30 @@ let widgetBWin() = widgetGamesAsync "https://widgets.oddsportal.com/5f5c1365462b
 let widgetPinnacle() = widgetGamesAsync "https://widgets.oddsportal.com/098c02809003dcd/s/"
 let widgetWilliamHill() = widgetGamesAsync "https://widgets.oddsportal.com/db03999b5cfdac1/s/"
 
-let calculateMeans odds = 
-    { Home = odds |> meanFromFunc (fun g-> g.Home);
-      Draw = odds |> meanFromFunc (fun g-> g.Draw);
-      Away = odds |> meanFromFunc (fun g-> g.Away) }
+let calculateMeans odds = option {
+        let! h = odds |> meanFromFunc (fun g-> g.Home)
+        let! d = odds |> meanFromFunc (fun g-> g.Draw)
+        let! a = odds |> meanFromFunc (fun g-> g.Away)
+
+        return { Home = h; Draw = d; Away = a }
+    }
 
 let groupGamesWithMean games =
     games
     |> Seq.groupBy (fun g -> g.GameLink)
     |> Seq.map (fun (_, gs) -> 
-        let gs = gs |> Seq.toArray
-        let means = 
-            gs 
-            |> Array.map (oddsFromGame >> normalizeGameOdds) 
-            |> calculateMeans
-        { (gs |> Seq.head) with 
-            MeanOdds = means
-            NoMean = gs.Length})
+        option {
+            let gs = gs |> Seq.toArray
+            let! means = 
+                gs 
+                |> Array.map (oddsFromGame >> normalizeGameOdds) 
+                |> calculateMeans
+        
+            return { (gs |> Seq.head) with 
+                        MeanOdds = means
+                        NoMean = gs.Length}
+         })
+    |> Seq.choose id
 
 let widgetMeanGamesAsync() = async {
     let! meanGames = [widgetBet365(); widgetBWin(); widgetPinnacle(); widgetWilliamHill()] |> Async.Parallel

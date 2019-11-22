@@ -1,23 +1,26 @@
 ﻿namespace OddsScraper.FSharp.Common
 
 module BettingCalculations =
+    open OptionExtension
     
     let round (n: float) = System.Math.Round(n, 2)
 
     let mean (values: float seq) = 
-        if values |> Seq.isEmpty then
-            1.
-        else
-            values |> Seq.average
+        if values |> Seq.isEmpty then None
+        else values |> Seq.average |> Some 
     let meanFromFunc propFunc = (Seq.map propFunc) >> mean
 
+    let muStdDev data = option {
+        let! mu = mean data
+        let variance = data |> Array.averageBy (fun x -> (x - mu)**2.)
+        return mu, sqrt(variance)
+    }
+        
+
     let kelly myOdd bookerOdd = 
-        if (myOdd = 0.) then
-            0.
-        else if (bookerOdd = 1.) then
-            0.
-        else    
-            (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
+        if (myOdd = 0.) then 0.
+        else if (bookerOdd = 1.) then 0.
+        else (bookerOdd/myOdd - 1.) / (bookerOdd - 1.)
 
     let complexMargin k odd = 
         if (odd < 3.) then false
@@ -29,7 +32,9 @@ module BettingCalculations =
         if m < 2.0 then 2.0
         else m
     
-    let invert = (/) 1.
+    let invert v = 
+        if v = 0. then 0.
+        else 1. / v
 
     let normalizePct h d a =
         let whole = h + d + a
@@ -42,7 +47,7 @@ module BettingCalculations =
     
     let getAmountToBet amount myOdd bookerOdd =
         let myOdd = myOdd |> invert |> psychFunc |> invert
-        if myOdd <= 3.05 || myOdd >= 3.15 then 0.
+        if myOdd < 3.1 || myOdd > 3.25 then 0.
         else
             let k = kelly myOdd bookerOdd
             if k > 0. then moneyToBet k amount

@@ -3,6 +3,7 @@
 module Calculations =
     open OddsScraper.Repository.Models
     open OddsScraper.FSharp.Common.BettingCalculations
+    open OddsScraper.FSharp.Common.OptionExtension
 
     let makeBet win myOdd bookerOdd (amount, alreadyRun) =
         let k = kelly myOdd bookerOdd
@@ -26,17 +27,28 @@ module Calculations =
         | Some o -> betGame g meanOdds o amount
         | _ -> amount
     
-    let meanOdds odds =
-        {
-            HomeOdd = odds |> meanFromFunc (fun o -> o.HomeOdd)
-            DrawOdd = odds |> meanFromFunc (fun o -> o.DrawOdd)
-            AwayOdd = odds |> meanFromFunc (fun o -> o.AwayOdd)
+    let meanOdds odds = option {
+        let! h = odds |> meanFromFunc (fun o -> o.HomeOdd)
+        let! d = odds |> meanFromFunc (fun o -> o.DrawOdd)
+        let! a = odds |> meanFromFunc (fun o -> o.AwayOdd)
+
+        return {
+            HomeOdd = h
+            DrawOdd = d
+            AwayOdd = a
             Game = int64(0); Bookkeeper = {Id = int64(0); Name = ""}; IsValid = true
         }
-    let betGroupedGame amount bookie (g:Game, odds: GameOdd list) =     
-        betGames g (meanOdds odds) (odds |> List.tryFind (fun o -> o.Bookkeeper.Name = bookie)) amount
+    }
+        
+    let betGroupedGame amount bookie (g:Game, odds: GameOdd list) = option {     
+            let! mu = meanOdds odds
+            return betGames g mu (odds |> List.tryFind (fun o -> o.Bookkeeper.Name = bookie)) amount
+        }
 
     let rec betAll amount bookie games =
         match games with
-        | head :: tail -> betAll (betGroupedGame amount bookie head) bookie tail
+        | head :: tail -> 
+            match (betGroupedGame amount bookie head) with
+            | None -> amount
+            | Some v -> betAll v bookie tail
         | [] -> amount

@@ -8,7 +8,7 @@ module Printing =
     open OddsScraper.Repository.Repository
 
     let private Separator = ","
-    let private JoinValues = JoinList Separator
+    let JoinValues = JoinList Separator
 
     let Header = 
         JoinValues ["HomeTeam"; "AwayTeam"; "HomeTeamScore"; "AwayTeamScore";

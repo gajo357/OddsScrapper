@@ -7,7 +7,7 @@ module Repository =
     
     [<Literal>]
     let resolutionPath = 
-        __SOURCE_DIRECTORY__ + @"\..\packages\System.Data.SQLite.Core.1.0.108.0\lib\net46\"
+        __SOURCE_DIRECTORY__ + @"\..\packages\System.Data.SQLite.Core.1.0.112.0\lib\net46\"
     
     [<Literal>]
     let private connectionString = 

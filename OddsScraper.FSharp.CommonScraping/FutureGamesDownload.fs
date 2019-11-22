@@ -60,22 +60,23 @@ module FutureGamesDownload =
     
     let getGameInfosFromTable = getTableRows >> Seq.choose getGameInfoFromRow
     
-    let readMeanOdds odds =
-        let odds =
-            odds 
-            |> Array.filter (fun o -> meanBookies |> Seq.contains o.Name)
-            |> Array.map convertOddsTo1x2
-        
-        (odds |> meanFromFunc (fun (h,_,_) -> h),
-            odds |> meanFromFunc (fun (_,d,_) -> d),
-            odds |> meanFromFunc (fun (_,_,a) -> a),
-            odds.Length)
+    let readMeanOdds odds = option {
+            let odds =
+                odds 
+                |> Array.filter (fun o -> meanBookies |> Seq.contains o.Name)
+                |> Array.map convertOddsTo1x2
+            let! h = odds |> meanFromFunc (fun (h,_,_) -> h)
+            let! d = odds |> meanFromFunc (fun (_,d,_) -> d)
+            let! a = odds |> meanFromFunc (fun (_,_,a) -> a)
+
+            return (h, d, a, odds.Length)
+        }
     
     let readGame(gameLink, gameHtml) =
         option {
             let odds = gameHtml |> getOddsFromGamePage
             let bet365Odd = odds |>  Seq.tryFind (fun o -> o.Name = "bet365")
-            let (homeMeanOdd, drawMeanOdd, awayMeanOdd, noOdds) = odds |> readMeanOdds
+            let! (homeMeanOdd, drawMeanOdd, awayMeanOdd, noOdds) = odds |> readMeanOdds
             let (homeOdd, drawOdd, awayOdd) = 
                 match bet365Odd with
                 | Some b -> b |> convertOddsTo1x2

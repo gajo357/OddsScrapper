@@ -7,26 +7,27 @@ System.Environment.CurrentDirectory <- @"C:\Users\gajo3\source\repos\OddsScrappe
 #load "../packages/FSharp.Charting.2.1.0/FSharp.Charting.fsx"
 
 open FSharp.Charting
+open FSharp.Data
 
 open Playground.Data
 open Playground.Engine
 open Playground.MonteCarlo
 
-let betAmount = 1000.<dkk>
 
-let bestMargin = simpleMargin 1.0<pct>
+type OutputCsv = CsvProvider<"output.csv">
 
-[ 2005 .. 2018 ]
-|> Seq.map (fun s ->
-    (s,
-     turGames
-     |> snd
-     |> Seq.filter (isFromSeason s)
-     |> Seq.sortBy (fun s -> s.Game.Date)
-     |> Seq.toList
-     |> betAll bestMargin betAmount
-     |> (fun b -> b / betAmount)))
-|> Seq.toArray
+type OutputRow = OutputCsv.Row
+
+let outputCsv = OutputCsv.Load("output.csv")
+
+let betAmount = 100.<dkk>
+
+let isInRange (league: OutputRow) myOdd =
+    let wg = (float league.WinCountMu) * gaus (float league.WinMu) (float league.WinSigma) myOdd
+    let lg = (float league.LoseCountMu) * gaus (float league.LoseMu) (float league.LoseSigma) myOdd
+
+    (wg > lg * 2.) && (float (league.WinMu - league.WinSigma) <= myOdd)
+    && (float (league.WinMu + league.WinSigma) >= myOdd)
 
 let betWithBookie bookie amount gg =
     match gg.Odds |> Seq.tryFind (fun f -> bookie = f.Name) with
@@ -35,111 +36,110 @@ let betWithBookie bookie amount gg =
 
 let betWithBet365 = betWithBookie "bet365"
 
-let gamesHist year title games =
-    let e =
-        games
-        |> Seq.filter (fun g -> g.Game.Date.Year >= year)
-        |> Seq.map (betWithBet365 betAmount)
-        |> Seq.choose id
-        |> Seq.toList
-
-
-    let winners = e |> List.filter (fun g -> float g.MoneyWon > 0.)
-    let losers = e |> List.filter (fun g -> float g.MoneyWon < 0.)
-
-    Chart.Combine([ Chart.Histogram(winners |> List.map (fun g -> g.MyOdd))
-                    Chart.Histogram(losers |> List.map (fun g -> g.MyOdd)) ])
-         .WithXAxis(Max = 4., Min = 2.5, MajorGrid = ChartTypes.Grid(Interval = 0.1)).WithTitle(title)
-
-let leagueHist year league = gamesHist year (fst league) (snd league)
-
-leagueHist 2010 azGames
-leagues312
-|> List.collect snd
-|> (gamesHist 2010 "Title")
-
-
-let bet margin g =
-    g
-    |> Seq.sortBy (fun s -> s.Game.Date)
-    |> Seq.toList
-    |> betAll margin betAmount
-    |> (fun b -> b / betAmount)
-
-let finalMedian games noSamples margin =
-    games
-    |> simpleMonteCarlo (bet margin) 10 noSamples
-    |> median
-
-
-finalMedian (polGames |> snd) 15 bestMargin
-
-let betGroup amount games =
+let betGroup league amount games =
     let amountLeft, winnings =
         games
         |> Seq.fold (fun (am, win) g ->
-            let res = betWithBet365 am g
-            match res with
-            | None -> am, win
-            | Some bet ->
-                if bet.MyOdd < 3.1<euOdd> || bet.MyOdd > 3.2<euOdd> then am, win
-                else am - bet.MoneyPlaced, win |> Array.append [| bet.MoneyWon |]) (amount, [||])
+            if am < 2.<dkk> then
+                am, win
+            else
+                let res = betWithBet365 am g
+                match res with
+                | None -> am, win
+                | Some bet ->
+                    if isInRange league (float bet.MyOdd) |> not then am, win
+                    else am - bet.MoneyPlaced, win |> Array.append [| bet.MoneyWon |]) (amount, [||])
 
     let amountLeft = amountLeft + (winnings |> Array.sum)
     winnings.Length, amountLeft
 
-let groupAndBet amount g =
+let groupAndBet league amount g =
     g
     |> Seq.groupBy (fun s -> s.Game.Date)
-    |> Seq.map (fun (_, games) -> betGroup amount games)
+    |> Seq.map (fun (_, games) -> betGroup league amount games)
     |> Seq.filter (fun (n, _) -> n > 0)
 
-let groupAndBet' amount g =
+let groupAndBet' year league amount g =
     g
+    |> Seq.filter (fun g -> g.Game.Date.Year = year)
     |> Seq.groupBy (fun s -> s.Game.Date)
     |> Seq.map snd
     |> Seq.fold (fun total games ->
-        let (_, amountLeft) = betGroup total games
+        let (_, amountLeft) = betGroup league total games
         amountLeft) amount
 
+let split (input: string) = input.Split([| '_' |], System.StringSplitOptions.RemoveEmptyEntries)
 
-let r =
-    polGames
-    |> snd
-    |> groupAndBet betAmount
-    |> Seq.map (fun (n, w) -> n, w / betAmount)
-    |> Seq.toList
-
-r
-|> List.filter (fun (n, _) -> n > 1)
-|> List.sortBy snd
-
-(r |> List.filter (fun (n, w) -> n > 2 && w > 1.5)).Length
-
-let betBestInGroup amount g =
-    g
-    |> Seq.groupBy (fun s -> s.Game.Date)
-    |> Seq.sortBy fst
-    |> Seq.map (fun (_, games) ->
+let leagueGaus (games: string * GroupedGame list) year =
+    let [| sport; country; name |] =
         games
-        |> Seq.map (betWithBet365 amount)
+        |> fst
+        |> split
+
+    let leagueRow =
+        outputCsv.Rows |> Seq.find (fun row -> row.Sport = sport && row.Country = country && row.League = name)
+    groupAndBet' year leagueRow betAmount (snd games)
+
+[ 2005 .. 2018 ] |> List.map (leagueGaus kazGames)
+[ 2005 .. 2018 ]
+|> List.collect (fun year -> goodLeagues |> List.map (fun league -> (fst league, leagueGaus league year)))
+|> List.filter (snd >> (>) betAmount)
+
+let writeToCsv line = System.IO.File.AppendAllLines("output.csv", [ line ])
+
+writeToCsv "league,wMu,wSigma,wnMu,lMu,lSigma,lnMu"
+
+let gamesGausPlot bookie minYear title games =
+    let results =
+        games
+        |> Seq.filter (fun g -> g.Game.Date.Year >= minYear)
+        |> Seq.map (betWithBookie bookie betAmount)
         |> Seq.choose id
-        |> Seq.sortByDescending (fun b -> b.Kelly)
-        |> Seq.tryHead)
-    |> Seq.choose id
-    |> Seq.fold (fun am bet ->
-        if bet.MyOdd <= 3.1<euOdd> || bet.MyOdd > 3.2<euOdd> then am
-        else am + bet.MoneyWon) amount
+        |> Seq.filter (fun g -> g.MyOdd < 3.3<euOdd>)
+        |> Seq.toList
 
-leagues312
-|> Seq.collect snd
-|> Seq.filter (fun g -> g.Game.Date.Year > 2017)
-|> betBestInGroup betAmount
-|> (*) (1. / betAmount)
+    let winners =
+        results
+        |> List.filter (fun g -> float g.MoneyWon > 0.)
+        |> List.map (fun g -> float g.MyOdd)
+    let losers =
+        results
+        |> List.filter (fun g -> float g.MoneyWon < 0.)
+        |> List.map (fun g -> float g.MyOdd)
 
+    let binSize = 0.02
+    let binFunc v = System.Math.Floor(v / binSize) * binSize
 
-leagues312
-|> Seq.collect snd
-|> Seq.filter (fun g -> g.Game.Date.Year > 2017)
-|> groupAndBet' betAmount
-|> (*) (1. / betAmount)
+    let sortToBins =
+        List.groupBy binFunc
+        >> List.map (fun (bin, games) -> bin, games |> Seq.length)
+        >> List.sortBy fst
+
+    let wBins = sortToBins winners
+    let lBins = sortToBins losers
+
+    let wMu, wSigma = muStdDev winners
+    let lMu, lSigma = muStdDev losers
+    let wnMu = binSize * (wBins |> List.sumBy (snd >> float))
+    let lnMu = binSize * (lBins |> List.sumBy (snd >> float))
+    writeToCsv (sprintf "%s,%f,%f,%f,%f,%f,%f" title wMu wSigma wnMu lMu lSigma lnMu)
+
+    Chart.Combine([ Chart.Column(wBins)
+                    Chart.Column(lBins)
+                    Chart.Line
+                        (List.zip (wBins |> List.map fst) (wBins |> List.map (fun (b, _) -> wnMu * gaus wMu wSigma b)))
+                    Chart.Line
+                        (List.zip (lBins |> List.map fst) (lBins |> List.map (fun (b, _) -> lnMu * gaus lMu lSigma b))) ])
+         .WithXAxis(Min = 2.85, Max = 3.4, MajorGrid = ChartTypes.Grid(Interval = 0.1)).WithTitle(title)
+
+let leagueGaus bookie year league = gamesGausPlot bookie year (fst league) (snd league)
+
+leagueGaus "William Hill" 2010 gerGames
+leagueGaus "bwin" 2010 engGames
+leagueGaus "bet365" 2010 eng2Games
+leagueGaus "Pinnacle" 2010 engGames
+// System.IO.Directory.GetFiles(@"..\OddsScraper.Analysis\", "*.csv")
+// |> Array.map System.IO.FileInfo
+// |> Array.filter (fun f -> f.Name.StartsWith("soccer"))
+// |> Array.map (fun f -> getGames(f.Name.Replace(".csv", "")))
+// |> Array.map (leagueGaus "bet365" 2010)

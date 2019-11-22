@@ -1,23 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net47</TargetFrameworks>
+    <TargetFramework>net47</TargetFramework>
     <OutputType>Exe</OutputType>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
   
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
-    <Compile Include="Calculations.fs" />
-    <Compile Include="LeagueProcessing.fs" />
-    <Compile Include="UserSelection.fs" />
-    <Compile Include="ProcessMethods.fs" />
+    <Compile Include="Printing.fs" />
+    <Compile Include="GetAnalysisData.fs" />
     <Compile Include="Program.fs" />
     <None Include="App.config" />
-    <None Include="Playground.Data.fsx" />
-    <None Include="Playground.Sampling.fsx" />
-    <None Include="Playground.Engine.fsx" />
-    <None Include="Playground.fsx" />
-    <None Include="Playground.Psych.fsx" />
   </ItemGroup>
   
   <ItemGroup>
@@ -26,10 +20,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="FSharp.Charting" Version="2.1.0" />
     <PackageReference Include="FSharp.Core" Version="4.7.0" />
     <PackageReference Include="SqlProvider" Version="1.1.73" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
-	  <PackageReference Include="System.ValueTuple" version="4.5.0" />
+	<PackageReference Include="System.ValueTuple" version="4.5.0" />
   </ItemGroup>
 </Project>

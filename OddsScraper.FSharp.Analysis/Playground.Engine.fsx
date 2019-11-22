@@ -144,9 +144,18 @@ let roundMoney m =
     |> (*) 1.<dkk>
 
 let kelly myOdd bookerOdd =
-    if (myOdd <= 0.<euOdd>) then 0.<pct>
-    else if (bookerOdd = 1.<euOdd>) then 0.<pct>
+    if (myOdd <= 1.<euOdd>) then 0.<pct>
+    else if (bookerOdd <= 1.<euOdd>) then 0.<pct>
     else (bookerOdd / myOdd - 1.) / (bookerOdd - 1.<euOdd>) * 1.<pct*euOdd>
+
+let gaus mu sigma x =
+    let variance = sigma ** 2.
+    1. / sqrt (2. * System.Math.PI * variance) * exp (-((x - mu) ** 2.) / (2. * variance))
+
+let muStdDev data =
+    let mu = mean data
+    let variance = data |> List.averageBy (fun x -> (x - mu) ** 2.)
+    mu, sqrt (variance)
 
 let simpleMargin (margin: float<pct>) k (odd: float<euOdd>) = k <= margin
 
@@ -186,7 +195,6 @@ let calcBet win myOdd bookerOdd winner amount input =
     match input with
     | Some _ -> input
     | None ->
-        if bookerOdd < 5.<euOdd> then
             let k = kelly myOdd bookerOdd
             match calcMoneyToBet k amount with
             | Some money ->
@@ -201,8 +209,6 @@ let calcBet win myOdd bookerOdd winner amount input =
                       MoneyWon = moneyWon |> roundMoney
                       MoneyPlaced = money }
             | None -> None
-        else
-            None
 
 let placeBetOnGame g meanOdds gameOdds amount =
     None
